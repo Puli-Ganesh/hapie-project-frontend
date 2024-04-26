@@ -1,0 +1,115 @@
+@import '_fonts';
+@import '_colors';
+
+// Font-family
+@mixin font($fontName) {
+	font-family: $fontName;
+}
+
+// Elipses
+@mixin elipses {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+@mixin elipses-1 {
+	@include elipses;
+	line-clamp: 1;
+	-webkit-line-clamp: 1;
+}
+
+@mixin elipses-2 {
+	@include elipses;
+	line-clamp: 2;
+	-webkit-line-clamp: 2;
+}
+
+@mixin elipses-3 {
+	@include elipses;
+	line-clamp: 3;
+	-webkit-line-clamp: 3;
+}
+
+@mixin drop-shadow {
+	box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+@mixin scrollbar-none {
+	&::-webkit-scrollbar {
+		display: none;
+	}
+
+	// For Chrome
+	-ms-overflow-style: none; // For IE and Edge
+	scrollbar-width: none; // For Firfox
+}
+
+@mixin user-select-none {
+	-webkit-user-select: none; // For Safari
+	-ms-user-select: none; // For IE and Edge
+	user-select: none; // Standard syntax
+}
+
+@mixin app-scrollbar {
+	&::-webkit-scrollbar {
+		width: 6px;
+		height: 6px;
+	}
+
+	&::-webkit-scrollbar-track {
+		background-color: $gray;
+		border-radius: 6px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background-color: $on-base;
+		width: 6px;
+		border-radius: 6px;
+	}
+}
+
+
+// Responsive media queries
+@mixin device($breakpoints...) {
+
+	@each $breakpoint in $breakpoints {
+		@if $breakpoint ==xs {
+			@media only screen and (max-width: 576px) {
+				@content;
+			}
+		}
+
+		@if $breakpoint ==s {
+			@media only screen and (min-width: 577px) and (max-width: 768px) {
+				@content;
+			}
+		}
+
+		@if $breakpoint ==m {
+			@media only screen and (min-width: 769px) and (max-width: 992px) {
+				@content;
+			}
+		}
+
+		@if $breakpoint ==l {
+			@media only screen and (min-width: 993px) and (max-width: 1280px) {
+				@content;
+			}
+		}
+
+		@if $breakpoint ==xl {
+			@media only screen and (min-width: 1281px) and (max-width: 1440px) {
+				@content;
+			}
+		}
+
+		@if $breakpoint ==xxl {
+			@media only screen and (min-width: 1441px) {
+				@content;
+			}
+		}
+	}
+
+}

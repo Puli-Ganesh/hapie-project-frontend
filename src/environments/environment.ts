@@ -2,8 +2,20 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { Settings } from "src/interfaces/settings.interface";
+
+const settings: Settings = {
+	apiProtocol: 'http',
+	apiHost: '192.168.29.2',
+	apiPort: 3000
+	// apiProtocol: 'https',
+	// apiHost: 'nexgenforce.ai',
+	// apiPort: 0
+}
+
 export const environment = {
-  production: false
+	production: false,
+	settings
 };
 
 /*

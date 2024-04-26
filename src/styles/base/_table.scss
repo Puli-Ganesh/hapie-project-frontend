@@ -1,0 +1,98 @@
+@import 'src/styles/_mixins';
+
+
+.app-table-container {
+	border: 1px solid #EFEFEF;
+	border-radius: 8px;
+	overflow: hidden;
+
+	.app-table-wrap {
+		display: grid;
+		grid-template-columns: 1fr;
+		border-radius: inherit;
+		background-color: $base;
+		overflow-x: auto;
+
+		.tbl-tr {
+			display: grid;
+			/** make columns based on table requirement using 'grid-template-columns' */
+
+			.tbl-th {
+				padding: 12px 10px 11px;
+				color: #8A8A8A;
+				font-family: $raleway-500;
+				font-size: 14px;
+				font-style: normal;
+				line-height: 24px;
+				/* 171.429% */
+				text-transform: capitalize;
+			}
+
+			.tbl-td {
+				padding: 16px 10px 15px;
+				color: #0A0908;
+				font-family: $raleway-500;
+				font-size: 14px;
+				font-style: normal;
+				line-height: 24px;
+				/* 171.429% */
+				word-break: break-word;
+
+				&.text-cap {
+					text-transform: capitalize;
+				}
+
+				&.text-end {
+					text-align: end;
+				}
+
+				.action-wrap {
+					display: inline-flex;
+					align-items: center;
+					color: $primary;
+					cursor: pointer;
+				}
+			}
+
+			.tbl-th,
+			.tbl-td {
+				&:first-child {
+					padding-left: 32px;
+				}
+
+				&:last-child {
+					padding-right: 32px;
+				}
+			}
+
+			&:not(:last-child, :first-child) {
+				border-bottom: 1px solid #EFEFEF;
+			}
+
+			&:first-child {
+				background-color: #F6F9FF;
+				border-radius: 8px 8px 0 0;
+
+				.tbl-th {
+					padding-bottom: 12px;
+				}
+
+				.tbl-td {
+					padding-bottom: 16px;
+				}
+			}
+
+			&:last-child {
+				border-radius: 0 0 8px 8px;
+
+				.tbl-th {
+					padding-bottom: 12px;
+				}
+
+				.tbl-td {
+					padding-bottom: 16px;
+				}
+			}
+		}
+	}
+}

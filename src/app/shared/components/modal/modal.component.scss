@@ -1,0 +1,37 @@
+@import 'src/styles/_mixins';
+
+.modal-wrapper {
+    padding: 10px;
+    position: fixed;
+    inset: 0 0 0 0;
+    display: none;
+    width: 100%;
+    height: auto;
+    background: rgba(0, 0, 30, 0.50);
+    overflow: auto;
+    z-index: 99;
+
+    &.visible {
+        display: grid;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-container {
+        position: relative;
+        min-width: 320px;
+        background-color: $base;
+        border-radius: 12px;
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 0;
+            background-color: transparent;
+            color: $on-base;
+            border: none;
+            cursor: pointer;
+        }
+    }
+}

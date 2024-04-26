@@ -1,0 +1,102 @@
+.app-button {
+	margin: 0;
+	padding: 12px 25px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: $raleway-500;
+	font-size: 1rem;
+	font-style: normal;
+	line-height: 24px;
+	/* 150% */
+	border: 0px;
+	outline: none;
+	border-radius: 8px;
+	@include user-select-none();
+	cursor: pointer;
+
+	&.small {
+		padding: 8px 25px;
+		font-size: 14px;
+	}
+
+	&.primary {
+		color: $on-primary;
+		background-color: $primary;
+
+		// &:hover {
+		// 	color: $primary;
+		// 	background-color: $on-primary;
+		// 	box-shadow: inset 0px 0px 1px 1px currentColor;
+		// }
+
+		&:disabled,
+		&.disabled {
+			opacity: 0.6;
+			cursor: not-allowed;
+		}
+	}
+
+	&.secondary {
+		color: $on-secondary;
+		background-color: $secondary;
+
+		// &:hover {
+		// 	color: $secondary;
+		// 	background-color: $on-secondary;
+		// 	box-shadow: inset 0px 0px 1px 1px currentColor;
+		// }
+
+		&:disabled,
+		&.disabled {
+			opacity: 0.6;
+			cursor: not-allowed;
+		}
+	}
+
+	&.simple {
+		font-size: 14px;
+		font-style: normal;
+		line-height: 24px;
+		/* 171.429% */
+		color: $on-base-blue;
+		background-color: $base;
+
+		&:disabled,
+		&.disabled {
+			opacity: 0.6;
+			cursor: not-allowed;
+		}
+	}
+
+	&.white-bg {
+		color: $on-base-blue;
+		background-color: $base;
+	}
+
+	&.wide {
+		width: 100%;
+	}
+
+	.btn-icon {
+		flex-shrink: 0;
+		width: 20px;
+		height: 20px;
+		color: inherit;
+		margin-right: 4px;
+		pointer-events: none;
+	}
+
+	.btn-label {
+		color: inherit;
+		pointer-events: none;
+		line-height: inherit;
+		font-family: inherit;
+		font-size: inherit;
+		font-style: inherit;
+		line-height: inherit;
+		/* 150% */
+		text-transform: capitalize;
+		@include elipses-1;
+	}
+}

@@ -1,0 +1,80 @@
+
+// #0B0BCF
+// #5386E4
+// #ECECFE
+// #0A0908
+// (input border) rgba(216, 216, 255, 1)
+// light background like(placeholder, selected tab) rgba(236, 236, 254, 0.5) on colors rgba(11, 11, 207, 1) rgba(10, 9, 8, 0.8)
+// divider rgba(236, 236, 254, 1)
+
+$base: rgba(255, 255, 255, 1);
+$on-base: rgba(10, 9, 8, 1);
+$on-base-light: rgba(10, 9, 8, 0.5);
+$on-base-blue: #0B0BCF;
+
+$primary: rgba(11, 11, 207, 1);
+$on-primary: rgba(255, 255, 255, 1);
+
+$primary-light: rgba(11, 11, 207, 0.04);
+$on-primary-light: rgba(11, 11, 207, 1);
+
+$secondary: rgba(236, 236, 254, 1);
+$on-secondary: rgba(11, 11, 207, 1);
+
+$lightbase: #F9F9F9;
+$on-lightbase: #000000;
+$on-lightbase-light: #9F9F9F;
+
+$blue: #0BA7FF;
+
+$ternary: #F0C72F;
+$on-ternary: #FFFFFF;
+
+$helper-green: #E2FFD0;
+$on-helper-green: #000000;
+
+$helper-orange: #FFE1D0;
+$on-helper-orange: #000000;
+
+$helper-blue: #C4F2FF;
+$on-helper-blue: #000000;
+
+$helper-sky: #5BC4FF;
+$on-helper-sky: #000000;
+
+$helper-purple: #917EE0;
+$helper-purple-light: #E6E4FF;
+$on-helper-purple: #000000;
+
+$error: #FF0000;
+$on-error: #FFFFFF;
+
+
+$gray: rgba(241, 241, 241, 1); // #f1f1f1
+$gray-100: rgba(251, 251, 251, 1);
+$gray-150: rgba(245, 245, 245, 1); //#F5F5F5
+$gray-200: rgba(225, 225, 225, 1); //#E1E1E1
+$gray-300: rgba(217, 217, 217, 1); //#D9D9D9
+$gray-700: rgba(159, 159, 159, 0.8);
+
+
+$family-1: #0B0BCF, #D8D8FF, #5386E4, #ECECFE;
+$color-1-1: #0B0BCF;
+$color-1-2: #D8D8FF;
+$color-1-3: #5386E4;
+$color-1-4: #ECECFE;
+$family-2: #2F4858, #DAF7DC, #B6EBAD, #EFFFF0;
+$color-2-1: #2F4858;
+$color-2-2: #DAF7DC;
+$color-2-3: #B6EBAD;
+$color-2-4: #EFFFF0;
+$family-3: #E15634, #F7D3C9, #FF9985, #FAE2DC;
+$color-3-1: #E15634;
+$color-3-2: #F7D3C9;
+$color-3-3: #FF9985;
+$color-3-4: #FAE2DC;
+$family-4: #392759, #D2C6E7, #8361BD, #E9E3F3;
+$color-4-1: #392759;
+$color-4-2: #D2C6E7;
+$color-4-3: #8361BD;
+$color-4-4: #E9E3F3;

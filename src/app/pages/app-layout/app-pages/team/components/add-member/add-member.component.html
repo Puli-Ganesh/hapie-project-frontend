@@ -1,0 +1,119 @@
+<div class="add-member-wrapper" #memberWrapper>
+    <div class="header">
+        <svg class="icon" (click)="onCloseModal()" width="23" height="19" viewBox="0 0 23 19" fill="none">
+            <path d="M1.66699 9.36576L21.667 9.36576" stroke="#0A0908" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+            <path d="M9.7334 17.3983L1.66673 9.36628L9.7334 1.33295" stroke="#0A0908" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <div class="title">
+            {{ editMode ? 'Edit Team Member' : 'Add Member' }}
+        </div>
+    </div>
+
+    <div class="body">
+        <form [formGroup]="userForm">
+            <div class="input-container">
+                <div class="input-wrap">
+                    <label class="label" for="firstName">User first name</label>
+                    <input class="input" type="text" id="firstName" formControlName="firstName" placeholder="Enter first name">
+                </div>
+
+                <div class="err-wrap" *ngIf="(firstName?.touched && firstName?.errors)">
+                    <p *ngIf="firstName?.errors?.['required']" class="err-msg">First name is required!</p>
+                    <p *ngIf="firstName?.errors?.['maxlength']" class="err-msg">First name must not exceed {{firstName?.errors?.['maxlength']['requiredLength']}} characters.</p>
+                </div>
+            </div>
+
+            <div class="input-container">
+                <div class="input-wrap">
+                    <label class="label" for="lastName">User last name</label>
+                    <input class="input" type="text" id="lastName" formControlName="lastName" placeholder="Enter last name">
+                </div>
+
+                <div class="err-wrap" *ngIf="(lastName?.touched && lastName?.errors)">
+                    <p *ngIf="lastName?.errors?.['maxlength']" class="err-msg">Last name must not exceed {{lastName?.errors?.['maxlength']['requiredLength']}} characters.</p>
+                </div>
+            </div>
+
+            <div class="input-container">
+                <div class="input-wrap">
+                    <label class="label" [class.required]="!editMode" for="name">User Email</label>
+                    <input class="input" type="text" id="name" formControlName="email" placeholder="Enter email">
+                </div>
+
+                <div class="err-wrap" *ngIf="(email?.touched && email?.errors)">
+                    <p *ngIf="email?.errors?.['required']" class="err-msg">Email address is required!</p>
+                    <p *ngIf="email?.errors?.['pattern']" class="err-msg">Please enter valid email address!</p>
+                    <p *ngIf="email?.errors?.['maxlength']" class="err-msg">An email address must not exceed 254 characters.</p>
+                </div>
+            </div>
+
+            <div class="role-dropdown">
+                <div class="label required">User Role</div>
+                <div class="selected-role" (click)="roleToggler = !roleToggler" #selectedRoleWrapper>
+                    <div class="option">{{ selectedRole.title }}</div>
+                    <svg class="icon" [class.open]="roleToggler" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M19 8.5L12 15.5L5 8.5" stroke="#D8D8FF" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                    </svg>
+                </div>
+                <div class="options-list" *ngIf="roleToggler" #roleListWrapper>
+                    <div class="option-wrapper" (click)="onSelectRole($event, roleIndex)" *ngFor="let role of roleOptions; let roleIndex = index">
+                        <div class="title">
+                            {{ role.title }}
+                        </div>
+                        <svg *ngIf="selectedRole.title == role.title" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M7.0332 10.0004L9.01158 11.9779L12.9666 8.02289" stroke="#0B0BCF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-dropdown">
+                <div class="label required">Project Access</div>
+                <div class="selected-project" (click)="projectToggler = !projectToggler" #selectedProjectWrapper>
+                    <div class="option">{{ selectedProjectString }}</div>
+                    <svg class="icon" [class.open]="projectToggler" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none">
+                        <path d="M19 8.5L12 15.5L5 8.5" stroke="#D8D8FF" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round"></path>
+                    </svg>
+                </div>
+                <div class="options-list" *ngIf="projectToggler" #projectListWrapper>
+                    <div class="option-wrapper all" (click)="onSelectAllProject($event)">
+                        <div class="title">All Projects</div>
+                    </div>
+                    <div class="option-wrapper" (click)="onSelectProject($event, projectIndex)" *ngFor="let project of projectsList; let projectIndex = index">
+                        <div class="title">
+                            {{ project.projectName }}
+                        </div>
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" *ngIf="project.checked">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M5.39199 0.66658H12.617C15.442 0.66658 17.3337 2.64991 17.3337 5.59991V12.4091C17.3337 15.3499 15.442 17.3332 12.617 17.3332H5.39199C2.56699 17.3332 0.666992 15.3499 0.666992 12.4091V5.59991C0.666992 2.64991 2.56699 0.66658 5.39199 0.66658ZM8.52533 11.4916L12.4837 7.53325C12.767 7.24991 12.767 6.79158 12.4837 6.49991C12.2003 6.21658 11.7337 6.21658 11.4503 6.49991L8.00866 9.94158L6.55033 8.48325C6.26699 8.19991 5.80033 8.19991 5.51699 8.48325C5.23366 8.76658 5.23366 9.22491 5.51699 9.51658L7.50033 11.4916C7.64199 11.6332 7.82533 11.6999 8.00866 11.6999C8.20033 11.6999 8.38366 11.6332 8.52533 11.4916Z"
+                                fill="#0B0BCF" />
+                        </svg>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" *ngIf="!project.checked">
+                            <path
+                                d="M4.38783 0.79184H11.612C12.751 0.79184 13.6372 1.19043 14.2413 1.83913C14.8491 2.49186 15.2087 3.43885 15.2087 4.59684V11.4035C15.2087 12.5615 14.8491 13.5085 14.2412 14.1612C13.6371 14.8099 12.7506 15.2085 11.6112 15.2085H4.38783C3.24886 15.2085 2.36282 14.8099 1.75901 14.1613C1.15143 13.5086 0.791992 12.5616 0.791992 11.4035V4.59684C0.791992 3.43941 1.15293 2.49232 1.7616 1.83932C2.36663 1.19022 3.25294 0.79184 4.38783 0.79184Z"
+                                fill="white" stroke="#CECFD8" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="footer">
+        <button class="app-button primary small" [class.disabled]="userForm.invalid || selectedProjectString == 'None'" [disabled]="userForm.invalid || selectedProjectString == 'None'" (click)="onSendInvite()">
+            <span class="btn-label">
+                {{ editMode ? 'Save Changes' : 'Send invite' }}
+            </span>
+        </button>
+        <button class="app-button simple small" (click)="onCloseModal()">
+            <span class="btn-label">
+                cancel
+            </span>
+        </button>
+    </div>
+</div>

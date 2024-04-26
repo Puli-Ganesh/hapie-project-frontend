@@ -1,0 +1,103 @@
+// Application headings
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+	font-family: $base-font-family;
+	line-height: $base-line-height;
+	font-weight: 700;
+}
+
+h1,
+.h1 {
+	font-size: 1.75em;
+	margin-bottom: 0.67em;
+}
+
+h2,
+.h2 {
+	font-size: 1.5em;
+	margin-bottom: 0.83em;
+}
+
+h3,
+.h3 {
+	font-size: 1.25em;
+	margin-bottom: 0.83em;
+}
+
+h4,
+.h4 {
+	font-size: 1em;
+	margin-bottom: 0.87em;
+}
+
+h5,
+.h5 {
+	font-size: 0.87em;
+	margin-bottom: 0.67em;
+}
+
+h6,
+.h6 {
+	font-size: 0.67em;
+	margin-bottom: 0.5em;
+}
+
+
+// Application paragraph
+p,
+.p {
+	font-family: $base-font-family;
+	line-height: $base-line-height;
+	font-size: 0.87em;
+	margin-bottom: 0.67em;
+}
+
+// Application span
+span,
+.span {
+	font-family: $base-font-family;
+	line-height: $base-line-height;
+}
+
+
+// Application display headings
+.display-1 {
+	font-size: 3em;
+	margin-bottom: 0.83em;
+	font-weight: 400;
+}
+
+.display-2 {
+	font-size: 2.75em;
+	margin-bottom: 1em;
+	font-weight: 400;
+}
+
+.display-3 {
+	font-size: 2.5em;
+	margin-bottom: 1em;
+	font-weight: 400;
+}
+
+.font-highlight {
+	font-family: $highlight-font-family;
+	line-height: $highlight-line-height;
+}
+
+.primary {
+	color: $primary;
+}
+
+.secondary {
+	color: $secondary;
+}

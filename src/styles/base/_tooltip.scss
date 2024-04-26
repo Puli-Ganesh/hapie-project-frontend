@@ -1,0 +1,91 @@
+.app-z-index-99 {
+	z-index: 99 !important;
+}
+
+.app-tooltip {
+	padding: 10px 16px;
+	// min-width: 150px;
+	width: max-content;
+	max-width: 400px;
+	display: inline-block;
+	font-size: 16px;
+	text-align: center;
+	border-radius: 6px;
+	position: absolute;
+	z-index: 1;
+	background-color: rgba(0, 0, 0, 0.75);
+	color: #fff;
+	line-height: normal;
+	opacity: 0;
+	animation: tooltip-slide 0.18s;
+	animation-fill-mode: forwards;
+
+	&::before {
+		content: "";
+		position: absolute;
+		border-width: 7px;
+		border-style: solid;
+		z-index: 1;
+	}
+
+	&.top {
+		bottom: calc(100% + 8px);
+		left: 50%;
+		transform: translateX(-50%);
+
+		&::before {
+			top: 100%;
+			left: 50%;
+			transform: translateX(-50%);
+			border-color: rgba(0, 0, 0, 0.75) transparent transparent transparent;
+		}
+	}
+
+	&.bottom {
+		top: calc(100% + 8px);
+		left: 50%;
+		transform: translateX(-50%);
+
+		&::before {
+			bottom: 100%;
+			left: 50%;
+			transform: translateX(-50%);
+			border-color: transparent transparent rgba(0, 0, 0, 0.75) transparent;
+		}
+	}
+
+	&.left {
+		top: 50%;
+		right: calc(100% + 8px);
+		transform: translateY(-50%);
+
+		&::before {
+			top: 50%;
+			left: 100%;
+			transform: translateY(-50%);
+			border-color: transparent transparent transparent rgba(0, 0, 0, 0.75);
+		}
+	}
+
+	&.right {
+		top: 50%;
+		left: calc(100% + 8px);
+		transform: translateY(-50%);
+
+		&::before {
+			top: 50%;
+			right: 100%;
+			transform: translateY(-50%);
+			border-color: transparent rgba(0, 0, 0, 0.75) transparent transparent;
+		}
+	}
+
+	@keyframes tooltip-slide {
+		0% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 1;
+		}
+	}
+}

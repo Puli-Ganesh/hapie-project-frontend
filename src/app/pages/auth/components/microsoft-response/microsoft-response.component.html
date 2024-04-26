@@ -1,0 +1,6 @@
+<div class="ms-wrapper">
+    <div class="loader" *ngIf="isLoggingIn"></div>
+    <h1 class="msg" *ngIf="isLoggingIn">Please wait while we are logging you in.</h1>
+
+    <h1 class="msg" *ngIf="serverError">{{ serverError }}</h1>
+</div>

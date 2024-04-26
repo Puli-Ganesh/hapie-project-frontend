@@ -1,0 +1,185 @@
+<div class="projects-wrap">
+
+    <!-- <ng-container *ngIf="!selectedWorkspace">
+        <div class="inner-header">
+            <h2 class="main-title">workspaces</h2>
+        </div>
+    
+        <div class="workspaces-container">
+            <div class="workspace-wrap" *ngFor="let workspace of workspaceList; let workspaceIndex = index;" (click)="selectWorkspace(workspaceIndex)">
+                <div class="workspace-img">
+                    <img src="{{workspace?.thumbnailUrl}}" alt="workspace-thumb">
+                </div>
+                <div class="workspace-details">
+                    <h2 class="workspace-name">{{workspace?.title}}</h2>
+                    <div class="workspace-desc">Created At ({{ workspace.createdAt | date:'YYYY-MM-dd' }})</div>
+                </div>
+            </div>
+        </div>
+    </ng-container> -->
+
+
+    <div class="inner-header">
+        <h2 class="main-title">your projects</h2>
+        <!-- <button class="app-button primary" type="button" *ngIf="permissions.PROJECT_CREATE.includes(loggedInUser.type)"
+            (click)="onAddNewProject()">
+            <span class="btn-label">
+                + New Project
+            </span>
+        </button> -->
+    </div>
+
+    <div class="search-header-wrap">
+        <div class="search-input-wrap">
+            <input class="search-input" type="text" name="searchQuery" [(ngModel)]="searchQuery"
+                (ngModelChange)="onSearchQuery($event)" placeholder="Search by project name">
+            <div class="search-icon-wrap">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <g clip-path="url(#clip0_618_2625)">
+                        <path
+                            d="M15.0262 13.8475L18.5953 17.4159L17.4162 18.595L13.8478 15.0259C12.5201 16.0902 10.8687 16.6691 9.16699 16.6667C5.02699 16.6667 1.66699 13.3067 1.66699 9.16669C1.66699 5.02669 5.02699 1.66669 9.16699 1.66669C13.307 1.66669 16.667 5.02669 16.667 9.16669C16.6694 10.8684 16.0905 12.5198 15.0262 13.8475ZM13.3545 13.2292C14.4121 12.1416 15.0027 10.6837 15.0003 9.16669C15.0003 5.94335 12.3895 3.33335 9.16699 3.33335C5.94366 3.33335 3.33366 5.94335 3.33366 9.16669C3.33366 12.3892 5.94366 15 9.16699 15C10.684 15.0024 12.1419 14.4118 13.2295 13.3542L13.3545 13.2292Z"
+                            fill="currentColor" />
+                    </g>
+                    <defs>
+                        <clipPath id="clip0_618_2625">
+                            <rect width="20" height="20" fill="white" />
+                        </clipPath>
+                    </defs>
+                </svg>
+            </div>
+        </div>
+
+        <div class="view-tab-wrap">
+            <div class="view-tab" [class.selected]="viewType === 't'" (click)="onChangeView()">
+                <svg class="tab-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path
+                        d="M6 12.6667V11.3334H14V12.6667H6ZM6 8.66669V7.33335H14V8.66669H6ZM6 4.66669V3.33335H14V4.66669H6ZM3.33333 13.3334C2.96667 13.3334 2.65278 13.2028 2.39167 12.9417C2.13056 12.6806 2 12.3667 2 12C2 11.6334 2.13056 11.3195 2.39167 11.0584C2.65278 10.7972 2.96667 10.6667 3.33333 10.6667C3.7 10.6667 4.01389 10.7972 4.275 11.0584C4.53611 11.3195 4.66667 11.6334 4.66667 12C4.66667 12.3667 4.53611 12.6806 4.275 12.9417C4.01389 13.2028 3.7 13.3334 3.33333 13.3334ZM3.33333 9.33335C2.96667 9.33335 2.65278 9.2028 2.39167 8.94169C2.13056 8.68058 2 8.36669 2 8.00002C2 7.63335 2.13056 7.31947 2.39167 7.05835C2.65278 6.79724 2.96667 6.66669 3.33333 6.66669C3.7 6.66669 4.01389 6.79724 4.275 7.05835C4.53611 7.31947 4.66667 7.63335 4.66667 8.00002C4.66667 8.36669 4.53611 8.68058 4.275 8.94169C4.01389 9.2028 3.7 9.33335 3.33333 9.33335ZM3.33333 5.33335C2.96667 5.33335 2.65278 5.2028 2.39167 4.94169C2.13056 4.68058 2 4.36669 2 4.00002C2 3.63335 2.13056 3.31946 2.39167 3.05835C2.65278 2.79724 2.96667 2.66669 3.33333 2.66669C3.7 2.66669 4.01389 2.79724 4.275 3.05835C4.53611 3.31946 4.66667 3.63335 4.66667 4.00002C4.66667 4.36669 4.53611 4.68058 4.275 4.94169C4.01389 5.2028 3.7 5.33335 3.33333 5.33335Z"
+                        fill="currentColor" />
+                </svg>
+            </div>
+            <div class="view-tab" [class.selected]="viewType === 'g'" (click)="onChangeView()">
+                <svg class="tab-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path
+                        d="M4 7.33333C2.89543 7.33333 2 6.4379 2 5.33333V4C2 2.89543 2.89543 2 4 2H5.33333C6.4379 2 7.33333 2.89543 7.33333 4V5.33333C7.33333 6.4379 6.4379 7.33333 5.33333 7.33333H4ZM4 14C2.89543 14 2 13.1046 2 12V10.6667C2 9.5621 2.89543 8.66667 4 8.66667H5.33333C6.4379 8.66667 7.33333 9.5621 7.33333 10.6667V12C7.33333 13.1046 6.4379 14 5.33333 14H4ZM10.6667 7.33333C9.5621 7.33333 8.66667 6.4379 8.66667 5.33333V4C8.66667 2.89543 9.5621 2 10.6667 2H12C13.1046 2 14 2.89543 14 4V5.33333C14 6.4379 13.1046 7.33333 12 7.33333H10.6667ZM10.6667 14C9.5621 14 8.66667 13.1046 8.66667 12V10.6667C8.66667 9.5621 9.5621 8.66667 10.6667 8.66667H12C13.1046 8.66667 14 9.5621 14 10.6667V12C14 13.1046 13.1046 14 12 14H10.6667ZM3.33333 4.66667C3.33333 5.40305 3.93029 6 4.66667 6C5.40305 6 6 5.40305 6 4.66667C6 3.93029 5.40305 3.33333 4.66667 3.33333C3.93029 3.33333 3.33333 3.93029 3.33333 4.66667ZM10 4.66667C10 5.40305 10.597 6 11.3333 6C12.0697 6 12.6667 5.40305 12.6667 4.66667C12.6667 3.93029 12.0697 3.33333 11.3333 3.33333C10.597 3.33333 10 3.93029 10 4.66667ZM10 11.3333C10 12.0697 10.597 12.6667 11.3333 12.6667C12.0697 12.6667 12.6667 12.0697 12.6667 11.3333C12.6667 10.597 12.0697 10 11.3333 10C10.597 10 10 10.597 10 11.3333ZM3.33333 11.3333C3.33333 12.0697 3.93029 12.6667 4.66667 12.6667C5.40305 12.6667 6 12.0697 6 11.3333C6 10.597 5.40305 10 4.66667 10C3.93029 10 3.33333 10.597 3.33333 11.3333Z"
+                        fill="currentColor" />
+                </svg>
+            </div>
+        </div>
+
+        <div class="add-filter-wrap">
+            <div class="icon-wrap">
+                <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M5.38729 3.59998H18.6119C19.5996 3.59998 20.3996 4.42406 20.3996 5.44147V6.72793C20.3996 7.22149 20.2067 7.69545 19.8643 8.04112L14.4 13.5683C14.3058 13.6645 14.1778 13.7179 14.0454 13.7171L9.47031 13.7028C9.33107 13.7028 9.19874 13.6431 9.10361 13.5389L4.0822 8.01617C3.77172 7.67496 3.59961 7.22416 3.59961 6.75644V5.44236C3.59961 4.42495 4.39961 3.59998 5.38729 3.59998ZM9.7149 15.2121L13.7927 15.2246C14.047 15.2255 14.2528 15.4384 14.2528 15.6995V17.9935C14.2528 18.2555 14.1041 18.4924 13.8723 18.602L10.1707 20.3402C10.0842 20.3803 9.99252 20.3999 9.90084 20.3999C9.7789 20.3999 9.65695 20.3642 9.55057 20.2938C9.36463 20.1709 9.25219 19.9589 9.25219 19.7317V15.687C9.25219 15.4242 9.45976 15.2112 9.7149 15.2121Z"
+                        fill="currentColor" />
+                </svg>
+            </div>
+            <span class="label">add filters</span>
+        </div>
+    </div>
+
+    <ng-container *ngIf="filteredProjectList.length; else noProjectView;" [ngSwitch]="viewType">
+        <ng-container *ngSwitchCase="'g'">
+            <div class="projects-container">
+                <div class="project-wrap border-{{project?.color}}"
+                    *ngFor="let project of filteredProjectList; let projectIndex = index;"
+                    (click)="onSelectProject(projectIndex)">
+                    <div class="project-img bg-{{project?.color}}-2">
+                        <img *ngIf="project?.thumbnailUrl" src="{{project?.thumbnailUrl}}" alt="project">
+                    </div>
+                    <div class="project-details">
+                        <h2 class="project-name">{{project?.projectName}}</h2>
+                        <div class="project-desc">{{project?.projectDescription}}</div>
+                    </div>
+
+                    <div class="action-wrap"
+                        *ngIf="permissions.PROJECT_EDIT.includes(loggedInUser.type) || permissions.PROJECT_DELETE.includes(loggedInUser.type)">
+                        <div class="btn" (click)="onEditProject($event, projectIndex)"
+                            *ngIf="permissions.PROJECT_EDIT.includes(loggedInUser.type)">
+                            edit
+                        </div>
+                        <div class="btn" (click)="onDeleteProject($event, projectIndex)"
+                            *ngIf="permissions.PROJECT_DELETE.includes(loggedInUser.type)">
+                            delete
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'t'">
+            <div class="app-table-container">
+                <div class="app-table-wrap">
+                    <div class="tbl-tr">
+                        <div class="tbl-th">Project Name</div>
+                        <div class="tbl-th">Project Description</div>
+                        <div class="tbl-th">Templates</div>
+                        <div class="tbl-th"></div>
+                    </div>
+                    <div class="tbl-tr" *ngFor="let project of filteredProjectList;let projectIndex = index;">
+                        <div class="tbl-td text-cap">{{project?.projectName}}</div>
+                        <div class="tbl-td">{{ project?.projectDescription }}</div>
+                        <div class="tbl-td">{{ project?.projectDescription }}</div>
+                        <div class="tbl-td text-end">
+                            <div class="action-wrap" (click)="onSelectProject(projectIndex)">
+                                View
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M5.6665 3.33341L10.3332 8.00008L5.6665 12.6667" stroke="#0B0BCF"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                            <div class="action-wrap" (click)="onEditProject($event, projectIndex)"
+                                *ngIf="permissions.PROJECT_EDIT.includes(loggedInUser.type)">edit
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M5.6665 3.33341L10.3332 8.00008L5.6665 12.6667" stroke="#0B0BCF"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                            <div class="action-wrap" (click)="onDeleteProject($event, projectIndex)"
+                                *ngIf="permissions.PROJECT_DELETE.includes(loggedInUser.type)">delete
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M5.6665 3.33341L10.3332 8.00008L5.6665 12.6667" stroke="#0B0BCF"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </ng-container>
+
+    <ng-template #noProjectView>
+        <div class="no-projects">
+            <div class="icon">
+                <svg width="88" height="88" viewBox="0 0 88 88" fill="none">
+                    <path opacity="0.4"
+                        d="M65.1658 14.1643H52.4124C49.2353 14.1853 46.2189 12.7721 44.2056 10.3192L40.0059 4.51304C38.0263 2.03866 35.0099 0.618766 31.8376 0.667907H22.8216C6.63914 0.667907 0.667038 10.1654 0.667038 26.315V43.7719C0.646902 45.6917 87.3148 45.6892 87.3203 43.7719V38.6963C87.3974 22.5467 81.5794 14.1643 65.1658 14.1643Z"
+                        fill="#D8D8FF" />
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M82.2729 20.355C83.6593 21.976 84.7307 23.8407 85.4324 25.8536C86.8129 29.9905 87.452 34.3379 87.3203 38.6963V61.4595C87.3148 63.3769 87.1731 65.2914 86.8965 67.1888C86.3696 70.5372 85.1916 73.7506 83.4288 76.6478C82.6186 78.0472 81.6347 79.3391 80.5005 80.4929C75.3663 85.205 68.5485 87.6578 61.5825 87.2988H26.3663C19.3891 87.6552 12.5603 85.2035 7.4097 80.4929C6.28907 79.3369 5.31824 78.0451 4.51997 76.6478C2.76757 73.7527 1.61465 70.5363 1.12935 67.1888C0.820776 65.2946 0.666153 63.3786 0.666996 61.4595V38.6963C0.666241 36.7952 0.769139 34.8955 0.975234 33.0055C1.01857 32.6739 1.08358 32.3477 1.14791 32.0249C1.25516 31.4868 1.36053 30.958 1.36053 30.4293C1.75165 28.1485 2.46514 25.9347 3.47967 23.8541C6.48498 17.4327 12.6497 14.1643 22.7445 14.1643H65.1272C70.7813 13.7271 76.3932 15.4292 80.8473 18.9323C81.3603 19.3673 81.8371 19.8431 82.2729 20.355ZM22.2051 59.3447H65.8207H65.8978C66.8548 59.3863 67.7886 59.0437 68.4909 58.3935C69.1931 57.7433 69.6052 56.8396 69.6352 55.8841C69.6893 55.0442 69.4128 54.2164 68.8646 53.577C68.234 52.7177 67.2347 52.2048 66.1675 52.1927H22.2051C20.2261 52.1927 18.6218 53.7938 18.6218 55.7687C18.6218 57.7437 20.2261 59.3447 22.2051 59.3447Z"
+                        fill="#D8D8FF" />
+                </svg>
+            </div>
+            <div class="title">No projects yet</div>
+            <div class="subtitle">Click New Project to start creating Projects</div>
+        </div>
+    </ng-template>
+</div>
+
+<app-modal id="deleteProjectModal" (onClose)="onCancelDeleteProject()">
+    <div class="delete-project-modal">
+        <div class="title">
+            Are you sure you want to delete<br>
+            {{selectedProject?.projectName}} project?
+        </div>
+        <div class="actions-container">
+            <button class="btn" [class.disabled]="isRequestAlive" [disabled]="isRequestAlive"
+                (click)="onConfirmDeleteProject()">
+                Yes, Delete
+            </button>
+            <button class="btn light" (click)="onCancelDeleteProject()">
+                Not Now
+            </button>
+        </div>
+    </div>
+</app-modal>

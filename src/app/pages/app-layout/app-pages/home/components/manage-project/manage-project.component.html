@@ -1,0 +1,358 @@
+<div class="new-project-container" #newProjectContainer>
+
+    <ng-container *ngIf="currentStep == 1; else membersTemplate;">
+        <form [formGroup]="projectForm" novalidate (ngSubmit)="onProjectUpsert()">
+            <div class="new-project-wrap">
+                <!-- <div class="new-project-header">
+                    <div class="title">{{isEditMode ? projectDetails.projectName : 'New project' }}</div>
+                    <div class="close-icon" (click)="onCloseModal()">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <g>
+                                <path
+                                    d="M16 32C24.8366 32 32 24.8366 32 16C32 7.16344 24.8366 0 16 0C7.16344 0 0 7.16344 0 16C0 24.8366 7.16344 32 16 32Z"
+                                    fill="#ECECFE" fill-opacity="0.5" />
+                                <path d="M20 12L12 20" stroke="#5386E4" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path d="M12 12L20 20" stroke="#5386E4" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </g>
+                        </svg>
+                    </div>
+                </div> -->
+
+                <div class="stepper-wrapper">
+                    <div class="stepper-item" (click)="onStep($event, 1)" [class.active]="currentStep == 1">
+                        <div class="stepper-title">
+                            Project details
+                        </div>
+                    </div>
+                    <div class="stepper-item" (click)="onStep($event, 2)" [class.active]="currentStep != 1">
+                        <div class="stepper-title">
+                            Project Team Members
+                        </div>
+                    </div>
+                </div>
+
+                <div class="new-project-body">
+                    <div class="input-container">
+                        <div class="input-wrap">
+                            <label class="label required" for="name">project name</label>
+                            <input class="input" type="text" id="name" formControlName="projectName"
+                                placeholder="Enter Project Name">
+                        </div>
+
+                        <div class="err-wrap" *ngIf="(projectName?.touched && projectName?.errors)">
+                            <p *ngIf="projectName?.errors?.['required']" class="err-msg">project name is required!</p>
+                        </div>
+                    </div>
+
+                    <div class="input-container">
+                        <div class="input-wrap">
+                            <label class="label required" for="description">project description</label>
+                            <input class="input" type="text" id="description" formControlName="projectDescription"
+                                placeholder="Enter Project Description">
+                        </div>
+
+                        <div class="err-wrap" *ngIf="projectDesc?.touched && projectDesc?.errors">
+                            <p *ngIf="projectDesc.errors?.['required']" class="err-msg">project description is required!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="color-dropdown">
+                        <div class="label required">Project Colours</div>
+                        <div class="selected-color" #selectedColorOption>
+                            <div class="selected-color-wrapper" (click)="onToggleColorOptions()">
+                                <div class="color-option bg-{{selectedColor}}-{{index + 1}}"
+                                    *ngFor="let color of colorOptions[selectedColor - 1]; let index = index;"></div>
+                            </div>
+                            <svg class="icon" [class.open]="selectColorToggler" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <path d="M19 8.5L12 15.5L5 8.5" stroke="#D8D8FF" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round"></path>
+                            </svg>
+                        </div>
+                        <div class="options-list" *ngIf="selectColorToggler" #colorOptionsList>
+                            <div class="option-wrapper" (click)="selectProjectColor($event, optionIndex + 1)"
+                                *ngFor="let colorOption of colorOptions; let optionIndex = index;">
+                                <div class="color-option bg-{{optionIndex + 1}}-{{colorIndex + 1}}"
+                                    *ngFor="let color of colorOption; let colorIndex = index;"></div>
+                                <svg class="checked" *ngIf="optionIndex + 1 == selectedColor" width="20" height="20"
+                                    viewBox="0 0 20 20" fill="none">
+                                    <path d="M7.0332 10.0003L9.01158 11.9778L12.9666 8.02287" stroke="#0B0BCF"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-container" *ngIf="currentUser?.type == appRoles.ADMIN">
+                        <div class="select-wrap" (click)="$event.stopPropagation()">
+                            <label class="label">project workspace</label>
+                            <div class="select-option" tabindex="0" (blur)="onBlurWorkspace()">
+                                <div class="selected-option-wrap" (click)="onToggleWorkspaceOptions()">
+                                    <div class="selected-option" [class.placeholder]="!selectedWorkspace?.title">
+                                        {{selectedWorkspace?.title || 'Select Project Workspace'}}</div>
+                                    <div class="options-toggle-icon" [class.open]="workspaceOptionToggler">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <path d="M19 8.5L12 15.5L5 8.5" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <div class="option-list-container" *ngIf="workspaceOptionToggler">
+                                    <div class="option-list-wrap">
+                                        <div class="option" [class.selected]="selectedWorkspace?._id === workspace?._id"
+                                            *ngFor="let workspace of workspaceList;"
+                                            (click)="onSelectWorkspace(workspace)">
+                                            {{workspace.title}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="err-wrap" *ngIf="getWorkspaceId.touched && getWorkspaceId.errors">
+                            <p class="err-msg" *ngIf="getWorkspaceId.errors['required']">project workspace(s) is
+                                required!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="template-dropdown" *ngIf="templateList.length > 0">
+                        <div class="label">Project Templates</div>
+                        <div class="selected-template" [class.active]="selectedTemplateString"
+                            (click)="selectTemplateToggler = !selectTemplateToggler" #selectedTemplateWrapper>
+                            {{ selectedTemplateString || 'Select Project Template'}}
+                            <svg class="icon" [class.open]="selectTemplateToggler" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <path d="M19 8.5L12 15.5L5 8.5" stroke="#D8D8FF" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round"></path>
+                            </svg>
+                        </div>
+                        <div class="options-list" *ngIf="selectTemplateToggler" #templateListWrapper>
+                            <div class="option-wrapper" (click)="onSelectTemplate($event, templateIndex)"
+                                *ngFor="let template of templateList; let templateIndex = index;">
+                                <div class="title">
+                                    {{ template.title }}
+                                </div>
+                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" *ngIf="template.checked">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M5.39199 0.66658H12.617C15.442 0.66658 17.3337 2.64991 17.3337 5.59991V12.4091C17.3337 15.3499 15.442 17.3332 12.617 17.3332H5.39199C2.56699 17.3332 0.666992 15.3499 0.666992 12.4091V5.59991C0.666992 2.64991 2.56699 0.66658 5.39199 0.66658ZM8.52533 11.4916L12.4837 7.53325C12.767 7.24991 12.767 6.79158 12.4837 6.49991C12.2003 6.21658 11.7337 6.21658 11.4503 6.49991L8.00866 9.94158L6.55033 8.48325C6.26699 8.19991 5.80033 8.19991 5.51699 8.48325C5.23366 8.76658 5.23366 9.22491 5.51699 9.51658L7.50033 11.4916C7.64199 11.6332 7.82533 11.6999 8.00866 11.6999C8.20033 11.6999 8.38366 11.6332 8.52533 11.4916Z"
+                                        fill="#0B0BCF" />
+                                </svg>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" *ngIf="!template.checked">
+                                    <path
+                                        d="M4.38783 0.79184H11.612C12.751 0.79184 13.6372 1.19043 14.2413 1.83913C14.8491 2.49186 15.2087 3.43885 15.2087 4.59684V11.4035C15.2087 12.5615 14.8491 13.5085 14.2412 14.1612C13.6371 14.8099 12.7506 15.2085 11.6112 15.2085H4.38783C3.24886 15.2085 2.36282 14.8099 1.75901 14.1613C1.15143 13.5086 0.791992 12.5616 0.791992 11.4035V4.59684C0.791992 3.43941 1.15293 2.49232 1.7616 1.83932C2.36663 1.19022 3.25294 0.79184 4.38783 0.79184Z"
+                                        fill="white" stroke="#CECFD8" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-container">
+                        <div class="auto-generate-docs-wrap">
+                            <label for="autoGenerateDocuments">
+                                <div class="auto-generate-docs" [class.on]="autoGenerateDocuments.value">
+                                    <div class="tap-round"></div>
+                                    <input type="checkbox" name="autoGenerateDocuments" id="autoGenerateDocuments"
+                                        formControlName="autoGenerateDocuments">
+                                </div>
+                            </label>
+                            <label for="autoGenerateDocuments">
+                                <div class="label-title">auto generate documents</div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="input-container" appDragDropFile (fileDropped)="onFileDrop($event)">
+                        <div class="input-wrap">
+                            <label class="label" for="file-select">project cover image</label>
+
+                            <div class="choose-img-container">
+                                <div class="cover-img-preview-wrap">
+                                    <img class="cover-img-preview" *ngIf="projectCoverImgPreview"
+                                        src="{{projectCoverImgPreview}}" alt="project-cover-image">
+
+                                    <div [ngClass]="{
+                                        'choose-img-wrap': !projectCoverImgPreview,
+                                        'choose-img-on-preview': projectCoverImgPreview
+                                    }">
+                                        <label class="choose-img-text" for="file-select">
+                                            Click here to choose a file
+                                            <input class="file-select" id="file-select" type="file"
+                                                accept="{{imageMimeTypes.join(', ')}}"
+                                                (change)="onUploadProjectCoverThumb($event)">
+                                            <input type="hidden" name="fileHidden" formControlName="thumbnailUrl" />
+                                            <!-- Validation Field -->
+                                        </label>
+                                        <div class="choose-img-text or-text">
+                                            or Drag and drop it here
+                                        </div>
+                                        <div class="mime-types">
+                                            JPG, JPEG, PNG
+                                        </div>
+
+
+                                        <div class="edit-img-action-wrap" [class.show]="!!projectCoverImgPreview">
+                                            <label for="file-select">
+                                                <div class="btn">edit</div>
+                                            </label>
+                                            <div class="btn" (click)="onRemovePicture()">delete</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="err-wrap" *ngIf="thumbnailUrl?.touched && thumbnailUrl?.errors">
+                            <p *ngIf="thumbnailUrl.errors?.['required']" class="err-msg">Project must have cover, please
+                                choose one!</p>
+                            <p *ngIf="thumbnailUrl.errors?.['mimeTypeNotSupport']" class="err-msg">
+                                {{thumbnailUrl.errors?.['mimeTypeNotSupport']}}</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="footer-actions">
+                <button class="app-button primary small" type="submit"
+                    [class.disabled]="projectForm.invalid || isRequestAlive"
+                    [disabled]="projectForm.invalid || isRequestAlive">
+                    <span class="btn-label">
+                        {{isEditMode ? 'Save changes' : 'Create project' }}
+                    </span>
+                </button>
+                <!-- (click)="onCloseModal()" -->
+                <button class="app-button simple small" type="button"><span
+                        class="btn-label">cancel</span></button>
+            </div>
+        </form>
+    </ng-container>
+
+    <ng-template #membersTemplate>
+        <div class="member-wrapper">
+            <div class="header">
+                <!-- <div class="new-project-header">
+                    <div class="title">{{isEditMode ? projectDetails.projectName : 'New project' }}</div>
+                    <div class="close-icon" (click)="onCloseModal()">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <g>
+                                <path
+                                    d="M16 32C24.8366 32 32 24.8366 32 16C32 7.16344 24.8366 0 16 0C7.16344 0 0 7.16344 0 16C0 24.8366 7.16344 32 16 32Z"
+                                    fill="#ECECFE" fill-opacity="0.5" />
+                                <path d="M20 12L12 20" stroke="#5386E4" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path d="M12 12L20 20" stroke="#5386E4" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </g>
+                        </svg>
+                    </div>
+                </div> -->
+                <div class="stepper-wrapper">
+                    <div class="stepper-item" (click)="onStep($event, 1)" [class.active]="currentStep == 1">
+                        <div class="stepper-title">
+                            Project details
+                        </div>
+                    </div>
+                    <div class="stepper-item" (click)="onStep($event, 2)" [class.active]="currentStep == 2">
+                        <div class="stepper-title">
+                            Project Team Members
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="body">
+                <div class="member-dropdown">
+                    <div class="label required">Team members</div>
+
+                    <div class="selected-list-wrapper" *ngIf="selectedMembers.length">
+                        <div class="selected-user" *ngFor="let user of selectedMembers; let userIndex = index;">
+                            <div class="user-details">
+                                <div class="img-wrapper">
+                                    <img src="assets/images/project/add-project1.jpeg" />
+                                </div>
+                                <div class="details">
+                                    <div class="name">{{ user.firstName + ' ' + user.lastName }}</div>
+                                    <div class="role" [ngSwitch]="user.type">
+                                        <span *ngSwitchCase="1">Admin</span>
+                                        <span *ngSwitchCase="2">System owner</span>
+                                        <span *ngSwitchCase="3">Project owner</span>
+                                        <span *ngSwitchCase="4">Viewer</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <svg class="delete-icon" (click)="removeSelectedUser($event, userIndex);" width="19"
+                                height="20" viewBox="0 0 19 20" fill="none">
+                                <path
+                                    d="M16.3238 7.4682C16.3238 7.4682 15.7808 14.2032 15.4658 17.0402C15.3158 18.3952 14.4788 19.1892 13.1078 19.2142C10.4988 19.2612 7.88681 19.2642 5.27881 19.2092C3.95981 19.1822 3.13681 18.3782 2.98981 17.0472C2.67281 14.1852 2.13281 7.4682 2.13281 7.4682"
+                                    stroke="#0A0908" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path d="M17.708 4.23969H0.75" stroke="#0A0908" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                                <path
+                                    d="M14.4406 4.23967C13.6556 4.23967 12.9796 3.68467 12.8256 2.91567L12.5826 1.69967C12.4326 1.13867 11.9246 0.750671 11.3456 0.750671H7.11258C6.53358 0.750671 6.02558 1.13867 5.87558 1.69967L5.63258 2.91567C5.47858 3.68467 4.80258 4.23967 4.01758 4.23967"
+                                    stroke="#0A0908" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                            <div class="color-drop" [ngStyle]="{
+                                'zIndex': memberDropdownToggler == userIndex ? '3' : '2'
+                            }" #colorDropdown>
+                                <div class="selected-color" (click)="toggleMemberColorDropdown(userIndex)">
+                                    <div class="color bg-{{selectedColor}}-{{user.color}}"></div>
+                                    <svg class="icon" [class.open]="false" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none">
+                                        <path d="M19 8.5L12 15.5L5 8.5" stroke="#D8D8FF" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+                                </div>
+                                <div class="color-options-list" *ngIf="memberDropdownToggler == userIndex">
+                                    <div class="color-wrapper" (click)="selectMemberColor($event, userIndex, color)"
+                                        *ngFor="let color of colorOptions[selectedColor - 1];let cIndex = index;">
+                                        <div class="color bg-{{selectedColor}}-{{cIndex + 1}}"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="selected-member" (click)="selectMemberToggler = !selectMemberToggler"
+                        #selectedMemberWrapper>
+                        <div class="option">Select member</div>
+                        <svg class="icon" [class.open]="selectMemberToggler" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none">
+                            <path d="M19 8.5L12 15.5L5 8.5" stroke="#D8D8FF" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round"></path>
+                        </svg>
+                    </div>
+                    <div class="options-list" *ngIf="selectMemberToggler" #membersListWrapper>
+                        <div class="option-wrapper" (click)="selectMember($event, memberIndex)"
+                            *ngFor="let member of filteredMembersList; let memberIndex = index;">
+                            <div class="img-wrapper">
+                                <img class="img" src="assets/images/project/add-project1.jpeg" />
+                            </div>
+                            <div class="name">{{ member.firstName + ' ' + member.lastName }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <button class="app-button primary small" [class.disabled]="isRequestAlive" [disabled]="isRequestAlive"
+                    (click)="onAddMembers()">
+                    <span class="btn-label">
+                        {{isEditMode ? 'Save changes' : 'Add Members' }}
+                    </span>
+                </button>
+                <!--  (click)="onCloseModal()" -->
+                <button class="app-button simple small" type="button">
+                    <span class="btn-label">
+                        skip
+                    </span>
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</div>

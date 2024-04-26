@@ -1,0 +1,73 @@
+<div class="auth-layout-form">
+
+    <div class="header">
+        <div class="logo-wrap">
+            <svg width="60" height="40" viewBox="0 0 60 40" fill="none">
+                <rect width="20" height="40" fill="#0B0BCF" />
+                <rect x="20" width="40" height="40" fill="#5386E4" />
+            </svg>
+        </div>
+
+        <h2 class="title">Setup profile with <span class="blue">NexGen Force</span></h2>
+    </div>
+
+    <form class="form-body" [formGroup]="userForm" novalidate (ngSubmit)="onSetup()">
+        <div class="input-wrap">
+            <label class="label required" for="firstName">First name</label>
+            <input class="input" type="text" id="firstName" formControlName="firstName" placeholder="First Name">
+            <div *ngIf="firstName?.touched && firstName?.errors">
+                <p class="err-msg" *ngIf="firstName?.errors?.['required']">
+                    first name is required.
+                </p>
+                <p *ngIf="firstName?.errors?.['maxlength']" class="err-msg">First name must not exceed
+                    {{firstName?.errors?.['maxlength']['requiredLength']}} characters.</p>
+            </div>
+        </div>
+
+        <div class="input-wrap">
+            <label class="label required" for="lastName">Last name</label>
+            <input class="input" type="text" id="lastName" formControlName="lastName" placeholder="Last Name">
+            <div *ngIf="lastName?.touched && lastName?.errors">
+                <p class="err-msg" *ngIf="lastName?.errors?.['required']">
+                    last name is required.
+                </p>
+                <p *ngIf="lastName?.errors?.['maxlength']" class="err-msg">Last name must not exceed
+                    {{lastName?.errors?.['maxlength']['requiredLength']}} characters.</p>
+            </div>
+        </div>
+
+        <div class="input-wrap">
+            <label class="label required" for="password">Password</label>
+            <input class="input" type="password" id="password" formControlName="password" placeholder="Password"
+                (keydown.space)="$event.preventDefault();" (keydown.shift.space)="$event.preventDefault();">
+            <div *ngIf="password?.touched && password?.errors">
+                <p class="err-msg" *ngIf="password?.errors?.['required']">
+                    password is required.
+                </p>
+                <p class="err-msg" *ngIf="password?.errors?.['minlength']">
+                    password must be longer than 8 characters.
+                </p>
+                <p class="err-msg" *ngIf="!password?.errors?.['minlength'] && password?.errors?.['pattern']">
+                    password must be contain at least one digit and one of the !@#$. special character.
+                </p>
+            </div>
+        </div>
+
+        <div class="input-wrap">
+            <label class="label required" for="confirmPassword">Confirm password</label>
+            <input class="input" type="password" id="confirmPassword" formControlName="confirmPassword"
+                placeholder="Confirm Password" (keydown.space)="$event.preventDefault();"
+                (keydown.shift.space)="$event.preventDefault();">
+            <div *ngIf="confirmPassword?.touched && confirmPassword?.errors">
+                <p class="err-msg" *ngIf="confirmPassword?.errors?.['required']">
+                    confirm password is required.
+                </p>
+                <p class="err-msg" *ngIf="confirmPassword?.errors?.['confirm']">
+                    passwords did not match.
+                </p>
+            </div>
+        </div>
+
+        <button class="app-button primary wide" style="margin-top: 24px;">Save</button>
+    </form>
+</div>

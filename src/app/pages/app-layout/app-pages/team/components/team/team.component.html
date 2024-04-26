@@ -1,0 +1,74 @@
+<div class="team-wrap">
+
+    <div class="inner-header">
+        <h2 class="main-title">team</h2>
+        <button class="app-button primary" (click)="onAddMember()"><span class="btn-label">+ add member</span></button>
+    </div>
+
+    <div class="search-header-wrap">
+        <div class="search-input-wrap">
+            <input class="search-input" type="text" name="searchQuery" [(ngModel)]="searchQuery"
+                (ngModelChange)="onSearchQuery($event)" placeholder="Search by Team Member name">
+            <div class="search-icon-wrap">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <g clip-path="url(#clip0_618_2625)">
+                        <path
+                            d="M15.0262 13.8475L18.5953 17.4159L17.4162 18.595L13.8478 15.0259C12.5201 16.0902 10.8687 16.6691 9.16699 16.6667C5.02699 16.6667 1.66699 13.3067 1.66699 9.16669C1.66699 5.02669 5.02699 1.66669 9.16699 1.66669C13.307 1.66669 16.667 5.02669 16.667 9.16669C16.6694 10.8684 16.0905 12.5198 15.0262 13.8475ZM13.3545 13.2292C14.4121 12.1416 15.0027 10.6837 15.0003 9.16669C15.0003 5.94335 12.3895 3.33335 9.16699 3.33335C5.94366 3.33335 3.33366 5.94335 3.33366 9.16669C3.33366 12.3892 5.94366 15 9.16699 15C10.684 15.0024 12.1419 14.4118 13.2295 13.3542L13.3545 13.2292Z"
+                            fill="currentColor" />
+                    </g>
+                    <defs>
+                        <clipPath id="clip0_618_2625">
+                            <rect width="20" height="20" fill="white" />
+                        </clipPath>
+                    </defs>
+                </svg>
+            </div>
+        </div>
+
+        <div class="add-filter-wrap">
+            <div class="icon-wrap">
+                <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M5.38729 3.59998H18.6119C19.5996 3.59998 20.3996 4.42406 20.3996 5.44147V6.72793C20.3996 7.22149 20.2067 7.69545 19.8643 8.04112L14.4 13.5683C14.3058 13.6645 14.1778 13.7179 14.0454 13.7171L9.47031 13.7028C9.33107 13.7028 9.19874 13.6431 9.10361 13.5389L4.0822 8.01617C3.77172 7.67496 3.59961 7.22416 3.59961 6.75644V5.44236C3.59961 4.42495 4.39961 3.59998 5.38729 3.59998ZM9.7149 15.2121L13.7927 15.2246C14.047 15.2255 14.2528 15.4384 14.2528 15.6995V17.9935C14.2528 18.2555 14.1041 18.4924 13.8723 18.602L10.1707 20.3402C10.0842 20.3803 9.99252 20.3999 9.90084 20.3999C9.7789 20.3999 9.65695 20.3642 9.55057 20.2938C9.36463 20.1709 9.25219 19.9589 9.25219 19.7317V15.687C9.25219 15.4242 9.45976 15.2112 9.7149 15.2121Z"
+                        fill="currentColor" />
+                </svg>
+            </div>
+            <span class="label">add filters</span>
+        </div>
+    </div>
+
+    <div class="app-table-container">
+        <div class="app-table-wrap">
+            <div class="tbl-tr">
+                <div class="tbl-th">name</div>
+                <div class="tbl-th">Email</div>
+                <div class="tbl-th">role</div>
+                <div class="tbl-th">Projects</div>
+                <div class="tbl-th">status</div>
+                <div class="tbl-th"></div>
+            </div>
+            <div class="tbl-tr" *ngFor="let user of filteredDisplayUserList;">
+                <div class="tbl-td text-cap">{{(user.firstName + (user?.lastName ? (' ' + user?.lastName) : '')) || '---'}}</div>
+                <div class="tbl-td">{{ user.email }}</div>
+                <div class="tbl-td">{{ user.role }}</div>
+                <div class="tbl-td">{{ user.projects }}</div>
+                <div class="tbl-td text-cap" [class.active]="!user.isInvited">
+                    {{user.isInvited ? 'invited' : 'active'}}
+                </div>
+                <div class="tbl-td text-end">
+                    <div class="action-wrap" (click)="onEditMember(user._id)">
+                        Edit
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M5.6665 3.33341L10.3332 8.00008L5.6665 12.6667" stroke="#0B0BCF" stroke-width="1.5"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="modalToggler">
+    <app-add-member [memberDetails]="selectedMember" (close)="onModalClose($event)" (memberUpdated)="onMemberUpdated($event)" (memberAdded)="onMemberAdded($event)"></app-add-member>
+</ng-container>    

@@ -1,0 +1,178 @@
+@import 'src/styles/_mixins';
+
+
+$primary: #5386E4;
+$primary-hover: rgba(170, 196, 255, 0.25);
+
+//dark   fg  #B1B2FF
+//dark   fg  rgb(177, 178, 255)
+//light  bg  #AAC4FF
+//light  bg  rgb(170, 196, 255)
+//dark   fg  #D2DAFF
+//dark   fg  rgb(210, 218, 255)
+//light  bg  #EEF1FF
+//light  bg  rgb(238, 241, 255)
+
+
+.app-container {
+    height: 100%;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    grid-template-rows: minmax(500px, 100vh);
+
+    .main-content-wrap {
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+
+        .main-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+
+            .main {
+                flex: 1;
+                padding: 25px;
+                height: 100%;
+                width: 100%;
+                overflow: auto;
+            }
+        }
+    }
+
+}
+
+.report-issue-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 96;
+    background-color: transparent;
+
+    .report-issue-wrap {
+        position: relative;
+        padding: 12px;
+        margin: 0 36px 4px 0;
+        width: 300px;
+        background: $base;
+        border-radius: 12px;
+        -webkit-box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.2);
+
+        .title {
+            padding-right: 32px;
+            margin: 0 0 24px;
+            color: $on-base;
+            font-family: $raleway-500;
+            font-size: 22px;
+            font-style: normal;
+            line-height: 32px;
+            text-align: center;
+            text-transform: capitalize;
+        }
+
+        .close-icon-wrap {
+            width: 32px;
+            height: 32px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            @include user-select-none;
+
+            .icon {
+                width: inherit;
+                height: inherit;
+            }
+        }
+
+        .form-wrap {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px 0;
+
+            .input-container {
+                .input-wrap {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px 0;
+
+                    .label {
+                        color: $on-base;
+                        font-family: $raleway-500;
+                        font-size: 13px;
+                        font-style: normal;
+                        line-height: 20px;
+                        text-transform: capitalize;
+                    }
+
+                    .input {
+                        padding: 8px 12px;
+                        color: $on-base;
+                        font-family: $raleway-500;
+                        font-size: 14px;
+                        font-style: normal;
+                        line-height: 24px;
+                        border-radius: 12px;
+                        border: 1px solid rgba(216, 216, 255, 1);
+
+                        &.multiline {
+                            outline: 0;
+                            resize: none;
+                            max-height: 140px;
+                        }
+
+                        &::placeholder,
+                        &::-webkit-input-placeholder {
+                            color: rgba(10, 9, 8, 0.40);
+                            font-family: $raleway-500;
+                            font-size: 14px;
+                            font-style: normal;
+                            line-height: 24px;
+                            /* 171.429% */
+                            text-transform: capitalize;
+                        }
+                    }
+                }
+
+                .err-wrap {
+                    margin-top: 2px;
+                    display: flex;
+                    flex-direction: column;
+
+                    .err-msg {
+                        margin: 0;
+                        color: $error;
+                        font-family: $raleway-500;
+                        font-size: 12px;
+                        font-style: normal;
+                        line-height: 18px;
+                    }
+                }
+            }
+        }
+    }
+
+    .icon-wrap {
+        margin: 0 0 0 auto;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        overflow: hidden;
+        background-color: $base;
+        color: $on-base-blue;
+        cursor: pointer;
+        @include user-select-none;
+        -webkit-box-shadow: 0 0 12px 6px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: 0 0 12px 6px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 0 12px 6px rgba(0, 0, 0, 0.2);
+
+        .icon {
+            width: inherit;
+            height: inherit;
+        }
+    }
+}

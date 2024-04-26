@@ -1,0 +1,283 @@
+@import 'src/styles/_mixins';
+
+:host {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: rgba(0, 0, 30, 0.50);
+    z-index: 99;
+
+    .add-member-wrapper {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100vh;
+        width: 480px;
+        background-color: $base;
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+
+        .header {
+            display: flex;
+            gap: 22px;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 36px 24px 24px 24px;
+            border-bottom: 1px solid #D8D8FF;
+            height: auto;
+            flex: 0 1;
+
+            .icon {
+                cursor: pointer;
+            }
+
+            .title {
+                font-family: $raleway-600;
+                font-size: 20px;
+                line-height: 32px;
+            }
+        }
+
+        .body {
+            padding: 24px 24px 0px 24px;
+            background-color: $base;
+            flex: 1 1;
+            overflow: auto;
+            height: 100%;
+
+            .input-container {
+                margin-bottom: 24px;
+
+                .input-wrap {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px 0;
+
+                    .label {
+                        color: $on-base;
+                        font-family: $raleway-500;
+                        font-size: 12px;
+                        font-style: normal;
+                        line-height: 20px;
+                        text-transform: capitalize;
+                    }
+
+                    .input {
+                        padding: 11px 16px;
+                        color: $on-base;
+                        font-family: $raleway-500;
+                        font-size: 14px;
+                        font-style: normal;
+                        line-height: 24px;
+                        border-radius: 12px;
+                        border: 1px solid rgba(216, 216, 255, 1);
+
+                        &:disabled {
+                            background-color: #F6F9FF;
+                        }
+
+                        &.multiline {
+                            outline: 0;
+                            resize: none;
+                        }
+
+                        &:has(.ng-invalid) {
+                            border-color: $error;
+                        }
+
+                        &::placeholder,
+                        &::-webkit-input-placeholder {
+                            color: rgba(10, 9, 8, 0.40);
+                            font-family: $raleway-500;
+                            font-size: 14px;
+                            font-style: normal;
+                            line-height: 24px;
+                            /* 171.429% */
+                        }
+                    }
+
+                }
+
+                .err-wrap {
+                    margin-top: 2px;
+                    display: flex;
+                    flex-direction: column;
+
+                    .err-msg {
+                        margin: 0;
+                        color: $error;
+                        font-family: $raleway-500;
+                        font-size: 12px;
+                        font-style: normal;
+                        line-height: 18px;
+                    }
+                }
+            }
+
+            .role-dropdown {
+                position: relative;
+                margin-bottom: 24px;
+
+                .label {
+                    font-family: $raleway-500;
+                    margin-bottom: 8px;
+                    font-size: 12px;
+                    line-height: 24px;
+                }
+
+                .selected-role {
+                    position: relative;
+                    padding: 12px 16px;
+                    border-radius: 12px;
+                    border: 1px solid #D8D8FF;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                    gap: 16px;
+
+                    .option {
+                        font-family: $raleway-500;
+                        font-size: 14px;
+                        line-height: 24px;
+                        @include elipses-1;
+                    }
+
+                    .icon {
+                        position: absolute;
+                        top: 50%;
+                        right: 16px;
+                        transform: translateY(-50%);
+
+                        &.open {
+                            transform: translateY(-50%) rotate(180deg)
+                        }
+                    }
+                }
+
+                .options-list {
+                    position: absolute;
+                    top: calc(100% + 12px);
+                    left: 0;
+                    right: 0;
+                    border: 1px solid #D8D8FF;
+                    border-radius: 12px;
+                    background-color: $base;
+                    padding: 8px 0px;
+                    z-index: 1;
+
+                    .option-wrapper {
+                        position: relative;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        padding: 8px 12px;
+                        gap: 16px;
+                        cursor: pointer;
+
+                        .title {
+                            font-family: $raleway-500;
+                            font-size: 12px;
+                            line-height: 20px;
+                        }
+
+                    }
+                }
+            }
+
+            .project-dropdown {
+                position: relative;
+                margin-bottom: 24px;
+
+                .label {
+                    font-family: $raleway-500;
+                    margin-bottom: 8px;
+                    font-size: 12px;
+                    line-height: 24px;
+                }
+
+                .selected-project {
+                    position: relative;
+                    padding: 12px 40px 12px 16px;
+                    border-radius: 12px;
+                    border: 1px solid #D8D8FF;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                    gap: 16px;
+
+                    .option {
+                        font-family: $raleway-500;
+                        font-size: 14px;
+                        line-height: 24px;
+                        @include elipses-1;
+                    }
+
+                    .icon {
+                        position: absolute;
+                        top: 50%;
+                        right: 16px;
+                        transform: translateY(-50%);
+
+                        &.open {
+                            transform: translateY(-50%) rotate(180deg)
+                        }
+                    }
+                }
+
+                .options-list {
+                    position: absolute;
+                    top: calc(100% + 12px);
+                    left: 0;
+                    right: 0;
+                    border: 1px solid #D8D8FF;
+                    border-radius: 12px;
+                    background-color: $base;
+                    padding: 8px 0px;
+                    z-index: 1;
+                    max-height: 236px;
+                    overflow: auto;
+
+                    .option-wrapper {
+                        position: relative;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        padding: 8px 12px;
+                        gap: 16px;
+                        cursor: pointer;
+
+                        &.all {
+                            border-bottom: 1px solid #D8D8FF;
+                            padding-bottom: 12px;
+                        }
+
+                        .title {
+                            font-family: $raleway-500;
+                            font-size: 12px;
+                            line-height: 20px;
+                        }
+
+                        .icon {
+
+                        }
+                    }
+                }
+            }
+
+        }
+
+        .footer {
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 12px;
+            height: 100%;
+            box-shadow: -4px -4px 4px 0px rgba(10, 9, 8, 0.04);
+            flex: 0 1;
+        }
+    }
+}

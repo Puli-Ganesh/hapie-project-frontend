@@ -1,0 +1,82 @@
+<div class="app-container">
+
+    <app-left-side-nav></app-left-side-nav>
+
+    <div class="main-content-wrap">
+        <div class="main-content">
+
+            <app-header></app-header>
+
+            <div class="main">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<app-toaster></app-toaster>
+
+<ng-container *ngIf="_facadeService.appService?.isHeaderShow">
+    <div class="report-issue-container">
+        <div class="report-issue-wrap" #reportIssueContainer *ngIf="toggleReportIssue">
+            <h2 class="title">report your issue!</h2>
+            <div class="close-icon-wrap" (click)="onCloseReportIssue()">
+                <svg class="icon" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <g>
+                        <path fill="#ECECFE" fill-opacity="0.5"
+                            d="M16 32C24.8366 32 32 24.8366 32 16C32 7.16344 24.8366 0 16 0C7.16344 0 0 7.16344 0 16C0 24.8366 7.16344 32 16 32Z" />
+                        <path d="M20 12L12 20" stroke="#5386E4" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M12 12L20 20" stroke="#5386E4" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </g>
+                </svg>
+            </div>
+
+            <form class="form-wrap" [formGroup]="reportIssueForm" (ngSubmit)="submitIssue()">
+                <div class="input-container">
+                    <div class="input-wrap">
+                        <label class="label required" for="name">issue</label>
+                        <input class="input" type="text" id="name" formControlName="issue" placeholder="issue...">
+                    </div>
+
+                    <div class="err-wrap" *ngIf="(issue?.touched && issue?.errors)">
+                        <p *ngIf="issue?.errors?.['required']" class="err-msg">Issue is required!</p>
+                        <p *ngIf="issue?.errors?.['maxlength']" class="err-msg">Issue must not exceed
+                            {{issue.errors?.['maxlength']['requiredLength']}} characters.</p>
+                    </div>
+                </div>
+
+                <div class="input-container">
+                    <div class="input-wrap">
+                        <label class="label required" for="description">describe</label>
+                        <textarea class="input multiline" id="description" formControlName="description" rows="5"
+                            placeholder="describe..."></textarea>
+                    </div>
+
+                    <div class="err-wrap" *ngIf="(description?.touched && description?.errors)">
+                        <p *ngIf="description?.errors?.['required']" class="err-msg">Description is required!</p>
+                        <p *ngIf="description?.errors?.['maxlength']" class="err-msg">Description must not exceed
+                            {{description.errors?.['maxlength']['requiredLength']}} characters.</p>
+                    </div>
+                </div>
+
+                <button class="app-button primary wide small bg-{{projectColor}}-1"
+                    [disabled]="this.reportIssueForm.invalid">
+                    <span class="btn-label">Submit Issue</span>
+                </button>
+            </form>
+        </div>
+
+        <div class="icon-wrap fg-{{projectColor}}-1" #reportIssueIconWrap
+            (click)="toggleReportIssue = !toggleReportIssue;">
+            <svg class="icon" shape-rendering="geometricPrecision" text-rendering="geometricPrecision"
+                image-rendering="optimizeQuality" fill-rule="evenodd" fill="currentColor" clip-rule="evenodd" width="32"
+                height="32" viewBox="0 0 512 512">
+                <path
+                    d="M256 0c70.686 0 134.69 28.658 181.016 74.984C483.342 121.31 512 185.314 512 256c0 70.686-28.658 134.69-74.984 181.016C390.69 483.342 326.686 512 256 512c-70.686 0-134.69-28.658-181.016-74.984C28.658 390.69 0 326.686 0 256c0-70.686 28.658-134.69 74.984-181.016C121.31 28.658 185.314 0 256 0zm19.546 302.281c-.88 22.063-38.246 22.092-39.099-.007-3.779-37.804-13.444-127.553-13.136-163.074.312-10.946 9.383-17.426 20.99-19.898 3.578-.765 7.512-1.136 11.476-1.132 3.987.007 7.932.4 11.514 1.165 11.989 2.554 21.402 9.301 21.398 20.444l-.044 1.117-13.099 161.385zm-19.55 39.211c14.453 0 26.168 11.717 26.168 26.171 0 14.453-11.715 26.167-26.168 26.167s-26.171-11.714-26.171-26.167c0-14.454 11.718-26.171 26.171-26.171z" />
+            </svg>
+        </div>
+    </div>
+</ng-container>

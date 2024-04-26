@@ -1,1 +1,77 @@
 /* You can add global styles to this file, and also import other style files */
+
+// main scss file
+@import './styles/main.scss';
+
+html,
+body {
+    width: 100%;
+    position: relative;
+    font-family: $raleway-400;
+    font-size: 16px;
+    background-color: $base;
+    color: $on-base;
+
+    @include device(xs, s) {
+        font-size: 14.17px;
+    }
+
+    @include device(m, l, xl) {
+        font-size: 16px;
+    }
+
+    @include device(xxl) {
+        font-size: 16px;
+    }
+}
+
+*,
+*::before,
+*::after {
+    // font: inherit;
+    // position: relative;
+    box-sizing: border-box;
+}
+
+.required:after {
+    content: "*";
+    margin-left: 2px;
+    display: inline-block;
+    font-family: "Nunito Sans";
+    font-size: inherit;
+    line-height: inherit;
+    color: #D12335;
+}
+
+@for $i from 1 through length($family-1) {
+    .bg-1-#{$i} {
+        background-color: nth($family-1, $i) !important;
+    }
+    .fg-1-#{$i} {
+        color: nth($family-1, $i) !important;
+    }
+}
+@for $i from 1 through length($family-2) {
+    .bg-2-#{$i} {
+        background-color: nth($family-2, $i) !important;
+    }
+    .fg-2-#{$i} {
+        color: nth($family-2, $i) !important;
+    }
+}
+@for $i from 1 through length($family-3) {
+    .bg-3-#{$i} {
+        background-color: nth($family-3, $i) !important;
+    }
+    .fg-3-#{$i} {
+        color: nth($family-3, $i) !important;
+    }
+}
+@for $i from 1 through length($family-4) {
+    .bg-4-#{$i} {
+        background-color: nth($family-4, $i) !important;
+    }
+    .fg-4-#{$i} {
+        color: nth($family-4, $i) !important;
+    }
+}

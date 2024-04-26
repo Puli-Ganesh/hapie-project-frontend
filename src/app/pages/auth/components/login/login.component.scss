@@ -1,0 +1,153 @@
+@import 'src/styles/_mixins';
+
+.auth-layout-form {
+    margin: 0 auto;
+    width: 280px;
+
+    .header {
+        .logo-wrap {
+            text-align: center;
+            height: 40px;
+            margin-bottom: 32px;
+        }
+
+        .title {
+            margin: 0 0 32px;
+            color: $on-base;
+            text-align: center;
+            font-family: $raleway-600;
+            font-size: 24px;
+            font-style: normal;
+            line-height: 36px;
+            /* 150% */
+
+            .blue {
+                color: $on-base-blue;
+                font-family: inherit;
+                font-size: inherit;
+                font-style: inherit;
+                line-height: inherit;
+            }
+        }
+    }
+
+    .form-body {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px 0;
+
+        .input-wrap {
+            .label {
+                display: block;
+                margin-bottom: 8px;
+                color: $on-base;
+                font-family: $raleway-500;
+                font-size: 12px;
+                font-style: normal;
+                line-height: 20px;
+                /* 166.667% */
+                text-transform: capitalize
+            }
+
+            .input {
+                width: 100%;
+                padding: 7px 26px 7px 12px;
+                border-radius: 8px;
+                border: 1px solid #DADADA;
+                color: $on-base;
+                font-family: $raleway-500;
+                font-size: 12px;
+                font-style: normal;
+                line-height: 24px;
+                /* 200% */
+                outline-color: $primary;
+
+                &::placeholder,
+                &::-webkit-input-placeholder {
+                    color: $on-base-light;
+                    opacity: 1;
+                    /* Firefox */
+                }
+            }
+
+            .password-wrap {
+                position: relative;
+
+                .password-eye {
+                    width: 18px;
+                    height: 18px;
+                    position: absolute;
+                    top: 50%;
+                    right: 10px;
+                    transform: translateY(-50%);
+                    cursor: pointer;
+                    @include user-select-none;
+                }
+            }
+        }
+
+        .forgot-pass-link {
+            color: $on-base-blue;
+            font-family: $raleway-600;
+            font-size: 12px;
+            font-style: normal;
+            line-height: 20px;
+            /* 166.667% */
+            text-transform: capitalize;
+            text-decoration: none;
+        }
+    }
+
+    .another-way {
+        margin: 16px 0;
+        color: $on-base-light;
+        text-align: center;
+        font-family: $raleway-600;
+        font-size: 10px;
+        font-style: normal;
+        line-height: 16px;
+        /* 160% */
+    }
+
+    .another-way-action-wrap {
+        margin-bottom: 24px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0 8px;
+
+        .another-option-item {
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    }
+
+    .note {
+        margin: 0;
+        color: $on-base-light;
+        text-align: center;
+        font-family: $raleway-600;
+        font-size: 10px;
+        font-style: normal;
+        line-height: 16px;
+        /* 160% */
+    }
+
+
+    .err-msg {
+        margin: 0;
+        color: $error;
+        font-family: $raleway-400;
+        font-size: 12px;
+        font-style: normal;
+        line-height: 20px;
+        /* 160% */
+
+        &.m-0 {
+            margin: 0 !important;
+        }
+
+        &:first-of-type {
+            margin: 4px 0 0;
+        }
+    }
+}
