@@ -1,0 +1,339 @@
+@import 'src/styles/_mixins';
+
+
+.media-transcript-container {
+
+    .inner-header {
+        margin-bottom: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px 0;
+
+        .breadcrumb-wrap {
+            display: flex;
+            gap: 0 16px;
+            text-transform: capitalize;
+            color: $on-base-light;
+            font-family: 'raleway-500';
+            font-size: 14px;
+            font-style: normal;
+            line-height: 20px;
+
+            .label {
+                font-family: $raleway-500;
+                font-size: 14px;
+                line-height: 20px;
+            }
+        }
+
+        .right-side {
+            display: flex;
+            gap: 0 20px;
+
+            .auto-highlight-using-ai-wrap {
+                display: flex;
+                gap: 0 8px;
+
+                label[for="autoHighlightUsingAi"] {
+                    height: 20px;
+                }
+                .auto-highlight-using-ai {
+                    position: relative;
+                    width: 36px;
+                    height: 20px;
+                    display: inline-block;
+                    border-radius: 10px;
+                    background-color: $secondary;
+                    cursor: pointer;
+
+                    .tap-round {
+                        width: 16px;
+                        height: 16px;
+                        position: absolute;
+                        left: 2px;
+                        top: 2px;
+                        overflow: hidden;
+                        border-radius: 10px;
+                        background-color: $base;
+
+                        &.on {
+                            left: unset;
+                            right: 2px;
+                        }
+                    }
+
+                    input[type="checkbox"] {
+                        display: none;
+                    }
+                }
+
+                .label-title {
+                    color: $on-base;
+                    font-family: $raleway-500;
+                    font-size: 14px;
+                    font-style: normal;
+                    line-height: 20px;
+                    /* 142.857% */
+                }
+            }
+        }
+    }
+
+    .media-transcript-wrap {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr min-content;
+        gap: 0 24px;
+
+        .transcript-container {
+            min-height: 500px;
+            max-height: calc(100vh - 72px - 32px - 20px - 40px - 10px - 20px);
+            border-radius: 12px;
+            overflow: hidden;
+
+            .transcript-wrap {
+                min-height: inherit;
+                max-height: inherit;
+                overflow-y: auto;
+                padding: 20px;
+                border-radius: 12px;
+                border: 1px solid rgba(216, 216, 255, 1);
+
+                .transcript-item {
+                    color: $on-base;
+                    margin-bottom: 1rem;
+
+                    &.disabled {
+                        color: $on-base-light;
+                    }
+
+                    .transcript-header {
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-start;
+                        gap: 0 8px;
+                        margin-bottom: 0.5rem;
+                        @include user-select-none;
+
+                        .speaker-tag {
+                            height: 20px;
+                            width: 20px;
+                            border-radius: 50%;
+                            object-fit: cover;
+                            object-position: center;
+                            background-color: #D8D8FF;
+                            display: grid;
+                            place-content: center;
+
+                            img {
+                                height: auto;
+                                width: auto;
+                            }
+                        }
+
+                        .time {
+                            flex: 1;
+
+                            .speaker-name {
+                                color: $on-base;
+                                font-family: $raleway-500;
+                                font-size: 12px;
+                                font-style: normal;
+                                line-height: 20px;
+                                /* 166.667% */
+                            }
+
+                            .light {
+                                color: $on-base-light;
+                                font-family: $raleway-500;
+                                font-size: 12px;
+                                font-style: normal;
+                                line-height: 20px;
+                                /* 166.667% */
+                            }
+                        }
+                    }
+
+                    .transcript-content {
+                        border-radius: 12px;
+                        background: #F4F4F4;
+                        padding: 12px;
+
+                        &.selection-1 {
+                            ::selection {
+                                background-color: $color-1-2;
+                            }
+                        }
+                        &.selection-2 {
+                            ::selection {
+                                background-color: $color-2-2;
+                            }
+                        }
+                        &.selection-3 {
+                            ::selection {
+                                background-color: $color-3-2;
+                            }
+                        }
+                        &.selection-4 {
+                            ::selection {
+                                background-color: $color-4-2;
+                            }
+                        }
+
+                        .word-wrapper {
+                            position: relative;
+                            color: $on-base;
+                            font-family: $raleway-500;
+                            font-size: 12px;
+                            font-style: normal;
+                            font-weight: 500;
+                            line-height: 20px;
+                            span {
+                                pointer-events: none;
+
+                                &.highlighted-1 {
+                                    background-color: $color-1-2;
+                                }
+                                &.highlighted-2 {
+                                    background-color: $color-2-2;
+                                }
+                                &.highlighted-3 {
+                                    background-color: $color-3-2;
+                                }
+                                &.highlighted-4 {
+                                    background-color: $color-4-2;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .media-container {
+            padding: 24px 22px;
+            border-radius: 12px;
+            border: 1px solid $secondary;
+            height: max-content;
+
+            .media-wrap {
+                min-width: 302px;
+                border-radius: 12px;
+                border: 1px solid $secondary;
+                overflow: hidden;
+                margin-bottom: 24px;
+                &.border-1 {
+                    border-color: $color-1-2;
+                }
+                &.border-2 {
+                    border-color: $color-2-2;
+                }
+                &.border-3 {
+                    border-color: $color-3-2;
+                }
+                &.border-4 {
+                    border-color: $color-4-2;
+                }
+
+                .media {
+                    width: 300px;
+                    aspect-ratio: 16 / 9;
+                    display: block;
+                    border-radius: 12px;
+                    overflow: hidden;
+                }
+
+                .media-details {
+                    padding: 16px;
+
+                    .media-name {
+                        margin: 0;
+                        color: $on-base;
+                        font-family: $raleway-600;
+                        font-size: 18px;
+                        font-style: normal;
+                        line-height: 28px;
+                        /* 155.556% */
+                        text-transform: capitalize;
+                        @include elipses-1();
+                    }
+
+                    .media-desc {
+                        color: $on-base-light;
+                        font-family: $raleway-500;
+                        font-size: 12px;
+                        font-style: normal;
+                        line-height: 20px;
+                        /* 166.667% */
+                        text-transform: capitalize;
+                    }
+                }
+
+            }
+
+            .delete-wrapper {
+                display: flex;
+                gap: 8px;
+                cursor: pointer;
+
+                .icon {
+                    height: 20px;
+                    width: auto;
+                }
+
+                .label {
+                    color: #D12335;
+                    font-family: $raleway-500;
+                    font-size: 12px;
+                    line-height: 20px;
+                }
+            }
+
+        }
+    }
+
+}
+
+.delete-media-modal {
+    padding: 32px 56px;
+    width: 640px;
+
+    .title {
+        text-align: center;
+        font-family: $raleway-600;
+        font-size: 20px;
+        line-height: 36px;
+        margin-bottom: 24px;
+    }
+
+    .actions-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 36px;
+        
+        .btn {
+            padding: 12px 36px;
+            border-radius: 8px;
+            background-color: #D12335;
+            color: $base;
+            outline: none;
+            border: none;
+            cursor: pointer;
+
+            .label {
+                color: inherit;
+                font-family: $raleway-500;
+                font-size: 16px;
+                line-height: 24px;
+            }
+
+            &.light {
+                background-color: #F4F4F4;
+                color: $on-base;
+            }
+        }
+    }
+}

@@ -1,0 +1,8 @@
+@import 'src/styles/mixins';
+
+.sign-document-wrapper {
+    .iframe {
+        height: calc(100vh - 160px);
+        width: 100%;
+    }
+}

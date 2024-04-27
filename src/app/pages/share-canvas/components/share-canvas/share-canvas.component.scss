@@ -1,0 +1,157 @@
+@import 'src/styles/_mixins';
+
+
+.app-container {
+    padding: 32px;
+    padding-bottom: 15px;
+
+    .inner-header {
+        gap: 30px;
+
+        .breadcrumb-wrap {
+            .label {
+                color: $on-base;
+                font-family: $raleway-500;
+                font-size: 32px;
+                font-style: normal;
+                line-height: 48px;
+                /* 150% */
+                text-transform: capitalize;
+            }
+        }
+
+        .right-side {
+            .app-button {
+                &.success-bg {
+                    background: #5FAD56;
+                    pointer-events: none;
+                    @include user-select-none;
+                }
+            }
+        }
+    }
+
+    .canvas-container {
+        height: calc(100vh - 32px - 50px - 32px - 10px - 10px);
+
+        .canvas-wrap {
+            .category-list-container {
+                .category-list-wrap {
+                    max-height: calc(100vh - 32px - 50px - 32px - 10px - 25px);
+
+                    .requirement-list-wrap {
+                        .requirement-list {
+                            .requirement-container {
+                                &.upsert-mode {
+                                    .requirement-txt {
+                                        margin-top: 20px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .msg-wrap {
+        padding-top: 20px;
+        text-align: center;
+
+        .title {
+            color: $on-base;
+            font-family: $raleway-500;
+            font-size: 20px;
+            font-style: normal;
+            line-height: 24px;
+        }
+    }
+}
+
+.request-edit-access-wrap {
+    width: 640px;
+    padding: 40px 56px 32px;
+
+    .title {
+        margin-bottom: 32px;
+        color: $on-base;
+        text-align: center;
+        font-family: $raleway-600;
+        font-size: 24px;
+        font-style: normal;
+        line-height: 36px;
+        /* 150% */
+        text-transform: capitalize;
+    }
+
+    .request-edit-access-form {
+
+        .input-container {
+            &:first-of-type {
+                margin-bottom: 10px;
+            }
+
+            &:last-of-type {
+                margin-bottom: 60px;
+            }
+
+            .input-wrap {
+                display: flex;
+                flex-direction: column;
+                gap: 8px 0;
+
+                .label {
+                    color: $on-base;
+                    font-family: $raleway-500;
+                    font-size: 12px;
+                    font-style: normal;
+                    line-height: 20px;
+                    text-transform: capitalize;
+                }
+
+                .input {
+                    padding: 11px 16px;
+                    color: $on-base;
+                    font-family: $raleway-500;
+                    font-size: 14px;
+                    font-style: normal;
+                    line-height: 24px;
+                    border-radius: 12px;
+                    border: 1px solid rgba(216, 216, 255, 1);
+
+                    &.multiline {
+                        outline: 0;
+                        resize: none;
+                    }
+
+                    &::placeholder,
+                    &::-webkit-input-placeholder {
+                        color: rgba(10, 9, 8, 0.40);
+                        font-family: $raleway-500;
+                        font-size: 14px;
+                        font-style: normal;
+                        line-height: 24px;
+                        /* 171.429% */
+                        text-transform: capitalize;
+                    }
+                }
+            }
+
+            .err-wrap {
+                margin-top: 2px;
+                display: flex;
+                flex-direction: column;
+
+                .err-msg {
+                    margin: 0;
+                    color: $error;
+                    font-family: $raleway-500;
+                    font-size: 12px;
+                    font-style: normal;
+                    line-height: 18px;
+                }
+            }
+        }
+    }
+}

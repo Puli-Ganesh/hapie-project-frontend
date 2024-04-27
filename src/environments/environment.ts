@@ -8,9 +8,6 @@ const settings: Settings = {
 	apiProtocol: 'http',
 	apiHost: '192.168.29.2',
 	apiPort: 3000
-	// apiProtocol: 'https',
-	// apiHost: 'nexgenforce.ai',
-	// apiPort: 0
 }
 
 export const environment = {

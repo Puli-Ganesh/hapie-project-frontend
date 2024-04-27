@@ -1,4 +1,4 @@
-<div class="new-project-container" #newProjectContainer>
+<div class="manage-project-container" #newProjectContainer>
 
     <ng-container *ngIf="currentStep == 1; else membersTemplate;">
         <form [formGroup]="projectForm" novalidate (ngSubmit)="onProjectUpsert()">
@@ -225,9 +225,8 @@
                         {{isEditMode ? 'Save changes' : 'Create project' }}
                     </span>
                 </button>
-                <!-- (click)="onCloseModal()" -->
-                <button class="app-button simple small" type="button"><span
-                        class="btn-label">cancel</span></button>
+                <button class="app-button simple small" type="button" (click)="onCancelAndSkip()">
+                    <span class="btn-label">cancel</span></button>
             </div>
         </form>
     </ng-container>
@@ -346,8 +345,7 @@
                         {{isEditMode ? 'Save changes' : 'Add Members' }}
                     </span>
                 </button>
-                <!--  (click)="onCloseModal()" -->
-                <button class="app-button simple small" type="button">
+                <button class="app-button simple small" type="button" (click)="onCancelAndSkip()">
                     <span class="btn-label">
                         skip
                     </span>

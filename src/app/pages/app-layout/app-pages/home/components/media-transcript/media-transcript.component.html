@@ -1,0 +1,133 @@
+<div class="media-transcript-container">
+
+    <div class="inner-header">
+        <div class="breadcrumb-wrap">
+            <!-- <div class="label" (click)="onGoToProjects()">projects</div>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M7.29289 14.7071C6.90237 14.3166 6.90237 13.6834 7.29289 13.2929L10.5858 10L7.29289 6.70711C6.90237 6.31658 6.90237 5.68342 7.29289 5.29289C7.68342 4.90237 8.31658 4.90237 8.70711 5.29289L12.7071 9.29289C13.0976 9.68342 13.0976 10.3166 12.7071 10.7071L8.70711 14.7071C8.31658 15.0976 7.68342 15.0976 7.29289 14.7071Z"
+                    fill="#8A8A8A" />
+            </svg>
+            <div class="label" (click)="onGoToProject()">{{projectName}}</div>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M7.29289 14.7071C6.90237 14.3166 6.90237 13.6834 7.29289 13.2929L10.5858 10L7.29289 6.70711C6.90237 6.31658 6.90237 5.68342 7.29289 5.29289C7.68342 4.90237 8.31658 4.90237 8.70711 5.29289L12.7071 9.29289C13.0976 9.68342 13.0976 10.3166 12.7071 10.7071L8.70711 14.7071C8.31658 15.0976 7.68342 15.0976 7.29289 14.7071Z"
+                    fill="#8A8A8A" />
+            </svg>
+            <div class="label" (click)="navigateOnMedia()" style="cursor: pointer;">media</div>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M7.29289 14.7071C6.90237 14.3166 6.90237 13.6834 7.29289 13.2929L10.5858 10L7.29289 6.70711C6.90237 6.31658 6.90237 5.68342 7.29289 5.29289C7.68342 4.90237 8.31658 4.90237 8.70711 5.29289L12.7071 9.29289C13.0976 9.68342 13.0976 10.3166 12.7071 10.7071L8.70711 14.7071C8.31658 15.0976 7.68342 15.0976 7.29289 14.7071Z"
+                    fill="#8A8A8A" />
+            </svg> -->
+            <div class="label">media upload {{recordingDetails?.version}}</div>
+        </div>
+
+        <div class="right-side">
+            <div class="auto-highlight-using-ai-wrap">
+                <label for="autoHighlightUsingAi">
+                    <div class="auto-highlight-using-ai bg-{{projectColor}}-{{autoHighlightUsingAi ? 1 : 2}}">
+                        <div class="tap-round" [class.on]="autoHighlightUsingAi"></div>
+                        <input type="checkbox" name="autoHighlightUsingAi" id="autoHighlightUsingAi"
+                            [(ngModel)]="autoHighlightUsingAi">
+                    </div>
+                </label>
+                <div class="label-title">Auto-highlight using AI</div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="media-transcript-wrap">
+        <div class="transcript-container">
+            <div class="transcript-wrap">
+                <div class="transcript-item" *ngFor="let speaker of speakerWiseTranscript;let speakerIndex = index;">
+                    <div class="transcript-header">
+                        <div class="speaker-tag bg-{{projectColor}}-2">
+                            <svg width="8" class="fg-{{projectColor}}-1" height="10" viewBox="0 0 8 10" fill="none">
+                                <g id="Profile">
+                                    <path id="Fill 1"
+                                        d="M3.9985 6.58734C1.842 6.58734 0 6.92734 0 8.28734C0 9.64784 1.8305 9.99984 3.9985 9.99984C6.155 9.99984 7.997 9.66034 7.997 8.29984C7.997 6.93934 6.167 6.58734 3.9985 6.58734Z"
+                                        fill="currentColor" />
+                                    <path id="Fill 4" opacity="0.4"
+                                        d="M3.99756 5.29188C5.46656 5.29188 6.64356 4.11438 6.64356 2.64588C6.64356 1.17738 5.46656 -0.00012207 3.99756 -0.00012207C2.52906 -0.00012207 1.35156 1.17738 1.35156 2.64588C1.35156 4.11438 2.52906 5.29188 3.99756 5.29188Z"
+                                        fill="currentColor" />
+                                </g>
+                            </svg>
+                        </div>
+                        <span class="time"><span class="speaker-name">{{ speakerTags[speaker.speaker]?.title }} .
+                            </span> <span class="light">{{ getSegmentTime(speakerIndex, 0) }}</span></span>
+                    </div>
+                    <div class="transcript-content selection-{{projectColor}}" (mousedown)="isSelecting = true;"
+                        (mouseleave)="isSelecting = false;">
+                        <ng-container *ngFor="let word of speaker.words; let wordIndex = index;">
+                            <span class="word-wrapper" id="{{'segment_' + speakerIndex + '_' + wordIndex}}">
+                                <span class="{{(autoHighlightUsingAi && word?.highlighted) ? ('highlighted-'+projectColor) : '' }}">
+                                    {{ word.word + ' ' }}
+                                </span>
+                                <!-- {{ word.word + ' ' }} -->
+                                <!-- <span class="pin start-pin"
+                                    *ngIf="selectedText && startSpeakerIndex == speakerIndex && startWordIndex == wordIndex"></span>
+                                <span style="pointer-events: none;" class="highlight-font" [ngClass]="{
+                                    'highlighted': word.highlighted,
+                                    'highlighted-end': word.highlighted && speaker.words[wordIndex + 1] && !speaker.words[wordIndex + 1].highlighted
+                                }">{{ word.word + ' ' }}</span>
+                                <span class="pin end-pin"
+                                    *ngIf="selectedText && endSpeakerIndex == speakerIndex && endWordIndex == wordIndex"></span> -->
+                            </span>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="media-container">
+            <div class="media-wrap border-{{projectColor}}">
+                <ng-container *ngIf="mediaUrl">
+                    <video class="media" width="100%" height="100%" controls=""
+                        controlslist="download playbackrate fullscreen">
+                        <source type="video/mp4" src="{{mediaUrl}}">
+                    </video>
+                </ng-container>
+                <div class="media-details">
+                    <h2 class="media-name">media upload {{recordingDetails?.version}}</h2>
+                    <div class="media-desc">uploaded by :- {{ recordingDetails?.userId ?
+                        (recordingDetails?.userId?.firstName + " " + recordingDetails?.userId?.lastName): "Zoom Meeting"
+                        }}
+                    </div>
+                </div>
+            </div>
+            <div class="delete-wrapper" *ngIf="permissions.MEDIA_DELETE.includes(currentUser.type)"
+                (click)="onDeleteMedia()">
+                <svg class="icon" width="16" height="18" viewBox="0 0 16 18" fill="none">
+                    <path
+                        d="M14.1032 6.89014C14.1032 6.89014 13.6507 12.5026 13.3882 14.8668C13.2632 15.996 12.5657 16.6576 11.4232 16.6785C9.24901 16.7176 7.07234 16.7201 4.89901 16.6743C3.79984 16.6518 3.11401 15.9818 2.99151 14.8726C2.72734 12.4876 2.27734 6.89014 2.27734 6.89014"
+                        stroke="#D12335" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M15.2567 4.19975H1.125" stroke="#D12335" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path
+                        d="M12.5335 4.19974C11.8793 4.19974 11.316 3.73724 11.1877 3.0964L10.9852 2.08307C10.8602 1.61557 10.4368 1.29224 9.95432 1.29224H6.42682C5.94432 1.29224 5.52099 1.61557 5.39599 2.08307L5.19349 3.0964C5.06516 3.73724 4.50182 4.19974 3.84766 4.19974"
+                        stroke="#D12335" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <div class="label">Delete Media</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<app-modal id="deleteMediaModal">
+    <div class="delete-media-modal">
+        <div class="title">
+            Are you sure to delete this media?
+        </div>
+        <div class="actions-container">
+            <button class="btn">
+                Yes, Cancel
+            </button>
+            <button class="btn light">
+                Not Now
+            </button>
+        </div>
+    </div>
+</app-modal>

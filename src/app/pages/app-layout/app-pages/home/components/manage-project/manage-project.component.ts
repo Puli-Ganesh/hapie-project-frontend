@@ -539,11 +539,12 @@ export class ManageProjectComponent implements OnInit {
       this._facadeService.projectService.updateMembers(body).subscribe({
         next: (res: any) => {
           // this.onCloseModal();
+          this._router.navigateByUrl(this.appRoutes.HOME);
           this.isRequestAlive = false;
           this._facadeService.appService.openToaster('Team members saved', 'success');
         },
         error: (err: any) => {
-          console.log(err);
+          console.log(err.error);
           this._facadeService.appService.openToaster('Members not updated', 'danger');
           this.isRequestAlive = false;
         }
@@ -600,8 +601,8 @@ export class ManageProjectComponent implements OnInit {
     this.templateOptionToggler = false;
   }
 
-  // onCloseModal() {
-  //   this.closeModal.emit(true);
-  // }
+  onCancelAndSkip() {
+    this._router.navigateByUrl(this.appRoutes.HOME);
+  }
 
 }

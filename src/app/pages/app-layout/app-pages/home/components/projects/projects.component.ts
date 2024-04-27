@@ -130,6 +130,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       localStorage.setItem(StorageKeys.PROJECT_ID, projectData._id);
       localStorage.setItem(StorageKeys.PROJECT_NAME, projectData.projectName);
       localStorage.setItem(StorageKeys.PROJECT_COLOR, projectData.color);
+      this._facadeService.projectService.selectProject(projectData._id);
       let userData: any = localStorage.getItem(StorageKeys.USER_INFORMATION);
       if (userData) {
         userData = JSON.parse(userData) ?? {};

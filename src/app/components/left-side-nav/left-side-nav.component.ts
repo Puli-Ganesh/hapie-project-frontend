@@ -17,6 +17,11 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
     private _facadeService: FacadeService,
     private _router: Router
   ) {
+    this.projectIdSubscription = this._facadeService.projectService.projectId$.subscribe({
+      next: (projectId: string) => {
+        this.projectId = projectId ?? '';
+      }
+    });
     this.userSubscription = this._facadeService.authService.getCurrentUser$().subscribe({
       next: (user: any) => {
         this.currentUser = user;
@@ -26,8 +31,10 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
 
   protected readonly permissions = Permissions;
   protected readonly appRoutes = Routes;
+  protected projectId: any;
   protected currentUser: any;
   protected userSubscription!: Subscription;
+  protected projectIdSubscription!: Subscription;
 
   protected selectedMenu: number = 1;
   protected isNavCollapsed: boolean = false;
@@ -53,6 +60,8 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.userSubscription?.unsubscribe();
+    this.projectIdSubscription?.unsubscribe();
+    this._facadeService.projectService.removeSelectedProject();
   }
 
 }

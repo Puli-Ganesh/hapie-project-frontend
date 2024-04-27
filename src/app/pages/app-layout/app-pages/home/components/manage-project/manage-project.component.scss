@@ -68,26 +68,12 @@
 
 
 :host {
-    // display: inline-block;
-    // position: fixed;
-    // top: 0;
-    // bottom: 0;
-    // right: 0;
-    // left: 0;
-    // background: rgba(0, 0, 30, 0.50);
-    // z-index: 99;
 
-    .new-project-container {
+    .manage-project-container {
         margin: 0 auto;
         width: 100%;
         max-width: 480px;
-        // display: inline-block;
-        // position: absolute;
-        // top: 0;
-        // right: 0;
-        // bottom: 0;
         background-color: $base;
-        // overflow-y: auto;
 
         .new-project-wrap {
             padding: 0 24px 24px;
@@ -448,14 +434,9 @@
 
         .footer-actions {
             padding: 16px 24px;
-            // position: sticky;
-            // bottom: 0;
-            // left: 0;
-            // right: 0;
             display: flex;
             gap: 0 24px;
             background-color: $base;
-            // box-shadow: -4px -4px 4px 0px rgba(10, 9, 8, 0.04);
         }
     }
 

@@ -1,0 +1,3 @@
+<div class="sign-document-wrapper app-container" *ngIf="isDocumentLoaded">
+    <iframe class="iframe" [src]="documentDetails?.embedLink | safe" frameBorder="0"></iframe>
+</div>

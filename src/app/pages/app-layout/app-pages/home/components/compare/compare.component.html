@@ -1,0 +1,224 @@
+<div class="compare-container">
+
+    <div class="inner-header">
+        <div class="breadcrumb-wrap">
+            <!-- <div class="label" (click)="onGoToProjects()">projects</div>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M7.29289 14.7071C6.90237 14.3166 6.90237 13.6834 7.29289 13.2929L10.5858 10L7.29289 6.70711C6.90237 6.31658 6.90237 5.68342 7.29289 5.29289C7.68342 4.90237 8.31658 4.90237 8.70711 5.29289L12.7071 9.29289C13.0976 9.68342 13.0976 10.3166 12.7071 10.7071L8.70711 14.7071C8.31658 15.0976 7.68342 15.0976 7.29289 14.7071Z"
+                    fill="currentColor" />
+            </svg>
+            <div class="label" (click)="onGoToProject()">{{projectName}}</div>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M7.29289 14.7071C6.90237 14.3166 6.90237 13.6834 7.29289 13.2929L10.5858 10L7.29289 6.70711C6.90237 6.31658 6.90237 5.68342 7.29289 5.29289C7.68342 4.90237 8.31658 4.90237 8.70711 5.29289L12.7071 9.29289C13.0976 9.68342 13.0976 10.3166 12.7071 10.7071L8.70711 14.7071C8.31658 15.0976 7.68342 15.0976 7.29289 14.7071Z"
+                    fill="currentColor" />
+            </svg> -->
+            <div class="label">compare</div>
+        </div>
+
+        <div class="action-buttons">
+            <div class="dropdown-container">
+                <div class="dropdown-wrap bg-{{projectColor}}-2" tabindex="0" (blur)="templateDropdownToggler = false;">
+                    <div class="selected-option-wrap" (click)="onToggleTemplateDropdown()">
+                        <div class="selected-option fg-{{projectColor}}-1">{{selectedTemplate ? selectedTemplate.title :
+                            'Select Template'}}
+                        </div>
+                        <div class="icon-wrap fg-{{projectColor}}-1" [class.open]="templateDropdownToggler">
+                            <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M19 8.5L12 15.5L5 8.5" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="options-container" *ngIf="templateDropdownToggler">
+                        <div class="options-wrap">
+                            <div class="option-wrap" *ngFor="let template of templateList;"
+                                (click)="onSelectTemplate(template)">
+                                <span class="option">{{template.title}}</span>
+                                <div class="icon-wrap" [class.selected]="selectedTemplate?._id === template?._id">
+                                    <svg class="icon fg-{{projectColor}}-1" width="20" height="20" viewBox="0 0 20 20"
+                                        fill="none">
+                                        <path d="M7.0332 10.0003L9.01158 11.9778L12.9666 8.02286" stroke="currentColor"
+                                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="app-button primary bg-{{projectColor}}-1"
+                *ngIf="permissions.GET_AI_SUMMARY.includes(currentUser.type)"
+                [class.disabled]="isAIRequestAlive || !displayCategoryByMediaList.length" (click)="onGetAISummary()"
+                [disabled]="isAIRequestAlive || !displayCategoryByMediaList.length">
+                <span class="btn-label">
+                    {{isAIRequestAlive ? 'generating AI summary...' : 'get AI summary'}}
+                </span>
+            </button>
+        </div>
+    </div>
+
+
+
+    <div class="video-list-wrap">
+        <div class="video-wrap" *ngFor="let media of mediaList; let mediaIndex = index;">
+            <video width="100%" height="100%" controls="" poster="{{media.thumbnailUrl}}"
+                controlslist="nodownload noplaybackrate nofullscreen" disablepictureinpicture="">
+                <source type="video/mp4" src="{{media.videoUrl}}">
+            </video>
+            <div class="details">
+                <div class="title">media upload {{media.version}}</div>
+                <div class="date">{{ media.createdAt | date:'dd.MM.YYYY'}}</div>
+            </div>
+            <div class="check-box-wrap" (click)="onSelectMedia(mediaIndex)">
+                <svg class="fg-{{projectColor}}-1" *ngIf="media.isSelected" width="20" height="20" viewBox="0 0 20 20"
+                    fill="none">
+                    <defs>
+                        <clipPath id="round-corner">
+                            <rect x="1" y="1" width="18" height="18" rx="8px" ry="8px" />
+                        </clipPath>
+                    </defs>
+                    <rect width="20" height="20" clip-path="url(#round-corner)" fill="white" />
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M5.67 0H14.34C17.73 0 20 2.38 20 5.92V14.091C20 17.62 17.73 20 14.34 20H5.67C2.28 20 0 17.62 0 14.091V5.92C0 2.38 2.28 0 5.67 0ZM9.43 12.99L14.18 8.24C14.52 7.9 14.52 7.35 14.18 7C13.84 6.66 13.28 6.66 12.94 7L8.81 11.13L7.06 9.38C6.72 9.04 6.16 9.04 5.82 9.38C5.48 9.72 5.48 10.27 5.82 10.62L8.2 12.99C8.37 13.16 8.59 13.24 8.81 13.24C9.04 13.24 9.26 13.16 9.43 12.99Z"
+                        fill="currentColor" />
+                </svg>
+                <svg *ngIf="!media.isSelected" width="22" height="22" viewBox="0 0 20 20" fill="none">
+                    <path
+                        d="M5.66549 1.25024H14.3345C15.726 1.25024 16.8171 1.73796 17.5628 2.53885C18.3123 3.34376 18.7505 4.50601 18.7505 5.91624V14.0842C18.7505 15.4945 18.3123 16.6567 17.5627 17.4616C16.8169 18.2625 15.7255 18.7502 14.3335 18.7502H5.66549C4.27402 18.7502 3.1832 18.2625 2.43772 17.4617C1.68847 16.6568 1.25049 15.4946 1.25049 14.0842V5.91624C1.25049 4.50656 1.69035 3.34423 2.44087 2.53904C3.18775 1.73775 4.27885 1.25024 5.66549 1.25024Z"
+                        fill="white" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </div>
+        </div>
+        <div *ngIf="!mediaList?.length" class="empty-media-list-wrap">
+            <div class="message">media not available!</div>
+        </div>
+    </div>
+
+
+
+    <div class="comparison-section">
+        <div class="prompt-container">
+            <ng-container *ngFor="let prompts of promptList; let listIndex = index;">
+                <div *ngIf="prompts.hasMany" class="prompt-list-wrap" [class.parent-select]="prompts?.selected">
+                    <div (click)="onSelectPrompt(listIndex, 0)" class="parent-title-wrap"
+                        [ngClass]="prompts?.selected ? ('selected-'+projectColor) : ('hover-'+projectColor)">
+                        <div class="title" [ngClass]="prompts?.selected ? ('fg-'+projectColor+'-1') : ''">
+                            {{prompts.title}}</div>
+                    </div>
+                    <div class="sub-prompt-list">
+                        <div *ngFor="let prompt of prompts.list; let promptIndex = index;" class="sub-prompt-wrap"
+                            [class.selected]="prompt.selected">
+                            <div class="title-wrap" (click)="onSelectPrompt(listIndex, promptIndex)"
+                                [ngClass]="prompt.selected ? ('bg-'+projectColor+'-1') : ('hover-'+projectColor)">
+                                <div class="title">{{prompt.dTitle}}</div>
+                                <div class="right-arrow-icon-wrap">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                        class="right-arrow-icon">
+                                        <path d="M5.66602 3.33335L10.3327 8.00002L5.66602 12.6667" stroke="currentColor"
+                                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="prompt-str">{{prompt.prompt}}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <ng-container *ngIf="!prompts.hasMany">
+                    <div class="prompt-wrap" [class.selected]="prompts?.list?.[0]?.selected">
+                        <div (click)="onSelectPrompt(listIndex)" class="title-wrap"
+                            [ngClass]="prompts.list?.[0]?.selected ? ('selected-'+projectColor) : ('hover-'+projectColor)">
+                            <div class="title">{{prompts?.list?.[0]?.dTitle}}</div>
+                            <div class="right-arrow-icon-wrap">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="right-arrow-icon">
+                                    <path d="M5.66602 3.33335L10.3327 8.00002L5.66602 12.6667" stroke="currentColor"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="prompt-str">{{prompts?.list?.[0]?.prompt}}</div>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </div>
+
+        <div class="media-list-wrap" [class.empty]="!displayCategoryByMediaList.length">
+            <div class="media-wrap"
+                *ngFor="let displayCategoryByMedia of displayCategoryByMediaList; let mediaIndex = index;">
+                <h2 class="media-title">{{displayCategoryByMedia.title}}</h2>
+                <div class="requirement-list">
+                    <div *ngFor="let requirement of displayCategoryByMedia.requirements; let requirementIndex = index;"
+                        [ngClass]="{
+                        'hover-1': projectColor == 1 && permissions.COMPARE_EDIT.includes(currentUser.type),
+                        'hover-2': projectColor == 2 && permissions.COMPARE_EDIT.includes(currentUser.type),
+                        'hover-3': projectColor == 3 && permissions.COMPARE_EDIT.includes(currentUser.type),
+                        'hover-4': projectColor == 4 && permissions.COMPARE_EDIT.includes(currentUser.type)
+                    }"
+                        class="requirement-wrap {{requirement?.isApproved ? ('selected bg-'+projectColor+'-2') : ''}} {{!requirement?.editMode ? ('view-mode ') : ('edit-mode-'+projectColor)}}">
+                        <span class="text"
+                            (click)="onSelectRequirement(selectedCategory?._id, requirement?._id);">{{requirement.requirement}}</span>
+                        <div class="action-wrap" *ngIf="permissions.COMPARE_EDIT.includes(currentUser.type)">
+                            <div class="btn" (click)="onEditRequirement(mediaIndex, requirementIndex)">Edit
+                            </div>
+                            <div class="btn" (click)="onDeleteRequirement(mediaIndex, requirementIndex)">Delete</div>
+                        </div>
+                        <ng-container
+                            *ngIf="editIndex.media === mediaIndex && editIndex.requirement === requirementIndex">
+                            <textarea class="textarea" name="requirement" [(ngModel)]="requirement.requirement"
+                                (keydown.shift.enter)="$event.preventDefault();"
+                                (keydown.enter)="$event.preventDefault();" appAutofocus></textarea>
+                            <div class="edit-action-wrap">
+                                <button class="app-button white-bg fg-{{projectColor}}-1"
+                                    (click)="onCancelEditing()">cancel</button>
+                                <button class="app-button primary bg-{{projectColor}}-1" (click)="onSaveChanges()">save
+                                    changes</button>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <div class="requirement-wrap empty" *ngIf="!displayCategoryByMedia?.requirements?.length">
+                        <span class="text">Data not available!</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="media-wrap"
+                *ngIf="!isAIRequestAlive && isGetAISummaryClicked && displayCategoryByMediaList.length > 0">
+                <h2 class="media-title">Summary(AI)</h2>
+                <div class="requirement-list">
+                    <ng-container *ngFor="let requirement of selectedCategory.requirements;">
+                        <ng-container *ngIf="requirement?.isAiGenerated && requirement?.isApproved">
+                            <div class="requirement-wrap view-mode selected {{('active-'+projectColor)}}"
+                                (click)="onSelectRequirement(selectedCategory?._id, requirement?._id);">
+                                <span class="text">{{requirement.requirement}}</span>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+
+                    <ng-container *ngFor="let aiSummary of aiSummaryList;">
+                        <ng-container *ngIf="aiSummary._id === selectedCategory._id">
+                            <div class="requirement-wrap view-mode" [ngClass]="{
+                                'hover-1': projectColor == 1 && permissions.COMPARE_EDIT.includes(currentUser.type),
+                                'hover-2': projectColor == 2 && permissions.COMPARE_EDIT.includes(currentUser.type),
+                                'hover-3': projectColor == 3 && permissions.COMPARE_EDIT.includes(currentUser.type),
+                                'hover-4': projectColor == 4 && permissions.COMPARE_EDIT.includes(currentUser.type)
+                            }" *ngFor="let requirementStr of aiSummary.requirements;"
+                                (click)="onCreateAIRequirement(selectedCategory._id, requirementStr)">
+                                <span class="text">{{requirementStr}}</span>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                    <div class="requirement-wrap empty">
+                        <span class="text">Data not available!</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="empty-list">
+                Please select {{ !templateList.length ? 'template and' : '' }} media(s) to compare documents.
+            </div>
+        </div>
+    </div>
+</div>

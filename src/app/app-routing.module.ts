@@ -14,6 +14,14 @@ const routes: Routes = [
     loadChildren: () => import('./pages/app-layout/app-layout.module').then(m => m.AppLayoutModule),
   },
   {
+    path: 'canvas',
+    loadChildren: () => import('./pages/share-canvas/share-canvas.module').then(m => m.ShareCanvasModule),
+  },
+  {
+    path: 'sign-document',
+    loadChildren: () => import('./pages/sign-document/sign-document.module').then(m => m.SignDocumentModule),
+  },
+  {
     path: 'auth',
     loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthModule),
   },

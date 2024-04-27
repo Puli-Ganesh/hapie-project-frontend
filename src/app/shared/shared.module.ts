@@ -7,13 +7,21 @@ import { ModalComponent } from './components/modal/modal.component';
 import { UploadDocumentModalComponent } from './components/upload-document-modal/upload-document-modal.component';
 import { UploadMediaModalComponent } from './components/upload-media-modal/upload-media-modal.component';
 
+import { DragDropFileDirective } from '../directives/drag-drop-file.directive';
+import { AutofocusDirective } from '../directives/autofocus.directive';
+
+import { SafePipe } from '../pipes/safe.pipe';
+
 
 @NgModule({
   declarations: [
     ToasterComponent,
     ModalComponent,
     UploadDocumentModalComponent,
-    UploadMediaModalComponent
+    UploadMediaModalComponent,
+    DragDropFileDirective,
+    AutofocusDirective,
+    SafePipe
   ],
   imports: [
     CommonModule,
@@ -24,7 +32,10 @@ import { UploadMediaModalComponent } from './components/upload-media-modal/uploa
     ToasterComponent,
     ModalComponent,
     UploadDocumentModalComponent,
-    UploadMediaModalComponent
+    UploadMediaModalComponent,
+    DragDropFileDirective,
+    AutofocusDirective,
+    SafePipe
   ]
 })
 export class SharedModule { }
