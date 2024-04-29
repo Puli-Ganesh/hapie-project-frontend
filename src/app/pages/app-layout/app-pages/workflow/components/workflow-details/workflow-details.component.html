@@ -1,0 +1,34 @@
+<div class="workflow-wrapper">
+    <div class="main-wrapper">
+        <canvas id="mainCanvas"></canvas>
+    </div>
+</div>
+
+<div class="workflow-name">
+    <label for="">Workflow Title</label>
+    <input type="text" [(ngModel)]="workflowName">
+</div>
+
+<button class="close-button" (click)="onCloseWorkflow()">
+    Close
+</button>
+<button class="save-button" (click)="onSaveData()">
+    Save
+</button>
+
+<div class="options-popup" *ngIf="addToggler" #addPopup>
+    <div class="options-list-wrapper" *ngIf="addList.length">
+        <div *ngFor="let option of addList" class="option-wrapper" (mousedown)="onAddNode(option)">
+            {{ option }}
+        </div>
+    </div>
+    <div class="message" style="padding: 12px;" *ngIf="!addList.length">
+        There are no more apps available
+    </div>
+</div>
+
+<div class="details-drawer" *ngIf="drawerToggler" #detailsDrawer>
+    <div class="body-wrapper">
+        lorem
+    </div>
+</div>

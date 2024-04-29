@@ -29,6 +29,11 @@ const routes: Routes = [
     component: CommonOutletComponent,
     loadChildren: () => import('./app-pages/templates/templates.module').then(m => m.TemplatesModule),
   },
+  {
+    path: 'workflow',
+    component: CommonOutletComponent,
+    loadChildren: () => import('./app-pages/workflow/workflow.module').then(m => m.WorkflowModule),
+  },
 ];
 
 @NgModule({

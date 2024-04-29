@@ -25,18 +25,21 @@ export class AppLayoutComponent implements OnDestroy {
     ).subscribe({
       next: (event: any) => {
         if ('urlAfterRedirects' in event) {
-          const restrictUris = ['/auth', '/sign-document', '/canvas', '/sidebar'];
+          const restrictUris = ['/auth', '/sign-document', '/canvas', '/workflow/details'];
           const isRestrictUri = restrictUris.some((restrictUri: string) => event.urlAfterRedirects.startsWith(restrictUri));
 
           // && _facadeService.appService.isHeaderShow === false
           if (!isRestrictUri && _facadeService.authService.isLoggedIn()) {
             // _facadeService.appService.setIsHeaderShow(true);
+            this.isSidebarHidden = false;
             this.reportIssueForm = this._fb.group({
               issue: ['', [Validators.required, Validators.maxLength(250)]],
               description: ['', [Validators.required, Validators.maxLength(5000)]],
               routeName: [event.urlAfterRedirects ?? '', Validators.required],
               raisedBy: ['']
             });
+          } else {
+            this.isSidebarHidden = true;
           }
 
           if (!isRestrictUri && event.urlAfterRedirects && event.urlAfterRedirects !== this.reportIssueForm.value.routeName) {
@@ -62,6 +65,8 @@ export class AppLayoutComponent implements OnDestroy {
   protected toggleReportIssue: boolean = false;
   protected reportIssueForm!: FormGroup;
   protected projectColor!: number;
+
+  protected isSidebarHidden = false;
 
 
   @ViewChild('reportIssueContainer') reportIssueContainer!: ElementRef;

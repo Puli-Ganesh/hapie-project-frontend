@@ -307,8 +307,8 @@ export class ManageProjectComponent implements OnInit {
           if (res.code == "OK") {
             // this.upsertProjectEvent.emit(res.data.project);
             // this.onCloseModal();
+            this.currentStep = 2;
             this._facadeService.appService.openToaster('Saved', 'success');
-            this._router.navigateByUrl(this.appRoutes.HOME);
           }
         },
         error: (error: any) => {
@@ -327,7 +327,6 @@ export class ManageProjectComponent implements OnInit {
             // this.upsertProjectEvent.emit(res.data.project);
             this.currentStep = 2;
             this._facadeService.appService.openToaster('Project created successfully', 'success');
-            this._router.navigateByUrl(this.appRoutes.HOME);
           }
         },
         error: (error: any) => {

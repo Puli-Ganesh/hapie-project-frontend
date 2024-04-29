@@ -1,7 +1,7 @@
 @import 'src/styles/_mixins';
 
 
-.app-container {
+.canvas-container {
     padding: 32px;
     padding-bottom: 15px;
 
@@ -31,13 +31,13 @@
         }
     }
 
-    .canvas-container {
+    .canvas-wrap-ctr {
         height: calc(100vh - 32px - 50px - 32px - 10px - 10px);
 
         .canvas-wrap {
             .category-list-container {
                 .category-list-wrap {
-                    max-height: calc(100vh - 32px - 50px - 32px - 10px - 25px);
+                    max-height: calc(100vh - 32px - 50px - 32px - 10px - 30px);
 
                     .requirement-list-wrap {
                         .requirement-list {

@@ -1,13 +1,17 @@
-<div class="app-container">
+<div class="app-container" [ngClass]="{
+    'sidebar-hide': isSidebarHidden
+}">
 
-    <app-left-side-nav></app-left-side-nav>
+    <app-left-side-nav *ngIf="!isSidebarHidden"></app-left-side-nav>
 
     <div class="main-content-wrap">
         <div class="main-content">
 
-            <app-header></app-header>
+            <app-header *ngIf="!isSidebarHidden"></app-header>
 
-            <div class="main">
+            <div class="main" [ngStyle]="{
+                'padding': !isSidebarHidden ? '25px' : '0px'
+            }">
                 <router-outlet></router-outlet>
             </div>
         </div>

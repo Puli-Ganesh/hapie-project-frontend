@@ -7,23 +7,67 @@
                     <rect x="20" width="40" height="40" fill="#5386E4" />
                 </svg>
             </div>
-            <div class="notification-wrap">
-                <svg class="notification-icon" width="19" height="22" viewBox="0 0 19 22" fill="none">
-                    <mask id="mask0_182_203" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0"
-                        width="19" height="18">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0H18.4969V17.348H0V0Z" fill="white" />
-                    </mask>
-                    <g mask="url(#mask0_182_203)">
+            <div class="notif-container" #notificationContainer>
+                <button class="notif-icon-wrap" (click)="onNotificationToggle()">
+                    <svg class="notif-icon" width="19" height="22" viewBox="0 0 19 22" fill="none">
+                        <mask id="mask0_182_203" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0"
+                            width="19" height="18">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0H18.4969V17.348H0V0Z" fill="white" />
+                        </mask>
+                        <g mask="url(#mask0_182_203)">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M9.24701 1.5C5.75201 1.5 3.31601 4.238 3.31601 6.695C3.31601 8.774 2.73901 9.735 2.22901 10.583C1.82001 11.264 1.49701 11.802 1.49701 12.971C1.66401 14.857 2.90901 15.848 9.24701 15.848C15.55 15.848 16.834 14.813 17 12.906C16.997 11.802 16.674 11.264 16.265 10.583C15.755 9.735 15.178 8.774 15.178 6.695C15.178 4.238 12.742 1.5 9.24701 1.5ZM9.24701 17.348C4.57101 17.348 0.345013 17.018 1.33547e-05 13.035C-0.00298665 11.387 0.500013 10.549 0.944013 9.811C1.39301 9.063 1.81601 8.358 1.81601 6.695C1.81601 3.462 4.80201 0 9.24701 0C13.692 0 16.678 3.462 16.678 6.695C16.678 8.358 17.101 9.063 17.55 9.811C17.994 10.549 18.497 11.387 18.497 12.971C18.148 17.018 13.923 17.348 9.24701 17.348Z"
+                                fill="#0A0908" />
+                        </g>
                         <path fill-rule="evenodd" clip-rule="evenodd"
-                            d="M9.24701 1.5C5.75201 1.5 3.31601 4.238 3.31601 6.695C3.31601 8.774 2.73901 9.735 2.22901 10.583C1.82001 11.264 1.49701 11.802 1.49701 12.971C1.66401 14.857 2.90901 15.848 9.24701 15.848C15.55 15.848 16.834 14.813 17 12.906C16.997 11.802 16.674 11.264 16.265 10.583C15.755 9.735 15.178 8.774 15.178 6.695C15.178 4.238 12.742 1.5 9.24701 1.5ZM9.24701 17.348C4.57101 17.348 0.345013 17.018 1.33547e-05 13.035C-0.00298665 11.387 0.500013 10.549 0.944013 9.811C1.39301 9.063 1.81601 8.358 1.81601 6.695C1.81601 3.462 4.80201 0 9.24701 0C13.692 0 16.678 3.462 16.678 6.695C16.678 8.358 17.101 9.063 17.55 9.811C17.994 10.549 18.497 11.387 18.497 12.971C18.148 17.018 13.923 17.348 9.24701 17.348Z"
+                            d="M9.19803 21.5H9.19603C8.07503 21.499 7.01403 21.005 6.20903 20.108C5.93203 19.801 5.95703 19.326 6.26503 19.05C6.57303 18.772 7.04703 18.797 7.32403 19.106C7.84203 19.683 8.50703 20 9.19703 20H9.19803C9.89103 20 10.559 19.683 11.078 19.105C11.356 18.798 11.83 18.773 12.137 19.05C12.445 19.327 12.47 19.802 12.193 20.109C11.385 21.006 10.322 21.5 9.19803 21.5Z"
                             fill="#0A0908" />
-                    </g>
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M9.19803 21.5H9.19603C8.07503 21.499 7.01403 21.005 6.20903 20.108C5.93203 19.801 5.95703 19.326 6.26503 19.05C6.57303 18.772 7.04703 18.797 7.32403 19.106C7.84203 19.683 8.50703 20 9.19703 20H9.19803C9.89103 20 10.559 19.683 11.078 19.105C11.356 18.798 11.83 18.773 12.137 19.05C12.445 19.327 12.47 19.802 12.193 20.109C11.385 21.006 10.322 21.5 9.19803 21.5Z"
-                        fill="#0A0908" />
-                </svg>
-                <div class="badge" *ngIf="true">
-                    <div class="count">{{ '2' }}</div>
+                    </svg>
+                </button>
+                <div class="badge" *ngIf="notificationCount">
+                    <div class="count">{{ notificationCount }}</div>
+                </div>
+
+                <div class="notif-center-wrap" *ngIf="isNotifCenterOpen">
+                    <div class="notif-center">
+                        <div class="notif-header">
+                            <h3 class="title">notifications</h3>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="notif-body">
+                            <div class="notifs-wrap" *ngFor="let notification of notificationList; let index = index;">
+                                <div class="profile-icon">
+                                    <svg width="24" height="24" viewBox="0 0 20 20" fill="none">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M7.877 13.2063C4.033 13.2063 0.75 13.7873 0.75 16.1153C0.75 18.4433 4.013 19.0453 7.877 19.0453C11.722 19.0453 15.004 18.4633 15.004 16.1363C15.004 13.8093 11.742 13.2063 7.877 13.2063Z"
+                                            stroke="#0B0BCF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M7.87562 9.886C10.3986 9.886 12.4436 7.841 12.4436 5.318C12.4436 2.795 10.3986 0.75 7.87562 0.75C5.35362 0.75 3.30862 2.795 3.30862 5.318C3.29962 7.832 5.32962 9.877 7.84462 9.886H7.87562Z"
+                                            stroke="#0B0BCF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M17.2031 6.66919V10.6792" stroke="#0B0BCF" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path d="M19.2502 8.67407H15.1602" stroke="#0B0BCF" stroke-width="1.5" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                    </svg>
+                                </div>
+                                <div class="notif-wrap">
+                                    <div class="req-type">REQUEST EDIT ACCESS</div>
+                                    <div class="title-wrap">
+                                        <span class="title text-cap">{{ notification.name }}</span><span class="title"> is requesting edit access to the {{ notification?.projectId?.projectName ?? '-' }} canvas.</span>
+                                    </div>
+                                    <div class="message" *ngIf="notification?.message">{{ notification.message }}</div>
+                                    <ng-container ngSwitch="{{notification?.shareCanvasId?.hasEditAccess ? 'Y' : 'N'}}">
+                                        <button *ngSwitchCase="'N'" class="btn-approve" type="button" (click)="onApproveEditAccess(index)">
+                                            Approve
+                                        </button>
+                                        <button *ngSwitchCase="'Y'" class="btn-approve approved">
+                                            Approved
+                                        </button>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -67,7 +111,7 @@
                     </div>
                 </button>
 
-                <ng-container *ngIf="permissions.MENU_TEMPLATES.includes(currentUser?.type)">
+                <ng-container *ngIf="permissions.MENU_TEAM.includes(currentUser?.type)">
                     <div class="divider"></div>
                     <button class="menu-item" routerLinkActive="active" routerLink="{{appRoutes.TEAM}}" type="button">
                         <div class="icon-wrap">
@@ -106,7 +150,7 @@
                     </button>
                 </ng-container>
 
-                <ng-container *ngIf="permissions.MENU_TEAM.includes(currentUser?.type)">
+                <ng-container *ngIf="permissions.MENU_TEMPLATES.includes(currentUser?.type)">
                     <div class="divider"></div>
                     <button class="menu-item" routerLinkActive="active" routerLink="{{appRoutes.TEMPLATES}}"
                         type="button">
@@ -130,6 +174,34 @@
                             <svg class="more-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                 <path d="M5.66699 3.33334L10.3337 8L5.66699 12.6667" stroke="currentColor"
                                     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                    </button>
+                </ng-container>
+
+                <ng-container *ngIf="permissions.MENU_WORKFLOW.includes(currentUser?.type)">
+                    <div class="divider"></div>
+                    <button class="menu-item" routerLinkActive="active" routerLink="{{appRoutes.WORKFLOW}}" type="button">
+                        <div class="icon-wrap">
+                            <svg class="icon" width="32" height="32" viewBox="0 0 80 80" fill="none">
+                                <path opacity="0.4"
+                                    d="M62.6954 30.07C61.1904 30.07 59.1968 30.0367 56.7148 30.0367C50.6617 30.0367 45.6845 25.0267 45.6845 18.9167V8.19666C45.6845 7.35333 45.0112 6.66666 44.1762 6.66666H26.5448C18.3166 6.66666 11.666 13.42 11.666 21.6967V57.6133C11.666 66.2967 18.6334 73.3333 27.2313 73.3333H53.4869C61.6854 73.3333 68.3327 66.6233 68.3327 58.34V31.57C68.3327 30.7233 67.6627 30.04 66.8243 30.0433C65.415 30.0533 63.7252 30.07 62.6954 30.07Z"
+                                    fill="currentColor" />
+                                <path opacity="0.4"
+                                    d="M53.6136 8.55766C52.617 7.521 50.877 8.23433 50.877 9.671V18.461C50.877 22.1477 53.9136 25.181 57.6003 25.181C59.9236 25.2077 63.1503 25.2143 65.8903 25.2077C67.2936 25.2043 68.007 23.5277 67.0336 22.5143C63.517 18.8577 57.2203 12.3043 53.6136 8.55766Z"
+                                    fill="currentColor" />
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M29.9116 37.9587H41.195C42.565 37.9587 43.6783 36.8487 43.6783 35.4787C43.6783 34.1087 42.565 32.9953 41.195 32.9953H29.9116C28.5416 32.9953 27.4316 34.1087 27.4316 35.4787C27.4316 36.8487 28.5416 37.9587 29.9116 37.9587ZM29.912 54.606H48.0586C49.4286 54.606 50.542 53.496 50.542 52.126C50.542 50.756 49.4286 49.6427 48.0586 49.6427H29.912C28.542 49.6427 27.432 50.756 27.432 52.126C27.432 53.496 28.542 54.606 29.912 54.606Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </div>
+                        <div class="menu-label">
+                            workflow
+                        </div>
+                        <div class="more-icon-wrap">
+                            <svg class="more-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M5.66699 3.33334L10.3337 8L5.66699 12.6667" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                         </div>
                     </button>

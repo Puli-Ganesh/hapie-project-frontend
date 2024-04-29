@@ -1,0 +1,122 @@
+@import 'src/styles/mixins';
+
+
+.workflow-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+    z-index: 1;
+
+    .main-wrapper {
+        overflow: hidden;
+        width: calc(100%);
+    }
+
+}
+
+.options-popup {
+    position: fixed;
+    z-index: 9;
+    background-color: #fff;
+    width: 240px;
+
+    .options-list-wrapper {
+        padding: 12px;
+        width: 240px;
+        height: fit-content;
+        max-height: 240;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #dfdfdf;
+        border-radius: 4px;
+        overflow: auto;
+
+        .option-wrapper {
+            padding: 6px;
+
+            &:hover {
+                background-color: #efefef;
+            }
+
+            cursor: pointer;
+        }
+    }
+
+    .message {
+        padding: 12px;
+        border: 1px solid #dfdfdf;
+        border-radius: 4px;
+        font-size: 12px;
+        text-align: center;
+    }
+}
+
+
+.workflow-name {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 240px;
+    border: none;
+    z-index: 3;
+
+    label {
+        color: $on-base;
+        font-size: 14px;
+        margin-bottom: 8px;
+        display: inline-block;
+    }
+
+    input {
+        display: inline-block;
+        font-size: 14px;
+        border-radius: 4px;
+        padding: 8px 14px;
+        width: 100%;
+        border: 1px solid #dfdfdf;
+    }
+}
+
+.save-button {
+    position: fixed;
+    top: 20px;
+    right: 100px;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 4px;
+    background: #0B0BCF;
+    color: white;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.close-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 4px;
+    background: #0B0BCF;
+    color: white;
+    cursor: pointer;
+    z-index: 3;
+
+}
+
+.details-drawer {
+    position: fixed;
+    width: 420px;
+    height: 100vh;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3;
+    background-color: white;
+    padding: 24px;
+    box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+}
