@@ -3,7 +3,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { FacadeService } from '@src/app/services/facade.service';
-import { IConnection, ICoordinates, IPosition, Node } from './node';
+import { IConnection, ICoordinates, IPosition, Node, roundedRect } from './node';
 
 @Component({
   selector: 'app-workflow-details',
@@ -43,23 +43,27 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   mainRect: DOMRect | null = null;
   mainCTX: CanvasRenderingContext2D | null = null;
   canConnect: Array<any> = [];
-  nodeWidth: number = 100;
-  nodeHeight: number = 100;
-  gap: number = 50;
+  nodeWidth: number = 151;
+  nodeHeight: number = 48;
+  gap: number = 70;
+  radius: number = 8;
+  nodeConnectorSize = 6;
   currentNodeId: number = 0;
   nodes: Array<Node> = [];
-
+  nodeImage: HTMLImageElement | null = null;
 
   async ngOnInit() {
+    this.setNodeImage();
     await this.getRootObject();
+    this.setCanvasSize();
     if (this.editMode) {
       await this.getWorkflowDetails();
     } else {
       this.addRootNode();
     }
 
-    this.setCanvasSize();
-    window.requestAnimationFrame(this.animateNode);
+
+    window.requestAnimationFrame(this.animate);
   }
 
   repeatingChildParent: any = {};
@@ -67,7 +71,12 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   processedChildren: any = [];
   childHeightSet: boolean = false;
 
-  animateNode = () => {
+  setNodeImage() {
+    this.nodeImage = new Image();
+    this.nodeImage.src = 'assets/images/component.svg';
+  }
+
+  animate = () => {
     if (!this.mainCTX) return;
 
     this.mainCTX.clearRect((this.mainRect as DOMRect).top, (this.mainRect as DOMRect).left, (this.mainRect as DOMRect).width, (this.mainRect as DOMRect).height);
@@ -81,38 +90,41 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
     }
 
 
-    const x = this.gap;
-    const y = ((this.mainRect as DOMRect).height / 2) - this.nodeHeight / 2;
-    // const x = 50;
-    // const y = 400
-    this.nodes[0].coords.x = x;
-    this.nodes[0].coords.y = y;
-    this.draw(this.nodes[0], x, y);
+    this.nodes[0].coords.x = this.panOffset.x;
+    this.nodes[0].coords.y = this.panOffset.y;
+    this.draw(this.nodes[0], this.nodes[0].coords.x, this.nodes[0].coords.y);
 
     this.repeatingChildParent = {};
-    window.requestAnimationFrame(this.animateNode);
+    window.requestAnimationFrame(this.animate);
+  }
+
+  drawConnector(ctx: CanvasRenderingContext2D, x: number, y: number) {
+    ctx.save();
+    ctx.fillStyle = '#2C76FF';
+    ctx.beginPath();
+    ctx.arc(x, y, this.nodeConnectorSize * this.scale, 0, Math.PI * 2, true);
+    ctx.fill();
   }
 
   draw(node: Node, x: number, y: number) {
     if (!this.mainCTX) return;
     this.mainCTX.fillStyle = '#ECECFE';
-    this.mainCTX.strokeStyle = '#0B0BCF';
-
+    this.mainCTX.strokeStyle = '#2C76FF';
 
     if (this.repeatingChildren[node.id]) {
       let totalChildrenHeight = 0;
       for (let id of this.repeatingChildren[node.id]) {
         let parent = this.nodes.find(n => n.id === id);
-        totalChildrenHeight += (parent as Node)?.childHeight || (this.nodeHeight + this.gap);
+        totalChildrenHeight += (parent as Node)?.childHeight || ((this.nodeHeight * this.scale) + (this.gap * this.scale));
       }
-      totalChildrenHeight -= this.gap;
-      y += (totalChildrenHeight / 2) - this.nodeHeight / 2
+      totalChildrenHeight -= (this.gap * this.scale);
+      y += (totalChildrenHeight / 2) - (this.nodeHeight * this.scale) / 2;
       this.mainCTX.beginPath();
-      this.mainCTX.moveTo(x, y + (this.nodeHeight / 2));
-      this.mainCTX.lineTo(x - (this.gap / 2), y + (this.nodeHeight / 2));
-      this.mainCTX.lineTo(x - (this.gap / 2), y - (totalChildrenHeight / 2) + this.nodeHeight);
-      this.mainCTX.moveTo(x - (this.gap / 2), y + (this.nodeHeight / 2));
-      this.mainCTX.lineTo(x - (this.gap / 2), y + (totalChildrenHeight / 2));
+      this.mainCTX.moveTo(x, y + ((this.nodeHeight * this.scale) / 2));
+      this.mainCTX.lineTo(x - ((this.gap * this.scale) / 2), y + ((this.nodeHeight * this.scale) / 2));
+      this.mainCTX.lineTo(x - ((this.gap * this.scale) / 2), y - (totalChildrenHeight / 2) + (this.nodeHeight * this.scale));
+      this.mainCTX.moveTo(x - ((this.gap * this.scale) / 2), y + ((this.nodeHeight * this.scale) / 2));
+      this.mainCTX.lineTo(x - ((this.gap * this.scale) / 2), y + (totalChildrenHeight / 2));
       this.mainCTX.stroke();
       this.mainCTX.closePath();
 
@@ -125,23 +137,14 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
 
     node.coords.x = x;
     node.coords.y = y;
-    this.mainCTX.fillRect(node.coords.x, node.coords.y, node.coords.width, node.coords.height);
-    node.setButtons();
-    if (node.title) {
-      this.mainCTX.font = '14px Arial';
-      this.mainCTX.fillStyle = '#0B0BCF';
-      this.mainCTX.textAlign = 'center';
-      this.mainCTX.textBaseline = 'middle';
-      this.mainCTX.fillText(node.title.toString(), node.coords.x + node.coords.width / 2, node.coords.y + node.coords.height / 2);
-    }
-
-
+    this.drawNode(node, this.mainCTX);
+    node.setButtons(this.scale);
 
     let totalHeight = 0;
     const children = node.connection.to;
     for (let child of children) {
       let childNode = this.nodes.find(n => n.id == child);
-      totalHeight += childNode?.childHeight || this.gap + this.nodeHeight;
+      totalHeight += childNode?.childHeight || (this.gap * this.scale) + (this.nodeHeight * this.scale);
     }
 
     let startY;
@@ -151,36 +154,36 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
       startY = (node.coords.y - (totalHeight / 2))
     }
 
-    const startX = x + this.nodeWidth / 2 + this.gap;
+    const startX = x + (this.nodeWidth * this.scale) / 2 + (this.gap * this.scale);
     let currentY = startY;
 
     for (let childId of children) {
       const child = this.nodes.find(n => n.id === childId);
       let childY = currentY;
       if ((child as Node).connection.to.length && this.repeatingChildren[(child as Node).connection.to[0]]) {
-        childY += (this.nodeHeight + this.gap) / 2
+        childY += ((this.nodeHeight * this.scale) + (this.gap * this.scale)) / 2
       } else {
-        childY += (((child?.childHeight || 0) / 2) || (this.nodeHeight + this.gap) / 2)
+        childY += (((child?.childHeight || 0) / 2) || ((this.nodeHeight * this.scale) + (this.gap * this.scale)) / 2)
       }
 
-      const childX = startX + this.nodeWidth / 2;
+      const childX = startX + (this.nodeWidth * this.scale) / 2;
       (child as any).parent = node.id;
       if (!(this.repeatingChildren[(child as Node).id] && this.repeatingChildParent[childId])) {
         this.draw(child as Node, childX, childY);
       }
-      currentY += (child?.childHeight || (this.nodeHeight + this.gap));
+      currentY += (child?.childHeight || ((this.nodeHeight * this.scale) + (this.gap * this.scale)));
       this.mainCTX.beginPath();
-      this.mainCTX.moveTo(x + this.nodeWidth, y + (this.nodeHeight / 2));
-      this.mainCTX.lineTo(x + this.nodeWidth + (this.gap / 2), y + (this.nodeHeight / 2));
-      this.mainCTX.lineTo(x + this.nodeWidth + (this.gap / 2), childY + (this.nodeHeight / 2));
+      this.mainCTX.moveTo(x + (this.nodeWidth * this.scale), y + ((this.nodeHeight * this.scale) / 2));
+      this.mainCTX.lineTo(x + (this.nodeWidth * this.scale) + ((this.gap * this.scale) / 2), y + ((this.nodeHeight * this.scale) / 2));
+      this.mainCTX.lineTo(x + (this.nodeWidth * this.scale) + ((this.gap * this.scale) / 2), childY + ((this.nodeHeight * this.scale) / 2));
 
       this.mainCTX.stroke();
       this.mainCTX.closePath();
 
       if (!this.repeatingChildren[(child as Node).id]) {
         this.mainCTX.beginPath();
-        this.mainCTX.moveTo(x + this.nodeWidth + (this.gap / 2), childY + (this.nodeHeight / 2));
-        this.mainCTX.lineTo(childX, childY + (this.nodeHeight / 2));
+        this.mainCTX.moveTo(x + (this.nodeWidth * this.scale) + ((this.gap * this.scale) / 2), childY + ((this.nodeHeight * this.scale) / 2));
+        this.mainCTX.lineTo(childX, childY + ((this.nodeHeight * this.scale) / 2));
         this.mainCTX.stroke();
         this.mainCTX.closePath();
       }
@@ -188,7 +191,61 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
 
     // for rendering extra state
     if (node.isHovered) {
-      node.drawButtons(this.mainCTX);
+      node.drawButtons(this.mainCTX, this.scale);
+    }
+
+  }
+
+  drawNode(node: Node, ctx: CanvasRenderingContext2D) {
+    // ctx.fillRect(node.coords.x, node.coords.y, node.coords.width * this.scale, node.coords.height * this.scale);
+    const smallRect = {
+      x: node.coords.x,
+      y: node.coords.y,
+      width: this.nodeHeight * this.scale,
+      height: this.nodeHeight * this.scale
+    }
+    roundedRect(ctx, smallRect, this.radius * this.scale, 'fill', '#F9FAFB', true, false, false, true);
+    if (this.nodeImage) {
+      const imageSize = smallRect.width / 2;
+      const x = smallRect.x + (smallRect.width - imageSize) / 2;
+      const y = smallRect.y + (smallRect.height - imageSize) / 2;
+      ctx.drawImage((this.nodeImage as HTMLImageElement), x, y, imageSize, imageSize);
+    }
+
+    const mainRect = {
+      x: node.coords.x + smallRect.width,
+      y: node.coords.y,
+      width: this.nodeWidth * this.scale - smallRect.width,
+      height: this.nodeHeight * this.scale
+    }
+    roundedRect(ctx, mainRect, this.radius * this.scale, 'fill', '#FFFFFF', false, true, true, false);
+    if (node.title) {
+      ctx.font = `400 ${14 * this.scale}px Inter`;
+      ctx.fillStyle = '#2D2E2E';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(node.title.toString(), mainRect.x + (8 * this.scale), mainRect.y + (mainRect.height) / 2);
+    }
+
+    ctx.save();
+    ctx.strokeStyle = '#E4E7EC';
+    ctx.beginPath();
+    ctx.moveTo(smallRect.x + smallRect.width, smallRect.y);
+    ctx.lineTo(smallRect.x + smallRect.width, smallRect.y + smallRect.height);
+    ctx.stroke();
+    ctx.restore();
+    const nodeRect = {
+      x: node.coords.x,
+      y: node.coords.y,
+      width: node.coords.width * this.scale,
+      height: node.coords.height * this.scale
+    }
+    roundedRect(ctx, nodeRect, this.radius * this.scale, 'stroke', '#E4E7EC', true, true, true, true);
+
+    if (node.connection.to.length) {
+      this.drawConnector(ctx, node.coords.x + (node.coords.width + this.nodeConnectorSize) * this.scale, node.coords.y + (node.coords.height * this.scale) / 2)
+    }
+    if (!node.isRoot) {
+      this.drawConnector(ctx, node.coords.x - (this.nodeConnectorSize * this.scale), node.coords.y + (node.coords.height * this.scale) / 2)
     }
 
   }
@@ -206,8 +263,8 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
     const parents = this.nodes.filter((n: Node) => n.connection.to.includes(nodeId));
     if (parents.length > 1) {
       let baseHeight = 0;
-      if (height > (parents.length * (this.nodeHeight + this.gap))) {
-        baseHeight = (height - (this.nodeHeight + this.gap)) / (parents.length - 1);
+      if (height > (parents.length * ((this.nodeHeight * this.scale) + (this.gap * this.scale)))) {
+        baseHeight = (height - ((this.nodeHeight * this.scale) + (this.gap * this.scale))) / (parents.length - 1);
       }
 
       if (!this.repeatingChildren[this.nodes[nodeIdx].id]) {
@@ -219,8 +276,8 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
       this.repeatingChildren[this.nodes[nodeIdx].id].push(parents[this.repeatingChildren[this.nodes[nodeIdx].id].length].id);
       if (this.repeatingChildren[this.nodes[nodeIdx].id].length == parents.length) {
         let parentIndex = parents.findIndex((n: Node) => n.id == this.repeatingChildren[this.nodes[nodeIdx].id][this.repeatingChildren[this.nodes[nodeIdx].id].length - 1])
-        parents[parentIndex as any].childHeight = this.nodeHeight + this.gap;
-        setHeight = this.nodeHeight + this.gap
+        parents[parentIndex as any].childHeight = (this.nodeHeight * this.scale) + (this.gap * this.scale);
+        setHeight = (this.nodeHeight * this.scale) + (this.gap * this.scale)
       } else {
         parents[this.repeatingChildren[this.nodes[nodeIdx].id].length - 1].childHeight = baseHeight;
         setHeight = baseHeight
@@ -231,23 +288,26 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
 
     this.processedChildren.push(this.nodes[nodeIdx].id);
     this.nodes[nodeIdx].childHeight = height;
-    return height || this.nodeHeight + this.gap;
+    return height || (this.nodeHeight * this.scale) + (this.gap * this.scale);
   }
 
   addRootNode() {
     const position: ICoordinates = {
-      x: 0,
-      y: 0,
-      width: this.nodeWidth,
-      height: this.nodeHeight
+      x: 0, //(this.gap * this.scale),
+      y: 0, //((this.mainRect as DOMRect).height / 2) - (this.nodeHeight * this.scale) / 2,
+      width: this.nodeWidth * this.scale,
+      height: this.nodeHeight * this.scale
     };
     const connection: IConnection = {
       connectionType: 'none',
       to: []
     };
-    const newNode = new Node(++this.currentNodeId, position, connection, true);
+    const newNode = new Node(++this.currentNodeId, position, connection, this.scale, true);
     newNode.title = this.canConnect[0].title;
     this.nodes.push(newNode);
+
+    this.panOffset.x = (this.gap * this.scale);
+    this.panOffset.y = ((this.mainRect as DOMRect).height / 2) - (this.nodeHeight * this.scale) / 2;
   }
 
 
@@ -316,8 +376,8 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
 
   setPopupPosition(node: Node) {
     setTimeout(() => {
-      if ((node.coords.x + node.coords.width + 250) < innerWidth) {
-        this.popupPosition.left = node.coords.x + node.coords.width + 10;
+      if ((node.coords.x + (node.coords.width * this.scale) + 250) < innerWidth) {
+        this.popupPosition.left = node.coords.x + (node.coords.width * this.scale) + 10;
       } else {
         this.popupPosition.left = node.coords.x - 250;
       }
@@ -326,7 +386,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
         this.popupPosition.top = node.coords.y;
       } else {
         this.popupPosition.top = 'unset';
-        this.popupPosition.bottom = innerHeight - node.coords.y - node.coords.height;
+        this.popupPosition.bottom = innerHeight - node.coords.y - (node.coords.height * this.scale);
       }
 
       if (this.addPopup) {
@@ -379,12 +439,13 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
         const newNode = new Node(++this.currentNodeId, {
           x: 0,
           y: 0,
-          width: this.nodeWidth,
-          height: this.nodeHeight
+          width: this.nodeWidth * this.scale,
+          height: this.nodeHeight * this.scale
         }, {
           connectionType: 'none',
           to: []
-        });
+        },
+          this.scale);
         newNode.title = option;
         parentNode.connection.to.push(newNode.id);
         this.nodes.push(newNode)
@@ -429,6 +490,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
     x: 0,
     y: 0
   };
+  scale = 1;
   isRightClick: boolean = false;
 
   @HostListener('window:contextmenu', ['$event'])
@@ -447,6 +509,47 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  @HostListener('window:mouseout', ['$event'])
+  onMouseOut(event: any) {
+    if (this.isRightClick) {
+      this.isRightClick = false;
+    }
+  }
+
+  @HostListener('window:wheel', ['$event'])
+  onWheel(event: any) {
+    // console.log(event);
+
+    if (event.ctrlKey) {
+      this.onZoom(event);
+      return;
+    }
+
+  }
+
+  onZoom(event: any) {
+    this.isRightClick = false;
+    this.panStartOffset = {
+      x: 0,
+      y: 0
+    }
+
+    if (Math.sign(event.wheelDelta) == -1) {
+      this.scale *= 1 / 1.1;
+      this.panOffset.x = event.offsetX - (event.offsetX - this.panOffset.x) * 1 / 1.1;
+      this.panOffset.y = event.offsetY - (event.offsetY - this.panOffset.y) * 1 / 1.1;
+    } else {
+      this.scale *= 1.1;
+      this.panOffset.x = event.offsetX - (event.offsetX - this.panOffset.x) * 1.1;
+      this.panOffset.y = event.offsetY - (event.offsetY - this.panOffset.y) * 1.1;
+    }
+    // this.nodes[0].coords.x = this.panOffset.x;
+    // this.nodes[0].coords.y = this.panOffset.y;
+
+    this.childHeightSet = false;
+
+  }
+
   startPanning(event: PointerEvent) {
     this.panStartOffset = {
       x: event.x,
@@ -463,6 +566,9 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
 
       this.panStartOffset.x = event.x;
       this.panStartOffset.y = event.y;
+      this.nodes[0].coords.x = this.panOffset.x;
+      this.nodes[0].coords.y = this.panOffset.y;
+      // console.log(this.panOffset)
       return;
     }
     if (this.selectedNodeId == null && this.mainRect) {
@@ -470,10 +576,11 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  bufferSize: number = 10;
+  bufferSize: number = 16;
   setHoverState(cp: IPosition) {
+    let bufferSize = this.bufferSize * this.scale;
     for (let node of this.nodes) {
-      if (cp.x >= node.coords.x - this.bufferSize && cp.x <= node.coords.x + this.bufferSize + node.coords.width && cp.y >= node.coords.y - this.bufferSize && cp.y <= node.coords.y + this.bufferSize + node.coords.height) {
+      if (cp.x >= node.coords.x - bufferSize && cp.x <= node.coords.x + bufferSize + (node.coords.width * this.scale) && cp.y >= node.coords.y - bufferSize && cp.y <= node.coords.y + bufferSize + (node.coords.height * this.scale)) {
         node.isHovered = true;
       } else {
         node.isHovered = false;
@@ -495,12 +602,18 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
         this.onDeleteNode(hoveredNode);
         return;
       }
-      if (cp.x >= hoveredNode.addButton.x && cp.x <= hoveredNode.addButton.x + hoveredNode.addButton.width && cp.y >= hoveredNode.addButton.y && cp.y <= hoveredNode.addButton.y + hoveredNode.addButton.height) {
+      const addButtonCoords = {
+        x: hoveredNode.addButton.x - hoveredNode.addButton.width / 2,
+        y: hoveredNode.addButton.y - hoveredNode.addButton.height / 2,
+        width: hoveredNode.addButton.width,
+        height: hoveredNode.addButton.height
+      }
+      if (cp.x >= addButtonCoords.x && cp.x <= addButtonCoords.x + addButtonCoords.width && cp.y >= addButtonCoords.y && cp.y <= addButtonCoords.y + addButtonCoords.height) {
         this.addNode(hoveredNode);
         return;
       }
-      if (!hoveredNode.isRoot && cp.x >= hoveredNode.coords.x && cp.x <= hoveredNode.coords.x + hoveredNode.coords.width && cp.y >= hoveredNode.coords.y && cp.y <= hoveredNode.coords.y + hoveredNode.coords.height) {
-        // this.openDrawer(hoveredNode);
+      if (!hoveredNode.isRoot && cp.x >= hoveredNode.coords.x && cp.x <= hoveredNode.coords.x + (hoveredNode.coords.width * this.scale) && cp.y >= hoveredNode.coords.y && cp.y <= hoveredNode.coords.y + (hoveredNode.coords.height * this.scale)) {
+        this.openDrawer(hoveredNode);
         return;
       }
     }
@@ -604,7 +717,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
             }
             for (let i = 0; i < res.data.nodes.length; i++) {
               let node = res.data.nodes[i];
-              let n = new Node(node.id, { ...coords }, node.connection, i ? false : true);
+              let n = new Node(node.id, { ...coords }, node.connection, this.scale, i ? false : true);
               n.title = node.app;
               this.nodes.push(n);
               if (this.currentNodeId < node.id) {
@@ -613,6 +726,8 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
             }
 
           }
+          this.panOffset.x = (this.gap * this.scale);
+          this.panOffset.y = ((this.mainRect as DOMRect).height / 2) - (this.nodeHeight * this.scale) / 2;
           resolve();
         },
         error: (err: any) => {

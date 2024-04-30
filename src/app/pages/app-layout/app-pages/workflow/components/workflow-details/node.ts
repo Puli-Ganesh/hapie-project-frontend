@@ -31,50 +31,53 @@ export class Node {
         public id: number,
         public coords: ICoordinates,
         public connection: IConnection,
+        public scale: number,
         public isRoot: boolean = false,
     ) {
-        this.setButtons();
+        this.setButtons(this.scale);
     }
 
-    setButtons() {
+    setButtons(scale: number) {
         this.addButton = {
-            x: this.coords.x + this.coords.width - (this.buttonSize / 2),
-            y: this.coords.y + (this.coords.height / 2) - (this.buttonSize / 2),
-            width: this.buttonSize,
-            height: this.buttonSize
+            x: this.coords.x + (this.coords.width * scale) + ((this.buttonSize * scale) / 2),
+            y: this.coords.y + ((this.coords.height * scale) / 2),
+            width: this.buttonSize * scale,
+            height: this.buttonSize * scale
         }
         this.deleteButton = {
-            x: this.coords.x + this.coords.width - this.buttonSize / 2,
-            y: this.coords.y - this.buttonSize / 2,
-            width: this.buttonSize,
-            height: this.buttonSize
+            x: this.coords.x + (this.coords.width * scale) - (6 * scale) / 2,
+            y: this.coords.y - (this.buttonSize * scale) / 2,
+            width: (this.buttonSize * scale),
+            height: (this.buttonSize * scale)
         }
     }
 
-    drawButtons(ctx: CanvasRenderingContext2D) {
+    drawButtons(ctx: CanvasRenderingContext2D, scale: number) {
         ctx.save();
-        ctx.fillStyle = '#0B0BCF';
-        ctx.strokeStyle = '#ECECFE';
-        ctx.lineWidth = 2;
+        ctx.fillStyle = '#2C76FF';
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 2 * scale;
 
         // for rendering add button
-        ctx.fillRect(this.addButton.x, this.addButton.y, this.addButton.width, this.addButton.height);
         ctx.beginPath();
-        ctx.moveTo(this.addButton.x + 2, this.addButton.y + this.buttonSize / 2)
-        ctx.lineTo(this.addButton.x + this.buttonSize - 2, this.addButton.y + this.buttonSize / 2);
-        ctx.moveTo(this.addButton.x + this.buttonSize / 2, this.addButton.y + 2);
-        ctx.lineTo(this.addButton.x + this.buttonSize / 2, this.addButton.y + this.buttonSize - 2);
-        ctx.stroke()
-        
+        ctx.arc(this.addButton.x, this.addButton.y, this.buttonSize * scale / 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(this.addButton.x - (this.buttonSize * scale) / 2 + (3 * scale), this.addButton.y);
+        ctx.lineTo(this.addButton.x + (this.buttonSize * scale) / 2 - (3 * scale), this.addButton.y);
+        ctx.moveTo(this.addButton.x, this.addButton.y - (this.buttonSize * scale) / 2 + (3 * scale));
+        ctx.lineTo(this.addButton.x, this.addButton.y + (this.buttonSize * scale) / 2 - (3 * scale));
+        ctx.stroke();
+
         // for rendering delete button
         if (!this.isRoot) {
             ctx.fillStyle = 'rgb(210, 4, 45)'
             ctx.fillRect(this.deleteButton.x, this.deleteButton.y, this.deleteButton.width, this.deleteButton.height);
             ctx.beginPath();
-            ctx.moveTo(this.deleteButton.x + 3, this.deleteButton.y + 3)
-            ctx.lineTo(this.deleteButton.x + this.buttonSize - 3, this.deleteButton.y + this.buttonSize - 3);
-            ctx.moveTo(this.deleteButton.x + this.buttonSize - 3, this.deleteButton.y + 3);
-            ctx.lineTo(this.deleteButton.x + 3, this.deleteButton.y + this.buttonSize - 3);
+            ctx.moveTo(this.deleteButton.x + (3 * scale), this.deleteButton.y + (3 * scale))
+            ctx.lineTo(this.deleteButton.x + (this.buttonSize - 3) * scale, this.deleteButton.y + (this.buttonSize - 3) * scale);
+            ctx.moveTo(this.deleteButton.x + (this.buttonSize - 3) * scale, this.deleteButton.y + (3 * scale));
+            ctx.lineTo(this.deleteButton.x + (3 * scale), this.deleteButton.y + (this.buttonSize - 3) * scale);
             ctx.stroke()
         }
         ctx.restore();
@@ -89,3 +92,50 @@ export interface IConnection {
 export type ArrowAngle = 'top' | 'down' | 'right' | 'left';
 export type ConnectionType = 'none' | 'one-to-one' | 'one-to-many' | 'many-to-one' | 'ternary';
 export type FillStyle = 'stroke' | 'fill';
+
+
+export function roundedRect(ctx: any, coords: ICoordinates, radius: number, fillStyle: FillStyle, color: string, tl = false, tr = false, br = false, bl = false) {
+    let { x, y, width, height } = coords;
+    ctx.save();
+
+    ctx.beginPath();
+    if (tl) {
+        ctx.moveTo(x + radius, y);
+    } else {
+        ctx.moveTo(x, y);
+    }
+
+    if (tr) {
+        ctx.arcTo(x + width, y, x + width, y + radius, radius)
+    } else {
+        ctx.lineTo(x + width, y);
+    }
+
+    if (br) {
+        ctx.arcTo(x + width, y + height, x + width - radius, y + height, radius)
+    } else {
+        ctx.lineTo(x + width, y + height);
+    }
+
+    if (bl) {
+        ctx.arcTo(x, y + height, x, y + height - radius, radius)
+    } else {
+        ctx.lineTo(x, y + height);
+    }
+    
+    if (tl) {
+        ctx.arcTo(x, y, x + radius, y, radius);
+    }
+
+    ctx.closePath();
+    if (fillStyle == 'fill') {
+        ctx.fillStyle = color;
+        ctx.fill();
+    } else {
+        ctx.strokeStyle = color;
+        ctx.stroke();
+    }
+
+    ctx.restore();
+
+}
