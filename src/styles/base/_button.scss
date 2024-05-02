@@ -1,17 +1,16 @@
 .app-button {
 	margin: 0;
-	padding: 12px 25px;
+	padding: 8px 16px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-family: $raleway-500;
-	font-size: 1rem;
+	font-family: $base-font-family;
+	font-size: 14px;
 	font-style: normal;
-	line-height: 24px;
-	/* 150% */
+	line-height: 1.2;
 	border: 0px;
 	outline: none;
-	border-radius: 8px;
+	border-radius: 4px;
 	@include user-select-none();
 	cursor: pointer;
 
@@ -80,8 +79,8 @@
 
 	.btn-icon {
 		flex-shrink: 0;
-		width: 20px;
-		height: 20px;
+		width: 16px;
+		height: 16px;
 		color: inherit;
 		margin-right: 4px;
 		pointer-events: none;
@@ -95,7 +94,6 @@
 		font-size: inherit;
 		font-style: inherit;
 		line-height: inherit;
-		/* 150% */
 		text-transform: capitalize;
 		@include elipses-1;
 	}

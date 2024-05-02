@@ -9,7 +9,6 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { AppConfig } from './constants/appConfig';
 import { FacadeService } from './services/facade.service';
 import { AppLayoutComponent } from './components/app-layout/app-layout.component';
-import { HeaderComponent } from './components/header/header.component';
 import { LeftSideNavComponent } from './components/left-side-nav/left-side-nav.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NotFoundComponent } from './components/not-found/not-found.component';
@@ -20,7 +19,6 @@ import { CommonOutletComponent } from './components/common-outlet/common-outlet.
   declarations: [
     AppComponent,
     AppLayoutComponent,
-    HeaderComponent,
     LeftSideNavComponent,
     NotFoundComponent,
     CommonOutletComponent

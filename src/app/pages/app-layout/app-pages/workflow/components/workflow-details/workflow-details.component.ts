@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 
 import { FacadeService } from '@src/app/services/facade.service';
 import { IConnection, ICoordinates, IPosition, Node, roundedRect } from './node';
+import { Routes } from '@src/app/constants/routes';
 
 @Component({
   selector: 'app-workflow-details',
@@ -21,12 +22,6 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
       next: (params: Params) => {
         if (params && params['workflowId']) {
           this.workflowId = params['workflowId'];
-          if (this.workflowId == 'new') {
-            this.workflowName = 'new'
-            this.editMode = false;
-          } else {
-            this.editMode = true;
-          }
         }
       }
     });
@@ -37,13 +32,13 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
 
   workflowName: string = '';
   workflowId: string = '';
-  editMode: boolean = false;
   qpSubscription: Subscription;
+  appRoutes = Routes;
   mainCanvas: HTMLCanvasElement | null = null;
   mainRect: DOMRect | null = null;
   mainCTX: CanvasRenderingContext2D | null = null;
   canConnect: Array<any> = [];
-  nodeWidth: number = 151;
+  nodeWidth: number = 170; //151;
   nodeHeight: number = 48;
   gap: number = 70;
   radius: number = 8;
@@ -52,16 +47,18 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   nodes: Array<Node> = [];
   nodeImage: HTMLImageElement | null = null;
 
-  async ngOnInit() {
-    this.setNodeImage();
-    await this.getRootObject();
-    this.setCanvasSize();
-    if (this.editMode) {
-      await this.getWorkflowDetails();
-    } else {
-      this.addRootNode();
-    }
+  selectedTemplate: any;
+  templateToggler = false;
+  templatesList: any = [];
 
+  async ngOnInit() {
+    await this.getRootObject();
+    await this.getTemplatesList();
+    this.setNodeImage();
+    this.setCanvasSize();
+    await this.getWorkflowDetails();
+
+    // this.addNode(this.nodes[0]);
 
     window.requestAnimationFrame(this.animate);
   }
@@ -76,10 +73,51 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
     this.nodeImage.src = 'assets/images/component.svg';
   }
 
+  getTemplatesList() {
+    return new Promise((resolve: any, reject: any) => {
+      this._facadeService.templateService.getMasterTemplatesList().subscribe({
+        next: (res: any) => {
+          this.templatesList = res.data.list ?? [];
+          resolve();
+        },
+        error: (err: any) => {
+          console.log('There is an error while getting templates list', err);
+          reject();
+        }
+      });
+    })
+  }
+
+  onSelectTemplate(event: any, index: number) {
+    event?.stopPropagation();
+
+    this.selectedTemplate = this.templatesList[index];
+    this.templateToggler = false;
+  }
+
+  onDetailsSave() {
+    if (this.selectedTemplate) {
+      const node = this.nodes.find((n: Node) => n.id == this.selectedNodeId);
+      if (node) {
+        node.config.templateId = this.selectedTemplate._id;
+        node.displayTitle = this.selectedTemplate.title;
+      }
+    }
+
+    this.onDetailsCancel();
+  }
+
+  onDetailsCancel() {
+    this.selectedNodeId = null;
+    this.drawerToggler = false;
+    this.templateToggler = false;
+    this.selectedTemplate = null;
+  }
+
   animate = () => {
     if (!this.mainCTX) return;
 
-    this.mainCTX.clearRect((this.mainRect as DOMRect).top, (this.mainRect as DOMRect).left, (this.mainRect as DOMRect).width, (this.mainRect as DOMRect).height);
+    this.mainCTX.clearRect(0, 0, (this.mainRect as DOMRect).width, (this.mainRect as DOMRect).height);
 
     if (!this.childHeightSet) {
       this.processedChildren = []
@@ -219,7 +257,12 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
       height: this.nodeHeight * this.scale
     }
     roundedRect(ctx, mainRect, this.radius * this.scale, 'fill', '#FFFFFF', false, true, true, false);
-    if (node.title) {
+    if (node.displayTitle) {
+      ctx.font = `400 ${14 * this.scale}px Inter`;
+      ctx.fillStyle = '#2D2E2E';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(node.displayTitle.toString(), mainRect.x + (8 * this.scale), mainRect.y + (mainRect.height) / 2);
+    } else if (node.title) {
       ctx.font = `400 ${14 * this.scale}px Inter`;
       ctx.fillStyle = '#2D2E2E';
       ctx.textBaseline = 'middle';
@@ -316,14 +359,21 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   popupPosition: any = {
     left: 10,
     top: 10,
-    bottom: 0
+    bottom: 0,
+    right: 0,
   };
   addList: any = [];
+  filteredAddList: any = [];
   drawerToggler: boolean = false;
 
   openDrawer(node: Node) {
     if (!node.title) {
       return;
+    }
+    this.selectedNodeId = node.id;
+    if (node.displayTitle) {
+      const template = this.templatesList.find((t: any) => t.title == node.displayTitle);
+      this.selectedTemplate = template;
     }
     this.drawerToggler = true;
   }
@@ -331,74 +381,72 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   onSaveData() {
     const nodes = [];
     for (let node of this.nodes) {
-      nodes.push({
+      const n: any = {
         id: node.id,
         app: node.title,
         connection: node.connection
-      });
-    }
-    if (nodes.length == 1) {
-      console.log('only root node added');
-      return;
+      }
+      if (Object.keys(node.config).length) {
+        n['config'] = node.config
+      }
+      nodes.push(n);
     }
     const body = {
       name: this.workflowName,
       nodes: nodes
     };
 
-    if (this.editMode) {
-      this._facadeService.workflowService.update(this.workflowId, body).subscribe({
-        next: (res: any) => {
-          this._facadeService.appService.openToaster('Workflow saved successfully.', 'success');
-          this._router.navigateByUrl('/workflow');
-        },
-        error: (err: any) => {
-          this._facadeService.appService.openToaster('Workflow saving failed', 'danger');
-        }
-      });
-    } else {
-      this._facadeService.workflowService.create(body).subscribe({
-        next: (res: any) => {
-          console.log(res);
-          this._facadeService.appService.openToaster('Workflow created successfully.', 'success');
-          this._router.navigateByUrl('/workflow');
-        },
-        error: (err: any) => {
-          this._facadeService.appService.openToaster('Workflow creation failed.', 'danger');
-        }
-      });
-    }
+    this._facadeService.workflowService.update(this.workflowId, body).subscribe({
+      next: (res: any) => {
+        this._facadeService.appService.openToaster('Workflow saved successfully.', 'success');
+        this.onExit();
+      },
+      error: (err: any) => {
+        this._facadeService.appService.openToaster('Workflow saving failed', 'danger');
+      }
+    });
   }
 
-  onCloseWorkflow() {
-    this._router.navigateByUrl('/workflow');
+  onExit() {
+    this._router.navigate([this.appRoutes.WORKFLOWS]);
   }
 
   setPopupPosition(node: Node) {
+    const popupWidth = 350;
+    const gap = 20;
+    const popupHeight = 205;
     setTimeout(() => {
-      if ((node.coords.x + (node.coords.width * this.scale) + 250) < innerWidth) {
-        this.popupPosition.left = node.coords.x + (node.coords.width * this.scale) + 10;
+      this.popupPosition = {
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
+      }
+      if ((node.coords.x + (node.coords.width) + popupWidth + gap) < (this.mainRect as DOMRect).width) {
+        this.popupPosition.left = (this.mainRect as DOMRect).x + node.coords.x + (node.coords.width * this.scale) + 20;
       } else {
-        this.popupPosition.left = node.coords.x - 250;
+        this.popupPosition.right = innerWidth - (this.mainRect as DOMRect).x - node.coords.x + gap;
       }
 
-      if (node.coords.y + 240 < innerHeight) {
-        this.popupPosition.top = node.coords.y;
+      if (node.coords.y + (node.coords.height * this.scale) + popupHeight + gap < (this.mainRect as DOMRect).height) {
+        this.popupPosition.top = (this.mainRect as DOMRect).top + node.coords.y;
       } else {
-        this.popupPosition.top = 'unset';
-        this.popupPosition.bottom = innerHeight - node.coords.y - (node.coords.height * this.scale);
+        this.popupPosition.bottom = innerHeight - (this.mainRect as DOMRect).top - node.coords.y;
       }
 
-      if (this.addPopup) {
-        if (this.popupPosition.top !== 'unset') {
-          this.addPopup.nativeElement.style.left = `${this.popupPosition.left}px`;
-          this.addPopup.nativeElement.style.top = `${this.popupPosition.top}px`;
-        } else {
-          this.addPopup.nativeElement.style.left = `${this.popupPosition.left}px`;
-          this.addPopup.nativeElement.style.bottom = `${this.popupPosition.bottom}px`;
-          this.addPopup.nativeElement.style.top = `${this.popupPosition.top}`;
-        }
+      for (let key of Object.keys(this.popupPosition)) {
+        this.addPopup.nativeElement.style[key] = this.popupPosition[key] ? `${this.popupPosition[key]}px` : 'unset';
       }
+      // if (this.addPopup) {
+      //   if (this.popupPosition.top !== 'unset') {
+      //     this.addPopup.nativeElement.style.left = `${this.popupPosition.left}px`;
+      //     this.addPopup.nativeElement.style.top = `${this.popupPosition.top}px`;
+      //   } else {
+      //     this.addPopup.nativeElement.style.left = `${this.popupPosition.left}px`;
+      //     this.addPopup.nativeElement.style.bottom = `${this.popupPosition.bottom}px`;
+      //     this.addPopup.nativeElement.style.top = `${this.popupPosition.top}`;
+      //   }
+      // }
     }, 0);
   }
 
@@ -439,8 +487,8 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
         const newNode = new Node(++this.currentNodeId, {
           x: 0,
           y: 0,
-          width: this.nodeWidth * this.scale,
-          height: this.nodeHeight * this.scale
+          width: this.nodeWidth,
+          height: this.nodeHeight
         }, {
           connectionType: 'none',
           to: []
@@ -448,7 +496,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
           this.scale);
         newNode.title = option;
         parentNode.connection.to.push(newNode.id);
-        this.nodes.push(newNode)
+        this.nodes.push(newNode);
       }
     }
 
@@ -479,8 +527,16 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   onClosePopup() {
     this.selectedNodeId = null;
     this.addToggler = false;
+    this.addList = [];
+    this.filteredAddList = [];
+    this.searchTerm = '';
   }
 
+  searchTerm = '';
+  onSearchOption() {
+    console.log(this.searchTerm);
+    this.filteredAddList = this.addList.filter((op: any) => op.toLowerCase().includes(this.searchTerm.toLowerCase()))
+  }
 
   panStartOffset: IPosition = {
     x: 0,
@@ -598,7 +654,13 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
     if (hoveredNode) {
       const cp = { x: event.x - (this.mainRect as DOMRect).left, y: event.y - (this.mainRect as DOMRect).top };
 
-      if (cp.x >= hoveredNode.deleteButton.x && cp.x <= hoveredNode.deleteButton.x + hoveredNode.deleteButton.width && cp.y >= hoveredNode.deleteButton.y && cp.y <= hoveredNode.deleteButton.y + hoveredNode.deleteButton.height) {
+      const deleteButtonCoords = {
+        x: hoveredNode.deleteButton.x - hoveredNode.deleteButton.width / 2,
+        y: hoveredNode.deleteButton.y - hoveredNode.deleteButton.height / 2,
+        width: hoveredNode.deleteButton.width,
+        height: hoveredNode.deleteButton.height
+      }
+      if (cp.x >= deleteButtonCoords.x && cp.x <= deleteButtonCoords.x + deleteButtonCoords.width && cp.y >= deleteButtonCoords.y && cp.y <= deleteButtonCoords.y + deleteButtonCoords.height) {
         this.onDeleteNode(hoveredNode);
         return;
       }
@@ -612,9 +674,11 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
         this.addNode(hoveredNode);
         return;
       }
-      if (!hoveredNode.isRoot && cp.x >= hoveredNode.coords.x && cp.x <= hoveredNode.coords.x + (hoveredNode.coords.width * this.scale) && cp.y >= hoveredNode.coords.y && cp.y <= hoveredNode.coords.y + (hoveredNode.coords.height * this.scale)) {
-        this.openDrawer(hoveredNode);
-        return;
+      if (!hoveredNode.isRoot && hoveredNode.title == 'Document') {
+        if (cp.x >= hoveredNode.coords.x && cp.x <= hoveredNode.coords.x + (hoveredNode.coords.width * this.scale) && cp.y >= hoveredNode.coords.y && cp.y <= hoveredNode.coords.y + (hoveredNode.coords.height * this.scale)) {
+          this.openDrawer(hoveredNode);
+          return;
+        }
       }
     }
 
@@ -631,10 +695,16 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   }
 
   setCanvasSize() {
+    const wrapper = document.getElementById('mainCanvasWrapper');
+    if (!wrapper) {
+      console.log('No main wrapper found');
+      return;
+    }
     this.mainCanvas = (document.getElementById('mainCanvas') as HTMLCanvasElement);
     if (this.mainCanvas) {
-      this.mainCanvas.width = innerWidth;
-      this.mainCanvas.height = innerHeight;
+      const wrapperRect = wrapper.getBoundingClientRect();
+      this.mainCanvas.width = wrapperRect.width;
+      this.mainCanvas.height = wrapperRect.height;
       this.mainRect = this.mainCanvas?.getBoundingClientRect() ?? null;
       this.mainCTX = this.mainCanvas?.getContext('2d');
     }
@@ -657,13 +727,14 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
     const connect = this.canConnect.find((d: any) => d.title == node.title);
     this.addList = [];
     if (connect) {
-      const siblings = this.nodes.filter((n: Node) => node.connection.to.includes(n.id));
-      for (let option of connect.to) {
-        const existingNode = siblings.find((n: Node) => n.title == option);
-        if (!existingNode) {
-          this.addList.push(option)
-        }
-      }
+      this.addList = [...connect.to];
+      // const siblings = this.nodes.filter((n: Node) => node.connection.to.includes(n.id));
+      // for (let option of connect.to) {
+      //   const existingNode = siblings.find((n: Node) => n.title == option);
+      //   if (!existingNode) {
+      //     this.addList.push(option)
+      //   }
+      // }
     }
 
     if (!node.isRoot) {
@@ -681,6 +752,8 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
         }
       }
     }
+
+    this.filteredAddList = [...this.addList];
 
     this.setPopupPosition(node);
   }
@@ -716,8 +789,16 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
               height: this.nodeHeight
             }
             for (let i = 0; i < res.data.nodes.length; i++) {
+
               let node = res.data.nodes[i];
               let n = new Node(node.id, { ...coords }, node.connection, this.scale, i ? false : true);
+              if (node?.config?.templateId) {
+                const template = this.templatesList.find((t: any) => t._id == node.config.templateId);
+                if (template) {
+                  n.displayTitle = template.title;
+                  n.config.templateId = node.config.templateId
+                }
+              }
               n.title = node.app;
               this.nodes.push(n);
               if (this.currentNodeId < node.id) {

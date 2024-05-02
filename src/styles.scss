@@ -7,9 +7,9 @@ html,
 body {
     width: 100%;
     position: relative;
-    font-family: $raleway-400;
+    font-family: $base-font-family;
     font-size: 16px;
-    background-color: $base;
+    background-color: $light-base;
     color: $on-base;
 
     @include device(xs, s) {

@@ -5,16 +5,14 @@
     <app-left-side-nav *ngIf="!isSidebarHidden"></app-left-side-nav>
 
     <div class="main-content-wrap">
-        <div class="main-content">
-
-            <app-header *ngIf="!isSidebarHidden"></app-header>
+        <router-outlet></router-outlet>
+        <!-- <div class="main-content">
 
             <div class="main" [ngStyle]="{
                 'padding': !isSidebarHidden ? '25px' : '0px'
             }">
-                <router-outlet></router-outlet>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
 

@@ -20,6 +20,8 @@ export class Node {
         width: 0,
         height: 0
     };
+    config: any = {};
+    displayTitle = '';
     addButton: ICoordinates = {
         x: 0,
         y: 0,
@@ -45,8 +47,8 @@ export class Node {
             height: this.buttonSize * scale
         }
         this.deleteButton = {
-            x: this.coords.x + (this.coords.width * scale) - (6 * scale) / 2,
-            y: this.coords.y - (this.buttonSize * scale) / 2,
+            x: this.coords.x + (this.coords.width * scale),
+            y: this.coords.y,
             width: (this.buttonSize * scale),
             height: (this.buttonSize * scale)
         }
@@ -71,14 +73,14 @@ export class Node {
 
         // for rendering delete button
         if (!this.isRoot) {
-            ctx.fillStyle = 'rgb(210, 4, 45)'
-            ctx.fillRect(this.deleteButton.x, this.deleteButton.y, this.deleteButton.width, this.deleteButton.height);
+            ctx.fillStyle = '#FF0000';
             ctx.beginPath();
-            ctx.moveTo(this.deleteButton.x + (3 * scale), this.deleteButton.y + (3 * scale))
-            ctx.lineTo(this.deleteButton.x + (this.buttonSize - 3) * scale, this.deleteButton.y + (this.buttonSize - 3) * scale);
-            ctx.moveTo(this.deleteButton.x + (this.buttonSize - 3) * scale, this.deleteButton.y + (3 * scale));
-            ctx.lineTo(this.deleteButton.x + (3 * scale), this.deleteButton.y + (this.buttonSize - 3) * scale);
-            ctx.stroke()
+            ctx.arc(this.deleteButton.x, this.deleteButton.y, this.buttonSize * scale / 2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(this.deleteButton.x - (this.buttonSize * scale) / 2 + (3 * scale), this.deleteButton.y);
+            ctx.lineTo(this.deleteButton.x + (this.buttonSize * scale) / 2 - (3 * scale), this.deleteButton.y);
+            ctx.stroke();
         }
         ctx.restore();
     }
@@ -122,7 +124,7 @@ export function roundedRect(ctx: any, coords: ICoordinates, radius: number, fill
     } else {
         ctx.lineTo(x, y + height);
     }
-    
+
     if (tl) {
         ctx.arcTo(x, y, x + radius, y, radius);
     }

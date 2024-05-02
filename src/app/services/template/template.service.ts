@@ -38,6 +38,10 @@ export class TemplateService {
     return this._httpClientService.delete(`${this.endPoint}/${id}`);
   }
 
+  getMasterTemplatesList() {
+    return this._httpClientService.get(`${this.endPoint}/master-list`);
+  }
+
   getList(workspaceId: string | undefined = undefined): Observable<IResponse> {
     return this._httpClientService.get(`${this.endPoint}/list${(workspaceId ? `/${workspaceId}` : '')}`);
   }

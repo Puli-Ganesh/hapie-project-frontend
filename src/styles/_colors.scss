@@ -7,16 +7,21 @@
 // light background like(placeholder, selected tab) rgba(236, 236, 254, 0.5) on colors rgba(11, 11, 207, 1) rgba(10, 9, 8, 0.8)
 // divider rgba(236, 236, 254, 1)
 
-$base: rgba(255, 255, 255, 1);
-$on-base: rgba(10, 9, 8, 1);
+$base: #FFFFFF;
+$on-base: #141C25;
+$light-base: #F9FAFB;
+$on-light-base: #344051;
+
+$border-color: #E4E7EC;
+
 $on-base-light: rgba(10, 9, 8, 0.5);
 $on-base-blue: #0B0BCF;
 
-$primary: rgba(11, 11, 207, 1);
-$on-primary: rgba(255, 255, 255, 1);
+$primary: #2C76FF;
+$on-primary: #FFFFFF;
 
-$primary-light: rgba(11, 11, 207, 0.04);
-$on-primary-light: rgba(11, 11, 207, 1);
+$light-primary: #C9DCFF;
+$on-light-primary: #344051;
 
 $secondary: rgba(236, 236, 254, 1);
 $on-secondary: rgba(11, 11, 207, 1);

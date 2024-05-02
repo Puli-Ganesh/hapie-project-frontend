@@ -19,5 +19,5 @@ export class Routes {
 	static readonly TEAM: string = '/team';
 	static readonly SHARE_CANVAS: string = '/canvas';
 	static readonly TEMPLATES: string = '/templates';
-	static readonly WORKFLOW: string = '/workflow';
+	static readonly WORKFLOWS: string = '/workflows';
 }

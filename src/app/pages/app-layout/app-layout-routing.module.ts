@@ -30,7 +30,7 @@ const routes: Routes = [
     loadChildren: () => import('./app-pages/templates/templates.module').then(m => m.TemplatesModule),
   },
   {
-    path: 'workflow',
+    path: 'workflows',
     component: CommonOutletComponent,
     loadChildren: () => import('./app-pages/workflow/workflow.module').then(m => m.WorkflowModule),
   },

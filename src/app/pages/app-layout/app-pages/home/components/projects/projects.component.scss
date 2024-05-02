@@ -1,179 +1,208 @@
 @import 'src/styles/_mixins';
 
 
-.projects-wrap {
+.projects-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
 
-    .inner-header {
-        margin-bottom: 40px;
+    .projects-header {
+        position: sticky;
+        top: 0;
+        left: 0;
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 20px 0;
+        background-color: $light-base;
+        z-index: 9;
 
-        .main-title {
-            margin: 0;
-            color: $on-base;
-            font-family: $raleway-500;
-            font-size: 32px;
-            font-style: normal;
-            line-height: 48px;
-            /* 150% */
-            text-transform: capitalize;
+        .breadcrumbs-wrapper {
+            margin-right: auto;
         }
     }
 
-    .projects-container,
-    .workspaces-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        grid-gap: 40px 56px;
+    .projects-wrap {
+        flex: 1;
+        overflow: auto;
+        background-color: $base;
+        border: 1px solid transparent;
+        border-color: $border-color $border-color transparent $border-color;
+        border-radius: 4px;
+        margin-right: 16px;
 
-        .project-wrap,
-        .workspace-wrap {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            border-radius: 12px;
-            border: 1px solid $secondary;
-            // aspect-ratio: 1.3043478261/1;
-            overflow: hidden;
-            cursor: pointer;
+        .inner-header {
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px 0;
+            padding: 16px 20px 0px;
 
-            &.border-1 {
-                border-color: $color-1-2;
-
-                &:hover {
-                    border-color: $color-1-1;
-                }
+            .main-title {
+                margin: 0;
+                color: $on-base;
+                font-family: $raleway-500;
+                font-size: 32px;
+                font-style: normal;
+                line-height: 48px;
+                /* 150% */
+                text-transform: capitalize;
             }
+        }
 
-            &.border-2 {
-                border-color: $color-2-2;
+        .projects-container,
+        .workspaces-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-gap: 40px 56px;
+            padding: 20px;
 
-                &:hover {
-                    border-color: $color-2-1;
-                }
-            }
-
-            &.border-3 {
-                border-color: $color-3-2;
-
-                &:hover {
-                    border-color: $color-3-1;
-                }
-            }
-
-            &.border-4 {
-                border-color: $color-4-2;
-
-                &:hover {
-                    border-color: $color-4-1;
-                }
-            }
-
-            .project-img,
-            .workspace-img {
+            .project-wrap,
+            .workspace-wrap {
+                position: relative;
                 width: 100%;
-                aspect-ratio: 2/1;
-                overflow: hidden;
+                height: 100%;
                 border-radius: 12px;
-                background-color: $secondary;
+                border: 1px solid $secondary;
+                // aspect-ratio: 1.3043478261/1;
+                overflow: hidden;
+                cursor: pointer;
 
-                img {
+                &.border-1 {
+                    border-color: $color-1-2;
+
+                    &:hover {
+                        border-color: $color-1-1;
+                    }
+                }
+
+                &.border-2 {
+                    border-color: $color-2-2;
+
+                    &:hover {
+                        border-color: $color-2-1;
+                    }
+                }
+
+                &.border-3 {
+                    border-color: $color-3-2;
+
+                    &:hover {
+                        border-color: $color-3-1;
+                    }
+                }
+
+                &.border-4 {
+                    border-color: $color-4-2;
+
+                    &:hover {
+                        border-color: $color-4-1;
+                    }
+                }
+
+                .project-img,
+                .workspace-img {
                     width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                    object-position: center;
-                    -webkit-user-drag: none;
-                }
-            }
+                    aspect-ratio: 2/1;
+                    overflow: hidden;
+                    border-radius: 12px;
+                    background-color: $secondary;
 
-            .project-details,
-            .workspace-details {
-                padding: 16px;
-
-                .project-name,
-                .workspace-name {
-                    margin: 0;
-                    color: $on-base;
-                    font-family: $raleway-600;
-                    font-size: 18px;
-                    font-style: normal;
-                    line-height: 28px;
-                    /* 155.556% */
-                    text-transform: capitalize;
-                    @include elipses-1();
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        object-position: center;
+                        -webkit-user-drag: none;
+                    }
                 }
 
-                .project-desc,
-                .workspace-desc {
-                    color: $on-base-light;
-                    font-family: $raleway-500;
-                    font-size: 12px;
-                    font-style: normal;
-                    line-height: 20px;
-                    /* 166.667% */
-                    @include elipses-2();
+                .project-details,
+                .workspace-details {
+                    padding: 16px;
+
+                    .project-name,
+                    .workspace-name {
+                        margin: 0;
+                        color: $on-base;
+                        font-family: $raleway-600;
+                        font-size: 18px;
+                        font-style: normal;
+                        line-height: 28px;
+                        /* 155.556% */
+                        text-transform: capitalize;
+                        @include elipses-1();
+                    }
+
+                    .project-desc,
+                    .workspace-desc {
+                        color: $on-base-light;
+                        font-family: $raleway-500;
+                        font-size: 12px;
+                        font-style: normal;
+                        line-height: 20px;
+                        /* 166.667% */
+                        @include elipses-2();
+                    }
                 }
-            }
-
-            .action-wrap {
-                display: none;
-                position: absolute;
-                top: 12px;
-                right: 12px;
-                border-radius: 4px;
-                border: 1px solid #F4F4F4;
-                background: $base;
-
-                .btn {
-                    display: inline-block;
-                    padding: 8px 16px;
-                    color: $on-base;
-                    font-family: $raleway-600;
-                    font-size: 12px;
-                    font-style: normal;
-                    line-height: 20px;
-                    text-transform: capitalize;
-                    cursor: pointer;
-                }
-            }
-
-            &:hover {
-                border-color: $primary;
 
                 .action-wrap {
-                    display: inline-block;
+                    display: none;
+                    position: absolute;
+                    top: 12px;
+                    right: 12px;
+                    border-radius: 4px;
+                    border: 1px solid #F4F4F4;
+                    background: $base;
+
+                    .btn {
+                        display: inline-block;
+                        padding: 8px 16px;
+                        color: $on-base;
+                        font-family: $raleway-600;
+                        font-size: 12px;
+                        font-style: normal;
+                        line-height: 20px;
+                        text-transform: capitalize;
+                        cursor: pointer;
+                    }
+                }
+
+                &:hover {
+                    border-color: $primary;
+
+                    .action-wrap {
+                        display: inline-block;
+                    }
                 }
             }
         }
-    }
 
-    .no-projects {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: calc(100vh - 70px - 170px);
-        padding-bottom: 150px;
+        .no-projects {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 70px - 170px);
+            padding-bottom: 150px;
 
-        .icon {
-            margin-bottom: 16px;
-        }
+            .icon {
+                margin-bottom: 16px;
+            }
 
-        .title {
-            font-family: $raleway-600;
-            font-size: 24px;
-            line-height: 36px;
-            margin-bottom: 8px;
-        }
+            .title {
+                font-family: $raleway-600;
+                font-size: 24px;
+                line-height: 36px;
+                margin-bottom: 8px;
+            }
 
-        .subtitle {
-            color: #8A8A8A;
-            font-family: $raleway-500;
-            font-size: 16px;
-            line-height: 24px;
+            .subtitle {
+                color: #8A8A8A;
+                font-family: $raleway-500;
+                font-size: 16px;
+                line-height: 24px;
+            }
         }
     }
 }

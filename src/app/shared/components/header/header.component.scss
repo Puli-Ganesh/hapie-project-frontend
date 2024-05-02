@@ -1,0 +1,293 @@
+@import 'src/styles/_mixins';
+
+.header-wrapper {
+    background-color: transparent;
+
+    .user-menu-wrapper {
+        display: flex;
+        gap: 24px;
+        margin: 16px;
+
+        .notification-wrapper {
+            position: relative;
+
+            .notif-icon-wrap {
+                margin: 0;
+                padding: 0;
+                display: block;
+                width: 32px;
+                height: 32px;
+                border: 0;
+                border-radius: 50%;
+                outline: none;
+                background: transparent;
+                overflow: hidden;
+
+                &:hover {
+                    cursor: pointer;
+                    background-color: rgba(0, 0, 0, 0.05);
+                }
+
+                .notif-icon {
+                    padding: 6px;
+                    width: inherit;
+                    height: inherit;
+                }
+            }
+
+            .badge {
+                position: absolute;
+                top: 0;
+                right: 0;
+                display: block;
+                height: 16px;
+                width: 16px;
+                border-radius: 50%;
+                background-color: $primary;
+                transform: translate(10%, -20%);
+                color: $base;
+
+                .count {
+                    font-size: 11px;
+                    line-height: 16px;
+                    text-align: center;
+                }
+            }
+
+            .notif-center-wrap {
+                position: absolute;
+                top: 100%;
+                right: 0px;
+                background-color: $base;
+                // box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.05), 0px 4px 6px -2px rgba(0, 0, 0, 0.05), 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 50px 20px rgba(0, 0, 0, 0.03), 0 28px 17px rgba(0, 0, 0, 0), 0 13px 13px rgba(0, 0, 0, 0.12), 0 3px 7px rgba(0, 0, 0, 0.14), 0 0 rgba(0, 0, 0, 0.14);
+                border-radius: 6px;
+                z-index: 99;
+
+                .notif-center {
+                    border-radius: inherit;
+                    display: flex;
+                    flex-flow: column nowrap;
+                    height: 500px;
+                    width: 400px;
+                    overflow: hidden;
+
+                    .notif-header {
+                        padding: 12px 16px;
+
+                        .title {
+                            margin: 0;
+                            color: $on-base;
+                            font-family: $raleway-500;
+                            font-size: 16px;
+                            font-style: normal;
+                            line-height: 20px;
+                            /* 160% */
+                            text-transform: capitalize;
+                        }
+                    }
+
+                    .notif-body {
+                        flex: 1 0;
+                        padding: 12px;
+                        overflow-x: hidden;
+                        overflow-y: auto;
+
+                        .notifs-wrap {
+                            display: flex;
+                            gap: 16px;
+
+                            &:not(:last-of-type) {
+                                margin-bottom: 24px;
+                            }
+
+                            .profile-icon {
+                                padding: 6px;
+                                width: 32px;
+                                height: 32px;
+                                border-radius: 4px;
+                                background: rgba(11, 11, 207, 0.04);
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                            }
+
+                            .notif-wrap {
+                                flex: 1;
+
+                                .req-type {
+                                    color: $on-base-blue;
+                                    font-family: $raleway-600;
+                                    font-size: 12px;
+                                    font-style: normal;
+                                    line-height: 20px;
+                                    letter-spacing: 0.48px;
+                                    text-transform: uppercase;
+                                }
+
+                                .title-wrap {
+                                    margin-bottom: 12px;
+
+                                    .title {
+                                        color: $on-base;
+                                        font-family: $raleway-500;
+                                        font-size: 12px;
+                                        font-style: normal;
+                                        line-height: 20px;
+                                        letter-spacing: 0.28px;
+
+                                        &.text-cap {
+                                            text-transform: capitalize;
+                                        }
+                                    }
+                                }
+
+                                .message {
+                                    padding: 8px 12px;
+                                    font-family: $raleway-500;
+                                    font-size: 12px;
+                                    font-style: normal;
+                                    line-height: 20px;
+                                    border-radius: 8px;
+                                    color: $on-base;
+                                    background: #ECECFE;
+                                }
+
+                                .btn-approve {
+                                    padding: 10px 12px;
+                                    min-width: 100px;
+                                    border-radius: 4px;
+                                    font-family: $raleway-600;
+                                    font-size: 12px;
+                                    font-style: normal;
+                                    line-height: 16px;
+                                    border: 0;
+                                    color: $on-primary;
+                                    background: $primary;
+
+                                    &:not(.approved):hover {
+                                        cursor: pointer;
+                                    }
+
+                                    &.approved {
+                                        @include user-select-none;
+                                        background-color: #5FAD56;
+                                    }
+                                }
+
+                                &:has(.btn-approve) {
+                                    .message {
+                                        margin-bottom: 12px;
+                                    }
+                                }
+                            }
+                        }
+
+                        .empty-msg {
+                            color: $on-base-light;
+                            font-family: $raleway-500;
+                            font-size: 16px;
+                            font-style: normal;
+                            line-height: 24px;
+                            /* 150% */
+                            @include user-select-none;
+                        }
+
+                        &:has(.empty-msg) {
+                            height: 100%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        .profile-wrapper {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            flex: 0;
+
+            .profile-image-wrapper {
+                height: 32px;
+                width: 32px;
+                border-radius: 50%;
+
+                .avatar-img {
+                    height: inherit;
+                    width: inherit;
+                    border-radius: inherit;
+                    object-fit: contain;
+                    object-position: center;
+
+                }
+            }
+
+            .profile-menu-wrapper {
+                width: 224px;
+                position: absolute;
+                right: 0;
+                top: 100%;
+                background-color: $base;
+                color: $on-base;
+                box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.05), 0px 4px 6px -2px rgba(0, 0, 0, 0.05), 0px 10px 15px -3px rgba(0, 0, 0, 0.10);
+                border-radius: 6px;
+                z-index: 9;
+                cursor: default;
+
+                .header {
+                    padding: 12px 16px;
+                    border-bottom: 1px solid #F3F4F6;
+
+                    .title {
+                        margin: 0;
+                        font-family: $raleway-400;
+                        font-size: 14px;
+                        line-height: 20px;
+                    }
+
+                    .name {
+                        margin: 0;
+                        font-family: $raleway-600;
+                        font-size: 14px;
+                        line-height: 20px;
+                        text-transform: capitalize;
+                    }
+                }
+
+                .menu {
+                    padding: 4px 0px;
+                    display: flex;
+                    flex-direction: column;
+                    border-bottom: 1px solid #F3F4F6;
+
+                    .item {
+                        padding: 8px 16px;
+                        color: rgba(55, 65, 81, 1);
+                        font-family: $raleway-500;
+                        font-size: 14px;
+                        line-height: 20px;
+                        cursor: pointer;
+                    }
+                }
+
+                .footer {
+                    padding: 4px 0px;
+
+                    .item {
+                        padding: 8px 16px;
+                        color: rgba(55, 65, 81, 1);
+                        font-family: $raleway-500;
+                        font-size: 14px;
+                        line-height: 20px;
+                        cursor: pointer;
+                    }
+                }
+            }
+
+        }
+    }
+}

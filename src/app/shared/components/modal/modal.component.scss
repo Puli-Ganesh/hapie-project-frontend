@@ -2,12 +2,13 @@
 
 .modal-wrapper {
     padding: 10px;
-    position: fixed;
+    position: absolute;
     inset: 0 0 0 0;
     display: none;
     width: 100%;
     height: auto;
-    background: rgba(0, 0, 30, 0.50);
+    background: rgba(0, 0, 0, 0.30);
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.15));
     overflow: auto;
     z-index: 99;
 
@@ -21,17 +22,17 @@
         position: relative;
         min-width: 320px;
         background-color: $base;
-        border-radius: 12px;
+        border-radius: 4px;
 
-        .close-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 0;
-            background-color: transparent;
-            color: $on-base;
-            border: none;
-            cursor: pointer;
-        }
+        // .close-button {
+        //     position: absolute;
+        //     top: 20px;
+        //     right: 20px;
+        //     padding: 0;
+        //     background-color: transparent;
+        //     color: $on-base;
+        //     border: none;
+        //     cursor: pointer;
+        // }
     }
 }

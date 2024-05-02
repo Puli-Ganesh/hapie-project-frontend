@@ -1,16 +1,262 @@
 @import 'src/styles/_mixins';
 
-$primary: #5386E4;
+// $primary: #5386E4;
 $primary-hover: rgba(170, 196, 255, 0.25);
 
-
-.side-navbar-wrap {
-    width: 280px;
+.navbar-wrapper {
+    min-width: 235px;
     height: 100%;
     position: relative;
     z-index: 99;
-    box-shadow: 1px 0px 4px 0px rgba(0, 0, 0, 0.2);
-    transition: width .15s ease-in;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 16px 16px 16px;
+    background-color: $light-base;
+
+    &.collapsed {
+        min-width: 88px;
+    }
+
+    .brand-wrapper {
+        padding: 4px 8px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+        cursor: pointer;
+
+        svg {
+            margin-right: 5px;
+        }
+
+        .brand {
+            font-size: 16px;
+            font-weight: 700;
+            color: $on-light-base;
+
+            .blue {
+                color: $primary;
+                font-weight: 500;
+            }
+        }
+    }
+
+    .nav-wrapper {
+        flex: 1;
+        overflow: auto;
+        position: relative;
+
+        .user-profile-wrapper {
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding-right: 12px;
+            border: 1px solid $border-color;
+            border-radius: 4px;
+            background-color: $base;
+            margin-bottom: 16px;
+
+            .img-wrapper {
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                flex: 0;
+
+                img {
+                    height: inherit;
+                    width: inherit;
+                    border-radius: inherit;
+                    object-fit: contain;
+                    object-position: center;
+                }
+            }
+
+            .name {
+                font-size: 14px;
+                font-weight: 400;
+                color: $on-light-base;
+                text-transform: capitalize;
+                margin-right: auto;
+            }
+        }
+
+        .dropdown-menu {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 4px;
+            color: $on-light-base;
+            cursor: pointer;
+            position: relative;
+
+            &:hover,
+            &.active {
+                color: $primary;
+
+                .toggler-wrapper .title {
+                    font-weight: 600;
+                }
+            }
+
+            &.active::after {
+                content: '';
+                position: absolute;
+                right: 0;
+                top: 8px;
+                display: block;
+                height: 20px;
+                width: 5px;
+                background-color: $primary;
+                z-index: 999;
+                border-radius: 4px;
+            }
+
+            .toggler-wrapper {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                padding: 6px;
+                padding-right: 12px;
+                gap: 6px;
+
+                &.expanded {
+                    .toggler {
+                        transform: rotate(180deg);
+                    }
+                }
+
+                .icon {
+                    height: 24px;
+                    width: 24px;
+                }
+
+                .title {
+                    font-size: 14px;
+                    font-weight: 400;
+                    color: inherit;
+                    text-transform: capitalize;
+                    margin-right: auto;
+                }
+
+                .toggler {
+                    cursor: pointer;
+                    height: 16px;
+                    width: 16px;
+                }
+            }
+
+            .list-wrapper {
+                margin: 0;
+                border: 1px solid $border-color;
+                border-radius: 4px;
+                background-color: $base;
+                padding: 14px 8px;
+                max-height: 180px;
+                overflow: auto;
+
+                .list-item {
+                    margin-bottom: 5px;
+                    padding: 2px 24px;
+                    display: flex;
+                    gap: 6px;
+                    align-items: center;
+                    border-radius: 4px;
+                    background-color: transparent;
+
+                    &.active,
+                    &:hover {
+                        background-color: $light-primary;
+
+                        .label {
+                            font-weight: 600;
+                        }
+                    }
+
+                    .list-item-icon {
+                        height: 24px;
+                        width: 24px;
+                    }
+
+                    .label {
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: $on-light-base;
+                        text-transform: capitalize;
+                    }
+                }
+            }
+        }
+
+        .divider {
+            height: 1px;
+            background-color: $border-color;
+            margin: 16px 0px;
+        }
+
+        .menu {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            color: $on-light-base;
+            cursor: pointer;
+            padding: 6px;
+            padding-right: 12px;
+            margin-bottom: 4px;
+
+            &:hover,
+            &.active {
+                color: $primary;
+
+                .menu-title {
+                    font-weight: 600;
+                }
+            }
+
+            .menu-icon-wrapper {
+                height: 24px;
+                width: 24px;
+                color: inherit;
+            }
+
+            .menu-title {
+                font-size: 14px;
+                font-weight: 400;
+                color: inherit;
+                text-transform: capitalize;
+            }
+        }
+
+    }
+
+    .basic-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        border-top: 1px solid $border-color;
+        margin-top: 16px;
+        padding: 10px 8px;
+
+        .basic-icon-wrapper {
+            height: 24px;
+            width: 24px;
+            overflow: hidden;
+        }
+
+        .basic-title {
+            font-size: 14px;
+            font-weight: 400;
+            color: $on-light-base;
+        }
+    }
+}
+
+
+
+
+.side-navbar-wrap {
+    width: 235px;
+    height: 100%;
+    position: relative;
+    z-index: 99;
 
     .nav-header-wrap {
         height: 100%;
@@ -38,201 +284,6 @@ $primary-hover: rgba(170, 196, 255, 0.25);
                     width: inherit;
                     height: inherit;
                     display: block;
-                }
-            }
-
-            .notif-container {
-                position: relative;
-                
-                .notif-icon-wrap {
-                    margin: 0;
-                    padding: 0;
-                    display: block;
-                    width: 32px;
-                    height: 32px;
-                    border: 0;
-                    border-radius: 50%;
-                    outline: none;
-                    background: transparent;
-                    overflow: hidden;
-
-                    &:hover {
-                        cursor: pointer;
-                        background-color: rgba(0, 0, 0, 0.05);
-                    }
-
-                    .notif-icon {
-                        padding: 6px;
-                        width: inherit;
-                        height: inherit;
-                    }
-                }
-
-                .badge {
-                    position: absolute;
-                    top: 0;
-                    right: 0;
-                    display: block;
-                    height: 16px;
-                    width: 16px;
-                    border-radius: 50%;
-                    background-color: $primary;
-                    transform: translate(10%, -20%);
-                    color: $base;
-
-                    .count {
-                        font-size: 11px;
-                        line-height: 16px;
-                        text-align: center;
-                    }
-                }
-
-                .notif-center-wrap {
-                    position: absolute;
-                    top: 0;
-                    left: calc(100% + 30px);
-                    background-color: $base;
-                    // box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.05), 0px 4px 6px -2px rgba(0, 0, 0, 0.05), 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
-                    box-shadow: 0 50px 20px rgba(0, 0, 0, 0.03), 0 28px 17px rgba(0, 0, 0, 0), 0 13px 13px rgba(0, 0, 0, 0.12), 0 3px 7px rgba(0, 0, 0, 0.14), 0 0 rgba(0, 0, 0, 0.14);
-                    border-radius: 6px;
-                    z-index: 99;
-                    
-                    .notif-center {
-                        border-radius: inherit;
-                        display: flex;
-                        flex-flow: column nowrap;
-                        height: 500px;
-                        width: 400px;
-                        overflow: hidden;
-
-                        .notif-header {
-                            padding: 12px 16px;
-
-                            .title {
-                                margin: 0;
-                                color: $on-base;
-                                font-family: $raleway-500;
-                                font-size: 16px;
-                                font-style: normal;
-                                line-height: 20px; /* 160% */
-                                text-transform: capitalize;
-                            }
-                        }
-
-                        .notif-body {
-                            flex: 1 0;
-                            padding: 12px;
-                            overflow-x: hidden;
-                            overflow-y: auto;
-
-                            .notifs-wrap {
-                                display: flex;
-                                gap: 16px;
-                
-                                &:not(:last-of-type) {
-                                    margin-bottom: 24px;
-                                }
-                
-                                .profile-icon {
-                                    padding: 6px;
-                                    width: 32px;
-                                    height: 32px;
-                                    border-radius: 4px;
-                                    background: rgba(11, 11, 207, 0.04);
-                                    display: flex;
-                                    justify-content: center;
-                                    align-items: center;
-                                }
-                
-                                .notif-wrap {
-                                    flex: 1;
-                
-                                    .req-type {
-                                        color: $on-base-blue;
-                                        font-family: $raleway-600;
-                                        font-size: 12px;
-                                        font-style: normal;
-                                        line-height: 20px;
-                                        letter-spacing: 0.48px;
-                                        text-transform: uppercase;
-                                    }
-                
-                                    .title-wrap {
-                                        margin-bottom: 12px;
-                
-                                        .title {
-                                            color: $on-base;
-                                            font-family: $raleway-500;
-                                            font-size: 12px;
-                                            font-style: normal;
-                                            line-height: 20px;
-                                            letter-spacing: 0.28px;
-                
-                                            &.text-cap {
-                                                text-transform: capitalize;
-                                            }
-                                        }
-                                    }
-                
-                                    .message {
-                                        padding: 8px 12px;
-                                        font-family: $raleway-500;
-                                        font-size: 12px;
-                                        font-style: normal;
-                                        line-height: 20px;
-                                        border-radius: 8px;
-                                        color: $on-base;
-                                        background: #ECECFE;
-                                    }
-                
-                                    .btn-approve {
-                                        padding: 10px 12px;
-                                        min-width: 100px;
-                                        border-radius: 4px;
-                                        font-family: $raleway-600;
-                                        font-size: 12px;
-                                        font-style: normal;
-                                        line-height: 16px;
-                                        border: 0;
-                                        color: $on-primary;
-                                        background: $primary;
-                                        
-                                        &:not(.approved):hover {
-                                            cursor: pointer;
-                                        }
-                
-                                        &.approved {
-                                            @include user-select-none;
-                                            background-color: #5FAD56;
-                                        }
-                                    }
-                
-                                    &:has(.btn-approve) {
-                                        .message {
-                                            margin-bottom: 12px;
-                                        }
-                                    }
-                                }
-                            }
-                
-                            .empty-msg {
-                                color: $on-base-light;
-                                font-family: $raleway-500;
-                                font-size: 16px;
-                                font-style: normal;
-                                line-height: 24px;
-                                /* 150% */
-                                @include user-select-none;
-                            }
-                
-                            &:has(.empty-msg) {
-                                height: 100%;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                            }
-                        }
-                    }
                 }
             }
         }
@@ -270,7 +321,7 @@ $primary-hover: rgba(170, 196, 255, 0.25);
                         border-radius: 50%;
                         overflow: hidden;
                         background-color: $base;
-                        
+
                         .avatar-img {
                             height: 100%;
                             width: 100%;
@@ -278,7 +329,7 @@ $primary-hover: rgba(170, 196, 255, 0.25);
                             border-radius: inherit;
                             object-fit: cover;
                             object-position: center;
-                            
+
                             &.default {
                                 padding: 4px;
                                 object-fit: unset;
@@ -745,6 +796,6 @@ $primary-hover: rgba(170, 196, 255, 0.25);
 }
 
 
-.divider {
-    border-bottom: 1px solid #E3E3E5;
-}
+// .divider {
+//     border-bottom: 1px solid #E3E3E5;
+// }

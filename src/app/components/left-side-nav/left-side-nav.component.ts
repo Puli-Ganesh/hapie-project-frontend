@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Subscription, filter } from 'rxjs';
 
 import { Permissions } from '@src/app/constants/permissions';
 import { Routes } from '@src/app/constants/routes';
@@ -25,11 +25,21 @@ export class LeftSideNavComponent implements OnDestroy {
     this.userSubscription = this._facadeService.authService.getCurrentUser$().subscribe({
       next: (user: any) => {
         this.currentUser = user;
+        // console.log(this.currentUser)
       }
     });
-    this.notificationSubscription = this._facadeService.notificationService.newNotification$.subscribe({
+    
+
+    this.setActiveMenu(this._router.url);
+
+    this.routerSubscription = this._router.events.pipe(
+      filter((event: any) => event instanceof NavigationEnd)
+    ).subscribe({
       next: (event: any) => {
-        this.notificationCount = this._facadeService.notificationService.notificationCount;
+        this.setActiveMenu(event.urlAfterRedirects)
+      },
+      error: (err) => {
+        console.error('There is an error while navigation end', err);
       }
     });
   }
@@ -43,7 +53,6 @@ export class LeftSideNavComponent implements OnDestroy {
 
   protected isRequestAlive: boolean = false;
 
-  protected notificationSubscription: Subscription;
   protected notificationCount: number = 0;
 
   protected notificationList: Array<{
@@ -64,6 +73,10 @@ export class LeftSideNavComponent implements OnDestroy {
   protected isNotifCenterOpen: boolean = false;
   @ViewChild('notificationContainer') notificationContainer!: ElementRef;
 
+  routerSubscription: Subscription;
+  activeMenu = '';
+  workflowToggler = false;
+  projectsToggler = false;
 
 
   @HostListener('document:click', ['$event'])
@@ -73,6 +86,18 @@ export class LeftSideNavComponent implements OnDestroy {
     }
     if (this.isNotifCenterOpen && !this.notificationContainer?.nativeElement?.contains(event.target)) {
       this.isNotifCenterOpen = false;
+    }
+  }
+
+  setActiveMenu(url: string) {
+    if (url.startsWith('/projects') || url.startsWith('/home')) {
+      this.activeMenu = 'projects';
+    } else if (url.startsWith('/workflows')) {
+      this.activeMenu = 'workflows'
+    } else if (url.startsWith('/team')) {
+      this.activeMenu = 'team';
+    } else if (url.startsWith('/templates')) {
+      this.activeMenu = 'templates';
     }
   }
 
@@ -92,6 +117,19 @@ export class LeftSideNavComponent implements OnDestroy {
         console.error('Error while getting notification list', err);
       }
     });
+  }
+
+  onTeam() {
+    this._router.navigate([this.appRoutes.TEAM])
+  }
+  onProjects() {
+    this._router.navigate([this.appRoutes.HOME])
+  }
+  onTemplates() {
+    this._router.navigate([this.appRoutes.TEMPLATES])
+  }
+  onWorkflows() {
+    this._router.navigate([this.appRoutes.WORKFLOWS])
   }
 
   onApproveEditAccess(index: number): void {
@@ -135,8 +173,8 @@ export class LeftSideNavComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.userSubscription?.unsubscribe();
     this.projectIdSubscription?.unsubscribe();
-    this.notificationSubscription?.unsubscribe();
     this._facadeService.projectService.removeSelectedProject();
+    this.routerSubscription?.unsubscribe();
   }
 
 }

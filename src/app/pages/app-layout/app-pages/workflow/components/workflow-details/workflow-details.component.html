@@ -1,34 +1,115 @@
 <div class="workflow-wrapper">
-    <div class="main-wrapper">
-        <canvas id="mainCanvas"></canvas>
+
+    <div class="workflow-header">
+        <div class="breadcrumbs-wrapper">
+            <svg class="back-icon" (click)="onExit()" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <rect x="0.5" y="0.5" width="23" height="23" rx="3.5" stroke="#344051" />
+                <path
+                    d="M6.63377 12.0001L11.8175 17.1826C11.9349 17.2999 12.0008 17.4591 12.0008 17.6251C12.0008 17.791 11.9349 17.9502 11.8175 18.0676C11.7002 18.1849 11.541 18.2508 11.375 18.2508C11.209 18.2508 11.0499 18.1849 10.9325 18.0676L5.30752 12.4426C5.24931 12.3845 5.20314 12.3155 5.17163 12.2396C5.14012 12.1637 5.1239 12.0823 5.1239 12.0001C5.1239 11.9178 5.14012 11.8364 5.17163 11.7605C5.20314 11.6846 5.24931 11.6156 5.30752 11.5576L10.9325 5.93256C11.0499 5.8152 11.209 5.74927 11.375 5.74927C11.541 5.74927 11.7002 5.8152 11.8175 5.93256C11.9349 6.04992 12.0008 6.20909 12.0008 6.37506C12.0008 6.54103 11.9349 6.7002 11.8175 6.81756L6.63377 12.0001Z"
+                    fill="#344051" stroke="#344051" stroke-width="0.75" />
+                <path
+                    d="M12.6336 11.9998L17.8174 17.1823C17.9348 17.2997 18.0007 17.4588 18.0007 17.6248C18.0007 17.7908 17.9348 17.95 17.8174 18.0673C17.7 18.1847 17.5409 18.2506 17.3749 18.2506C17.2089 18.2506 17.0498 18.1847 16.9324 18.0673L11.3074 12.4423C11.2492 12.3843 11.203 12.3153 11.1715 12.2394C11.14 12.1634 11.1238 12.082 11.1238 11.9998C11.1238 11.9176 11.14 11.8362 11.1715 11.7603C11.203 11.6843 11.2492 11.6154 11.3074 11.5573L16.9324 5.93231C17.0498 5.81495 17.2089 5.74902 17.3749 5.74902C17.5409 5.74902 17.7 5.81495 17.8174 5.93231C17.9348 6.04967 18.0007 6.20884 18.0007 6.37481C18.0007 6.54078 17.9348 6.69995 17.8174 6.81731L12.6336 11.9998Z"
+                    fill="#344051" stroke="#344051" stroke-width="0.75" />
+            </svg>
+
+            <h2 class="breadcrumb-item">
+                {{ workflowName }}
+            </h2>
+        </div>
+        <div class="actions-wrapper">
+            <button class="app-button primary" (click)="onSaveData()">
+                <svg class="btn-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path
+                        d="M11.4408 13.6667H4.5591C4.05718 13.6667 3.57583 13.4735 3.22092 13.1297C2.86601 12.7859 2.66663 12.3196 2.66663 11.8333V3.83333C2.66663 3.3471 2.86601 2.88079 3.22092 2.53697C3.57583 2.19315 4.05718 2 4.5591 2H9.72039C9.85723 2.00012 9.98842 2.05287 10.0851 2.14667L13.1819 5.16667C13.2787 5.26034 13.3332 5.38744 13.3333 5.52V11.8333C13.3333 12.3196 13.1339 12.7859 12.779 13.1297C12.4241 13.4735 11.9427 13.6667 11.4408 13.6667ZM4.5591 3C4.33096 3 4.11216 3.0878 3.95084 3.24408C3.78951 3.40036 3.69888 3.61232 3.69888 3.83333V11.8333C3.69888 12.0543 3.78951 12.2663 3.95084 12.4226C4.11216 12.5789 4.33096 12.6667 4.5591 12.6667H11.4408C11.669 12.6667 11.8878 12.5789 12.0491 12.4226C12.2104 12.2663 12.301 12.0543 12.301 11.8333V5.70667L9.50706 3H4.5591Z"
+                        fill="white" stroke="white" stroke-width="0.3" />
+                    <path
+                        d="M11 13.1667H9.99999V9H5.66665V13.1667H4.66665V8.83333C4.66665 8.61232 4.75445 8.40036 4.91073 8.24408C5.06701 8.0878 5.27897 8 5.49999 8H10.1667C10.3877 8 10.5996 8.0878 10.7559 8.24408C10.9122 8.40036 11 8.61232 11 8.83333V13.1667ZM8.14665 5.66667H5.51999C5.40705 5.66579 5.29539 5.64269 5.19138 5.59866C5.08737 5.55463 4.99306 5.49055 4.91382 5.41007C4.83458 5.32959 4.77197 5.2343 4.72956 5.12962C4.68715 5.02494 4.66577 4.91294 4.66665 4.8V2.5H5.66665V4.66667H7.99999V2.5H8.99999V4.8C9.00086 4.91294 8.97949 5.02494 8.93708 5.12962C8.89467 5.2343 8.83206 5.32959 8.75282 5.41007C8.67358 5.49055 8.57926 5.55463 8.47526 5.59866C8.37125 5.64269 8.25959 5.66579 8.14665 5.66667Z"
+                        fill="white" stroke="white" stroke-width="0.3" />
+                </svg>
+                <span class="btn-label">Save</span>
+            </button>
+            <button class="app-button primary" (click)="onExit()">
+                <svg class="btn-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <g clip-path="url(#clip0_2072_168)">
+                        <path
+                            d="M8.00008 2C8.17 2.00019 8.33344 2.06525 8.45699 2.1819C8.58055 2.29855 8.6549 2.45797 8.66486 2.6276C8.67482 2.79722 8.61963 2.96425 8.51057 3.09455C8.40151 3.22486 8.24681 3.3086 8.07808 3.32867L8.00008 3.33333H4.66675C4.50346 3.33335 4.34586 3.3933 4.22383 3.50181C4.10181 3.61032 4.02385 3.75983 4.00475 3.922L4.00008 4V12C4.0001 12.1633 4.06005 12.3209 4.16856 12.4429C4.27706 12.5649 4.42658 12.6429 4.58875 12.662L4.66675 12.6667H7.66675C7.83667 12.6669 8.0001 12.7319 8.12366 12.8486C8.24722 12.9652 8.32157 13.1246 8.33153 13.2943C8.34149 13.4639 8.2863 13.6309 8.17724 13.7612C8.06818 13.8915 7.91348 13.9753 7.74475 13.9953L7.66675 14H4.66675C4.15661 14 3.66574 13.8051 3.29457 13.4551C2.92341 13.1052 2.70001 12.6266 2.67008 12.1173L2.66675 12V4C2.66672 3.48986 2.86163 2.99899 3.2116 2.62783C3.56158 2.25666 4.04015 2.03326 4.54941 2.00333L4.66675 2H8.00008ZM11.8047 5.64267L13.6901 7.52867C13.8151 7.65369 13.8853 7.82322 13.8853 8C13.8853 8.17678 13.8151 8.34631 13.6901 8.47133L11.8047 10.3573C11.6797 10.4823 11.51 10.5525 11.3332 10.5525C11.1563 10.5524 10.9868 10.4821 10.8617 10.357C10.7367 10.2319 10.6666 10.0623 10.6666 9.88543C10.6667 9.70858 10.737 9.53901 10.8621 9.414L11.6094 8.66667H8.00008C7.82327 8.66667 7.6537 8.59643 7.52868 8.4714C7.40365 8.34638 7.33342 8.17681 7.33342 8C7.33342 7.82319 7.40365 7.65362 7.52868 7.5286C7.6537 7.40357 7.82327 7.33333 8.00008 7.33333H11.6094L10.8621 6.586C10.737 6.46099 10.6667 6.29142 10.6666 6.11457C10.6666 5.93772 10.7367 5.76809 10.8617 5.643C10.9868 5.51791 11.1563 5.44759 11.3332 5.44753C11.51 5.44747 11.6797 5.51766 11.8047 5.64267Z"
+                            fill="white" stroke="white" stroke-width="0.3" />
+                    </g>
+                    <defs>
+                        <clipPath id="clip0_2072_168">
+                            <rect width="16" height="16" fill="white" />
+                        </clipPath>
+                    </defs>
+                </svg>
+                <span class="btn-label">Exit</span>
+            </button>
+        </div>
+        <app-header></app-header>
     </div>
-</div>
 
-<div class="workflow-name">
-    <label for="">Workflow Title</label>
-    <input type="text" [(ngModel)]="workflowName">
-</div>
+    <div class="main-wrapper" id="mainCanvasWrapper">
+        <canvas id="mainCanvas"></canvas>
 
-<button class="close-button" (click)="onCloseWorkflow()">
-    Close
-</button>
-<button class="save-button" (click)="onSaveData()">
-    Save
-</button>
+        <div class="details-drawer" *ngIf="drawerToggler" #detailsDrawer>
+            <div class="dropdown-wrapper">
+                <div class="label">Choose Document's Template</div>
+                <div class="selected-wrapper" (click)="templateToggler = !templateToggler">
+                    <div class="selected-option">
+                        {{ selectedTemplate?.title ?? 'Please select'}}
+                    </div>
+                    <svg class="icon" [class.open]="templateToggler" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <circle cx="8" cy="8" r="7.25" stroke="#E4E7EC" stroke-width="1.5" />
+                        <path d="M5 7L8 10L11 7" stroke="#344051" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                    <div class="list-wrapper" *ngIf="templateToggler">
+                        <div class="list-option" *ngFor="let template of templatesList; let tIndex = index;" (click)="onSelectTemplate($event, tIndex);">
+                            {{ template.title }}
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-<div class="options-popup" *ngIf="addToggler" #addPopup>
-    <div class="options-list-wrapper" *ngIf="addList.length">
-        <div *ngFor="let option of addList" class="option-wrapper" (mousedown)="onAddNode(option)">
-            {{ option }}
+            <div class="actions-wrapper">
+                <button class="app-button primary" (click)="onDetailsSave()">
+                    <div class="btn-label">Save</div>
+                </button>
+                <button class="app-button" (click)="onDetailsCancel()">
+                    <div class="btn-label">Cancel</div>
+                </button>
+            </div>
         </div>
     </div>
-    <div class="message" style="padding: 12px;" *ngIf="!addList.length">
-        There are no more apps available
-    </div>
 </div>
 
-<div class="details-drawer" *ngIf="drawerToggler" #detailsDrawer>
-    <div class="body-wrapper">
-        lorem
+<div class="options-popup" *ngIf="addToggler" #addPopup>
+    <div class="search-wrapper">
+        <input type="text" [(ngModel)]="searchTerm" class="input" (keyup)="onSearchOption()" />
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M7.15455 2.12476C6.34673 2.12482 5.55064 2.31573 4.83269 2.68154C4.11475 3.04736 3.49577 3.57747 3.0274 4.22766C2.55903 4.87785 2.25485 5.62925 2.14024 6.41919C2.02562 7.20913 2.1039 8.01468 2.36855 8.76866C2.63319 9.52263 3.07651 10.2031 3.66154 10.7534C4.24657 11.3037 4.95633 11.7079 5.73161 11.9321C6.50689 12.1563 7.32521 12.1941 8.1183 12.0424C8.91138 11.8906 9.65623 11.5537 10.2907 11.0598L12.4673 13.2099C12.5797 13.3172 12.7302 13.3765 12.8865 13.3752C13.0428 13.3738 13.1923 13.3119 13.3028 13.2027C13.4133 13.0936 13.476 12.9459 13.4773 12.7915C13.4787 12.6372 13.4186 12.4884 13.31 12.3774L11.1334 10.2273C11.7223 9.48932 12.0889 8.60252 12.1914 7.66835C12.2939 6.73418 12.128 5.79038 11.7129 4.94497C11.2977 4.09955 10.65 3.38668 9.84388 2.88792C9.03774 2.38917 8.10575 2.12469 7.15455 2.12476ZM3.28056 7.12921C3.28056 6.11424 3.68871 5.14085 4.41522 4.42316C5.14174 3.70547 6.12711 3.30227 7.15455 3.30227C8.182 3.30227 9.16737 3.70547 9.89388 4.42316C10.6204 5.14085 11.0286 6.11424 11.0286 7.12921C11.0286 8.14417 10.6204 9.11757 9.89388 9.83526C9.16737 10.5529 8.182 10.9561 7.15455 10.9561C6.12711 10.9561 5.14174 10.5529 4.41522 9.83526C3.68871 9.11757 3.28056 8.14417 3.28056 7.12921Z"
+                fill="#344051" />
+        </svg>
+    </div>
+
+    <div class="options-list-wrapper">
+        <div class="title">Components</div>
+
+        <div class="options-list-container" *ngIf="filteredAddList.length">
+            <div *ngFor="let option of filteredAddList" class="option-wrapper" (mousedown)="onAddNode(option)">
+                <svg class="option-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path
+                        d="M16 8.26707L12 1.33374H7.45804L5.9967 3.86707H10.537L13.0754 8.26707L10.537 12.6671H5.9967L7.45804 15.2004H12L16 8.26707Z"
+                        fill="#2C76FF" />
+                    <path
+                        d="M5.46333 12.6671L2.92467 8.26707L5.46333 3.86707L6.92467 1.33374H4L0 8.26707L4 15.2004H6.92467L5.46333 12.6671Z"
+                        fill="#2C76FF" />
+                </svg>
+                <h2 class="option-title">{{ option }}</h2>
+            </div>
+        </div>
+        <div class="message" style="padding: 12px;" *ngIf="!filteredAddList.length">
+            There are no more apps available
+        </div>
     </div>
 </div>

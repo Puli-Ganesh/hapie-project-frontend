@@ -11,6 +11,7 @@ import { DragDropFileDirective } from '../directives/drag-drop-file.directive';
 import { AutofocusDirective } from '../directives/autofocus.directive';
 
 import { SafePipe } from '../pipes/safe.pipe';
+import { HeaderComponent } from './components/header/header.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { SafePipe } from '../pipes/safe.pipe';
     UploadMediaModalComponent,
     DragDropFileDirective,
     AutofocusDirective,
-    SafePipe
+    SafePipe,
+    HeaderComponent
   ],
   imports: [
     CommonModule,
@@ -35,7 +37,8 @@ import { SafePipe } from '../pipes/safe.pipe';
     UploadMediaModalComponent,
     DragDropFileDirective,
     AutofocusDirective,
-    SafePipe
+    SafePipe,
+    HeaderComponent
   ]
 })
 export class SharedModule { }
