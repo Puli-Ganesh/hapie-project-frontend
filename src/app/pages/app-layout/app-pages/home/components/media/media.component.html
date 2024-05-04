@@ -18,7 +18,7 @@
             </h2>
         </div>
         <div class="actions-wrapper">
-            <button class="app-button primary" *ngIf="permissions.PROJECT_UPLOAD.includes(currentUser.type)" (click)="onUploadMedia()">
+            <button class="app-button primary" *ngIf="isUploadVisible && permissions.PROJECT_UPLOAD.includes(currentUser.type)" (click)="onUploadMedia()">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="btn-icon">
                     <mask id="mask0_245_2241" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="2" y="1"
                         width="15" height="18">

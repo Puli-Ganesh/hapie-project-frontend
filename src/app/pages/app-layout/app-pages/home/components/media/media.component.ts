@@ -26,6 +26,14 @@ export class MediaComponent implements OnInit, OnDestroy {
     this.projectDetailsSubscription = this._facadeService.projectService.projectDetails$.subscribe({
       next: (details: any) => {
         this.projectDetails = details;
+        const nodes = this.projectDetails?.workflowId?.nodes;
+        if (nodes?.length) {
+          console.log(nodes);
+          const videoNode = nodes.find((n: any) => n.app == 'Video Upload');
+          this.isUploadVisible = videoNode ? true : false;
+        } else {
+          this.isUploadVisible = false;
+        }
       }
     });
 
@@ -40,6 +48,7 @@ export class MediaComponent implements OnInit, OnDestroy {
   protected readonly appRoutes = Routes;
   projectDetailsSubscription: Subscription;
   projectDetails: any;
+  isUploadVisible = false;
 
   protected projectId: string = '';
   protected projectName: string = '';
