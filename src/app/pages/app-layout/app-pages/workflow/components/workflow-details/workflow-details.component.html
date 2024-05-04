@@ -52,8 +52,8 @@
         <canvas id="mainCanvas"></canvas>
 
         <div class="details-drawer" *ngIf="drawerToggler" #detailsDrawer>
-            <div class="dropdown-wrapper">
-                <div class="label">Choose Document's Template</div>
+            <!-- <div class="dropdown-wrapper">
+                <div class="label">Document's Title</div>
                 <div class="selected-wrapper" (click)="templateToggler = !templateToggler">
                     <div class="selected-option">
                         {{ selectedTemplate?.title ?? 'Please select'}}
@@ -68,6 +68,10 @@
                         </div>
                     </div>
                 </div>
+            </div> -->
+            <div class="input-wrapper">
+                <div class="label">Document's Title</div>
+                <input type="text" [(ngModel)]="documentTitle" class="input">
             </div>
 
             <div class="actions-wrapper">

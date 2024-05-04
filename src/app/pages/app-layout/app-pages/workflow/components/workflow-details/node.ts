@@ -21,7 +21,6 @@ export class Node {
         height: 0
     };
     config: any = {};
-    displayTitle = '';
     addButton: ICoordinates = {
         x: 0,
         y: 0,

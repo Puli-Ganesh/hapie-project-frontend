@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Permissions } from '@src/app/constants/permissions';
 
@@ -6,13 +6,14 @@ import { Routes } from '@src/app/constants/routes';
 import { StorageKeys } from '@src/app/constants/storage-keys';
 import { FacadeService } from '@src/app/services/facade.service';
 import { IResponse } from '@src/interfaces/response.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-media',
   templateUrl: './media.component.html',
   styleUrls: ['./media.component.scss']
 })
-export class MediaComponent implements OnInit {
+export class MediaComponent implements OnInit, OnDestroy {
 
   constructor(
     private _router: Router,
@@ -21,9 +22,15 @@ export class MediaComponent implements OnInit {
     this.projectId = localStorage.getItem(StorageKeys.PROJECT_ID) ?? '';
     this.projectName = localStorage.getItem(StorageKeys.PROJECT_NAME) ?? '';
     this.projectColor = localStorage.getItem(StorageKeys.PROJECT_COLOR) ?? 1;
+    
+    this.projectDetailsSubscription = this._facadeService.projectService.projectDetails$.subscribe({
+      next: (details: any) => {
+        this.projectDetails = details;
+      }
+    });
 
     if (!this.projectId) {
-      _router.navigateByUrl(this.appRoutes.HOME);
+      _router.navigateByUrl(this.appRoutes.PROJECTS);
       return;
     }
   }
@@ -31,6 +38,8 @@ export class MediaComponent implements OnInit {
   permissions = Permissions;
   currentUser: any;
   protected readonly appRoutes = Routes;
+  projectDetailsSubscription: Subscription;
+  projectDetails: any;
 
   protected projectId: string = '';
   protected projectName: string = '';
@@ -57,6 +66,10 @@ export class MediaComponent implements OnInit {
     })
   }
 
+  onGoBack() {
+    this._router.navigate([this.appRoutes.PROJECTS]);
+  }
+
   // onGoToProjects() {
   //   this._router.navigate([this.appRoutes.PROJECTS])
   // }
@@ -66,7 +79,7 @@ export class MediaComponent implements OnInit {
   // }
 
   navigateOnCompare() {
-    this._router.navigateByUrl(this.appRoutes.PROJECT_MEDIA_COMPARE);
+    this._router.navigateByUrl(this.appRoutes.PROJECT_COMPARE);
   }
 
   onUploadMedia() {
@@ -84,6 +97,10 @@ export class MediaComponent implements OnInit {
     if (!recording?._id) { return; }
 
     this._router.navigateByUrl(`${this.appRoutes.PROJECT_MEDIA_TRANSCRIPT}${recording._id}`);
+  }
+
+  ngOnDestroy(): void {
+    this.projectDetailsSubscription?.unsubscribe();
   }
 
 }

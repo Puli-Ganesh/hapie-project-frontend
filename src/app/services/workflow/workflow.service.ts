@@ -20,6 +20,10 @@ export class WorkflowService {
     return this._httpClientService.get(`${this.endPoint}`);
   }
 
+  getMasterList() {
+    return this._httpClientService.get(`${this.endPoint}/master-list`);
+  }
+
   getById(id: string) {
     return this._httpClientService.get(`${this.endPoint}/${id}`);
   }

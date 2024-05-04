@@ -34,6 +34,7 @@ export class TeamComponent implements OnInit {
     await this.getProjects();
 
     this.setDisplayUsers();
+    this._facadeService.modalService.registerModal('manageTeamModal');
   }
 
   setDisplayUsers() {
@@ -72,6 +73,7 @@ export class TeamComponent implements OnInit {
   }
 
   onAddMember() {
+    this._facadeService.modalService.openModal('manageTeamModal');
     this.modalToggler = true;
   }
 
@@ -80,12 +82,14 @@ export class TeamComponent implements OnInit {
     if (index > -1) {
       this.selectedMember = this.usersList[index];
     }
+    this._facadeService.modalService.openModal('manageTeamModal');
     this.modalToggler = true;
   }
 
   onModalClose(event: any) {
     this.modalToggler = false;
     this.selectedMember = null;
+    this._facadeService.modalService.closeModal('manageTeamModal');
   }
 
   async onMemberAdded(newMember: any) {

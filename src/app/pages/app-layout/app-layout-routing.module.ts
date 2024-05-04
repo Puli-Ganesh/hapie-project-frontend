@@ -6,11 +6,11 @@ import { CommonOutletComponent } from '@src/app/components/common-outlet/common-
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'projects',
     pathMatch: 'full',
   },
   {
-    path: 'home',
+    path: 'projects',
     title: 'Projects | NexGen Force',
     component: ProjectsComponent
   },

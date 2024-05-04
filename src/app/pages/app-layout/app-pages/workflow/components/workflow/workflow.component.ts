@@ -120,10 +120,10 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     }
     this._facadeService.workflowService.create(body).subscribe({
       next: (res: any) => {
-        this.getWorkflowList();
         this.workflowForm.reset();
         this._facadeService.modalService.closeModal('createWorkflowModal')
         this._facadeService.appService.openToaster('Workflow successfully created.', 'success');
+        this._router.navigate([this.appRoutes.WORKFLOWS, 'details', res.data._id]);
       },
       error: (err: any) => {
         console.log('There is an error while creating workflow', err);

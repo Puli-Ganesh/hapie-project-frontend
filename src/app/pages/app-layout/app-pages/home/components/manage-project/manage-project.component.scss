@@ -1,18 +1,20 @@
 @import 'src/styles/_mixins';
 
 
-.new-project-header {
-    margin-bottom: 24px;
+.project-header {
+    margin-bottom: 20px;
     display: flex;
     justify-content: space-between;
+    border-bottom: 1px solid $border-color;
 
     .title {
+        margin-bottom: 4px;
         color: $on-base;
-        font-family: $raleway-600;
-        font-size: 20px;
+        font-family: $base-font-family;
+        font-size: 14px;
         font-style: normal;
-        line-height: 32px;
-        /* 160% */
+        font-weight: 600;
+        line-height: normal; 
         text-transform: capitalize;
     }
 
@@ -28,40 +30,45 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 24px;
-    margin-bottom: 24px;
+    gap: 34px;
+    margin-bottom: 28px;
     width: 100%;
 
-    // border-bottom: 1px solid #ECECFE;
-    &::after {
-        content: '';
-        position: absolute;
-        bottom: -24px;
-        left: -24px;
-        height: 1px;
-        width: calc(100% + 48px);
-        background-color: #ECECFE;
-    }
+    // // border-bottom: 1px solid #ECECFE;
+    // &::after {
+    //     content: '';
+    //     position: absolute;
+    //     bottom: -24px;
+    //     left: -24px;
+    //     height: 1px;
+    //     width: calc(100% + 48px);
+    //     background-color: #ECECFE;
+    // }
 
-    .stepper-item {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 12px;
-        padding: 8px 12px;
-        border-radius: 6px;
-        cursor: pointer;
-        color: $on-base;
-        font-family: $highlight-font-family;
+    .stepper-title {
+        color: #637083;
+        font-family: $base-font-family;
         font-size: 14px;
-        font-weight: 500;
-        line-height: 16px;
-
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        
         &:hover,
         &.active {
-            color: $primary;
-            background-color: rgba(11, 11, 207, 0.04);
-            ;
+            position: relative;
+            font-weight: 500;
+            cursor: pointer;
+
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: -4px;
+                left: 0;
+                right: 0;
+                width: 100%;
+                height: 2px;
+                background-color: $primary;
+            }
         }
     }
 }
@@ -72,43 +79,48 @@
     .manage-project-container {
         margin: 0 auto;
         width: 100%;
+        min-width: 400px;
         max-width: 480px;
         background-color: $base;
+        border: 1px solid $border-color;
+        border-radius: 4px;
 
-        .new-project-wrap {
-            padding: 0 24px 24px;
+        .project-wrap {
+            padding: 16px 16px 0;
             width: 100%;
 
-            .new-project-body {
+            .project-body {
                 display: grid;
                 grid-template-columns: 1fr;
-                gap: 24px 0;
-                padding-top: 24px;
+                gap: 16px 0;
 
                 .input-container {
                     .input-wrap {
                         display: flex;
                         flex-direction: column;
-                        gap: 8px 0;
+                        gap: 2px 0;
 
                         .label {
-                            color: $on-base;
-                            font-family: $raleway-500;
+                            color: $on-light-base;
+                            font-family: $base-font-family;
                             font-size: 12px;
                             font-style: normal;
-                            line-height: 20px;
+                            font-weight: 400;
+                            line-height: normal;
                             text-transform: capitalize;
                         }
 
                         .input {
-                            padding: 11px 16px;
-                            color: $on-base;
-                            font-family: $raleway-500;
-                            font-size: 14px;
+                            padding: 8px 8px;
+                            color: $on-light-base;
+                            background-color: $light-base;
+                            font-family: $base-font-family;
+                            font-size: 13px;
                             font-style: normal;
-                            line-height: 24px;
-                            border-radius: 12px;
-                            border: 1px solid rgba(216, 216, 255, 1);
+                            font-weight: 400;
+                            line-height: normal;
+                            border-radius: 4px;
+                            border: 1px solid $border-color;
 
                             &.multiline {
                                 outline: 0;
@@ -122,20 +134,15 @@
                             &::placeholder,
                             &::-webkit-input-placeholder {
                                 color: rgba(10, 9, 8, 0.40);
-                                font-family: $raleway-500;
-                                font-size: 14px;
-                                font-style: normal;
-                                line-height: 24px;
-                                /* 171.429% */
                             }
                         }
 
                         .choose-img-container {
                             width: 100%;
                             aspect-ratio: 2/1;
-                            border-radius: 12px;
-                            border: 1px dashed #5386E4;
-                            background: rgba(236, 236, 254, 0.50);
+                            border-radius: 4px;
+                            border: 1px solid $border-color;
+                            background: $light-base;
                             overflow: hidden;
 
                             .cover-img-preview-wrap {
@@ -165,54 +172,44 @@
                                     top: 12px;
                                     right: 12px;
                                     border-radius: 4px;
-                                    border: 1px solid #F4F4F4;
+                                    border: 1px solid $border-color;
                                     background: $base;
 
                                     .btn {
                                         display: inline-block;
                                         padding: 8px 16px;
                                         color: $on-base;
-                                        font-family: $raleway-600;
-                                        font-size: 12px;
+                                        font-family: $base-font-family;
+                                        font-size: 14px;
                                         font-style: normal;
-                                        line-height: 20px;
+                                        font-weight: 400;
+                                        line-height: normal;
                                         text-transform: capitalize;
                                         cursor: pointer;
                                     }
                                 }
 
                                 .choose-img-text {
-                                    color: $on-secondary;
+                                    color: $on-base;
                                     text-align: center;
-                                    font-family: $raleway-600;
-                                    font-size: 14px;
+                                    font-family: $base-font-family;
+                                    font-size: 13px;
                                     font-style: normal;
-                                    line-height: 20px;
-
+                                    font-weight: 400;
+                                    line-height: normal;
                                     /* 142.857% */
-                                    &:first-child {
+
+                                    &.choose-link {
+                                        color: #2C76FF;
                                         cursor: pointer;
                                     }
-
-                                    &.or-text {
-                                        color: rgba(10, 9, 8, 0.80);
+                                    &.text-upp {
+                                        text-transform: uppercase;
                                     }
 
                                     .file-select {
                                         display: none;
                                     }
-                                }
-
-                                .mime-types {
-                                    margin-top: 6px;
-                                    color: rgba(10, 9, 8, 0.80);
-                                    text-align: center;
-                                    font-family: $raleway-500;
-                                    font-size: 10px;
-                                    font-style: normal;
-                                    line-height: 20px;
-                                    /* 200% */
-                                    text-transform: uppercase;
                                 }
 
                                 &:hover {
@@ -360,6 +357,7 @@
 
 
                     .auto-generate-docs-wrap {
+                        margin: 7px 0;
                         display: flex;
                         gap: 0 12px;
 
@@ -373,7 +371,7 @@
                             height: 20px;
                             display: inline-block;
                             border-radius: 10px;
-                            background-color: $color-1-2;
+                            background-color: $light-primary;
                             cursor: pointer;
 
                             .tap-round {
@@ -388,7 +386,7 @@
                             }
 
                             &.on {
-                                background-color: $color-1-1;
+                                background-color: $primary;
 
                                 .tap-round {
                                     left: unset;
@@ -433,10 +431,10 @@
         }
 
         .footer-actions {
-            padding: 16px 24px;
+            padding: 16px 16px;
             display: flex;
             gap: 0 24px;
-            background-color: $base;
+            justify-content: flex-end;
         }
     }
 
@@ -446,18 +444,13 @@
 }
 
 .member-wrapper {
+    padding: 16px 16px;
     display: flex;
     flex-direction: column;
     height: 100%;
     max-height: 100%;
 
-    .header {
-        flex: 0 1;
-        padding: 0 24px 0px 24px;
-    }
-
     .body {
-        padding: 24px;
         height: 100%;
         flex: 1 1;
 
@@ -465,135 +458,31 @@
             position: relative;
 
             .label {
-                font-family: $raleway-600;
-                margin-bottom: 8px;
-                font-size: 16px;
-                line-height: 24px;
-            }
-
-            .selected-list-wrapper {
-                display: flex;
-                flex-direction: column;
-                gap: 16px;
-                margin-bottom: 24px;
-
-                .selected-user {
-                    border-radius: 12px;
-                    border: 1px solid #D8D8FF;
-                    padding: 8px;
-                    display: flex;
-                    align-items: center;
-                    gap: 16px;
-
-                    .user-details {
-                        display: flex;
-                        gap: 8px;
-                        align-items: center;
-                        flex: 1;
-
-                        .img-wrapper {
-                            height: 32px;
-                            width: 32px;
-                            border-radius: 50%;
-                            overflow: hidden;
-                            object-fit: cover;
-                            object-position: center;
-
-                            img {
-                                height: inherit;
-                                width: inherit;
-                            }
-                        }
-
-                        .details {
-                            .name {
-                                font-family: $raleway-600;
-                                font-size: 14px;
-                                line-height: 20px;
-                                margin: 0;
-                            }
-
-                            .role {
-                                color: rgba(10, 9, 8, 0.50);
-                                font-family: $raleway-400;
-                                font-size: 10px;
-                                line-height: 12px;
-                                margin: 0;
-                            }
-                        }
-                    }
-
-                    .delete-icon {
-                        width: 17px;
-                        height: auto;
-                        cursor: pointer;
-                    }
-
-                    .color-drop {
-                        position: relative;
-                        z-index: 2;
-
-                        .selected-color {
-                            padding: 12px 16px;
-                            border: 1px solid #D8D8FF;
-                            border-radius: 12px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: space-between;
-                            width: 96px;
-                            cursor: pointer;
-
-                            .color {
-                                height: 24px;
-                                width: 24px;
-                                border-radius: 50%;
-                            }
-
-                            .icon {
-                                height: auto;
-
-                                &.open {
-                                    transform: rotate(180deg);
-                                }
-                            }
-                        }
-
-                        .color-options-list {
-                            position: absolute;
-                            top: calc(100% + 8px);
-                            left: 0;
-                            right: 0;
-                            border: 1px solid #D8D8FF;
-                            border-radius: 12px;
-                            padding: 6px 0px;
-                            display: flex;
-                            flex-direction: column;
-                            background-color: $base;
-                            z-index: 2;
-
-                            .color-wrapper {
-                                padding: 6px 16px;
-
-                                .color {
-                                    height: 24px;
-                                    width: 24px;
-                                    border-radius: 50%;
-                                }
-                            }
-                        }
-                    }
-                }
+                margin-bottom: 2px;
+                font-family: $base-font-family;
+                font-size: 12px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+                text-transform: capitalize;
             }
 
             .selected-member {
+                margin-bottom: 8px;
+                padding: 8px 8px;
+                height: 32px;
                 position: relative;
-                padding: 12px 16px;
-                border-radius: 12px;
-                border: 1px solid #D8D8FF;
                 display: flex;
                 align-items: center;
                 justify-content: flex-start;
                 gap: 16px;
+                background-color: $light-base;
+                border-radius: 4px;
+                border: 1px solid $border-color;
+
+                &:hover {
+                    cursor: pointer;
+                }
 
                 .option {
                     font-family: $raleway-500;
@@ -606,7 +495,7 @@
                 .icon {
                     position: absolute;
                     top: 50%;
-                    right: 16px;
+                    right: 8px;
                     transform: translateY(-50%);
 
                     &.open {
@@ -617,27 +506,27 @@
 
             .options-list {
                 position: absolute;
-                top: calc(100% + 12px);
+                top: 100%;
                 left: 0;
                 right: 0;
-                border: 1px solid #D8D8FF;
-                border-radius: 12px;
-                background-color: $base;
-                padding: 8px 0px;
-                z-index: 1;
-
+                z-index: 4;
+                border: 1px solid $border-color;
+                border-radius: 4px;
+                background-color: $light-base;
+                
                 .option-wrapper {
+                    padding: 6px 8px;
                     position: relative;
                     display: flex;
                     align-items: center;
                     justify-content: flex-start;
-                    padding: 8px 12px;
-                    gap: 16px;
-                    cursor: pointer;
+                    gap: 0 12px;
+                    border-radius: inherit;
+                    background-color: $light-base;
 
                     .img-wrapper {
-                        height: 32px;
-                        width: 32px;
+                        height: 24px;
+                        width: 24px;
                         border-radius: 50%;
                         object-fit: cover;
                         object-position: center;
@@ -650,23 +539,161 @@
                     }
 
                     .name {
-                        font-family: $raleway-600;
-                        font-size: 14px;
-                        line-height: 24px;
-                        margin: 0;
+                        font-family: $base-font-family;
+                        font-size: 13px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: normal;
                         text-transform: capitalize;
+                    }
+
+                    &:hover {
+                        background-color: $light-primary;
+                        cursor: pointer;
                     }
                 }
             }
         }
 
+        .selected-list-wrapper {
+            padding: 8px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            border: 1px solid $border-color;
+            border-radius: 4px;
+            background-color: $light-base;
+            
+            .selected-user {
+                padding: 7px 8px;
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                border: 1px solid $border-color;
+                border-radius: 4px;
+                background-color: $base;
+
+                .user-details {
+                    display: flex;
+                    gap: 8px;
+                    align-items: center;
+                    flex: 1;
+
+                    .img-wrapper {
+                        height: 28px;
+                        width: 28px;
+                        border-radius: 50%;
+                        overflow: hidden;
+                        object-fit: cover;
+                        object-position: center;
+
+                        img {
+                            height: inherit;
+                            width: inherit;
+                        }
+                    }
+
+                    .details {
+                        .name {
+                            font-family: $base-font-family;
+                            color: $on-base;
+                            font-size: 13px;
+                            font-style: normal;
+                            font-weight: 600;
+                            line-height: normal;
+                            text-transform: capitalize;
+                        }
+
+                        .role {
+                            font-family: $base-font-family;
+                            color: #637083;
+                            font-size: 12px;
+                            font-style: normal;
+                            font-weight: 400;
+                            line-height: normal;
+                        }
+                    }
+                }
+
+                .delete-icon {
+                    display: block;
+                    width: 24px;
+                    height: auto;
+                    cursor: pointer;
+                }
+
+                .color-drop {
+                    position: relative;
+                    z-index: 2;
+
+                    .selected-color {
+                        padding: 5px 8px;
+                        width: 70px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        border: 1px solid $border-color;
+                        border-radius: 4px;
+                        
+                        &:hover {
+                            cursor: pointer;
+                        }
+
+                        .color {
+                            height: 18px;
+                            width: 15px;
+                            border-radius: inherit;
+                        }
+
+                        .icon {
+                            height: auto;
+
+                            &.open {
+                                transform: rotate(180deg);
+                            }
+                        }
+                    }
+
+                    .color-options-list {
+                        position: absolute;
+                        top: 100%;
+                        left: 0;
+                        right: 0;
+                        display: flex;
+                        flex-direction: column;
+                        border: 1px solid $border-color;
+                        border-radius: 4px;
+                        background-color: $base;
+                        z-index: 4;
+                        
+                        .color-wrapper {
+                            padding: 4px 8px;
+                            border-radius: inherit;
+                            
+                            .color {
+                                height: 18px;
+                                width: 15px;
+                                border-radius: 4px;
+                            }
+
+                            &:hover {
+                                background-color: $light-primary;
+                                cursor: pointer;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     .footer {
+        margin-top: 16px;
         flex: 0 1;
         display: flex;
+        gap: 0 8px;
         align-items: center;
-        padding: 16px 24px;
+        justify-content: flex-end;
     }
 }
 
@@ -675,52 +702,56 @@
     position: relative;
 
     .label {
-        font-family: $raleway-500;
+        margin-bottom: 2px;
+        font-family: $base-font-family;
+        color: $on-light-base;
         font-size: 12px;
-        line-height: 20px;
-        margin-bottom: 8px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
     }
 
     .selected-color {
         position: relative;
 
         .selected-color-wrapper {
-            padding: 12px 16px;
-            border-radius: 12px;
-            border: 1px solid #D8D8FF;
+            padding: 7px 8px;
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            gap: 16px;
+            gap: 0 8px;
+            border-radius: 4px;
+            border: 1px solid $border-color;
+            background-color: $light-base;
 
             .color-option {
-                height: 24px;
-                width: 24px;
-                border-radius: 50%;
+                height: 18px;
+                width: 15px;
+                border-radius: 4px;
             }
         }
 
         .icon {
             position: absolute;
             top: 50%;
-            right: 16px;
+            right: 8px;
             transform: translateY(-50%);
 
             &.open {
-                transform: translateY(-50%) rotate(180deg)
+                transform: translateY(-50%) rotate(180deg);
             }
         }
     }
 
     .options-list {
+        padding: 4px 0px;
         position: absolute;
-        top: calc(100% + 12px);
+        top: 100%;
         left: 0;
         right: 0;
-        border: 1px solid #D8D8FF;
-        border-radius: 12px;
-        background-color: $base;
-        padding: 8px 0px;
+        background-color: $light-base;
+        border: 1px solid $border-color;
+        border-radius: 4px;
         z-index: 1;
 
         .option-wrapper {
@@ -728,20 +759,25 @@
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            padding: 8px 12px;
-            gap: 16px;
-            cursor: pointer;
-
+            padding: 6px 8px;
+            gap: 0 8px;
+            border-radius: 4px;
+            
+            &:hover {
+                background: $light-primary;
+                cursor: pointer;
+            }
+            
             .color-option {
-                height: 24px;
-                width: 24px;
-                border-radius: 50%;
+                height: 18px;
+                width: 16px;
+                border-radius: 4px;
             }
 
             .checked {
                 position: absolute;
-                right: 16px;
-                top: 12px;
+                right: 8px;
+                top: 3px;
             }
         }
     }
@@ -752,35 +788,45 @@
     position: relative;
 
     .label {
-        font-family: $raleway-500;
+        margin-bottom: 2px;
+        color: $on-light-base;
+        font-family: $base-font-family;
         font-size: 12px;
-        line-height: 20px;
-        margin-bottom: 8px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
     }
 
     .selected-template {
+        padding: 8px 8px;
         position: relative;
-        padding: 7px 16px;
-        border-radius: 12px;
-        border: 1px solid #D8D8FF;
         display: flex;
         align-items: center;
         justify-content: flex-start;
         gap: 16px;
-        color: rgba(10, 9, 8, 0.40);
-        font-family: $raleway-500;
-        font-size: 14px;
-        line-height: 34px;
+        color: $on-light-base;
+        background-color: $light-base;
+        font-family: $base-font-family;
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        border-radius: 4px;
+        border: 1px solid $border-color;
+        text-transform: capitalize;
         @include elipses-1;
 
         &.active {
             color: $on-base;
         }
+        &.disabled {
+            color: darkgray;
+        }
 
         .icon {
             position: absolute;
             top: 50%;
-            right: 16px;
+            right: 8px;
             transform: translateY(-50%);
 
             &.open {
@@ -790,31 +836,38 @@
     }
 
     .options-list {
+        max-height: 196px;
         position: absolute;
-        top: calc(100% + 12px);
+        top: 100%;
         left: 0;
         right: 0;
-        border: 1px solid #D8D8FF;
-        border-radius: 12px;
-        background-color: $base;
-        padding: 8px 0px;
         z-index: 3;
+        background-color: $light-base;
+        border: 1px solid $border-color;
+        border-radius: 4px;
         overflow: auto;
-        max-height: 196px;
-
+        
         .option-wrapper {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 8px 12px;
-            gap: 16px;
-            cursor: pointer;
+            padding: 8px 8px;
+            gap: 0 16px;
+            border-radius: 4px;
+
+            &:hover {
+                background-color: $light-primary;
+                cursor: pointer;
+            }
 
             .title {
-                color: #0A0908;
-                font-family: $raleway-500;
-                font-size: 12px;
-                line-height: 20px;
+                color: $on-base;
+                font-family: $base-font-family;
+                font-size: 13px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+                text-transform: capitalize;
                 @include elipses-1;
             }
         }

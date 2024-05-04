@@ -8,6 +8,8 @@ import { MediaComponent } from './components/media/media.component';
 import { MediaTranscriptComponent } from './components/media-transcript/media-transcript.component';
 import { CanvasComponent } from './components/canvas/canvas.component';
 import { DocumentsComponent } from './components/documents/documents.component';
+import { TemplateComponent } from './components/template/template.component';
+import { DocumentComponent } from './components/document/document.component';
 
 const routes: Routes = [
   {
@@ -41,9 +43,14 @@ const routes: Routes = [
     component: CanvasComponent
   },
   {
+    path: 'template',
+    title: 'Templates | NexGen Force',
+    component: TemplateComponent
+  },
+  {
     path: 'documents',
     title: 'Documents & Templates | NexGen Force',
-    component: DocumentsComponent
+    component: DocumentComponent
   },
   {
     path: '**',

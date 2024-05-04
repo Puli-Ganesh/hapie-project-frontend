@@ -3,6 +3,7 @@ import { StorageKeys } from '@src/app/constants/storage-keys';
 import { IResponse } from '@src/interfaces/response.interface';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClientService } from '../http-client/http-client.service';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,26 +11,53 @@ import { HttpClientService } from '../http-client/http-client.service';
 export class ProjectService {
 
   constructor(
-    private _httpClientService: HttpClientService
+    private _httpClientService: HttpClientService,
+    private _authService: AuthService
   ) {
     const projectId = localStorage.getItem(StorageKeys.PROJECT_ID);
     if (projectId) {
-      this._projectId.next(projectId);
+      this.selectProject(projectId);
     }
   }
 
   private readonly endPoint: string = 'projects';
 
-  private _projectId = new BehaviorSubject<string>('');
-  public projectId$ = this._projectId.asObservable();
+  private projectsList = new BehaviorSubject<any[]>([]);
+  public projectsList$ = this.projectsList.asObservable();
+  private _projectDetails = new BehaviorSubject<any>(null);
+  public projectDetails$ = this._projectDetails.asObservable();
+
+  updateProjectsList() {
+    const userId = this._authService.getCurrentUser()?._id;
+    if (!userId) return;
+
+    this.getListByUserId(userId).subscribe({
+      next: (res: any) => {
+        this.projectsList.next([...res.data.projects])
+      },
+      error: (err: any) => {
+        console.log('There is an error while fetching projects list', err);
+        this.projectsList.next([]);
+      }
+    });
+  }
 
   selectProject(projectId: string) {
-    this._projectId.next(projectId);
+    this.getProject(projectId).subscribe({
+      next: (res: any) => {
+        localStorage.setItem(StorageKeys.PROJECT_ID, projectId);
+        this._projectDetails.next(res.data);
+      },
+      error: (err: any) => {
+        console.log('There is an error while fetching project details', err);
+        this._projectDetails.next(null);
+      }
+    });
   }
 
   removeSelectedProject() {
     localStorage.removeItem(StorageKeys.PROJECT_ID);
-    this._projectId.next('');
+    // this._projectId.next('');
   }
 
   getListByUserId(userId: string): Observable<IResponse> {
@@ -38,6 +66,10 @@ export class ProjectService {
 
   getList(workspaceId: string = ''): Observable<IResponse> {
     return this._httpClientService.get(`${this.endPoint}/list${(workspaceId ? `/${workspaceId}` : '')}`);
+  }
+
+  getOptionList(workspaceId: string = ''): Observable<IResponse> {
+    return this._httpClientService.get(`${this.endPoint}/options${(workspaceId ? `/${workspaceId}` : '')}`);
   }
 
   getProjectData(projectId: string): Observable<IResponse> {

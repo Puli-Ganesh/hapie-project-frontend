@@ -32,7 +32,7 @@ export class MicrosoftResponseComponent implements OnInit {
             this.isLoggingIn = false;
 
             this._facadeService.authService.setSession(res);
-            this._router.navigateByUrl(this.appRoutes.HOME);
+            this._router.navigateByUrl(this.appRoutes.PROJECTS);
           },
           error: (err: any) => {
             this.isLoggingIn = false;

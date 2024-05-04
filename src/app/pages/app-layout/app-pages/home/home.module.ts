@@ -12,6 +12,8 @@ import { CompareComponent } from './components/compare/compare.component';
 import { DocumentsComponent } from './components/documents/documents.component';
 import { MediaComponent } from './components/media/media.component';
 import { MediaTranscriptComponent } from './components/media-transcript/media-transcript.component';
+import { TemplateComponent } from './components/template/template.component';
+import { DocumentComponent } from './components/document/document.component';
 
 
 @NgModule({
@@ -22,7 +24,9 @@ import { MediaTranscriptComponent } from './components/media-transcript/media-tr
     CompareComponent,
     DocumentsComponent,
     MediaComponent,
-    MediaTranscriptComponent
+    MediaTranscriptComponent,
+    TemplateComponent,
+    DocumentComponent
   ],
   imports: [
     CommonModule,

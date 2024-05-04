@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     // navigating user to home page if already logged in.
     if (this._facadeService.authService.isLoggedIn()) {
-      this._router.navigateByUrl(this.appRoutes.HOME);
+      this._router.navigateByUrl(this.appRoutes.PROJECTS);
     } else {
       localStorage.clear();
     }
@@ -95,7 +95,7 @@ export class LoginComponent implements OnInit {
         // after successfully login navigating user
         if (res.code == "OK") {
           this.serverError = '';
-          this._router.navigateByUrl(this.appRoutes.HOME);
+          this._router.navigateByUrl(this.appRoutes.PROJECTS);
         }
         this._facadeService.appService.clearToasters();
       },
@@ -129,7 +129,7 @@ export class LoginComponent implements OnInit {
         this.isRequestAlive = false;
         if (res.code == 'OK') {
           this._facadeService.authService.setSession(res);
-          this._router.navigateByUrl(Routes.HOME);
+          this._router.navigateByUrl(Routes.PROJECTS);
         }
       },
       error: (err: any) => {

@@ -4,7 +4,7 @@ export class Routes {
 	static readonly FORGOT_PASSWORD: string = '/auth/forgot-password';
 	static readonly RESET_PASSWORD: string = '/auth/reset-password';
 	/** Home as Project list */
-	static readonly HOME: string = '/home';
+	static readonly PROJECTS: string = '/projects';
 	/** Create New Project */
 	static readonly PROJECT_CREATE: string = '/project/create';
 	/** Manage/Edit Project */
@@ -12,8 +12,9 @@ export class Routes {
 	// static readonly PROJECT_PROFILE: string = '/projects/project-profile';
 	static readonly PROJECT_MEDIA: string = '/project/media';
 	static readonly PROJECT_MEDIA_TRANSCRIPT: string = '/project/media/';
-	static readonly PROJECT_MEDIA_COMPARE: string = '/project/compare';
+	static readonly PROJECT_COMPARE: string = '/project/compare';
 	static readonly PROJECT_CANVAS: string = '/project/canvas';
+	static readonly PROJECT_TEMPLATE: string = '/project/template';
 	static readonly PROJECT_DOCUMENTS: string = '/project/documents';
 
 	static readonly TEAM: string = '/team';

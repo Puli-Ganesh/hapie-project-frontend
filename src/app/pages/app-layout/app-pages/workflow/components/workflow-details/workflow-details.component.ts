@@ -46,14 +46,11 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   currentNodeId: number = 0;
   nodes: Array<Node> = [];
   nodeImage: HTMLImageElement | null = null;
-
-  selectedTemplate: any;
-  templateToggler = false;
-  templatesList: any = [];
+  documentTitle = '';
 
   async ngOnInit() {
     await this.getRootObject();
-    await this.getTemplatesList();
+    // await this.getTemplatesList();
     this.setNodeImage();
     this.setCanvasSize();
     await this.getWorkflowDetails();
@@ -73,45 +70,18 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
     this.nodeImage.src = 'assets/images/component.svg';
   }
 
-  getTemplatesList() {
-    return new Promise((resolve: any, reject: any) => {
-      this._facadeService.templateService.getMasterTemplatesList().subscribe({
-        next: (res: any) => {
-          this.templatesList = res.data.list ?? [];
-          resolve();
-        },
-        error: (err: any) => {
-          console.log('There is an error while getting templates list', err);
-          reject();
-        }
-      });
-    })
-  }
-
-  onSelectTemplate(event: any, index: number) {
-    event?.stopPropagation();
-
-    this.selectedTemplate = this.templatesList[index];
-    this.templateToggler = false;
-  }
 
   onDetailsSave() {
-    if (this.selectedTemplate) {
-      const node = this.nodes.find((n: Node) => n.id == this.selectedNodeId);
-      if (node) {
-        node.config.templateId = this.selectedTemplate._id;
-        node.displayTitle = this.selectedTemplate.title;
-      }
+    const node = this.nodes.find((n: Node) => n.id == this.selectedNodeId);
+    if (node) {
+      node.config.documentTitle = this.documentTitle.trim();
     }
-
     this.onDetailsCancel();
   }
 
   onDetailsCancel() {
     this.selectedNodeId = null;
     this.drawerToggler = false;
-    this.templateToggler = false;
-    this.selectedTemplate = null;
   }
 
   animate = () => {
@@ -257,11 +227,11 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
       height: this.nodeHeight * this.scale
     }
     roundedRect(ctx, mainRect, this.radius * this.scale, 'fill', '#FFFFFF', false, true, true, false);
-    if (node.displayTitle) {
+    if (node?.config?.documentTitle) {
       ctx.font = `400 ${14 * this.scale}px Inter`;
       ctx.fillStyle = '#2D2E2E';
       ctx.textBaseline = 'middle';
-      ctx.fillText(node.displayTitle.toString(), mainRect.x + (8 * this.scale), mainRect.y + (mainRect.height) / 2);
+      ctx.fillText(node.config.documentTitle.toString(), mainRect.x + (8 * this.scale), mainRect.y + (mainRect.height) / 2);
     } else if (node.title) {
       ctx.font = `400 ${14 * this.scale}px Inter`;
       ctx.fillStyle = '#2D2E2E';
@@ -371,9 +341,8 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
       return;
     }
     this.selectedNodeId = node.id;
-    if (node.displayTitle) {
-      const template = this.templatesList.find((t: any) => t.title == node.displayTitle);
-      this.selectedTemplate = template;
+    if (node?.config?.documentTitle) {
+      this.documentTitle = node.config.documentTitle;
     }
     this.drawerToggler = true;
   }
@@ -792,12 +761,8 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
 
               let node = res.data.nodes[i];
               let n = new Node(node.id, { ...coords }, node.connection, this.scale, i ? false : true);
-              if (node?.config?.templateId) {
-                const template = this.templatesList.find((t: any) => t._id == node.config.templateId);
-                if (template) {
-                  n.displayTitle = template.title;
-                  n.config.templateId = node.config.templateId
-                }
+              if (node?.config?.documentTitle) {
+                n.config['documentTitle'] = node.config.documentTitle;
               }
               n.title = node.app;
               this.nodes.push(n);

@@ -4,7 +4,8 @@
 $primary-hover: rgba(170, 196, 255, 0.25);
 
 .navbar-wrapper {
-    min-width: 235px;
+    width: 235px;
+    max-width: 235px;
     height: 100%;
     position: relative;
     z-index: 99;
@@ -172,6 +173,7 @@ $primary-hover: rgba(170, 196, 255, 0.25);
                     }
 
                     .list-item-icon {
+                        flex-shrink: 0;
                         height: 24px;
                         width: 24px;
                     }
@@ -181,6 +183,7 @@ $primary-hover: rgba(170, 196, 255, 0.25);
                         font-weight: 400;
                         color: $on-light-base;
                         text-transform: capitalize;
+                        @include elipses-1;
                     }
                 }
             }
@@ -212,6 +215,9 @@ $primary-hover: rgba(170, 196, 255, 0.25);
             }
 
             .menu-icon-wrapper {
+                display: grid;
+                place-content: center;
+                flex-shrink: 0;
                 height: 24px;
                 width: 24px;
                 color: inherit;

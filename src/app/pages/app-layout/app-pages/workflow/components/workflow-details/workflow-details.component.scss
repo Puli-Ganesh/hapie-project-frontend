@@ -239,6 +239,32 @@
     }
 }
 
+.input-wrapper {
+    .label {
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        margin-bottom: 4px;
+        text-transform: capitalize;
+    }
+
+    .input {
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        margin: 0;
+        background-color: $light-base;
+        border: 1px solid $border-color;
+        border-radius: 4px;
+        padding: 8px 16px;
+        width: 100%;
+        margin-bottom: 16px;
+    }
+
+}
+
 .dropdown-wrapper {
     margin-bottom: 24px;
 

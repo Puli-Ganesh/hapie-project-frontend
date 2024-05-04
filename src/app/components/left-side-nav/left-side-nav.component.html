@@ -271,7 +271,7 @@
 
         <div class="nav-body">
             <ul class="list-wrap">
-                <li class="item-wrap" routerLinkActive="active" routerLink="{{appRoutes.HOME}}">
+                <li class="item-wrap" routerLinkActive="active" routerLink="{{appRoutes.PROJECTS}}">
                     <div class="icon-wrap">
                         <svg class="icon" width="32" height="32" viewBox="0 2 24 22">
                             <path
@@ -281,7 +281,7 @@
                     </div>
                     <div class="item-name">Home</div>
                 </li>
-                <li *ngIf="projectId" class="item-wrap" routerLinkActive="active"
+                <li *ngIf="projectDetails?._id" class="item-wrap" routerLinkActive="active"
                     routerLink="{{appRoutes.PROJECT_MEDIA}}">
                     <div class="icon-wrap">
                         <svg class="icon" width="32" height="32" viewBox="0 0 80 80" fill="none">
@@ -295,7 +295,7 @@
                     </div>
                     <div class="item-name">media</div>
                 </li>
-                <li *ngIf="projectId" class="item-wrap" routerLinkActive="active"
+                <li *ngIf="projectDetails?._id" class="item-wrap" routerLinkActive="active"
                     routerLink="{{appRoutes.PROJECT_CANVAS}}">
                     <div class="icon-wrap">
                         <svg class="icon" width="32" height="32" viewBox="0 0 80 80" fill="none">
@@ -309,7 +309,7 @@
                     </div>
                     <div class="item-name">canvas</div>
                 </li>
-                <li *ngIf="projectId" class="item-wrap" routerLinkActive="active"
+                <li *ngIf="projectDetails?._id" class="item-wrap" routerLinkActive="active"
                     routerLink="{{appRoutes.PROJECT_DOCUMENTS}}">
                     <div class="icon-wrap">
                         <svg class="icon" width="32" height="32" viewBox="0 0 80 80" fill="none">
@@ -326,8 +326,8 @@
                     </div>
                     <div class="item-name">documents & templates</div>
                 </li>
-                <li *ngIf="projectId" class="item-wrap" routerLinkActive="active"
-                    routerLink="{{appRoutes.PROJECT_MEDIA_COMPARE}}">
+                <li *ngIf="projectDetails?._id" class="item-wrap" routerLinkActive="active"
+                    routerLink="{{appRoutes.PROJECT_COMPARE}}">
                     <div class="icon-wrap">
                         <svg class="icon" width="32" height="32" viewBox="0 0 80 80" fill="none">
                             <path opacity="0.4"
@@ -364,7 +364,7 @@
 
 <nav class="navbar-wrapper" *ngIf="true">
     <div class="brand-wrapper" (click)="onProjects()">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path fill-rule="evenodd" clip-rule="evenodd"
                 d="M19.2592 5.92204C19.4935 5.68772 19.4935 5.30782 19.2592 5.0735C19.0249 4.83919 18.645 4.83919 18.4107 5.0735L13.4107 10.0735C13.1764 10.3078 13.1764 10.6877 13.4107 10.9221C13.645 11.1564 14.0249 11.1564 14.2592 10.9221L19.2592 5.92204ZM4.74019 18.7445C4.50587 18.9788 4.50587 19.3587 4.74019 19.593C4.9745 19.8273 5.3544 19.8273 5.58871 19.593L10.5887 14.593C10.823 14.3587 10.823 13.9788 10.5887 13.7445C10.3544 13.5101 9.97447 13.5101 9.74016 13.7445L4.74019 18.7445ZM19.2592 19.593C19.0249 19.8273 18.645 19.8273 18.4107 19.593L13.4107 14.593C13.1764 14.3587 13.1764 13.9788 13.4107 13.7445C13.645 13.5101 14.0249 13.5101 14.2592 13.7445L19.2592 18.7445C19.4935 18.9788 19.4935 19.3587 19.2592 19.593ZM5.58871 5.0735C5.3544 4.83919 4.9745 4.83919 4.74019 5.0735C4.50587 5.30782 4.50587 5.68772 4.74019 5.92204L9.74016 10.9221C9.97448 11.1564 10.3544 11.1564 10.5887 10.9221C10.823 10.6877 10.823 10.3078 10.5887 10.0735L5.58871 5.0735Z"
                 fill="#2C76FF" />
@@ -407,7 +407,7 @@
             <div class="name">
                 {{ currentUser?.firstName + ' ' + currentUser?.lastName }}
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <circle cx="8" cy="8" r="7.25" fill="#F9FAFB" stroke="#E4E7EC" stroke-width="1.5" />
                 <path d="M5 7L8 10L11 7" stroke="#344051" stroke-width="1.5" stroke-linecap="round" />
             </svg>
@@ -416,7 +416,7 @@
         <div class="dropdown-menu" [class.active]="activeMenu == 'workflows'">
             <div class="toggler-wrapper" (click)="onWorkflows()">
                 <div class="icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M7 14L11.7498 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                         <path d="M18 14L11.7498 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                         <rect x="4" y="14" width="6" height="5" rx="0.1" stroke="currentColor" stroke-width="1.5" />
@@ -426,14 +426,14 @@
                 </div>
                 <div class="title">Workflows</div>
                 <div class="toggler" (click)="workflowToggler = !workflowToggler;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <circle cx="8" cy="8" r="7.25" stroke="#E4E7EC" stroke-width="1.5" />
                         <path d="M5 7L8 10L11 7" stroke="#344051" stroke-width="1.5" stroke-linecap="round" />
                     </svg>
                 </div>
             </div>
             <ul class="list-wrapper" *ngIf="workflowToggler">
-                <li class="list-item" *ngFor="let a of [1, 2,3,4,5,6]">
+                <li class="list-item" *ngFor="let workflow of workflowList;">
                     <svg class="list-item-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M7 14L11.7498 9" stroke="currentColor" stroke-linecap="round" />
                         <path d="M18 14L11.7498 9" stroke="currentColor" stroke-linecap="round" />
@@ -442,7 +442,7 @@
                         <rect x="7" y="4" width="10" height="5" rx="0.1" stroke="currentColor" />
                     </svg>
                     <div class="label">
-                        workflow 1
+                        {{ workflow?.name + '' + workflow?.name }}
                     </div>
                 </li>
             </ul>
@@ -452,7 +452,7 @@
             *ngIf="permissions.MENU_PROJECTS.includes(currentUser?.type)">
             <div class="toggler-wrapper" [class.expanded]="projectsToggler" (click)="onProjects()">
                 <div class="icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path
                             d="M3 18.6V8.59998C3 8.04769 3.44771 7.59998 4 7.59998H7.47947C7.76529 7.59998 8.03746 7.72228 8.22724 7.93602L10.3365 10.3116C10.5263 10.5253 10.7985 10.6476 11.0843 10.6476H16.4C16.9523 10.6476 17.4 11.0953 17.4 11.6476V18.6C17.4 19.1523 16.9523 19.6 16.4 19.6H4C3.44772 19.6 3 19.1523 3 18.6Z"
                             stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
@@ -463,14 +463,14 @@
                 </div>
                 <div class="title">Projects</div>
                 <div class="toggler" (click)="projectsToggler = !projectsToggler;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <circle cx="8" cy="8" r="7.25" stroke="#E4E7EC" stroke-width="1.5" />
                         <path d="M5 7L8 10L11 7" stroke="#344051" stroke-width="1.5" stroke-linecap="round" />
                     </svg>
                 </div>
             </div>
             <ul class="list-wrapper" *ngIf="projectsToggler">
-                <li class="list-item" *ngFor="let a of [1, 2,3,4,5,6]">
+                <li class="list-item" *ngFor="let project of projectList" (click)="onSelectProject(project._id)">
                     <svg class="list-item-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M7 14L11.7498 9" stroke="currentColor" stroke-linecap="round" />
                         <path d="M18 14L11.7498 9" stroke="currentColor" stroke-linecap="round" />
@@ -479,7 +479,7 @@
                         <rect x="7" y="4" width="10" height="5" rx="0.1" stroke="currentColor" />
                     </svg>
                     <div class="label">
-                        project 1
+                        {{project?.projectName}}
                     </div>
                 </li>
             </ul>
@@ -491,7 +491,7 @@
         <div class="menu" [class.active]="activeMenu == 'templates'"
             *ngIf="permissions.MENU_TEMPLATES.includes(currentUser?.type)" (click)="onTemplates()">
             <div class="menu-icon-wrapper">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <rect x="3" y="5" width="18" height="6" rx="1" stroke="currentColor" stroke-width="1.2" />
                     <rect x="3" y="13" width="18" height="6" rx="1" stroke="currentColor" stroke-width="1.2" />
                     <path d="M6 8H18" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
@@ -502,7 +502,7 @@
         </div>
         <div class="menu">
             <div class="menu-icon-wrapper">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <mask id="path-1-inside-1_152_1448" fill="white">
                         <rect x="3" y="3" width="7.5" height="7.5" rx="1" />
                     </mask>
@@ -530,7 +530,7 @@
         <div class="menu" [class.active]="activeMenu == 'team'" (click)="onTeam()"
             *ngIf="permissions.MENU_TEAM.includes(currentUser?.type)">
             <div class="menu-icon-wrapper">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <path
                         d="M19.0245 16.2282C18.4613 15.6646 17.8032 15.2046 17.0805 14.8692C18.0997 14.0435 18.75 12.7835 18.75 11.3705C18.75 8.87749 16.671 6.83225 14.178 6.8705C11.7233 6.90875 9.74551 8.90899 9.74551 11.3705C9.74551 12.7835 10.398 14.0435 11.415 14.8692C10.6921 15.2043 10.034 15.6644 9.47102 16.2282C8.24252 17.4589 7.54503 19.0834 7.50003 20.8159C7.49943 20.8399 7.50364 20.8638 7.51242 20.8862C7.52119 20.9085 7.53436 20.9289 7.55113 20.9461C7.56791 20.9633 7.58795 20.977 7.61009 20.9863C7.63223 20.9956 7.65601 21.0004 7.68003 21.0004H8.94002C9.03677 21.0004 9.11777 20.9239 9.12002 20.8272C9.16277 19.5222 9.69151 18.3004 10.6208 17.3734C11.0963 16.8954 11.6619 16.5164 12.2848 16.2584C12.9078 16.0004 13.5757 15.8686 14.25 15.8704C15.6202 15.8704 16.9095 16.4037 17.8792 17.3734C18.8062 18.3004 19.335 19.5222 19.38 20.8272C19.3822 20.9239 19.4632 21.0004 19.56 21.0004H20.8199C20.844 21.0004 20.8677 20.9956 20.8899 20.9863C20.912 20.977 20.9321 20.9633 20.9488 20.9461C20.9656 20.9289 20.9788 20.9085 20.9876 20.8862C20.9963 20.8638 21.0005 20.8399 20.9999 20.8159C20.9549 19.0834 20.2574 17.4589 19.0245 16.2282ZM14.25 14.2505C13.4805 14.2505 12.756 13.9512 12.2137 13.4067C11.9416 13.1367 11.7267 12.8147 11.5817 12.4598C11.4367 12.105 11.3647 11.7245 11.37 11.3412C11.3768 10.6032 11.6715 9.88998 12.1867 9.36124C12.7267 8.80774 13.449 8.49949 14.2207 8.49049C14.9835 8.48374 15.7237 8.78074 16.2682 9.31399C16.8262 9.86073 17.1322 10.592 17.1322 11.3705C17.1322 12.14 16.833 12.8622 16.2885 13.4067C16.0213 13.6751 15.7036 13.8879 15.3537 14.0327C15.0038 14.1776 14.6287 14.2516 14.25 14.2505ZM8.61377 11.9645C8.59352 11.7687 8.58227 11.5707 8.58227 11.3705C8.58227 11.0127 8.61602 10.664 8.67902 10.3242C8.69477 10.2432 8.65202 10.16 8.57777 10.1262C8.27177 9.98898 7.99053 9.79998 7.74753 9.56149C7.46119 9.28385 7.23588 8.94958 7.08595 8.58C6.93603 8.21042 6.86479 7.81365 6.87678 7.415C6.89703 6.69275 7.18728 6.00651 7.69353 5.48901C8.24927 4.91977 8.99627 4.60927 9.79051 4.61827C10.5083 4.62502 11.2013 4.90177 11.7255 5.39226C11.9033 5.55876 12.0562 5.74326 12.1845 5.94126C12.2295 6.01101 12.3172 6.04026 12.3937 6.01326C12.7897 5.87601 13.2082 5.77926 13.638 5.73426C13.764 5.72076 13.836 5.58576 13.7797 5.47326C13.0485 4.02652 11.5545 3.02753 9.82651 3.00053C7.33128 2.96228 5.25229 5.00752 5.25229 7.49825C5.25229 8.91124 5.90254 10.1712 6.92178 10.997C6.20629 11.3277 5.54704 11.7845 4.97554 12.356C3.74255 13.5867 3.04506 15.2112 3.00006 16.9459C2.99946 16.97 3.00367 16.9938 3.01244 17.0162C3.02122 17.0386 3.03438 17.0589 3.05116 17.0761C3.06793 17.0933 3.08798 17.107 3.11012 17.1163C3.13225 17.1256 3.15603 17.1304 3.18006 17.1304H4.4423C4.53905 17.1304 4.62005 17.0539 4.6223 16.9572C4.66505 15.6522 5.19379 14.4305 6.12304 13.5035C6.78453 12.842 7.59453 12.383 8.47877 12.1602C8.56652 12.1377 8.62502 12.0545 8.61377 11.9645Z"
                         fill="currentColor" />
@@ -541,11 +541,68 @@
 
         <div class="divider"></div>
 
+        <div class="project-menus-wrapper" *ngIf="projectDetails?.projectName">
+            <div class="menu" [class.active]="activeMenu == 'project'">
+                <div class="menu-icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path
+                            d="M3 18.6001V8.6001C3 8.04781 3.44771 7.6001 4 7.6001H7.47947C7.76529 7.6001 8.03746 7.72241 8.22724 7.93614L10.3365 10.3117C10.5263 10.5254 10.7985 10.6477 11.0843 10.6477H16.4C16.9523 10.6477 17.4 11.0954 17.4 11.6477V18.6001C17.4 19.1524 16.9523 19.6001 16.4 19.6001H4C3.44772 19.6001 3 19.1524 3 18.6001Z"
+                            stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+                        <path
+                            d="M6.6001 7V5C6.6001 4.44772 7.04781 4 7.6001 4H11.0796C11.3654 4 11.6376 4.12231 11.8273 4.33604L13.9366 6.71158C14.1264 6.92531 14.3986 7.04762 14.6844 7.04762H20.0001C20.5524 7.04762 21.0001 7.49533 21.0001 8.04762V15C21.0001 15.5523 20.5524 16 20.0001 16H17.4001"
+                            stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+                    </svg>
+                </div>
+                <div class="menu-title">{{ projectDetails?.projectName }}</div>
+            </div>
+            <div class="menu" (click)="onGoToMedia()" *ngIf="hasAccessTo.includes('Analysis')" [class.active]="secondaryMenu == 'media'">
+                <div class="menu-icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                        <circle cx="6" cy="6" r="6" fill="currentColor" />
+                    </svg>
+                </div>
+                <div class="menu-title">Media</div>
+            </div>
+            <div class="menu" (click)="onGoToCompare()" *ngIf="hasAccessTo.includes('Compare Video')" [class.active]="secondaryMenu == 'compare'">
+                <div class="menu-icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                        <circle cx="6" cy="6" r="6" fill="currentColor" />
+                    </svg>
+                </div>
+                <div class="menu-title">Compare Video</div>
+            </div>
+            <div class="menu" (click)="onGoToCanvas()" *ngIf="hasAccessTo.includes('Canvas')" [class.active]="secondaryMenu == 'canvas'">
+                <div class="menu-icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                        <circle cx="6" cy="6" r="6" fill="currentColor" />
+                    </svg>
+                </div>
+                <div class="menu-title">Canvas</div>
+            </div>
+            <div class="menu" (click)="onGoToDocument()" *ngIf="hasAccessTo.includes('Document')" [class.active]="secondaryMenu == 'document'">
+                <div class="menu-icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                        <circle cx="6" cy="6" r="6" fill="currentColor" />
+                    </svg>
+                </div>
+                <div class="menu-title">Document</div>
+            </div>
+            <div class="menu" (click)="onGoToTemplate()" *ngIf="hasAccessTo.includes('Document')" [class.active]="secondaryMenu == 'template'">
+                <div class="menu-icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                        <circle cx="6" cy="6" r="6" fill="currentColor" />
+                    </svg>
+                </div>
+                <div class="menu-title">Template</div>
+            </div>
+
+        </div>
+
     </div>
 
     <div class="basic-wrapper">
         <div class="basic-icon-wrapper">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <rect x="3" y="5" width="18" height="14" rx="1" stroke="#344051" />
                 <path
                     d="M3 11.3333C3 10.781 3.44772 10.3333 4 10.3333H9.76189C10.078 10.3333 10.3756 10.1838 10.5643 9.93017L11.7001 8.40317C11.8888 8.1495 12.1863 8 12.5025 8H20C20.5523 8 21 8.44772 21 9V18C21 18.5523 20.5523 19 20 19H4C3.44772 19 3 18.5523 3 18V11.3333Z"

@@ -1,0 +1,121 @@
+<div class="documents-wrapper">
+
+    <ng-container *ngIf="!selectedDocument; else templateView">
+        <div class="inner-header">
+            <h1 class="title">Document</h1>
+            <div class="right-side">
+            </div>
+        </div>
+
+        <div class="pills-wrapper">
+            <div class="pill-wrapper" [class.selected]="selectedNodeId === node.id"
+                *ngFor="let node of templateNodes; let projectIndex = index;">
+                {{ node?.config?.documentTitle }}
+            </div>
+        </div>
+
+        <div class="templates-list-wrapper app-table-container">
+            <div class="app-table-wrap">
+                <div class="tbl-tr">
+                    <div class="tbl-th">Document</div>
+                    <div class="tbl-th">Uploaded by</div>
+                    <div class="tbl-th">Uploaded on</div>
+                    <div class="tbl-th"></div>
+                </div>
+                <div class="tbl-tr" *ngFor="let template of filteredTemplateList; let templateIndex = index;">
+                    <div class="tbl-td with-icon">
+                        <svg width="18" height="20" viewBox="0 0 18 20" fill="none">
+                            <path opacity="0.4"
+                                d="M15.8088 7.021C15.3573 7.021 14.7592 7.011 14.0146 7.011C12.1987 7.011 10.7055 5.508 10.7055 3.675V0.459C10.7055 0.206 10.5036 0 10.253 0H4.96363C2.49517 0 0.5 2.026 0.5 4.509V15.284C0.5 17.889 2.59022 20 5.16958 20H13.0463C15.5058 20 17.5 17.987 17.5 15.502V7.471C17.5 7.217 17.299 7.012 17.0475 7.013C16.6247 7.016 16.1177 7.021 15.8088 7.021Z"
+                                fill="currentColor" />
+                            <path opacity="0.4"
+                                d="M13.0847 0.567293C12.7857 0.256293 12.2637 0.470293 12.2637 0.901293V3.53829C12.2637 4.64429 13.1747 5.55429 14.2807 5.55429C14.9777 5.56229 15.9457 5.56429 16.7677 5.56229C17.1887 5.56129 17.4027 5.05829 17.1107 4.75429C16.0557 3.65729 14.1667 1.69129 13.0847 0.567293Z"
+                                fill="currentColor" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M5.97447 9.38761H9.35947C9.77047 9.38761 10.1045 9.05461 10.1045 8.64361C10.1045 8.23261 9.77047 7.89861 9.35947 7.89861H5.97447C5.56347 7.89861 5.23047 8.23261 5.23047 8.64361C5.23047 9.05461 5.56347 9.38761 5.97447 9.38761ZM5.97457 14.3818H11.4186C11.8296 14.3818 12.1636 14.0488 12.1636 13.6378C12.1636 13.2268 11.8296 12.8928 11.4186 12.8928H5.97457C5.56357 12.8928 5.23057 13.2268 5.23057 13.6378C5.23057 14.0488 5.56357 14.3818 5.97457 14.3818Z"
+                                fill="currentColor" />
+                        </svg>
+                        <span>{{ template.title }}</span>
+                    </div>
+                    <div class="tbl-td">
+                        {{ template?.createdBy?.firstName + ' ' + template?.createdBy?.lastName }}
+                    </div>
+                    <div class="tbl-td">
+                        {{ template?.uploadedOn }}
+                    </div>
+                    <div class="tbl-td">
+                        <div class="items-wrap">
+                            <div class="edit-action-wrap" (click)="onManageDocument(templateIndex)">
+                                Manage
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M5.6665 3.33341L10.3332 8.00008L5.6665 12.6667" stroke="#0B0BCF"
+                                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </ng-container>
+
+    <ng-template #templateView>
+        <div class="editor-wrapper">
+
+            <div class="inner-header">
+                <h1 class="title">{{ selectedDocument.title }}</h1>
+
+                <div class="right-side">
+                    <div class="dropdown-container">
+                        <div class="dropdown-wrap" tabindex="0" (blur)="docVersionDropdownToggler = false;">
+                            <div class="selected-option-wrap" (click)="onToggleDocVersionDropdown()">
+                                <div class="selected-option">{{ selectedVersion }}
+                                </div>
+                                <div class="icon-wrap" [class.open]="docVersionDropdownToggler">
+                                    <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M19 8.5L12 15.5L5 8.5" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="options-container" *ngIf="docVersionDropdownToggler">
+                                <div class="options-wrap">
+                                    <div class="option-wrap" *ngFor="let version of versionOptions;"
+                                        (click)="onSelectDocVersion(version)">
+                                        <span class="option">{{version}}</span>
+                                        <div class="icon-wrap" [class.selected]="selectedVersion == version">
+                                            <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                <path d="M7.0332 10.0003L9.01158 11.9778L12.9666 8.02286"
+                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="app-button" *ngIf="permissions.DOCUMENT_SIGN.includes(currentUser.type)"
+                        type="button" (click)="onSignDocument()">
+                        <span class="btn-label">sign with pandaDoc</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="ck-editor-wrapper">
+                <div class="document-editor">
+                    <div class="document-editor__toolbar"></div>
+                    <div class="document-editor__editable-container">
+                        <div id="outline" style="display: none;"></div>
+                        <div class="document-editor__editable">
+                        </div>
+                    </div>
+                </div>
+                <div id="sidebar"></div>
+            </div>
+        </div>
+    </ng-template>
+</div>

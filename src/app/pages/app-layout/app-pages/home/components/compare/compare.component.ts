@@ -8,6 +8,7 @@ import { FacadeService } from '@src/app/services/facade.service';
 import { IResponse } from '@src/interfaces/response.interface';
 import { Routes } from '@src/app/constants/routes';
 import { Permissions } from '@src/app/constants/permissions';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -25,8 +26,13 @@ export class CompareComponent implements OnInit {
     this.projectId = localStorage.getItem(StorageKeys.PROJECT_ID) ?? '';
     this.projectName = localStorage.getItem(StorageKeys.PROJECT_NAME) ?? '';
     this.projectColor = parseInt(localStorage.getItem(StorageKeys.PROJECT_COLOR) ?? '1');
-  }
 
+    this.projectDetailsSubscription = this._facadeService.projectService.projectDetails$.subscribe({
+      next: (details: any) => {
+        this.projectDetails = details;
+      }
+    });
+  }
 
   permissions = Permissions;
   protected currentUser: any;
@@ -36,6 +42,8 @@ export class CompareComponent implements OnInit {
   protected projectColor: number;
   protected isRequestAlive: boolean = false;
 
+  projectDetailsSubscription: Subscription;
+  projectDetails: any;
 
   protected templateList: Array<any> = [];
   protected selectedTemplate: any;
@@ -116,9 +124,10 @@ export class CompareComponent implements OnInit {
   //   this._router.navigateByUrl(Routes.HOME);
   // }
 
-  // onGoToProject() {
-  //   this._router.navigateByUrl(Routes.PROJECT_PROFILE);
-  // }
+  onGoBack() {
+    this._router.navigate([this.appRoutes.PROJECTS]);
+  }
+  
 
   getTemplateAndVideoList(): void {
     if (this.isRequestAlive) {

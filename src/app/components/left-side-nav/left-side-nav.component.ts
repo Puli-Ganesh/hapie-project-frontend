@@ -1,34 +1,58 @@
-import { Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 
 import { Permissions } from '@src/app/constants/permissions';
 import { Routes } from '@src/app/constants/routes';
 import { FacadeService } from '@src/app/services/facade.service';
+import { Node } from '@src/app/pages/app-layout/app-pages/workflow/components/workflow-details/node';
 
 @Component({
   selector: 'app-left-side-nav',
   templateUrl: './left-side-nav.component.html',
   styleUrls: ['./left-side-nav.component.scss']
 })
-export class LeftSideNavComponent implements OnDestroy {
+export class LeftSideNavComponent implements OnInit, OnDestroy {
 
   constructor(
     private _facadeService: FacadeService,
     private _router: Router
   ) {
-    this.projectIdSubscription = this._facadeService.projectService.projectId$.subscribe({
-      next: (projectId: string) => {
-        this.projectId = projectId ?? '';
+
+    this.projectsSubscription = this._facadeService.projectService.projectsList$.subscribe({
+      next: (res: Array<any>) => {
+        this.projectList = [...res];
       }
     });
+
+    this.projectDetailsSubscription = this._facadeService.projectService.projectDetails$.subscribe({
+      next: (projectDetails: any) => {
+        this.projectDetails = projectDetails;
+        if (this.projectDetails?.workflowId?.nodes) {
+          const nodes = this.projectDetails?.workflowId?.nodes;
+          // console.log(nodes)
+          this.hasAccessTo = ['Analysis']
+          const compareIndex = nodes.findIndex((n: any) => n.app == 'Compare Video');
+          if (compareIndex > -1) {
+            this.hasAccessTo.push('Compare Video');
+          }
+          const canvasIndex = nodes.findIndex((n: any) => n.app == 'Canvas');
+          if (canvasIndex > -1) {
+            this.hasAccessTo.push('Canvas');
+          }
+          const documentIndex = nodes.findIndex((n: any) => n.app == 'Document');
+          if (documentIndex > -1) {
+            this.hasAccessTo.push('Document');
+          }
+        }
+      }
+    });
+
     this.userSubscription = this._facadeService.authService.getCurrentUser$().subscribe({
       next: (user: any) => {
         this.currentUser = user;
-        // console.log(this.currentUser)
       }
     });
-    
 
     this.setActiveMenu(this._router.url);
 
@@ -46,10 +70,10 @@ export class LeftSideNavComponent implements OnDestroy {
 
   protected readonly permissions = Permissions;
   protected readonly appRoutes = Routes;
-  protected projectId: any;
   protected currentUser: any;
   protected userSubscription!: Subscription;
-  protected projectIdSubscription!: Subscription;
+  protected projectsSubscription!: Subscription;
+  protected projectDetailsSubscription!: Subscription;
 
   protected isRequestAlive: boolean = false;
 
@@ -64,7 +88,6 @@ export class LeftSideNavComponent implements OnDestroy {
     }
   }> = [];
 
-  protected selectedMenu: number = 1;
   protected isNavCollapsed: boolean = false;
   protected avatarMenu: boolean = false;
   @ViewChild('avatarToggler') avatarToggler!: ElementRef;
@@ -75,9 +98,14 @@ export class LeftSideNavComponent implements OnDestroy {
 
   routerSubscription: Subscription;
   activeMenu = '';
+  secondaryMenu = '';
   workflowToggler = false;
   projectsToggler = false;
+  projectDetails: any;
+  hasAccessTo = [''];
 
+  protected workflowList: Array<any> = [];
+  protected projectList: Array<any> = [];
 
   @HostListener('document:click', ['$event'])
   clickOut(event: any) {
@@ -89,8 +117,18 @@ export class LeftSideNavComponent implements OnDestroy {
     }
   }
 
+  ngOnInit(): void {
+    this.getWorkflowList();
+    // this.getProjectList();
+  }
+
+  onSelectProject(projectId: string) {
+    this._facadeService.projectService.selectProject(projectId);
+    this._router.navigate([this.appRoutes.PROJECT_MEDIA]);
+  }
+
   setActiveMenu(url: string) {
-    if (url.startsWith('/projects') || url.startsWith('/home')) {
+    if (url.startsWith('/projects')) {
       this.activeMenu = 'projects';
     } else if (url.startsWith('/workflows')) {
       this.activeMenu = 'workflows'
@@ -98,7 +136,47 @@ export class LeftSideNavComponent implements OnDestroy {
       this.activeMenu = 'team';
     } else if (url.startsWith('/templates')) {
       this.activeMenu = 'templates';
+    } else if (url.startsWith('/project')) {
+      this.activeMenu = 'project';
+      if (url.includes('/media')) {
+        this.secondaryMenu = 'media'
+      } else if (url.includes('/compare')) {
+        this.secondaryMenu = 'compare'
+      } else if (url.includes('/canvas')) {
+        this.secondaryMenu = 'canvas'
+      } else if (url.includes('/document')) {
+        this.secondaryMenu = 'document';
+      } else if (url.includes('/template')) {
+        this.secondaryMenu = 'template';
+      }
     }
+
+    if (this.activeMenu != 'project') {
+      this.projectDetails = null;
+      this.secondaryMenu = '';
+    }
+
+    console.log(`${this.activeMenu}/${this.secondaryMenu}`)
+  }
+
+  onGoToMedia() {
+    this._router.navigate([this.appRoutes.PROJECT_MEDIA]);
+  }
+
+  onGoToCompare() {
+    this._router.navigate([this.appRoutes.PROJECT_COMPARE]);
+  }
+
+  onGoToCanvas() {
+    // this._router.navigate([this.appRoutes.PROJECT_CANVAS]);
+  }
+
+  onGoToDocument() {
+    this._router.navigate([this.appRoutes.PROJECT_DOCUMENTS]);
+  }
+
+  onGoToTemplate() {
+    this._router.navigate([this.appRoutes.PROJECT_TEMPLATE]);
   }
 
   getNotificationList(): void {
@@ -123,7 +201,7 @@ export class LeftSideNavComponent implements OnDestroy {
     this._router.navigate([this.appRoutes.TEAM])
   }
   onProjects() {
-    this._router.navigate([this.appRoutes.HOME])
+    this._router.navigate([this.appRoutes.PROJECTS])
   }
   onTemplates() {
     this._router.navigate([this.appRoutes.TEMPLATES])
@@ -165,6 +243,18 @@ export class LeftSideNavComponent implements OnDestroy {
     }
   }
 
+  getWorkflowList() {
+    this._facadeService.workflowService.getMasterList().subscribe({
+      next: (res: any) => {
+        if (res.code == 'OK') {
+          this.workflowList = res.data.list;
+        }
+      }, error: (err: any) => {
+        console.error('Error while getting workflow list', err.error);
+      }
+    });
+  }
+
   onLogout() {
     this._facadeService.authService.logOut();
     this._router.navigateByUrl(this.appRoutes.LOGIN);
@@ -172,7 +262,8 @@ export class LeftSideNavComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.userSubscription?.unsubscribe();
-    this.projectIdSubscription?.unsubscribe();
+    this.projectsSubscription?.unsubscribe();
+    this.projectDetailsSubscription?.unsubscribe();
     this._facadeService.projectService.removeSelectedProject();
     this.routerSubscription?.unsubscribe();
   }

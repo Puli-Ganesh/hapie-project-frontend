@@ -28,7 +28,7 @@ export class UploadMediaModalComponent implements OnInit, OnDestroy {
     this.projectId = localStorage.getItem(StorageKeys.PROJECT_ID) ?? '';
 
     if (!this.projectId) {
-      this._router.navigateByUrl(this.appRoutes.HOME);
+      this._router.navigateByUrl(this.appRoutes.PROJECTS);
       return;
     }
   }

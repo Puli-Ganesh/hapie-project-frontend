@@ -1,14 +1,14 @@
 .app-button {
 	margin: 0;
-	padding: 8px 16px;
+	padding: 6px 16px 7px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	font-family: $base-font-family;
 	font-size: 14px;
 	font-style: normal;
-	line-height: 1.2;
-	border: 0px;
+	line-height: normal;
+	border: 1px solid $border-color;
 	outline: none;
 	border-radius: 4px;
 	@include user-select-none();
@@ -54,12 +54,19 @@
 	}
 
 	&.simple {
-		font-size: 14px;
-		font-style: normal;
-		line-height: 24px;
-		/* 171.429% */
 		color: $on-base-blue;
 		background-color: $base;
+
+		&:disabled,
+		&.disabled {
+			opacity: 0.6;
+			cursor: not-allowed;
+		}
+	}
+
+	&.cancel {
+		color: $on-light-base;
+		background-color: $light-base;
 
 		&:disabled,
 		&.disabled {

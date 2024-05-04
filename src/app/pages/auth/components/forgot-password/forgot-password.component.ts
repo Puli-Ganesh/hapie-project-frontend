@@ -39,7 +39,7 @@ export class ForgotPasswordComponent implements OnInit {
 
   ngOnInit(): void {
     if (this._facadeService.authService.isLoggedIn()) {
-      this._router.navigateByUrl(this.appRoutes.HOME);
+      this._router.navigateByUrl(this.appRoutes.PROJECTS);
     } else {
       localStorage.clear();
     }

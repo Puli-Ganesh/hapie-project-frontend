@@ -1,0 +1,355 @@
+@import 'src/styles/mixins';
+
+
+.documents-wrapper {
+    padding: 16px;
+
+    .inner-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+
+        .title {
+            font-family: $raleway-500;
+            font-size: 32px;
+            font-style: normal;
+            line-height: 48px;
+            margin: 0;
+        }
+
+        .right-side {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+    }
+
+    .pills-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        gap: 32px;
+        width: 100%;
+        overflow: auto;
+        padding-bottom: 8px;
+        margin-bottom: 16px;
+
+        .pill-wrapper {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: $highlight-font-family;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 20px;
+            text-transform: capitalize;
+            text-wrap: nowrap;
+
+            &:hover, &.selected {
+                background-color: $color-1-2;
+                color: $color-1-1;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .templates-list-wrapper {
+        .app-table-wrap {
+            .tbl-tr {
+                grid-template-columns: minmax(320px, 1fr) minmax(220px, 0.6fr) minmax(220px, 0.6fr) 175px;
+
+                .tbl-td {
+                    &.with-icon {
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+
+                        svg {
+                            color: $on-base-blue;
+                        }
+                    }
+
+                    .items-wrap {
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-end;
+                        gap: 0 34px;
+                    }
+
+                    .edit-action-wrap {
+                        display: inline-flex;
+                        align-items: center;
+                        color: $primary;
+                        cursor: pointer;
+                    }
+
+                    .delete-icon {
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+:host {
+
+    ::ng-deep {
+        .document-editor {
+            border: 1px solid var(--ck-color-base-border);
+            border-radius: var(--ck-border-radius);
+    
+            /* Set vertical boundaries for the document editor.*/
+            // max-height: calc(100vh - 70px - 50px - 16px);
+            max-height: calc(100dvh - 70px - 50px - 16px);
+    
+            /* This element is a flex container for easier rendering. */
+            display: flex;
+            flex-flow: column nowrap;
+        }
+    
+        .document-editor__toolbar {
+            /* Make sure the toolbar container is always above the editable. */
+            z-index: 1;
+    
+            /* Create the illusion of the toolbar floating over the editable. */
+            box-shadow: 0 0 5px hsla(0, 0%, 0%, .2);
+    
+            /* Use the CKEditor CSS variables to keep the UI consistent. */
+            border-bottom: 1px solid var(--ck-color-toolbar-border);
+        }
+    
+        /* Adjust the look of the toolbar inside the container. */
+        .document-editor__toolbar .ck-toolbar {
+            border: 0;
+            border-radius: 0;
+        }
+    
+        /* Make the editable container look like the inside of a native word processor application. */
+        .document-editor__editable-container {
+            padding: calc(2 * var(--ck-spacing-large));
+            background: #e5e5e5;
+    
+            /* Make it possible to scroll the "page" of the edited content. */
+            overflow-y: scroll;
+        }
+    
+        .document-editor__editable-container .ck-editor__editable {
+            /* Set the dimensions of the "page". */
+            width: 21cm;
+            min-height: 29.7cm;
+    
+            /* Keep the "page" off the boundaries of the container. */
+            padding: 20mm 12mm;
+    
+            border: 1px hsl(0, 0%, 82.7%) solid;
+            border-radius: var(--ck-border-radius);
+            background: white;
+    
+            /* The "page" should cast a slight shadow (3D illusion). */
+            box-shadow: 0 0 5px hsla(0, 0%, 0%, .1);
+    
+            /* Center the "page". */
+            margin: 0 auto;
+        }
+    
+    // /* Set the default font for the "page" of the content. */
+    // .document-editor .ck-content,
+    // .document-editor .ck-heading-dropdown .ck-list .ck-button__label {
+    //     font: 16px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
+    // }
+    
+    // /* Adjust the headings dropdown to host some larger heading styles. */
+    // .document-editor .ck-heading-dropdown .ck-list .ck-button__label {
+    //     line-height: calc( 1.7 * var(--ck-line-height-base) * var(--ck-font-size-base) );
+    //     min-width: 6em;
+    // }
+    
+    // /* Scale down all heading previews because they are way too big to be presented in the UI.
+    // Preserve the relative scale, though. */
+    // .document-editor .ck-heading-dropdown .ck-list .ck-button:not(.ck-heading_paragraph) .ck-button__label {
+    //     transform: scale(0.8);
+    //     transform-origin: left;
+    // }
+    
+    // /* Set the styles for "Heading 1". */
+    // .document-editor .ck-content h2,
+    // .document-editor .ck-heading-dropdown .ck-heading_heading1 .ck-button__label {
+    //     font-size: 2.18em;
+    //     font-weight: normal;
+    // }
+    
+    // .document-editor .ck-content h2 {
+    //     line-height: 1.37em;
+    //     padding-top: .342em;
+    //     margin-bottom: .142em;
+    // }
+    
+    // /* Set the styles for "Heading 2". */
+    // .document-editor .ck-content h3,
+    // .document-editor .ck-heading-dropdown .ck-heading_heading2 .ck-button__label {
+    //     font-size: 1.75em;
+    //     font-weight: normal;
+    //     color: hsl( 203, 100%, 50% );
+    // }
+    
+    // .document-editor .ck-heading-dropdown .ck-heading_heading2.ck-on .ck-button__label {
+    //     color: var(--ck-color-list-button-on-text);
+    // }
+    // /* Set the styles for "Heading 2". */
+    // .document-editor .ck-content h3 {
+    //     line-height: 1.86em;
+    //     padding-top: .171em;
+    //     margin-bottom: .357em;
+    // }
+    
+    // /* Set the styles for "Heading 3". */
+    // .document-editor .ck-content h4,
+    // .document-editor .ck-heading-dropdown .ck-heading_heading3 .ck-button__label {
+    //     font-size: 1.31em;
+    //     font-weight: bold;
+    // }
+    
+    // .document-editor .ck-content h4 {
+    //     line-height: 1.24em;
+    //     padding-top: .286em;
+    //     margin-bottom: .952em;
+    // }
+    
+    // /* Set the styles for "Paragraph". */
+    // .document-editor .ck-content p {
+    //     // font-size: 1em;
+    //     // line-height: 1.63em;
+    //     // padding-top: .5em;
+    //     // margin-bottom: 1.13em;
+    // }
+    
+    // /* Make the block quoted text serif with some additional spacing. */
+    // .document-editor .ck-content blockquote {
+    //     font-family: Georgia, serif;
+    //     margin-left: calc( 2 * var(--ck-spacing-large) );
+    //     margin-right: calc( 2 * var(--ck-spacing-large) );
+    // }
+    
+    
+    .ck-body-wrapper{
+        position: unset;
+    }
+    
+    }
+}
+
+
+.dropdown-container {
+    min-width: 175px;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px 0;
+
+    .dropdown-wrap {
+        position: relative;
+        // border: 1px solid $secondary;
+        border-radius: 8px;
+        outline: none;
+        background-color: $secondary;
+        @include user-select-none();
+
+        .selected-option-wrap {
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0 16px;
+            border-radius: inherit;
+            cursor: pointer;
+            
+            .selected-option {
+                color: $primary;
+                font-family: $raleway-500;
+                font-size: 16px;
+                font-style: normal;
+                line-height: 24px;
+                text-transform: capitalize;
+                @include elipses-1;
+            }
+
+            .icon-wrap {
+                width: 24px;
+                height: 24px;
+                color: rgba(138, 138, 255, 1);
+                transform: rotate(0deg);
+                -webkit-transform: rotate(0deg);
+                transition: transform 0.2s linear;
+
+                &.open {
+                    -webkit-transform: rotate(180deg);
+                    transform: rotate(180deg);
+                    transition: transform 0.2s linear;
+                }
+
+                .icon {
+                    width: 24px;
+                    height: 24px;
+                }
+            }
+        }
+
+        .options-container {
+            position: absolute;
+            top: calc(100% + 12px);
+            width: 100%;
+            z-index: 9;
+            border-radius: 8px;
+            border: 1px solid #D8D8FF;
+            overflow: hidden;
+
+            .options-wrap {
+                padding: 8px 0;
+                max-height: 250px;
+                overflow: hidden auto;
+                border-radius: inherit;
+                background-color: $base;
+
+                .option-wrap {
+                    padding: 8px 16px;
+                    display: flex;
+                    align-items: center;
+                    gap: 0 8px;
+                    cursor: pointer;
+
+                    .option {
+                        flex: 1;
+                        color: $on-base;
+                        font-family: $raleway-500;
+                        font-size: 12px;
+                        font-style: normal;
+                        line-height: 20px;
+                        text-transform: capitalize;
+                        @include elipses-1;
+                    }
+
+                    .icon-wrap {
+                        display: none;
+                        width: 20px;
+                        height: 20px;
+                        overflow: hidden;
+
+                        &.selected {
+                            display: block;
+                        }
+
+                        .icon {
+                            width: 20px;
+                            height: 20px;
+                            color: $on-base-blue;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
