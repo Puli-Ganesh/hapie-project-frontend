@@ -26,6 +26,10 @@ export class TemplateService {
     return this._httpClientService.get(`${this.endPoint}`);
   }
 
+  setDefaultTemplate(body: any): Observable<IResponse> {
+    return this._httpClientService.post(body, `${this.endPoint}/set-default`);
+  }
+
   updateById(id: string, body: any): Observable<IResponse> {
     return this._httpClientService.put(body, `${this.endPoint}/update/${id}`);
   }

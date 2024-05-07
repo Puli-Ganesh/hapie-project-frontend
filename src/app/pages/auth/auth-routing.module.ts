@@ -6,6 +6,7 @@ import { MicrosoftResponseComponent } from './components/microsoft-response/micr
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { SetupProfileComponent } from './components/setup-profile/setup-profile.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { AuthRedirectComponent } from './components/auth-redirect/auth-redirect.component';
 
 const routes: Routes = [
   {
@@ -14,8 +15,8 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'login',
-        pathMatch: 'full',
+        title: 'Redirect | NexGex Force',
+        component: AuthRedirectComponent,
       },
       {
         path: 'login',

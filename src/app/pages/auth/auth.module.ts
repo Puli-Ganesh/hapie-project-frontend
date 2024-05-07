@@ -10,6 +10,7 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
 import { SetupProfileComponent } from './components/setup-profile/setup-profile.component';
 
 import { AuthRoutingModule } from './auth-routing.module';
+import { AuthRedirectComponent } from './components/auth-redirect/auth-redirect.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { AuthRoutingModule } from './auth-routing.module';
     LoginComponent,
     MicrosoftResponseComponent,
     ResetPasswordComponent,
-    SetupProfileComponent
+    SetupProfileComponent,
+    AuthRedirectComponent
   ],
   imports: [
     CommonModule,

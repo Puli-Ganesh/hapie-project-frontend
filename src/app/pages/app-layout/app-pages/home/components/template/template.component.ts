@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { CkEditorConfig } from '@src/app/constants/ckEditorConfig';
 import { Permissions } from '@src/app/constants/permissions';
 import { Routes } from '@src/app/constants/routes';
-import { StorageKeys } from '@src/app/constants/storage-keys';
 import { FacadeService } from '@src/app/services/facade.service';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
@@ -42,6 +41,7 @@ export class TemplateComponent implements OnInit {
   templateNodes: any = [];
   selectedTemplate: any;
   appRoutes = Routes;
+  defaultTemplateId = '';
 
   ngOnInit(): void {
     this.getTemplateList();
@@ -52,7 +52,7 @@ export class TemplateComponent implements OnInit {
   }
 
   onExit() {
-    this._router.navigate([this.appRoutes.PROJECT_MEDIA]);
+    this._router.navigate([this.appRoutes.PROJECTS]);
   }
 
   onSaveTemplate() {
@@ -71,20 +71,36 @@ export class TemplateComponent implements OnInit {
       this._facadeService.templateService.getListByProjectId(this.projectDetails._id).subscribe({
         next: (res: any) => {
           if (this.projectDetails?.workflowId?.nodes) {
+            this.templateList = res.data.list;
+
             this.templateNodes = this.projectDetails.workflowId.nodes.filter((n: any) => n.app == 'Document');
             if (this.templateNodes.length) {
-              this.selectedNodeId = this.templateNodes[0].id;
+              this.selectPill(this.templateNodes[0].id);
             }
-            this.templateList = res.data.list.map((temp: any) => {
-              temp.uploadedOn = moment(temp.createdAt).format('DD MMMM YYYY')
-              return temp;
-            })
-            this.onSelectTemplate();
           }
         }
-      })
-
+      });
     }
+  }
+
+  selectPill(nodeId: number) {
+    this.selectedNodeId = nodeId;
+    this.filteredTemplateList = this.templateList.filter((template: any) => template.nodeId == this.selectedNodeId);
+    const defaultTemplate = this.templateList.find((template: any) => template.nodeId == this.selectedNodeId && template.isDefault);
+    if (defaultTemplate) {
+      this.defaultTemplateId = defaultTemplate._id;
+    }
+  }
+
+  onMakeDefault(templateId: any) {
+    const body = {
+      templateId: templateId
+    }
+    this._facadeService.templateService.setDefaultTemplate(body).subscribe({
+      next: (res: any) => {
+        this.getTemplateList();
+      }
+    })
   }
 
   onManageTemplate(index: number) {

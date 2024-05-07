@@ -23,8 +23,6 @@ export class UploadDocumentModalComponent implements OnInit, OnDestroy {
     private _httpClientService: HttpClientService,
     private _httpClient: HttpClient
   ) {
-    this.projectId = localStorage.getItem(StorageKeys.PROJECT_ID) ?? '';
-
     this.documentForm = this._formBuilder.group({
       title: ['', [
         Validators.required
@@ -152,9 +150,7 @@ export class UploadDocumentModalComponent implements OnInit, OnDestroy {
     } else {
       const formData = new FormData();
       formData.append('title', (this.title as FormControl).value);
-      if (this.projectId) {
-        formData.append('projectId', this.projectId);
-      }
+      formData.append('projectId', this.projectId);
       formData.append('docFile', this.documentFile);
       formData.append('dataType', (this.documentForm.get('dataType') as any).value);
 
