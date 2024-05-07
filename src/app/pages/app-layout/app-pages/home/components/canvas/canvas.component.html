@@ -20,186 +20,188 @@
         <app-header></app-header>
     </div>
     
-    <div class="inner-header">
 
-        <div class="title">Canvas</div>
-
-        <div class="right-side">
-            <div class="copy-button-wrapper" *ngIf="permissions.CANVAS_SHARE_LINK.includes(currentUser.type)"
-                (click)="onCopyShareLink()">
-                <svg class="fg-{{projectColor}}-1" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path
-                        d="M19 19H8C7.45 19 6.97917 18.8042 6.5875 18.4125C6.19583 18.0208 6 17.55 6 17V3C6 2.45 6.19583 1.97917 6.5875 1.5875C6.97917 1.19583 7.45 1 8 1H15L21 7V17C21 17.55 20.8042 18.0208 20.4125 18.4125C20.0208 18.8042 19.55 19 19 19ZM14 8V3H8V17H19V8H14ZM4 23C3.45 23 2.97917 22.8042 2.5875 22.4125C2.19583 22.0208 2 21.55 2 21V7H4V21H15V23H4Z"
-                        fill="currentColor" />
-                </svg>
-            </div>
-
-            <div class="active-users-wrapper">
-                <div class="active-user bg-{{projectColor}}-2 fg-{{projectColor}}-1"
-                    *ngFor="let liveUser of canvasUsers; let userIndex = index;">
-                    <div class="name">{{ liveUser?.firstName?.[0] + liveUser?.lastName?.[0] }}</div>
+    <div class="body">
+        <div class="inner-header">
+    
+            <div class="title">Canvas</div>
+    
+            <div class="right-side">
+                <div class="copy-button-wrapper" *ngIf="permissions.CANVAS_SHARE_LINK.includes(currentUser.type)"
+                    (click)="onCopyShareLink()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path
+                            d="M19 19H8C7.45 19 6.97917 18.8042 6.5875 18.4125C6.19583 18.0208 6 17.55 6 17V3C6 2.45 6.19583 1.97917 6.5875 1.5875C6.97917 1.19583 7.45 1 8 1H15L21 7V17C21 17.55 20.8042 18.0208 20.4125 18.4125C20.0208 18.8042 19.55 19 19 19ZM14 8V3H8V17H19V8H14ZM4 23C3.45 23 2.97917 22.8042 2.5875 22.4125C2.19583 22.0208 2 21.55 2 21V7H4V21H15V23H4Z"
+                            fill="#141C25" />
+                    </svg>
                 </div>
-            </div>
-
-            <div class="dropdown-container">
-                <div class="dropdown-wrap" tabindex="0" (blur)="templateDropdownToggler = false;">
-                    <div class="selected-option-wrap bg-{{projectColor}}-2" (click)="onToggleTemplateDropdown()">
-                        <div class="selected-option fg-{{projectColor}}-1">
-                            {{selectedTemplate ? selectedTemplate.title : 'Select Template'}}
-                        </div>
-                        <div class="icon-wrap fg-{{projectColor}}-1" [class.open]="templateDropdownToggler">
-                            <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M19 8.5L12 15.5L5 8.5" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round"></path>
-                            </svg>
-                        </div>
-                    </div>
-
-                    <div class="options-container" *ngIf="templateDropdownToggler">
-                        <div class="options-wrap">
-                            <div class="option-wrap" *ngFor="let template of templateDropdownList;"
-                                (click)="onSelectTemplate(template)">
-                                <span class="option">{{template.title}}</span>
-                                <div class="icon-wrap" [class.selected]="selectedTemplate?._id === template?._id">
-                                    <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                        <path d="M7.0332 10.0003L9.01158 11.9778L12.9666 8.02286" stroke="currentColor"
-                                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
+    
+                <div class="active-users-wrapper">
+                    <div class="active-user bg-{{projectColor}}-2 fg-{{projectColor}}-1"
+                        *ngFor="let liveUser of canvasUsers; let userIndex = index;">
+                        <div class="name">{{ liveUser?.firstName?.[0] + liveUser?.lastName?.[0] }}</div>
                     </div>
                 </div>
-            </div>
-
-            <button class="app-button primary bg-{{projectColor}}-1" type="button"
-                *ngIf="permissions.CANVAS_MIGRATE.includes(currentUser.type)" (click)="onMigrateVersion()">
-                <span class="btn-label">migrate to version {{ currentVersion.major + 1 }}.{{ currentVersion.minor
-                    }}</span>
-            </button>
-        </div>
-    </div>
-
-
-
-    <div class="canvas-wrap-ctr">
-        <div class="canvas-wrap">
-
-            <div class="category-list-container" *ngFor="let categories of categoryList; let categoriesIndex = index;">
-                <div class="category-list-wrap">
-                    <h2 class="title">{{categories?.title}}</h2>
-
-                    <div class="requirement-list-wrap" [ngClass]="{
-                    'multi-list': categories.hasMany,
-                    'show-list': category.toggler
-                }" *ngFor="let category of categories.list; let catIndex = index;">
-                        <ng-container *ngIf="categories.hasMany">
-                            <div class="sub-title-wrap" (click)="category.toggler = !category.toggler;">
-                                <h2 class="sub-title">{{category.dTitle}}</h2>
-                                <div class="icon" [class.open]="category.toggler">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                        <path d="M15.8337 7.08333L10.0003 12.9167L4.16699 7.08333" stroke="#0A0908"
-                                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                </div>
+    
+                <!-- <div class="dropdown-container">
+                    <div class="dropdown-wrap" tabindex="0" (blur)="templateDropdownToggler = false;">
+                        <div class="selected-option-wrap bg-{{projectColor}}-2" (click)="onToggleTemplateDropdown()">
+                            <div class="selected-option fg-{{projectColor}}-1">
+                                {{selectedTemplate ? selectedTemplate.title : 'Select Template'}}
                             </div>
-                        </ng-container>
-
-                        <div class="requirement-list" *ngIf="category.requirements?.length > 0">
-                            <ng-container *ngFor="let requirement of category.requirements; let reqIndex = index;">
-                                <div class="requirement-container high" [ngClass]="{
-                                'upsert-mode': requirement?.upsertMode,
-                                'high': requirement?.matchingCount && requirement.matchingCount >= 75,
-                                'medium': requirement?.matchingCount && requirement.matchingCount >= 50 && requirement.matchingCount < 75,
-                                'low': requirement?.matchingCount && requirement.matchingCount < 50
-                            }">
-                                    <ng-container [ngSwitch]="requirement.toggler ? 'open' : 'close'">
-                                        <span *ngSwitchCase="'open'" class="requirement-txt">{{ requirement.requirement
-                                            }}</span>
-                                        <div *ngSwitchCase="'close'" class="requirement-wrap">
-                                            <span class="requirement-txt">{{ requirement.requirement }}</span>
-                                            <div class="icon-wrap"
-                                                (click)="requirement.toggler = !requirement.toggler;">
-                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                                    <path d="M15.8337 7.08333L10.0003 12.9167L4.16699 7.08333"
-                                                        stroke="#0A0908" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </ng-container>
-
-                                    <div class="action-wrap">
-                                        <div class="btn" *ngIf="permissions.CANVAS_EDIT.includes(currentUser.type)"
-                                            (click)="onEditRequirement(categoriesIndex, catIndex, reqIndex)">
-                                            Edit
-                                        </div>
-                                        <div class="btn" *ngIf="permissions.CANVAS_EDIT.includes(currentUser.type)"
-                                            (click)="onDeleteRequirement(categoriesIndex, catIndex, reqIndex)">
-                                            Delete</div>
-                                        <div class="icon-wrap" (click)="requirement.toggler = !requirement.toggler;">
-                                            <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                                <path d="M4.16732 12.9167L10.0007 7.08341L15.834 12.9167"
-                                                    stroke="#0A0908" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                            </svg>
-                                        </div>
+                            <div class="icon-wrap fg-{{projectColor}}-1" [class.open]="templateDropdownToggler">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M19 8.5L12 15.5L5 8.5" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </div>
+                        </div>
+    
+                        <div class="options-container" *ngIf="templateDropdownToggler">
+                            <div class="options-wrap">
+                                <div class="option-wrap" *ngFor="let template of templateDropdownList;"
+                                    (click)="onSelectTemplate(template)">
+                                    <span class="option">{{template.title}}</span>
+                                    <div class="icon-wrap" [class.selected]="selectedTemplate?._id === template?._id">
+                                        <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <path d="M7.0332 10.0003L9.01158 11.9778L12.9666 8.02286" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <ng-container *ngIf="templateDropdownList.length > 0">
+                    <app-drop-down [optionsList]="templateDropdownList" displayKey="title" (onSelectChange)="onSelectTemplate($event)"></app-drop-down>
+                </ng-container>
+    
+                <button class="app-button primary" type="button"
+                    *ngIf="permissions.CANVAS_MIGRATE.includes(currentUser.type)" (click)="onMigrateVersion()">
+                    <span class="btn-label">migrate to version {{ currentVersion.major + 1 }}.{{ currentVersion.minor
+                        }}</span>
+                </button>
+            </div>
+        </div>
 
-                                    <ng-container
-                                        *ngIf="(editIndexes.categoriesIndex === categoriesIndex && editIndexes.categoryIndex === catIndex && editIndexes.requirementIndex === reqIndex) || !requirement?._id">
-                                        <textarea class="textarea" name="requirement"
-                                            [(ngModel)]="requirement.requirement"
-                                            (keydown.shift.enter)="$event.preventDefault();"
-                                            (keydown.enter)="$event.preventDefault();" appAutofocus
-                                            placeholder="Type here..."></textarea>
-                                        <div class="upsert-action-wrap">
-                                            <button class="app-button white-bg"
-                                                (click)="resetEditingAndCancelUpserData()">cancel</button>
-                                            <button class="app-button primary" (click)="onSaveChanges()">save
-                                                changes</button>
-                                        </div>
-                                    </ng-container>
 
-                                    <div class="live-users-wrapper" *ngIf="requirement?.liveUsers?.length > 0"
-                                        [ngClass]="{
-                                        'with-edit': requirement?.upsertMode
-                                    }">
-                                        <div class="live-user bg-{{projectColor}}-2"
-                                            *ngFor="let user of requirement.liveUsers;">
-                                            <div class="name fg-{{projectColor}}-1">{{ user?.firstName?.[0] +
-                                                user?.lastName?.[0] }}</div>
-                                        </div>
+
+        <div class="canvas-wrap-ctr">
+            <div class="canvas-wrap">
+    
+                <div class="category-list-container" *ngFor="let categories of categoryList; let categoriesIndex = index;">
+                    <div class="category-list-wrap">
+                        <h2 class="title">{{categories?.title}}</h2>
+    
+                        <div class="requirement-list-wrap" [ngClass]="{
+                        'multi-list': categories.hasMany,
+                        'show-list': category.toggler
+                    }" *ngFor="let category of categories.list; let catIndex = index;">
+                            <ng-container *ngIf="categories.hasMany">
+                                <div class="sub-title-wrap" (click)="category.toggler = !category.toggler;">
+                                    <h2 class="sub-title">{{category.dTitle}}</h2>
+                                    <div class="toggle-icon-wrap" [class.open]="category.toggler">
+                                        <svg class="icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                            <circle cx="8" cy="8" r="7.25" stroke="#E4E7EC" stroke-width="1.5"/>
+                                            <path d="M5 7L8 10L11 7" stroke="#344051" stroke-width="1.5" stroke-linecap="round"/>
+                                        </svg>
                                     </div>
                                 </div>
                             </ng-container>
+    
+                            <div class="requirement-list" *ngIf="category.requirements?.length > 0">
+                                <ng-container *ngFor="let requirement of category.requirements; let reqIndex = index;">
+                                    <div class="requirement-container high" [ngClass]="{
+                                    'upsert-mode': requirement?.upsertMode,
+                                    'high': requirement?.matchingCount && requirement.matchingCount >= 75,
+                                    'medium': requirement?.matchingCount && requirement.matchingCount >= 50 && requirement.matchingCount < 75,
+                                    'low': requirement?.matchingCount && requirement.matchingCount < 50
+                                }">
+                                        <ng-container [ngSwitch]="requirement.toggler ? 'open' : 'close'">
+                                            <span *ngSwitchCase="'open'" class="requirement-txt">{{ requirement.requirement }}</span>
+                                            <div *ngSwitchCase="'close'" class="requirement-wrap">
+                                                <span class="requirement-txt">{{ requirement.requirement }}</span>
+                                                <div class="toggle-icon-wrap" (click)="requirement.toggler = !requirement.toggler;">
+                                                    <svg class="inner-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                        <circle cx="8" cy="8" r="7.25" stroke="#E4E7EC" stroke-width="1.5"></circle>
+                                                        <path d="M5 7L8 10L11 7" stroke="#344051" stroke-width="1.5" stroke-linecap="round"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+    
+                                        <div class="action-wrap">
+                                            <div class="btn" *ngIf="permissions.CANVAS_EDIT.includes(currentUser.type)"
+                                                (click)="onEditRequirement(categoriesIndex, catIndex, reqIndex)">
+                                                Edit
+                                            </div>
+                                            <div class="btn" *ngIf="permissions.CANVAS_EDIT.includes(currentUser.type)"
+                                                (click)="onDeleteRequirement(categoriesIndex, catIndex, reqIndex)">
+                                                Delete</div>
+                                            <div class="icon-wrap" (click)="requirement.toggler = !requirement.toggler;">
+                                                <svg class="icon" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
+                                                    <circle cx="8" cy="8" r="7.25" stroke="#E4E7EC" stroke-width="1.5"></circle>
+                                                    <path d="M5 7L8 10L11 7" stroke="#344051" stroke-width="1.5" stroke-linecap="round"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+    
+                                        <ng-container
+                                            *ngIf="(editIndexes.categoriesIndex === categoriesIndex && editIndexes.categoryIndex === catIndex && editIndexes.requirementIndex === reqIndex) || !requirement?._id">
+                                            <textarea class="textarea" name="requirement"
+                                                [(ngModel)]="requirement.requirement"
+                                                (keydown.shift.enter)="$event.preventDefault();"
+                                                (keydown.enter)="$event.preventDefault();" appAutofocus
+                                                placeholder="Type here..."></textarea>
+                                            <div class="upsert-action-wrap">
+                                                <button class="app-button cancel"
+                                                    (click)="resetEditingAndCancelUpserData()">cancel</button>
+                                                <button class="app-button primary" (click)="onSaveChanges()">save
+                                                    changes</button>
+                                            </div>
+                                        </ng-container>
+    
+                                        <div class="live-users-wrapper" *ngIf="requirement?.liveUsers?.length > 0"
+                                            [ngClass]="{
+                                            'with-edit': requirement?.upsertMode
+                                        }">
+                                            <div class="live-user bg-{{projectColor}}-2"
+                                                *ngFor="let user of requirement.liveUsers;">
+                                                <div class="name fg-{{projectColor}}-1">{{ user?.firstName?.[0] +
+                                                    user?.lastName?.[0] }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+    
+                            <button class="app-button wide add-btn"
+                                *ngIf="permissions.CANVAS_EDIT.includes(currentUser.type)" type="button" tabindex="-1"
+                                (click)="addNewRequirement(categoriesIndex, catIndex)">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="btn-icon">
+                                    <g clip-path="url(#clip0_334_541)">
+                                        <path d="M8 5.55147V10.4357" stroke="#0A0908" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path d="M10.4445 7.99362H5.55566" stroke="#0A0908" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M11.124 1.33331H4.87635C2.69858 1.33331 1.3335 2.87469 1.3335 5.05674V10.9432C1.3335 13.1253 2.69222 14.6666 4.87635 14.6666H11.124C13.3081 14.6666 14.6668 13.1253 14.6668 10.9432V5.05674C14.6668 2.87469 13.3081 1.33331 11.124 1.33331Z"
+                                            stroke="#0A0908" stroke-linecap="round" stroke-linejoin="round" />
+                                    </g>
+                                    <defs>
+                                        <clipPath id="clip0_334_541">
+                                            <rect width="16" height="16" fill="white" />
+                                        </clipPath>
+                                    </defs>
+                                </svg>
+                                <span class="btn-label">add new</span>
+                            </button>
                         </div>
-
-                        <button class="app-button wide add-btn"
-                            *ngIf="permissions.CANVAS_EDIT.includes(currentUser.type)" type="button" tabindex="-1"
-                            (click)="addNewRequirement(categoriesIndex, catIndex)">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="btn-icon">
-                                <g clip-path="url(#clip0_334_541)">
-                                    <path d="M8 5.55147V10.4357" stroke="#0A0908" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                    <path d="M10.4445 7.99362H5.55566" stroke="#0A0908" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M11.124 1.33331H4.87635C2.69858 1.33331 1.3335 2.87469 1.3335 5.05674V10.9432C1.3335 13.1253 2.69222 14.6666 4.87635 14.6666H11.124C13.3081 14.6666 14.6668 13.1253 14.6668 10.9432V5.05674C14.6668 2.87469 13.3081 1.33331 11.124 1.33331Z"
-                                        stroke="#0A0908" stroke-linecap="round" stroke-linejoin="round" />
-                                </g>
-                                <defs>
-                                    <clipPath id="clip0_334_541">
-                                        <rect width="16" height="16" fill="white" />
-                                    </clipPath>
-                                </defs>
-                            </svg>
-                            <span class="btn-label">add new</span>
-                        </button>
                     </div>
                 </div>
+    
             </div>
-
         </div>
     </div>
 

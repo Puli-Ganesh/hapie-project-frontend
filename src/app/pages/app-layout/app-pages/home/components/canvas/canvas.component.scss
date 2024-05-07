@@ -2,6 +2,12 @@
 
 
 .canvas-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
 
     .canvas-header {
         position: sticky;
@@ -40,24 +46,36 @@
         }
     }
 
+    .body {
+        margin-right: 16px;
+        padding: 16px 16px 8px;
+        flex: 1;
+        background-color: $base;
+        border: 1px solid $border-color;
+        border-radius: 4px;
+        overflow: auto;
+    }
 
     .inner-header {
-        padding-top: 10px;
+        margin: 0 0 12px;
+        padding: 0;
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: flex-start;
         flex-wrap: wrap;
         gap: 20px 0;
         background-color: $base;
-        padding-bottom: 16px;
 
         .title {
-            font-size: 16px;
+            color: $on-base;
+            font-family: $base-font-family;
+            font-size: 14px;
             font-style: normal;
             font-weight: 600;
             line-height: normal;
-            padding-left: 10px;
+            text-transform: capitalize;
         }
+
         .right-side {
             display: flex;
             align-items: center;
@@ -97,115 +115,115 @@
             }
         }
 
-        .dropdown-container {
-            min-width: 175px;
-            max-width: 300px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px 0;
+        // .dropdown-container {
+        //     min-width: 175px;
+        //     max-width: 300px;
+        //     display: flex;
+        //     flex-direction: column;
+        //     gap: 8px 0;
 
-            .dropdown-wrap {
-                position: relative;
-                border: 1px solid $secondary;
-                border-radius: 8px;
-                outline: none;
-                background-color: $secondary;
-                @include user-select-none();
+        //     .dropdown-wrap {
+        //         position: relative;
+        //         border: 1px solid $secondary;
+        //         border-radius: 8px;
+        //         outline: none;
+        //         background-color: $secondary;
+        //         @include user-select-none();
 
-                .selected-option-wrap {
-                    padding: 12px 16px;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    gap: 0 16px;
-                    border-radius: inherit;
-                    cursor: pointer;
+        //         .selected-option-wrap {
+        //             padding: 12px 16px;
+        //             display: flex;
+        //             justify-content: space-between;
+        //             align-items: center;
+        //             gap: 0 16px;
+        //             border-radius: inherit;
+        //             cursor: pointer;
 
-                    .selected-option {
-                        color: $primary;
-                        font-family: $raleway-500;
-                        font-size: 16px;
-                        font-style: normal;
-                        line-height: 24px;
-                        text-transform: capitalize;
-                        @include elipses-1;
-                    }
+        //             .selected-option {
+        //                 color: $primary;
+        //                 font-family: $raleway-500;
+        //                 font-size: 16px;
+        //                 font-style: normal;
+        //                 line-height: 24px;
+        //                 text-transform: capitalize;
+        //                 @include elipses-1;
+        //             }
 
-                    .icon-wrap {
-                        width: 24px;
-                        height: 24px;
-                        transform: rotate(0deg);
-                        -webkit-transform: rotate(0deg);
-                        transition: transform 0.2s linear;
+        //             .icon-wrap {
+        //                 width: 24px;
+        //                 height: 24px;
+        //                 transform: rotate(0deg);
+        //                 -webkit-transform: rotate(0deg);
+        //                 transition: transform 0.2s linear;
 
-                        &.open {
-                            -webkit-transform: rotate(180deg);
-                            transform: rotate(180deg);
-                            transition: transform 0.2s linear;
-                        }
+        //                 &.open {
+        //                     -webkit-transform: rotate(180deg);
+        //                     transform: rotate(180deg);
+        //                     transition: transform 0.2s linear;
+        //                 }
 
-                        .icon {
-                            width: 24px;
-                            height: 24px;
-                        }
-                    }
-                }
+        //                 .icon {
+        //                     width: 24px;
+        //                     height: 24px;
+        //                 }
+        //             }
+        //         }
 
-                .options-container {
-                    position: absolute;
-                    top: calc(100% + 12px);
-                    width: 100%;
-                    z-index: 9;
-                    border-radius: 8px;
-                    border: 1px solid #D8D8FF;
-                    overflow: hidden;
+        //         .options-container {
+        //             position: absolute;
+        //             top: calc(100% + 12px);
+        //             width: 100%;
+        //             z-index: 9;
+        //             border-radius: 8px;
+        //             border: 1px solid #D8D8FF;
+        //             overflow: hidden;
 
-                    .options-wrap {
-                        padding: 8px 0;
-                        max-height: 250px;
-                        overflow: hidden auto;
-                        border-radius: inherit;
-                        background-color: $base;
+        //             .options-wrap {
+        //                 padding: 8px 0;
+        //                 max-height: 250px;
+        //                 overflow: hidden auto;
+        //                 border-radius: inherit;
+        //                 background-color: $base;
 
-                        .option-wrap {
-                            padding: 8px 16px;
-                            display: flex;
-                            align-items: center;
-                            gap: 0 8px;
-                            cursor: pointer;
+        //                 .option-wrap {
+        //                     padding: 8px 16px;
+        //                     display: flex;
+        //                     align-items: center;
+        //                     gap: 0 8px;
+        //                     cursor: pointer;
 
-                            .option {
-                                flex: 1;
-                                color: $on-base;
-                                font-family: $raleway-500;
-                                font-size: 12px;
-                                font-style: normal;
-                                line-height: 20px;
-                                text-transform: capitalize;
-                                @include elipses-1;
-                            }
+        //                     .option {
+        //                         flex: 1;
+        //                         color: $on-base;
+        //                         font-family: $raleway-500;
+        //                         font-size: 12px;
+        //                         font-style: normal;
+        //                         line-height: 20px;
+        //                         text-transform: capitalize;
+        //                         @include elipses-1;
+        //                     }
 
-                            .icon-wrap {
-                                display: none;
-                                width: 20px;
-                                height: 20px;
-                                overflow: hidden;
+        //                     .icon-wrap {
+        //                         display: none;
+        //                         width: 20px;
+        //                         height: 20px;
+        //                         overflow: hidden;
 
-                                &.selected {
-                                    display: block;
-                                }
+        //                         &.selected {
+        //                             display: block;
+        //                         }
 
-                                .icon {
-                                    width: 20px;
-                                    height: 20px;
-                                    color: $on-base-blue;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        //                         .icon {
+        //                             width: 20px;
+        //                             height: 20px;
+        //                             color: $on-base-blue;
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
     }
 
 }
@@ -219,30 +237,31 @@
     // border-radius: 4px;
 
     .canvas-wrap {
-        // margin: 16px 0px 0px 16px;
-        padding: 0px 4px 4px 0;
-        // min-height: inherit;
+        padding: 16px 16px 8px;
         height: inherit;
         display: grid;
         grid-auto-flow: column;
         grid-auto-columns: 280px;
         gap: 0 16px;
         overflow: auto hidden;
+        border-radius: 4px;
+        border: 1px solid $border-color;
+        background: $light-base;
 
         .category-list-container {
             // margin-bottom: 4px;
             height: max-content;
             // max-height: calc(100vh - 72px - 32px - 50px - 32px - 10px - 30px);
-            border-radius: 12px;
-            background: #F4F4F4;
+            border-radius: 4px;
             overflow: hidden hidden;
 
             .category-list-wrap {
                 padding: 12px 8px;
                 // height: max-content;
-                max-height: calc(100vh - 72px - 32px - 50px - 32px - 10px - 25px);
+                max-height: calc(100vh - 64px - 26px - 34px - 12px - 26px - 24px);
                 border-radius: inherit;
-                background: #F4F4F4;
+                border: 1px solid $border-color;
+                background: $base;
                 overflow: hidden auto;
 
                 &::-webkit-scrollbar {
@@ -266,11 +285,11 @@
                     margin: 0 0 8px;
                     padding: 0 8px;
                     color: $on-base;
-                    font-family: $raleway-500;
-                    font-size: 12px;
+                    font-family: $base-font-family;
+                    font-size: 14px;
                     font-style: normal;
-                    line-height: 20px;
-                    /* 166.667% */
+                    font-weight: 600;
+                    line-height: normal;
                     text-transform: capitalize;
                     @include elipses-1;
                     @include user-select-none();
@@ -289,23 +308,29 @@
                         padding: 0 8px;
                         flex: 1;
                         color: $on-base;
-                        font-family: $raleway-500;
+                        font-family: $base-font-family;
                         font-size: 12px;
                         font-style: normal;
-                        line-height: 20px;
-                        /* 166.667% */
+                        font-weight: 500;
+                        line-height: normal;
                         text-transform: capitalize;
                         @include elipses-1;
                     }
 
-                    .icon {
-                        width: 20px;
-                        height: 20px;
-                        transform: rotate(0deg);
-                        transition: transform 0.25s linear;
+                    .toggle-icon-wrap {
+                        // width: 20px;
+                        // height: 20px;
+                        // transform: rotate(0deg);
+                        // transition: transform 0.25s linear;
 
                         &.open {
                             transform: rotate(180deg);
+                        }
+
+                        .icon ,svg {
+                            display: block;
+                            width: 20px;
+                            height: 20px;
                         }
                     }
                 }
@@ -336,11 +361,12 @@
 
                         .requirement-container {
                             position: relative;
-                            padding: 12px;
+                            padding: 8px;
                             min-height: 64px;
-                            border-radius: 12px;
-                            background: $base;
-                            border-bottom: 3px solid transparent;
+                            border-radius: 4px;
+                            background: $light-base;
+                            border: 1px solid $border-color;
+                            border-bottom: 3px solid $border-color;
                             cursor: pointer;
 
                             .requirement-wrap {
@@ -354,19 +380,23 @@
                                     @include elipses-1;
                                 }
 
-                                .icon-wrap {
-                                    width: 20px;
-                                    height: 20px;
+                                .toggle-icon-wrap {
+                                    .inner-icon {
+                                        display: block;
+                                        width: 20px;
+                                        height: 20px;
+                                    }
                                 }
                             }
 
                             .requirement-txt {
-                                display: inline-block;
-                                font-family: $raleway-500;
-                                font-size: 12px;
+                                display: block;
+                                color: $on-light-base;
+                                font-family: $base-font-family;
+                                font-size: 14px;
                                 font-style: normal;
-                                line-height: 20px;
-                                color: $on-base;
+                                font-weight: 400;
+                                line-height: normal;
                                 word-break: break-word;
                                 -ms-word-break: break-word;
                             }
@@ -393,6 +423,7 @@
 
                                 .icon-wrap {
                                     padding: 7px 10px;
+                                    transform: rotate(-180deg);
 
                                     .icon {
                                         width: 20px;
@@ -405,17 +436,16 @@
                             .upsert-action-wrap {
                                 position: relative;
                                 padding: 8px 16px;
-                                border-radius: 0 0 12px 12px;
+                                border-radius: 0 0 4px 4px;
                                 display: flex;
                                 justify-content: flex-end;
                                 gap: 0 10px;
-                                border-top: 1px solid rgba(223, 223, 223, 1);
+                                border-top: 1px solid $border-color;
                                 background-color: $base;
                                 cursor: default;
 
                                 .app-button {
                                     padding: 4px 14px;
-                                    font-family: $raleway-600;
                                     font-size: 10px;
                                     font-style: normal;
                                     line-height: 16px;
@@ -425,28 +455,28 @@
                             }
 
                             .textarea {
-                                padding: 10px 11px 11px;
+                                padding: 8px 8px;
                                 width: 100%;
-                                height: calc(100% - 41px);
+                                height: calc(100% - 43px);
                                 position: absolute;
                                 inset: 0;
-                                top: 1px;
-                                font-family: $raleway-500;
-                                font-size: 12px;
+                                color: $on-light-base;
+                                font-family: $base-font-family;
+                                font-size: 14px;
                                 font-style: normal;
-                                line-height: 20px;
+                                font-weight: 400;
+                                line-height: normal;
                                 word-break: break-word;
                                 -ms-word-break: break-word;
                                 border-top-left-radius: inherit;
                                 border-top-right-radius: inherit;
-                                color: $on-base;
                                 border: 0;
                                 outline: none;
                                 resize: none;
                             }
 
                             &.upsert-mode {
-                                border: 1px solid $on-base-blue;
+                                border: 1px solid $primary;
                                 border-bottom-width: 3px;
                                 padding: 0;
                                 overflow: hidden;
@@ -462,10 +492,11 @@
                             }
 
                             &:not(.upsert-mode):hover {
-                                padding: 11px 11px 12px;
-                                border: 1px solid $on-base-blue;
-                                border-bottom-width: 3px;
-                                background: $base;
+                                // padding: 11px 11px 12px;
+                                // border: 1px solid $on-base-blue;
+                                // border-bottom-width: 3px;
+                                // background: $base;
+                                border-color: $primary;
 
                                 .action-wrap {
                                     display: flex;
@@ -538,13 +569,14 @@
 
 
     .add-btn {
-        padding: 9px;
+        padding: 6px 12px;
+        font-family: $base-font-family;
         font-size: 12px;
-        font-family: $raleway-600;
-        line-height: 16px;
-        border-radius: 8px;
-        border: 1px solid #DFDFDF;
-        background-color: rgba(244, 244, 244, 1);
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        border: 1px solid $border-color;
+        background-color: $light-base;
 
         .btn-icon {
             width: 16px;
