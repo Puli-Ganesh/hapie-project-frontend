@@ -2,6 +2,60 @@
 
 
 .media-transcript-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+
+    .media-transcript-header {
+        position: sticky;
+        display: flex;
+        align-items: center;
+        top: 0;
+        left: 0;
+        flex: 0;
+        z-index: 1;
+        background-color: $light-base;
+
+        .breadcrumbs-wrapper {
+            display: flex;
+            margin-right: auto;
+            gap: 18px;
+
+            .back-icon {
+                height: 20px;
+                width: 20px;
+                cursor: pointer;
+            }
+
+            .breadcrumb-item {
+                font-size: 16px;
+                font-style: normal;
+                font-weight: 600;
+                line-height: normal;
+                text-transform: capitalize;
+                margin: 0;
+            }
+        }
+
+        .actions-wrapper {
+            display: flex;
+            gap: 16px;
+        }
+    }
+
+    .body {
+        flex: 1;
+        background-color: $base;
+        border: 1px solid $border-color;
+        border-radius: 4px;
+        padding: 16px;
+        margin-right: 16px;
+    }
+
 
     .inner-header {
         margin-bottom: 40px;

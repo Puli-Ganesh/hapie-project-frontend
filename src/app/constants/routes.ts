@@ -21,4 +21,5 @@ export class Routes {
 	static readonly SHARE_CANVAS: string = '/canvas';
 	static readonly TEMPLATES: string = '/templates';
 	static readonly WORKFLOWS: string = '/workflows';
+	static readonly WORKFLOW_DETAILS: string = '/workflows/details';
 }

@@ -12,6 +12,7 @@ import { AutofocusDirective } from '../directives/autofocus.directive';
 
 import { SafePipe } from '../pipes/safe.pipe';
 import { HeaderComponent } from './components/header/header.component';
+import { DropDownComponent } from './components/drop-down/drop-down.component';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { HeaderComponent } from './components/header/header.component';
     DragDropFileDirective,
     AutofocusDirective,
     SafePipe,
-    HeaderComponent
+    HeaderComponent,
+    DropDownComponent
   ],
   imports: [
     CommonModule,
@@ -38,7 +40,8 @@ import { HeaderComponent } from './components/header/header.component';
     DragDropFileDirective,
     AutofocusDirective,
     SafePipe,
-    HeaderComponent
+    HeaderComponent,
+    DropDownComponent
   ]
 })
 export class SharedModule { }

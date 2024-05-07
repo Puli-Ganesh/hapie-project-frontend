@@ -433,7 +433,7 @@
                 </div>
             </div>
             <ul class="list-wrapper" *ngIf="workflowToggler">
-                <li class="list-item" *ngFor="let workflow of workflowList;">
+                <li class="list-item" [class.active]="selectedWorkflowId == workflow._id" *ngFor="let workflow of workflowList; let index = index;" (click)="onViewWorkflow(index)">
                     <svg class="list-item-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M7 14L11.7498 9" stroke="currentColor" stroke-linecap="round" />
                         <path d="M18 14L11.7498 9" stroke="currentColor" stroke-linecap="round" />
@@ -442,7 +442,7 @@
                         <rect x="7" y="4" width="10" height="5" rx="0.1" stroke="currentColor" />
                     </svg>
                     <div class="label">
-                        {{ workflow?.name + '' + workflow?.name }}
+                        {{ workflow?.name }}
                     </div>
                 </li>
             </ul>
@@ -488,7 +488,7 @@
         <div class="divider"></div>
 
 
-        <div class="menu" [class.active]="activeMenu == 'templates'"
+        <!-- <div class="menu" [class.active]="activeMenu == 'templates'"
             *ngIf="permissions.MENU_TEMPLATES.includes(currentUser?.type)" (click)="onTemplates()">
             <div class="menu-icon-wrapper">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -499,7 +499,7 @@
                 </svg>
             </div>
             <div class="menu-title">templates</div>
-        </div>
+        </div> -->
         <div class="menu">
             <div class="menu-icon-wrapper">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -569,7 +569,7 @@
                         <circle cx="6" cy="6" r="6" fill="currentColor" />
                     </svg>
                 </div>
-                <div class="menu-title">Compare Video</div>
+                <div class="menu-title">Compare</div>
             </div>
             <div class="menu" (click)="onGoToCanvas()" *ngIf="hasAccessTo.includes('Canvas')" [class.active]="secondaryMenu == 'canvas'">
                 <div class="menu-icon-wrapper">

@@ -6,6 +6,7 @@ import { Routes } from '@src/app/constants/routes';
 import { StorageKeys } from '@src/app/constants/storage-keys';
 import { IResponse } from '@src/interfaces/response.interface';
 import { Permissions } from '@src/app/constants/permissions';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -22,9 +23,15 @@ export class MediaTranscriptComponent implements OnInit, OnDestroy {
   ) {
 
     this.recordingId = this._activatedRoute.snapshot.params['id'];
+
     // this.projectId = localStorage.getItem(StorageKeys.PROJECT_ID) ?? '';
-    this.projectName = localStorage.getItem(StorageKeys.PROJECT_NAME) ?? '';
-    this.projectColor = localStorage.getItem(StorageKeys.PROJECT_COLOR) ?? 1;
+    // this.projectName = localStorage.getItem(StorageKeys.PROJECT_NAME) ?? '';
+    // this.projectColor = localStorage.getItem(StorageKeys.PROJECT_COLOR) ?? 1;
+    this.projectDetailsSubscription = this._facadeService.projectService.projectDetails$.subscribe({
+      next: (details: any) => {
+        this.projectDetails = details;
+      }
+    });
   }
 
   permissions = Permissions;
@@ -34,7 +41,9 @@ export class MediaTranscriptComponent implements OnInit, OnDestroy {
   protected isRequestAlive: boolean = false;
 
   // protected projectId: string = '';
-  protected projectName: string = '';
+  // protected projectName: string = '';
+  projectDetailsSubscription: Subscription;
+  projectDetails: any;
 
   protected recordingId: string = '';
   protected recordingDetails: any;
@@ -176,7 +185,8 @@ export class MediaTranscriptComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this._facadeService.modalService.unregisterModal('deleteMediaModal')
+    this._facadeService.modalService.unregisterModal('deleteMediaModal');
+    this.projectDetailsSubscription?.unsubscribe();
   }
 
 }

@@ -54,6 +54,10 @@ export class TemplateService {
     return this._httpClientService.get(`${this.endPoint}/list-by-project/${projectId}`);
   }
 
+  getDefaultListByProjectId(projectId: string): Observable<IResponse> {
+    return this._httpClientService.get(`${this.endPoint}/list-default-by-project/${projectId}`);
+  }
+
   saveModifiedTemplate(body: any) {
     return this._httpClientService.post(body, `${this.endPoint}/save-modified-template`);
   }

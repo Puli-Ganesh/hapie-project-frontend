@@ -58,6 +58,11 @@ export class UploadDocumentModalComponent implements OnInit, OnDestroy {
     this.resetData();
   }
 
+  onCancel() {
+    this.onClose.emit(true);
+    this.resetData();
+  }
+
   onFileDrop(event: any) {
     this.onUploadProjectCoverThumb({
       target: {
@@ -122,7 +127,7 @@ export class UploadDocumentModalComponent implements OnInit, OnDestroy {
         }
       });
       // @ts-ignore
-    } else if (this.dataType.value === 'witheBlank') {
+    } else if (this.dataType.value === 'withBlank') {
       
       const body: any = {
         title: this.title?.value

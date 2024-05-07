@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CkEditorConfig } from '@src/app/constants/ckEditorConfig';
 import { Permissions } from '@src/app/constants/permissions';
+import { Routes } from '@src/app/constants/routes';
 import { StorageKeys } from '@src/app/constants/storage-keys';
 import { FacadeService } from '@src/app/services/facade.service';
 import * as moment from 'moment';
@@ -14,7 +16,8 @@ import { Subscription } from 'rxjs';
 export class TemplateComponent implements OnInit {
 
   constructor(
-    private _facadeService: FacadeService
+    private _facadeService: FacadeService,
+    private _router: Router
   ) {
     this.currentUser = this._facadeService.authService.getCurrentUser();
 
@@ -38,6 +41,7 @@ export class TemplateComponent implements OnInit {
   filteredTemplateList: any = []
   templateNodes: any = [];
   selectedTemplate: any;
+  appRoutes = Routes;
 
   ngOnInit(): void {
     this.getTemplateList();
@@ -47,8 +51,19 @@ export class TemplateComponent implements OnInit {
     this.selectedTemplate = null;
   }
 
+  onExit() {
+    this._router.navigate([this.appRoutes.PROJECT_MEDIA]);
+  }
+
   onSaveTemplate() {
     console.log('saving')
+  }
+
+  onCloseModal() {
+    this.isUploading = false;
+  }
+  onDocumentUpdated(event: any) {
+    console.log('closing')
   }
 
   getTemplateList() {

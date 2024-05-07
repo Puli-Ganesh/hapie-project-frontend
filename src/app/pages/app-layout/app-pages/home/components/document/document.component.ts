@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CkEditorConfig } from '@src/app/constants/ckEditorConfig';
 import { Permissions } from '@src/app/constants/permissions';
+import { Routes } from '@src/app/constants/routes';
 import { FacadeService } from '@src/app/services/facade.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -14,7 +16,8 @@ import { Subscription } from 'rxjs';
 export class DocumentComponent implements OnInit {
 
   constructor(
-    private _facadeService: FacadeService
+    private _facadeService: FacadeService,
+    private _router: Router
   ) {
     this.currentUser = this._facadeService.authService.getCurrentUser();
 
@@ -42,6 +45,7 @@ export class DocumentComponent implements OnInit {
   versionOptions = [];
   selectedDocument: any = null;
   selectedDocumentCategoryList: Array<any> = [];
+  appRoutes = Routes;
 
   ngOnInit(): void {
     this.getTemplateList();
@@ -49,6 +53,10 @@ export class DocumentComponent implements OnInit {
 
   onGoBack() {
     this.selectedDocument = null;
+  }
+
+  onExit() {
+    this._router.navigate([this.appRoutes.PROJECT_MEDIA]);
   }
 
   onSaveTemplate() {
@@ -162,9 +170,9 @@ export class DocumentComponent implements OnInit {
     if (this.projectDetails?._id) {
       this._facadeService.templateService.getListByProjectId(this.projectDetails._id).subscribe({
         next: (res: any) => {
-          console.log(res)
           if (this.projectDetails?.workflowId?.nodes) {
             this.templateNodes = this.projectDetails.workflowId.nodes.filter((n: any) => n.app == 'Document');
+            console.log(this.templateNodes)
             if (this.templateNodes.length) {
               this.selectedNodeId = this.templateNodes[0].id;
             }
@@ -172,7 +180,8 @@ export class DocumentComponent implements OnInit {
               temp.uploadedOn = moment(temp.createdAt).format('DD MMMM YYYY')
               return temp;
             })
-            this.onSelectTemplate();
+
+            this.filteredTemplateList = [...this.templateList];
           }
         }
       });
@@ -231,14 +240,6 @@ export class DocumentComponent implements OnInit {
           console.log(error);
         });
       }, 100);
-    }
-  }
-
-
-
-  onSelectTemplate() {
-    if (this.selectedNodeId != null) {
-      this.filteredTemplateList = this.templateList.filter((template: any) => template.nodeId == this.selectedNodeId);
     }
   }
 

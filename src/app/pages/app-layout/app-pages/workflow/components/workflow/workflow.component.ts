@@ -96,6 +96,13 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     this._facadeService.modalService.openModal('createWorkflowModal')
   }
 
+  onViewWorkflow(index: number) {
+    const workflowId = this.filteredWorkflowList[index]?._id;
+    if (workflowId) {
+      this._router.navigate([this.appRoutes.WORKFLOW_DETAILS, workflowId], { state: { isCreating: false }});
+    }
+  }
+
   onEditWorkflow(index: number) {
     const workflowId = this.filteredWorkflowList[index]._id;
     if (workflowId) {
@@ -103,9 +110,13 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     }
   }
 
-  onDeleteWorkflow(index: number) {
+  onDeleteWorkflow(event: Event, index: number) {
+    if (event.stopPropagation) {
+      event.stopPropagation()
+    }
     this.selectedWorkflow = this.filteredWorkflowList[index];
     this._facadeService.modalService.openModal('deleteWorkflowModal');
+
   }
 
   onConfirmCreate() {
@@ -123,7 +134,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
         this.workflowForm.reset();
         this._facadeService.modalService.closeModal('createWorkflowModal')
         this._facadeService.appService.openToaster('Workflow successfully created.', 'success');
-        this._router.navigate([this.appRoutes.WORKFLOWS, 'details', res.data._id]);
+        this._router.navigate([this.appRoutes.WORKFLOW_DETAILS, res.data._id], { state: { isCreating: true }});
       },
       error: (err: any) => {
         console.log('There is an error while creating workflow', err);

@@ -56,25 +56,30 @@
         border-radius: 4px;
         margin-right: 16px;
 
-        .title {
-            font-size: 16px;
-            font-weight: 600;
-            color: $on-base;
-            margin: 0;
+        .title-wrapper {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 16px;
+
+            .title {
+                font-size: 16px;
+                font-weight: 600;
+                color: $on-base;
+                margin: 0;
+            }
         }
 
         .media-wrap {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            grid-gap: 40px 56px;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-gap: 16px;
 
             .media-item {
                 width: 100%;
                 height: 100%;
-                border-radius: 12px;
-                border: 1px solid $secondary;
-                // aspect-ratio: 1.3043478261/1;
+                border-radius: 4px;
+                background: $light-base;
+                border: 1px solid $border-color;
                 overflow: hidden;
                 cursor: pointer;
 
@@ -114,8 +119,7 @@
                     width: 100%;
                     aspect-ratio: 2/1;
                     overflow: hidden;
-                    border-radius: 12px;
-                    background-color: $secondary;
+                    background-color: $light-base;
 
                     img {
                         width: 100%;
@@ -127,29 +131,33 @@
                 }
 
                 .media-details {
-                    padding: 16px;
+                    padding: 8px;
 
                     .media-name {
                         margin: 0;
-                        color: $on-base;
-                        font-family: $raleway-600;
-                        font-size: 18px;
+                        font-size: 14px;
                         font-style: normal;
-                        line-height: 28px;
-                        /* 155.556% */
+                        font-weight: 600;
+                        line-height: normal;
                         text-transform: capitalize;
+                        margin-bottom: 4px;
                         @include elipses-1();
                     }
 
                     .media-desc {
-                        color: $on-base-light;
-                        font-family: $raleway-500;
                         font-size: 12px;
                         font-style: normal;
-                        line-height: 20px;
-                        /* 166.667% */
-                        text-transform: capitalize;
+                        font-weight: 400;
+                        line-height: normal;
                         @include elipses-2();
+                    }
+                }
+
+                &:hover,
+                &.active {
+                    border-color: $light-primary;
+                    .media-details {
+                        background-color: $light-primary;
                     }
                 }
             }

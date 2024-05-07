@@ -2,8 +2,7 @@
 
     <div class="compare-header">
         <div class="breadcrumbs-wrapper">
-            <svg class="back-icon" (click)="onGoBack()" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                xmlns="http://www.w3.org/2000/svg">
+            <svg class="back-icon" (click)="onGoBack()" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <rect x="0.5" y="0.5" width="23" height="23" rx="3.5" stroke="#344051" />
                 <path
                     d="M6.63377 12.0001L11.8175 17.1826C11.9349 17.2999 12.0008 17.4591 12.0008 17.6251C12.0008 17.791 11.9349 17.9502 11.8175 18.0676C11.7002 18.1849 11.541 18.2508 11.375 18.2508C11.209 18.2508 11.0499 18.1849 10.9325 18.0676L5.30752 12.4426C5.24931 12.3845 5.20314 12.3155 5.17163 12.2396C5.14012 12.1637 5.1239 12.0823 5.1239 12.0001C5.1239 11.9178 5.14012 11.8364 5.17163 11.7605C5.20314 11.6846 5.24931 11.6156 5.30752 11.5576L10.9325 5.93256C11.0499 5.8152 11.209 5.74927 11.375 5.74927C11.541 5.74927 11.7002 5.8152 11.8175 5.93256C11.9349 6.04992 12.0008 6.20909 12.0008 6.37506C12.0008 6.54103 11.9349 6.7002 11.8175 6.81756L6.63377 12.0001Z"
@@ -39,7 +38,7 @@
             </div>
 
             <div class="action-buttons">
-                <div class="dropdown-container">
+                <!-- <div class="dropdown-container">
                     <div class="dropdown-wrap bg-{{projectColor}}-2" tabindex="0"
                         (blur)="templateDropdownToggler = false;">
                         <div class="selected-option-wrap" (click)="onToggleTemplateDropdown()">
@@ -72,14 +71,28 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <button class="app-button primary bg-{{projectColor}}-1"
-                    *ngIf="permissions.GET_AI_SUMMARY.includes(currentUser.type)"
+                </div> -->
+
+                <ng-container *ngIf="templateList.length > 0">
+                    <app-drop-down [optionsList]="templateList" displayKey="title"
+                        (onSelectChange)="onSelectTemplate($event)"></app-drop-down>
+                </ng-container>
+                <button class="app-button primary" *ngIf="permissions.GET_AI_SUMMARY.includes(currentUser.type)"
                     [class.disabled]="isAIRequestAlive || !displayCategoryByMediaList.length" (click)="onGetAISummary()"
                     [disabled]="isAIRequestAlive || !displayCategoryByMediaList.length">
-                    <span class="btn-label">
+                    <div class="btn-icon">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M6 4.4C6.28695 4.4 6.54171 4.58362 6.63246 4.85585L7.61038 7.78962L10.5442 8.76754C10.8164 8.85829 11 9.11305 11 9.4C11 9.68695 10.8164 9.94171 10.5442 10.0325L7.61038 11.0104L6.63246 13.9442C6.54171 14.2164 6.28695 14.4 6 14.4C5.71305 14.4 5.45829 14.2164 5.36754 13.9442L4.38962 11.0104L1.45585 10.0325C1.18362 9.94171 1 9.68695 1 9.4C1 9.11305 1.18362 8.85829 1.45585 8.76754L4.38962 7.78962L5.36754 4.85585C5.45829 4.58362 5.71305 4.4 6 4.4ZM6 7.17485L5.54912 8.52748C5.48277 8.72655 5.32656 8.88276 5.12749 8.94912L3.77485 9.4L5.12749 9.85088C5.32656 9.91723 5.48277 10.0734 5.54912 10.2725L6 11.6251L6.45088 10.2725C6.51723 10.0734 6.67345 9.91723 6.87252 9.85088L8.22515 9.4L6.87252 8.94912C6.67345 8.88276 6.51723 8.72655 6.45088 8.52748L6 7.17485Z"
+                                fill="white" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M11.3333 2C11.5055 2 11.6584 2.11017 11.7128 2.27351L12.2329 3.83377L13.7932 4.35386C13.9565 4.40831 14.0667 4.56116 14.0667 4.73333C14.0667 4.90551 13.9565 5.05836 13.7932 5.11281L12.2329 5.63289L11.7128 7.19316C11.6584 7.35649 11.5055 7.46667 11.3333 7.46667C11.1612 7.46667 11.0083 7.35649 10.9539 7.19316L10.4338 5.63289L8.87351 5.11281C8.71017 5.05836 8.6 4.90551 8.6 4.73333C8.6 4.56116 8.71017 4.40831 8.87351 4.35386L10.4338 3.83377L10.9539 2.27351C11.0083 2.11017 11.1612 2 11.3333 2Z"
+                                fill="white" />
+                        </svg>
+                    </div>
+                    <div class="btn-label">
                         {{isAIRequestAlive ? 'generating AI summary...' : 'get AI summary'}}
-                    </span>
+                    </div>
                 </button>
             </div>
         </div>
@@ -92,10 +105,20 @@
                 </video>
                 <div class="details">
                     <div class="title">media upload {{media.version}}</div>
-                    <div class="date">{{ media.createdAt | date:'dd.MM.YYYY'}}</div>
+                    <!-- <div class="date">{{ media.createdAt | date:'dd.MM.YYYY'}}</div> -->
                 </div>
-                <div class="check-box-wrap" (click)="onSelectMedia(mediaIndex)">
-                    <svg class="fg-{{projectColor}}-1" *ngIf="media.isSelected" width="20" height="20"
+                <div class="check-box-wrap" (click)="onSelectMedia(mediaIndex)"
+                    [ngSwitch]="media.isSelected ? 'checked': ''">
+                    <svg *ngSwitchCase="'checked'" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <rect x="0.5" y="0.5" width="17" height="17" rx="3.5" fill="#2C76FF" stroke="#2C76FF" />
+                        <path d="M4 9.33333L6.12973 13.3088C6.30235 13.6311 6.75113 13.6652 6.97047 13.3727L14 4"
+                            stroke="white" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                    <svg *ngSwitchDefault width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <rect x="0.499023" y="0.5" width="17" height="16.0526" rx="3.5" fill="#F9FAFB"
+                            stroke="#E4E7EC" />
+                    </svg>
+                    <!-- <svg class="fg-{{projectColor}}-1" *ngIf="media.isSelected" width="20" height="20"
                         viewBox="0 0 20 20" fill="none">
                         <defs>
                             <clipPath id="round-corner">
@@ -111,7 +134,7 @@
                         <path
                             d="M5.66549 1.25024H14.3345C15.726 1.25024 16.8171 1.73796 17.5628 2.53885C18.3123 3.34376 18.7505 4.50601 18.7505 5.91624V14.0842C18.7505 15.4945 18.3123 16.6567 17.5627 17.4616C16.8169 18.2625 15.7255 18.7502 14.3335 18.7502H5.66549C4.27402 18.7502 3.1832 18.2625 2.43772 17.4617C1.68847 16.6568 1.25049 15.4946 1.25049 14.0842V5.91624C1.25049 4.50656 1.69035 3.34423 2.44087 2.53904C3.18775 1.73775 4.27885 1.25024 5.66549 1.25024Z"
                             fill="white" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
+                    </svg> -->
                 </div>
             </div>
             <div *ngIf="!mediaList?.length" class="empty-media-list-wrap">
@@ -121,25 +144,30 @@
 
         <div class="comparison-section">
             <div class="prompt-container">
-                <ng-container *ngFor="let prompts of promptList; let listIndex = index;">
-                    <div *ngIf="prompts.hasMany" class="prompt-list-wrap" [class.parent-select]="prompts?.selected">
-                        <div (click)="onSelectPrompt(listIndex, 0)" class="parent-title-wrap"
-                            [ngClass]="prompts?.selected ? ('selected-'+projectColor) : ('hover-'+projectColor)">
-                            <div class="title" [ngClass]="prompts?.selected ? ('fg-'+projectColor+'-1') : ''">
-                                {{prompts.title}}</div>
+                <div class="prompt-template-title" *ngIf="!!selectedTemplate?.title">{{selectedTemplate.title}} - Topics</div>
+                <ng-container *ngFor="let prompts of promptList; let listIndex = index;" [ngSwitch]="prompts.hasMany ? 'many' : ''">
+                    <div *ngSwitchCase="'many'" class="prompt-list-wrap" [class.parent-select]="prompts?.selected">
+                        <!-- [ngClass]="prompts?.selected ? ('selected- '+projectColor) : ('hover- '+projectColor)" -->
+                        <div (click)="onSelectPrompt(listIndex, 0)" class="parent-title-wrap">
+                            <!-- [ngClass]="prompts?.selected ? ('fg- '+projectColor+'-1') : ''" -->
+                            <div class="title">{{prompts.title}}</div>
+                            <div class="toggle-icon-wrap">
+                                <svg class="toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <circle cx="8" cy="8" r="7.25" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M5 7L8 10L11 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>
+                            </div>
                         </div>
                         <div class="sub-prompt-list">
                             <div *ngFor="let prompt of prompts.list; let promptIndex = index;" class="sub-prompt-wrap"
                                 [class.selected]="prompt.selected">
-                                <div class="title-wrap" (click)="onSelectPrompt(listIndex, promptIndex)"
-                                    [ngClass]="prompt.selected ? ('bg-'+projectColor+'-1') : ('hover-'+projectColor)">
+                                <!-- [ngClass]="prompt.selected ? ('bg-'+projectColor+'-1') : ('hover-'+projectColor)" -->
+                                <div class="title-wrap" (click)="onSelectPrompt(listIndex, promptIndex)">
                                     <div class="title">{{prompt.dTitle}}</div>
-                                    <div class="right-arrow-icon-wrap">
-                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                            class="right-arrow-icon">
-                                            <path d="M5.66602 3.33335L10.3327 8.00002L5.66602 12.6667"
-                                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                stroke-linejoin="round"></path>
+                                    <div class="toggle-icon-wrap">
+                                        <svg class="toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                            <circle cx="8" cy="8" r="7.25" stroke="currentColor" stroke-width="1.5"/>
+                                            <path d="M5 7L8 10L11 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                                         </svg>
                                     </div>
                                 </div>
@@ -148,22 +176,19 @@
                         </div>
                     </div>
 
-                    <ng-container *ngIf="!prompts.hasMany">
-                        <div class="prompt-wrap" [class.selected]="prompts?.list?.[0]?.selected">
-                            <div (click)="onSelectPrompt(listIndex)" class="title-wrap"
-                                [ngClass]="prompts.list?.[0]?.selected ? ('selected-'+projectColor) : ('hover-'+projectColor)">
-                                <div class="title">{{prompts?.list?.[0]?.dTitle}}</div>
-                                <div class="right-arrow-icon-wrap">
-                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                        class="right-arrow-icon">
-                                        <path d="M5.66602 3.33335L10.3327 8.00002L5.66602 12.6667" stroke="currentColor"
-                                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    </svg>
-                                </div>
+                    <div *ngSwitchDefault="" class="prompt-wrap" [class.selected]="prompts?.list?.[0]?.selected">
+                        <!-- [ngClass]="prompts.list?.[0]?.selected ? ('selected-'+projectColor) : ('hover-'+projectColor)" -->
+                        <div (click)="onSelectPrompt(listIndex)" class="title-wrap">
+                            <div class="title">{{prompts?.list?.[0]?.dTitle}}</div>
+                            <div class="toggle-icon-wrap">
+                                <svg class="toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <circle cx="8" cy="8" r="7.25" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M5 7L8 10L11 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>
                             </div>
-                            <div class="prompt-str">{{prompts?.list?.[0]?.prompt}}</div>
                         </div>
-                    </ng-container>
+                        <div class="prompt-str">{{prompts?.list?.[0]?.prompt}}</div>
+                    </div>
                 </ng-container>
             </div>
 
@@ -173,31 +198,32 @@
                     <h2 class="media-title">{{displayCategoryByMedia.title}}</h2>
                     <div class="requirement-list">
                         <div *ngFor="let requirement of displayCategoryByMedia.requirements; let requirementIndex = index;"
-                            [ngClass]="{
-                            'hover-1': projectColor == 1 && permissions.COMPARE_EDIT.includes(currentUser.type),
-                            'hover-2': projectColor == 2 && permissions.COMPARE_EDIT.includes(currentUser.type),
-                            'hover-3': projectColor == 3 && permissions.COMPARE_EDIT.includes(currentUser.type),
-                            'hover-4': projectColor == 4 && permissions.COMPARE_EDIT.includes(currentUser.type)
-                        }"
-                            class="requirement-wrap {{requirement?.isApproved ? ('selected bg-'+projectColor+'-2') : ''}} {{!requirement?.editMode ? ('view-mode ') : ('edit-mode-'+projectColor)}}">
-                            <span class="text"
-                                (click)="onSelectRequirement(selectedCategory?._id, requirement?._id);">{{requirement.requirement}}</span>
-                            <div class="action-wrap" *ngIf="permissions.COMPARE_EDIT.includes(currentUser.type)">
-                                <div class="btn" (click)="onEditRequirement(mediaIndex, requirementIndex)">Edit
-                                </div>
-                                <div class="btn" (click)="onDeleteRequirement(mediaIndex, requirementIndex)">Delete
-                                </div>
+                            class="requirement-wrap {{requirement?.isApproved ? 'selected' : ''}} {{!requirement?.editMode ? ('view-mode ') : 'edit-mode'}}">
+                            <span (click)="onSelectRequirement(selectedCategory?._id, requirement?._id);"
+                                class="text">{{requirement.requirement}}</span>
+
+                                <div class="action-wrap" *ngIf="permissions.COMPARE_EDIT.includes(currentUser.type)">
+                                <button class="btn" type="button" (click)="onEditRequirement(mediaIndex, requirementIndex)">
+                                    <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M6 7H5C4.46957 7 3.96086 7.21071 3.58579 7.58579C3.21071 7.96086 3 8.46957 3 9V18C3 18.5304 3.21071 19.0391 3.58579 19.4142C3.96086 19.7893 4.46957 20 5 20H14C14.5304 20 15.0391 19.7893 15.4142 19.4142C15.7893 19.0391 16 18.5304 16 18V17" stroke="#637083" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M15 5.00011L18 8.00011M19.385 6.58511C19.7788 6.19126 20.0001 5.65709 20.0001 5.10011C20.0001 4.54312 19.7788 4.00895 19.385 3.61511C18.9912 3.22126 18.457 3 17.9 3C17.343 3 16.8088 3.22126 16.415 3.61511L8 12.0001V15.0001H11L19.385 6.58511Z" stroke="#637083" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                                <button class="btn" (click)="onDeleteRequirement(mediaIndex, requirementIndex)">
+                                    <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M10.2 6.6H13.8C13.8 6.12261 13.6104 5.66477 13.2728 5.32721C12.9352 4.98964 12.4774 4.8 12 4.8C11.5226 4.8 11.0648 4.98964 10.7272 5.32721C10.3896 5.66477 10.2 6.12261 10.2 6.6ZM8.4 6.6C8.4 5.64522 8.77928 4.72955 9.45442 4.05442C10.1295 3.37928 11.0452 3 12 3C12.9548 3 13.8705 3.37928 14.5456 4.05442C15.2207 4.72955 15.6 5.64522 15.6 6.6H20.1C20.3387 6.6 20.5676 6.69482 20.7364 6.8636C20.9052 7.03239 21 7.2613 21 7.5C21 7.73869 20.9052 7.96761 20.7364 8.1364C20.5676 8.30518 20.3387 8.4 20.1 8.4H19.3062L18.5088 17.706C18.4321 18.6046 18.021 19.4417 17.3567 20.0517C16.6924 20.6617 15.8233 21.0001 14.9214 21H9.0786C8.17672 21.0001 7.30765 20.6617 6.64333 20.0517C5.97902 19.4417 5.56786 18.6046 5.4912 17.706L4.6938 8.4H3.9C3.66131 8.4 3.43239 8.30518 3.2636 8.1364C3.09482 7.96761 3 7.73869 3 7.5C3 7.2613 3.09482 7.03239 3.2636 6.8636C3.43239 6.69482 3.66131 6.6 3.9 6.6H8.4ZM14.7 12C14.7 11.7613 14.6052 11.5324 14.4364 11.3636C14.2676 11.1948 14.0387 11.1 13.8 11.1C13.5613 11.1 13.3324 11.1948 13.1636 11.3636C12.9948 11.5324 12.9 11.7613 12.9 12V15.6C12.9 15.8387 12.9948 16.0676 13.1636 16.2364C13.3324 16.4052 13.5613 16.5 13.8 16.5C14.0387 16.5 14.2676 16.4052 14.4364 16.2364C14.6052 16.0676 14.7 15.8387 14.7 15.6V12ZM10.2 11.1C10.4387 11.1 10.6676 11.1948 10.8364 11.3636C11.0052 11.5324 11.1 11.7613 11.1 12V15.6C11.1 15.8387 11.0052 16.0676 10.8364 16.2364C10.6676 16.4052 10.4387 16.5 10.2 16.5C9.96131 16.5 9.73239 16.4052 9.5636 16.2364C9.39482 16.0676 9.3 15.8387 9.3 15.6V12C9.3 11.7613 9.39482 11.5324 9.5636 11.3636C9.73239 11.1948 9.96131 11.1 10.2 11.1ZM7.284 17.553C7.32234 18.0025 7.52805 18.4211 7.8604 18.7262C8.19275 19.0312 8.6275 19.2003 9.0786 19.2H14.9214C15.3722 19.1998 15.8065 19.0305 16.1385 18.7255C16.4704 18.4206 16.6759 18.0022 16.7142 17.553L17.499 8.4H6.501L7.284 17.553Z" fill="#637083"/>
+                                    </svg>
+                                </button>
                             </div>
+
                             <ng-container
                                 *ngIf="editIndex.media === mediaIndex && editIndex.requirement === requirementIndex">
                                 <textarea class="textarea" name="requirement" [(ngModel)]="requirement.requirement"
                                     (keydown.shift.enter)="$event.preventDefault();"
                                     (keydown.enter)="$event.preventDefault();" appAutofocus></textarea>
                                 <div class="edit-action-wrap">
-                                    <button class="app-button white-bg fg-{{projectColor}}-1"
-                                        (click)="onCancelEditing()">cancel</button>
-                                    <button class="app-button primary bg-{{projectColor}}-1"
-                                        (click)="onSaveChanges()">save
+                                    <button class="app-button cancel" (click)="onCancelEditing()">cancel</button>
+                                    <button class="app-button primary" (click)="onSaveChanges()">save
                                         changes</button>
                                 </div>
                             </ng-container>
@@ -245,5 +271,6 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>

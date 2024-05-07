@@ -269,8 +269,8 @@ export class CompareComponent implements OnInit {
     this.selectedCategory = _.cloneDeep(this.categoryList.find((cat: any) => (cat.title === this.promptList[listIndex].list[promptIndex].title && cat.templateId == this.selectedTemplate?._id)));
     /** filter requirements based on selected media(video) from selected category */
     for (const displayCategoryByMedia of this.displayCategoryByMediaList) {
-      displayCategoryByMedia.categoryId = this.selectedCategory._id;
-      displayCategoryByMedia.requirements = _.cloneDeep(this.selectedCategory.requirements.filter((req: any) => req.recordingId == displayCategoryByMedia.recordingId));
+      displayCategoryByMedia.categoryId = this.selectedCategory?._id;
+      displayCategoryByMedia.requirements = _.cloneDeep(this.selectedCategory?.requirements?.filter((req: any) => req.recordingId == displayCategoryByMedia.recordingId));
     }
   }
 

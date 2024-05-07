@@ -42,7 +42,7 @@ export class ProjectService {
     });
   }
 
-  selectProject(projectId: string) {
+  async selectProject(projectId: string) {
     this.getProject(projectId).subscribe({
       next: (res: any) => {
         localStorage.setItem(StorageKeys.PROJECT_ID, projectId);

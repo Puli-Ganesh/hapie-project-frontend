@@ -67,7 +67,7 @@
         <ng-container *ngIf="filteredWorkflowList.length; else noWorkflowView;" [ngSwitch]="viewType">
             <ng-container *ngSwitchCase="'g'">
                 <div class="workflow-list-container">
-                    <div class="workflow-wrap border-{{workflow?.color}}"
+                    <div class="workflow-wrap border-{{workflow?.color}}" (click)="onViewWorkflow(workflowIndex);"
                         *ngFor="let workflow of filteredWorkflowList; let workflowIndex = index;">
                         <div class="image"></div>
                         <div class="details">
@@ -76,13 +76,13 @@
                         </div>
 
                         <div class="action-wrap"
-                            *ngIf="permissions.PROJECT_EDIT.includes(loggedInUser.type) || permissions.PROJECT_DELETE.includes(loggedInUser.type)">
-                            <div class="btn" (click)="onEditWorkflow(workflowIndex)"
+                            *ngIf="permissions.WORKFLOW_DELETE.includes(loggedInUser.type)">
+                            <!-- <div class="btn" (click)="onEditWorkflow(workflowIndex)"
                                 *ngIf="permissions.PROJECT_EDIT.includes(loggedInUser.type)">
                                 edit
-                            </div>
-                            <div class="btn" (click)="onDeleteWorkflow(workflowIndex)"
-                                *ngIf="permissions.PROJECT_DELETE.includes(loggedInUser.type)">
+                            </div> -->
+                            <div class="btn" (click)="onDeleteWorkflow($event, workflowIndex)"
+                                *ngIf="permissions.WORKFLOW_DELETE.includes(loggedInUser.type)">
                                 delete
                             </div>
                         </div>
@@ -113,7 +113,7 @@
                                             stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
                                 </div>
-                                <div class="action-wrap" (click)="onDeleteWorkflow(workflowIndex)"
+                                <div class="action-wrap" (click)="onDeleteWorkflow($event, workflowIndex)"
                                     *ngIf="permissions.PROJECT_DELETE.includes(loggedInUser.type)">delete
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                                         <path d="M5.6665 3.33341L10.3332 8.00008L5.6665 12.6667" stroke="#0B0BCF"
@@ -293,7 +293,7 @@
                             *ngIf="permissions.PROJECT_EDIT.includes(loggedInUser.type)">
                             edit
                         </div>
-                        <div class="btn" (click)="onDeleteWorkflow(workflowIndex)"
+                        <div class="btn" (click)="onDeleteWorkflow($event, workflowIndex)"
                             *ngIf="permissions.PROJECT_DELETE.includes(loggedInUser.type)">
                             delete
                         </div>
@@ -325,7 +325,7 @@
                                         stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                             </div>
-                            <div class="action-wrap" (click)="onDeleteWorkflow(workflowIndex)"
+                            <div class="action-wrap" (click)="onDeleteWorkflow($event, workflowIndex)"
                                 *ngIf="permissions.PROJECT_DELETE.includes(loggedInUser.type)">delete
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                                     <path d="M5.6665 3.33341L10.3332 8.00008L5.6665 12.6667" stroke="#0B0BCF"

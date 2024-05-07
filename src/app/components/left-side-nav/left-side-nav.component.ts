@@ -31,7 +31,11 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
         if (this.projectDetails?.workflowId?.nodes) {
           const nodes = this.projectDetails?.workflowId?.nodes;
           // console.log(nodes)
-          this.hasAccessTo = ['Analysis']
+          this.hasAccessTo = [];
+          const analysisIndex = nodes.findIndex((n: any) => n.app == 'Analysis');
+          if (analysisIndex > -1) {
+            this.hasAccessTo.push('Analysis');
+          }
           const compareIndex = nodes.findIndex((n: any) => n.app == 'Compare Video');
           if (compareIndex > -1) {
             this.hasAccessTo.push('Compare Video');
@@ -103,6 +107,7 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
   projectsToggler = false;
   projectDetails: any;
   hasAccessTo = [''];
+  selectedWorkflowId = ''
 
   protected workflowList: Array<any> = [];
   protected projectList: Array<any> = [];
@@ -125,13 +130,22 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
   onSelectProject(projectId: string) {
     this._facadeService.projectService.selectProject(projectId);
     this._router.navigate([this.appRoutes.PROJECT_MEDIA]);
+    this.projectsToggler = false;
   }
 
   setActiveMenu(url: string) {
     if (url.startsWith('/projects')) {
       this.activeMenu = 'projects';
     } else if (url.startsWith('/workflows')) {
-      this.activeMenu = 'workflows'
+      this.activeMenu = 'workflows';
+      if (!url.includes('details')) {
+        this.selectedWorkflowId = '';
+      } else {
+        this.selectedWorkflowId = url.split('/').pop() ?? '';
+        if (this.selectedWorkflowId) {
+          this.workflowToggler = true;
+        }
+      }
     } else if (url.startsWith('/team')) {
       this.activeMenu = 'team';
     } else if (url.startsWith('/templates')) {
@@ -156,7 +170,10 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
       this.secondaryMenu = '';
     }
 
-    console.log(`${this.activeMenu}/${this.secondaryMenu}`)
+    if (this.activeMenu != 'workflows') {
+      this.workflowToggler = false
+    }
+
   }
 
   onGoToMedia() {
@@ -168,7 +185,7 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
   }
 
   onGoToCanvas() {
-    // this._router.navigate([this.appRoutes.PROJECT_CANVAS]);
+    this._router.navigate([this.appRoutes.PROJECT_CANVAS]);
   }
 
   onGoToDocument() {
@@ -177,6 +194,13 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
 
   onGoToTemplate() {
     this._router.navigate([this.appRoutes.PROJECT_TEMPLATE]);
+  }
+
+  onViewWorkflow(index: number) {
+    this.selectedWorkflowId = this.workflowList[index]?._id;
+    if (this.selectedWorkflowId) {
+      this._router.navigate([this.appRoutes.WORKFLOW_DETAILS, this.selectedWorkflowId], { state: { isCreating: false } })
+    }
   }
 
   getNotificationList(): void {

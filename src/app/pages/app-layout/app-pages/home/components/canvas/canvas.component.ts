@@ -40,6 +40,12 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.projectName = localStorage.getItem(StorageKeys.PROJECT_NAME) ?? '';
     this.workspaceId = localStorage.getItem(StorageKeys.WORKSPACE_ID) ?? '';
     this.projectColor = localStorage.getItem(StorageKeys.PROJECT_COLOR) ?? 1;
+    
+    this.projectDetailsSubscription = this._facadeService.projectService.projectDetails$.subscribe({
+      next: (details: any) => {
+        this.projectDetails = details;
+      }
+    })
   }
 
   protected readonly userRoles = Roles;
@@ -51,6 +57,9 @@ export class CanvasComponent implements OnInit, OnDestroy {
   projectColor: any;
   permissions = Permissions;
   currentUser: any;
+
+  projectDetailsSubscription: Subscription;
+  projectDetails: any;
 
   protected templatesList: Array<any> = [];
   protected templateDropdownList: Array<any> = [];
@@ -146,6 +155,10 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this._facadeService.modalService.registerModal('migrateVersionModal');
   }
 
+  onBack() {
+    console.log('currently not desided where to send');
+  }
+
   setLiveEditing() {
     for (let categoryData of this.categoryList) {
       for (let category of categoryData.list) {
@@ -178,12 +191,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
   // }
 
   getTemplateList() {
-    const body = {
-      workspaceId: this.workspaceId,
-      projectId: this.projectId
-    };
-
-    this._facadeService.templateService.getListByWorkspaceId(body).subscribe({
+    this._facadeService.templateService.getDefaultListByProjectId(this.projectId).subscribe({
       next: (res: any) => {
         if (res.code == "OK") {
           this.templatesList = res.data.list;

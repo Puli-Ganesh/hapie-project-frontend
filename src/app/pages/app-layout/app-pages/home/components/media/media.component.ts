@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { Permissions } from '@src/app/constants/permissions';
 
 import { Routes } from '@src/app/constants/routes';
-import { StorageKeys } from '@src/app/constants/storage-keys';
 import { FacadeService } from '@src/app/services/facade.service';
 import { IResponse } from '@src/interfaces/response.interface';
 import { Subscription } from 'rxjs';
@@ -19,28 +18,25 @@ export class MediaComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _facadeService: FacadeService,
   ) {
-    this.projectId = localStorage.getItem(StorageKeys.PROJECT_ID) ?? '';
-    this.projectName = localStorage.getItem(StorageKeys.PROJECT_NAME) ?? '';
-    this.projectColor = localStorage.getItem(StorageKeys.PROJECT_COLOR) ?? 1;
+    // this.projectId = localStorage.getItem(StorageKeys.PROJECT_ID) ?? '';
+    // this.projectName = localStorage.getItem(StorageKeys.PROJECT_NAME) ?? '';
+    // this.projectColor = localStorage.getItem(StorageKeys.PROJECT_COLOR) ?? 1;
     
     this.projectDetailsSubscription = this._facadeService.projectService.projectDetails$.subscribe({
       next: (details: any) => {
         this.projectDetails = details;
         const nodes = this.projectDetails?.workflowId?.nodes;
         if (nodes?.length) {
-          console.log(nodes);
           const videoNode = nodes.find((n: any) => n.app == 'Video Upload');
           this.isUploadVisible = videoNode ? true : false;
         } else {
           this.isUploadVisible = false;
         }
+        if (this.projectDetails) {
+          this.getRecordingList();
+        }
       }
     });
-
-    if (!this.projectId) {
-      _router.navigateByUrl(this.appRoutes.PROJECTS);
-      return;
-    }
   }
 
   permissions = Permissions;
@@ -50,8 +46,6 @@ export class MediaComponent implements OnInit, OnDestroy {
   projectDetails: any;
   isUploadVisible = false;
 
-  protected projectId: string = '';
-  protected projectName: string = '';
   projectColor: any;
 
   isUploadingMedia = false;
@@ -60,12 +54,16 @@ export class MediaComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    this.getRecordingList();
     this.currentUser = this._facadeService.authService.getCurrentUser();
   }
 
   getRecordingList() {
-    this._facadeService.recordingService.list({ projectId: this.projectId }).subscribe({
+    if (!this.projectDetails?._id) {
+      console.log('project id not found');
+      this._router.navigate([this.appRoutes.PROJECTS]);
+      return;
+    }
+    this._facadeService.recordingService.list({ projectId: this.projectDetails?._id }).subscribe({
       next: (res: IResponse) => {
         this.recordings = res.data.list;
       },
@@ -79,16 +77,8 @@ export class MediaComponent implements OnInit, OnDestroy {
     this._router.navigate([this.appRoutes.PROJECTS]);
   }
 
-  // onGoToProjects() {
-  //   this._router.navigate([this.appRoutes.PROJECTS])
-  // }
-
-  // onGoToProject() {
-  //   this._router.navigate([this.appRoutes.PROJECT_PROFILE])
-  // }
-
-  navigateOnCompare() {
-    this._router.navigateByUrl(this.appRoutes.PROJECT_COMPARE);
+  onExit() {
+    this._router.navigateByUrl(this.appRoutes.PROJECTS);
   }
 
   onUploadMedia() {

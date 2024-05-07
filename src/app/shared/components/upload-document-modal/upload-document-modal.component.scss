@@ -1,59 +1,49 @@
 @import 'src/styles/mixins';
 
 .upload-wrapper {
-    width: 640px;
-    padding: 32px 56px;
-    
+    width: 420px;
+    padding: 16px;
+    background-color: $base;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+
     .title {
-        text-align: center;
-        font-family: $raleway-600;
-        font-size: 24px;
+        font-size: 14px;
         font-style: normal;
-        line-height: 36px;
-        margin-bottom: 32px;
+        font-weight: 600;
+        line-height: 22px;
+        text-transform: capitalize;
+        border-bottom: 1px solid $border-color;
+        margin-bottom: 24px;
     }
 
     .input-container {
-        margin-bottom: 32px;
+        margin-bottom: 22px;
 
         .uploader-wrapper {
-            padding: 24px 36px;
+            padding: 48px;
             width: 100%;
-            height: 124px;
-            border-radius: 12px;
-            border: 1px dashed #5386E4;
-            background: rgba(236, 236, 254, 0.50);
+            border-radius: 4px;
+            background-color: $light-base;
+            border: 1px solid $border-color;
             overflow: hidden;
 
             .message-wrapper {
-                font-family: $raleway-600;
-                font-size: 16px;
+                font-size: 13px;
                 font-style: normal;
-                line-height: 24px;
+                font-weight: 400;
+                line-height: normal;
                 text-align: center;
 
                 .label {
-                    color: $on-secondary;
+                    display: block;
+                    color: $primary;
+                    margin-bottom: 6px;
                     cursor: pointer;
                 }
 
                 .file-select {
                     display: none;
-                }
-
-                .gray {
-                    color: rgba(10, 9, 8, 0.80);
-                }
-
-                .small {
-                    color: rgba(10, 9, 8, 0.80);
-                    text-align: center;
-                    font-family: $raleway-500;
-                    font-size: 10px;
-                    font-weight: 500;
-                    line-height: 20px;
-                    text-transform: uppercase;
-                    margin-top: 8px;
                 }
             }
 
@@ -117,23 +107,22 @@
             gap: 8px 0;
 
             .label {
-                color: $on-base;
-                font-family: $raleway-500;
                 font-size: 12px;
                 font-style: normal;
-                line-height: 20px;
+                font-weight: 400;
+                line-height: normal;
                 text-transform: capitalize;
             }
 
             .input {
-                padding: 11px 16px;
-                color: $on-base;
-                font-family: $raleway-500;
-                font-size: 14px;
+                padding: 8px;
+                font-size: 13px;
                 font-style: normal;
-                line-height: 24px;
-                border-radius: 12px;
-                border: 1px solid rgba(216, 216, 255, 1);
+                font-weight: 400;
+                line-height: normal;
+                background-color: $light-base;
+                border: 1px solid $border-color;
+                border-radius: 4px;
 
                 &.multiline {
                     outline: 0;
@@ -144,15 +133,6 @@
                     border-color: $error;
                 }
 
-                &::placeholder,
-                &::-webkit-input-placeholder {
-                    color: rgba(10, 9, 8, 0.40);
-                    font-family: $raleway-500;
-                    font-size: 14px;
-                    font-style: normal;
-                    line-height: 24px;
-                    /* 171.429% */
-                }
             }
 
         }
@@ -170,15 +150,17 @@
                 font-style: normal;
                 line-height: 20px;
                 text-transform: capitalize;
-                margin-right: 16px;
+                margin-right: 8px;
                 cursor: pointer;
+
                 &.w-100 {
                     flex: 100%;
                 }
             }
+
             .input {
                 margin: 0;
-                margin-right: 8px;
+                margin-right: 4px;
                 cursor: pointer;
             }
         }
@@ -197,6 +179,13 @@
                 line-height: 18px;
             }
         }
+    }
+
+    .actions-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
     }
 
 }

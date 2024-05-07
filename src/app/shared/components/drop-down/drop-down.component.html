@@ -1,0 +1,50 @@
+<div class="dropdown-wrap" #dropdownWrapper>
+    <div class="selected-option-wrap" (click)="onToggleDropDown()">
+        <div class="selected-option">
+            {{(displayKey ? selectedOption[displayKey] : selectedOption) ?? 'Select Option'}}
+        </div>
+        <div class="icon-wrap" [class.expanded]="isExpanded">
+            <svg class="icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <circle cx="8" cy="8" r="7.25" stroke="#E4E7EC" stroke-width="1.5" />
+                <path d="M5 7L8 10L11 7" stroke="#344051" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+        </div>
+    </div>
+
+    <div class="options-container" *ngIf="isExpanded">
+        <div class="search-box" *ngIf="withSearch">
+            <svg class="icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M7.15443 2.12476C6.34661 2.12482 5.55052 2.31573 4.83257 2.68154C4.11463 3.04736 3.49565 3.57747 3.02728 4.22766C2.55891 4.87785 2.25473 5.62925 2.14011 6.41919C2.0255 7.20913 2.10378 8.01468 2.36842 8.76866C2.63306 9.52263 3.07639 10.2031 3.66142 10.7534C4.24645 11.3037 4.95621 11.7079 5.73149 11.9321C6.50677 12.1563 7.32509 12.1941 8.11817 12.0424C8.91126 11.8906 9.65611 11.5537 10.2906 11.0598L12.4672 13.2099C12.5796 13.3172 12.7301 13.3765 12.8864 13.3752C13.0427 13.3738 13.1922 13.3119 13.3027 13.2027C13.4132 13.0936 13.4758 12.9459 13.4772 12.7915C13.4786 12.6372 13.4185 12.4884 13.3099 12.3774L11.1333 10.2273C11.7222 9.48932 12.0888 8.60252 12.1913 7.66835C12.2938 6.73418 12.1279 5.79038 11.7128 4.94497C11.2976 4.09955 10.6499 3.38668 9.84376 2.88792C9.03762 2.38917 8.10563 2.12469 7.15443 2.12476ZM3.28044 7.12921C3.28044 6.11424 3.68859 5.14085 4.4151 4.42316C5.14162 3.70547 6.12698 3.30227 7.15443 3.30227C8.18188 3.30227 9.16725 3.70547 9.89376 4.42316C10.6203 5.14085 11.0284 6.11424 11.0284 7.12921C11.0284 8.14417 10.6203 9.11757 9.89376 9.83526C9.16725 10.5529 8.18188 10.9561 7.15443 10.9561C6.12698 10.9561 5.14162 10.5529 4.4151 9.83526C3.68859 9.11757 3.28044 8.14417 3.28044 7.12921Z"
+                    fill="#344051" />
+            </svg>
+            <input class="input" type="text" placeholder="Search" [(ngModel)]="searchKeyword"
+                (keyup)="onSearch()" />
+        </div>
+
+        <div class="options-wrap">
+            <ng-container *ngIf="displayKey">
+                <div class="option-wrap" [class.selected]="selectedOption?._id === option?._id" *ngFor="let option of filteredList; let idx = index;"
+                    (click)="onSelectOption(idx)">
+                    <span class="option">{{option[displayKey]}}</span>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="!displayKey">
+                <div class="option-wrap" [class.selected]="selectedOption === option" *ngFor="let option of filteredList; let idx = index;"
+                    (click)="onSelectOption(idx)">
+                    <span class="option">{{option}}</span>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="!filteredList.length">
+                <div class="option-wrap" *ngIf="searchKeyword;">
+                    <span class="option">no matches found!</span>
+                </div>
+                <div class="option-wrap" *ngIf="!searchKeyword">
+                    <span class="option">options not available!</span>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>

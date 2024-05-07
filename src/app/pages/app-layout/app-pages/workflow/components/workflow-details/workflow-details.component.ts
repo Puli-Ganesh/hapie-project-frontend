@@ -19,12 +19,19 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
     private _router: Router
   ) {
     this.qpSubscription = this._activatedRoute.params.subscribe({
-      next: (params: Params) => {
+      next: async (params: Params) => {
         if (params && params['workflowId']) {
-          this.workflowId = params['workflowId'];
+          if (this.workflowId && params['workflowId'] != this.workflowId) {
+            this.workflowId = params['workflowId'];
+            this.getWorkflowDetails();
+          } else {
+            this.workflowId = params['workflowId'];
+          }
         }
       }
     });
+    const state = this._router.getCurrentNavigation()?.extras.state;
+    this.isCreating = state?.['isCreating'] ?? false;
   }
 
   @ViewChild('addPopup') addPopup!: ElementRef;
@@ -47,6 +54,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   nodes: Array<Node> = [];
   nodeImage: HTMLImageElement | null = null;
   documentTitle = '';
+  isCreating = false;
 
   async ngOnInit() {
     await this.getRootObject();
@@ -348,6 +356,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   }
 
   onSaveData() {
+    if (!this.isCreating) return;
     const nodes = [];
     for (let node of this.nodes) {
       const n: any = {
@@ -482,7 +491,8 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    let nodeIds = [node.id, ...node.connection.to];
+    const childIds = this.getChildIds(node);
+    let nodeIds = [node.id, ...childIds];
     this.nodes = this.nodes.filter((n: Node) => !nodeIds.includes(n.id));
 
     for (let node of this.nodes) {
@@ -491,6 +501,18 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
 
     this.childHeightSet = false;
     this.repeatingChildren = {};
+  }
+
+  getChildIds(node: Node): number[] {
+    if (!node.connection.to.length) {
+      return [];
+    }
+    let arr: number[] = [...node.connection.to];
+    for (let childId of node.connection.to) {
+      const childNode = this.nodes.find((n: Node) => n.id == childId);
+      arr.push(...this.getChildIds(childNode as Node));
+    }
+    return arr;
   }
 
   onClosePopup() {
