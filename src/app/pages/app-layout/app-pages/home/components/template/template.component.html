@@ -55,16 +55,16 @@
 
             <div class="pills-wrapper">
                 <div class="pill-wrapper" [class.selected]="selectedNodeId === node.id"
-                    *ngFor="let node of templateNodes; let projectIndex = index;">
+                    *ngFor="let node of templateNodes; let projectIndex = index;" (click)="selectPill(node.id)">
                     {{ node?.config?.documentTitle }}
                 </div>
             </div>
 
             <div class="app-table-ctrl">
                 <div class="app-table-wrap">
-                    <div class="tbl-tr" *ngFor="let template of filteredTemplateList;"
-                        [class.selected]="defaultTemplateId == template?._id" (click)="onMakeDefault(template._id)">
-                        <div class="tbl-td">
+                    <div class="tbl-tr" *ngFor="let template of filteredTemplateList;let tIndex = index"
+                        [class.selected]="defaultTemplateId == template?._id">
+                        <div class="tbl-td" (click)="onMakeDefault(template._id)">
                             <svg *ngIf="template?._id == defaultTemplateId" width="18" height="18" viewBox="0 0 18 18"
                                 fill="none">
                                 <rect x="0.5" y="0.5" width="17" height="17" rx="8.5" fill="#F9FAFB" stroke="#E4E7EC" />
@@ -104,7 +104,7 @@
                             <div class="details">{{ 'Description' }}</div>
                         </div>
                         <div class="tbl-td actions">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" (click)="onViewTemplate(tIndex)">
                                 <path
                                     d="M6 7H5C4.46957 7 3.96086 7.21071 3.58579 7.58579C3.21071 7.96086 3 8.46957 3 9V18C3 18.5304 3.21071 19.0391 3.58579 19.4142C3.96086 19.7893 4.46957 20 5 20H14C14.5304 20 15.0391 19.7893 15.4142 19.4142C15.7893 19.0391 16 18.5304 16 18V17"
                                     stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
@@ -114,8 +114,8 @@
                                     stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
                                     stroke-linejoin="round" />
                             </svg>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                *ngIf="defaultTemplateId != template?._id">
+                            <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                *ngIf="defaultTemplateId != template?._id" (click)="onDeleteTemplate(tIndex)">
                                 <path
                                     d="M10.2 6.6H13.8C13.8 6.12261 13.6104 5.66477 13.2728 5.32721C12.9352 4.98964 12.4774 4.8 12 4.8C11.5226 4.8 11.0648 4.98964 10.7272 5.32721C10.3896 5.66477 10.2 6.12261 10.2 6.6ZM8.4 6.6C8.4 5.64522 8.77928 4.72955 9.45442 4.05442C10.1295 3.37928 11.0452 3 12 3C12.9548 3 13.8705 3.37928 14.5456 4.05442C15.2207 4.72955 15.6 5.64522 15.6 6.6H20.1C20.3387 6.6 20.5676 6.69482 20.7364 6.8636C20.9052 7.03239 21 7.2613 21 7.5C21 7.73869 20.9052 7.96761 20.7364 8.1364C20.5676 8.30518 20.3387 8.4 20.1 8.4H19.3062L18.5088 17.706C18.4321 18.6046 18.021 19.4417 17.3567 20.0517C16.6924 20.6617 15.8233 21.0001 14.9214 21H9.0786C8.17672 21.0001 7.30765 20.6617 6.64333 20.0517C5.97902 19.4417 5.56786 18.6046 5.4912 17.706L4.6938 8.4H3.9C3.66131 8.4 3.43239 8.30518 3.2636 8.1364C3.09482 7.96761 3 7.73869 3 7.5C3 7.2613 3.09482 7.03239 3.2636 6.8636C3.43239 6.69482 3.66131 6.6 3.9 6.6H8.4ZM14.7 12C14.7 11.7613 14.6052 11.5324 14.4364 11.3636C14.2676 11.1948 14.0387 11.1 13.8 11.1C13.5613 11.1 13.3324 11.1948 13.1636 11.3636C12.9948 11.5324 12.9 11.7613 12.9 12V15.6C12.9 15.8387 12.9948 16.0676 13.1636 16.2364C13.3324 16.4052 13.5613 16.5 13.8 16.5C14.0387 16.5 14.2676 16.4052 14.4364 16.2364C14.6052 16.0676 14.7 15.8387 14.7 15.6V12ZM10.2 11.1C10.4387 11.1 10.6676 11.1948 10.8364 11.3636C11.0052 11.5324 11.1 11.7613 11.1 12V15.6C11.1 15.8387 11.0052 16.0676 10.8364 16.2364C10.6676 16.4052 10.4387 16.5 10.2 16.5C9.96131 16.5 9.73239 16.4052 9.5636 16.2364C9.39482 16.0676 9.3 15.8387 9.3 15.6V12C9.3 11.7613 9.39482 11.5324 9.5636 11.3636C9.73239 11.1948 9.96131 11.1 10.2 11.1ZM7.284 17.553C7.32234 18.0025 7.52805 18.4211 7.8604 18.7262C8.19275 19.0312 8.6275 19.2003 9.0786 19.2H14.9214C15.3722 19.1998 15.8065 19.0305 16.1385 18.7255C16.4704 18.4206 16.6759 18.0022 16.7142 17.553L17.499 8.4H6.501L7.284 17.553Z"
                                     fill="currentColor" />
@@ -205,8 +205,30 @@
 
 
         <ng-container *ngIf="isUploading">
-            <app-upload-document-modal [projectId]="projectDetails?._id" (onClose)="onCloseModal()"
+            <app-upload-document-modal [projectId]="projectDetails?._id" [nodeId]="selectedNodeId" (onClose)="onCloseModal()"
                 (documentUpdated)="onDocumentUpdated($event)"></app-upload-document-modal>
+        </ng-container>
+
+        <ng-container *ngIf="deleteTemplateId">
+
+            <app-modal id="deleteTemplateModal" (onClose)="onDeleteCancel()">
+                <div class="delete-template-modal">
+                    <div class="title">
+                        Delete template
+                    </div>
+                    <div class="subtitle">
+                        Are you sure you want to delete this template?
+                    </div>
+                    <div class="actions-container">
+                        <button class="app-button primary" (click)="onDeleteConfirm()">
+                            <span class="btn-label">Yes, Delete</span>
+                        </button>
+                        <button class="app-button" (click)="onDeleteCancel()">
+                            <span class="btn-label">Not Now</span>
+                        </button>
+                    </div>
+                </div>
+            </app-modal>
         </ng-container>
 
     </div>

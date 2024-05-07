@@ -48,6 +48,7 @@
     }
 
     .body {
+        position: relative;
         flex: 1;
         background-color: $base;
         border-radius: 4px;
@@ -58,15 +59,15 @@
 
     .inner-header {
         display: flex;
-        align-items: center;
         justify-content: space-between;
         margin-bottom: 16px;
 
         .title {
-            font-family: $raleway-500;
-            font-size: 32px;
+            font-size: 14px;
             font-style: normal;
-            line-height: 48px;
+            font-weight: 600;
+            line-height: normal;
+            text-transform: capitalize;
             margin: 0;
         }
 
@@ -83,27 +84,25 @@
         align-items: center;
         justify-content: flex-start;
         flex-wrap: nowrap;
-        gap: 32px;
+        gap: 24px;
         width: 100%;
         overflow: auto;
         padding-bottom: 8px;
         margin-bottom: 16px;
 
         .pill-wrapper {
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-family: $highlight-font-family;
             font-size: 14px;
+            font-style: normal;
             font-weight: 500;
-            line-height: 20px;
+            line-height: 1.5;
             text-transform: capitalize;
             text-wrap: nowrap;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
 
             &:hover,
             &.selected {
-                background-color: $color-1-2;
-                color: $color-1-1;
-                cursor: pointer;
+                border-bottom: 2px solid $primary;
             }
         }
     }
@@ -147,6 +146,136 @@
     }
 }
 
+.app-table-ctrl {
+    border: 0;
+    border-radius: 4px;
+    overflow: hidden;
+
+    .app-table-wrap {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px 0;
+        border-radius: inherit;
+        background-color: $base;
+        overflow-x: auto;
+
+        .tbl-tr {
+            display: grid;
+            align-items: center;
+            /** make columns based on table requirement using 'grid-template-columns' */
+            grid-template-columns: minmax(60px, 60px) minmax(320px, 1fr) max-content;
+            border-radius: 4px;
+            background-color: $light-base;
+            border: 1px solid $border-color;
+
+            .tbl-td {
+                padding: 12px 10px;
+                color: $on-light-base;
+                font-family: $base-font-family;
+                font-size: 12px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+                word-break: break-word;
+
+                &.text-cap {
+                    text-transform: capitalize;
+                }
+
+                &.text-end {
+                    text-align: end;
+                }
+
+                &.profile {
+                    padding: 0;
+                    gap: 10px;
+
+                    .profile-wrap {
+                        width: 32px;
+                        height: 32px;
+                        border-radius: 50%;
+                        overflow: hidden;
+                        background-color: $base;
+
+                        .img {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                            object-position: center;
+                        }
+                    }
+
+                    .name {
+                        color: $on-light-base;
+                        font-family: $base-font-family;
+                        font-size: 14px;
+                        font-style: normal;
+                        font-weight: 600;
+                        line-height: normal;
+                    }
+                }
+            }
+
+            .tbl-td {
+                &:first-child {
+                    padding-left: 28px;
+                    cursor: pointer;
+                }
+
+                &:last-child {
+                    padding-right: 28px;
+                }
+
+                svg {
+                    display: block;
+                }
+            }
+
+            &.selected,
+            &:hover {
+                background-color: $light-primary;
+
+                .tbl-td {
+                    &.icons-tbl-td {
+                        color: $on-light-base;
+                    }
+                }
+            }
+        }
+
+        .template-details {
+            display: flex;
+            flex-direction: column;
+
+            .name {
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 600;
+                line-height: normal;
+                text-transform: capitalize;
+                margin-bottom: 4px;
+            }
+
+            .details {
+                font-size: 12px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+            }
+        }
+
+        .actions {
+            align-self: center;
+            display: flex;
+            gap: 20px;
+
+            .icon {
+                cursor: pointer;
+            }
+        }
+
+    }
+}
 
 :host {
 
@@ -157,7 +286,7 @@
 
             /* Set vertical boundaries for the document editor.*/
             // max-height: calc(100vh - 70px - 50px - 16px);
-            max-height: calc(100dvh - 70px - 50px - 16px);
+            max-height: calc(100vh - 70px - 50px - 16px);
 
             /* This element is a flex container for easier rendering. */
             display: flex;
@@ -296,113 +425,144 @@
 }
 
 
-.dropdown-container {
-    min-width: 175px;
-    max-width: 300px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px 0;
+.sign-document-modal {
+    padding: 32px 56px;
+    width: 640px;
 
-    .dropdown-wrap {
-        position: relative;
-        // border: 1px solid $secondary;
-        border-radius: 8px;
-        outline: none;
-        background-color: $secondary;
-        @include user-select-none();
+    .title {
+        font-family: $raleway-600;
+        font-size: 20px;
+        line-height: 36px;
+        margin-bottom: 24px;
+    }
 
-        .selected-option-wrap {
-            padding: 12px 16px;
+    
+    .input-container {
+        margin-bottom: 24px;
+
+        .input-wrap {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 0 16px;
-            border-radius: inherit;
-            cursor: pointer;
+            flex-direction: column;
+            gap: 8px 0;
 
-            .selected-option {
-                color: $primary;
+            .label {
+                color: $on-base;
                 font-family: $raleway-500;
-                font-size: 16px;
+                font-size: 12px;
+                font-style: normal;
+                line-height: 20px;
+                text-transform: capitalize;
+            }
+
+            .input {
+                padding: 11px 16px;
+                color: $on-base;
+                font-family: $raleway-500;
+                font-size: 14px;
                 font-style: normal;
                 line-height: 24px;
-                text-transform: capitalize;
-                @include elipses-1;
-            }
+                border-radius: 12px;
+                border: 1px solid rgba(216, 216, 255, 1);
 
-            .icon-wrap {
-                width: 24px;
-                height: 24px;
-                color: rgba(138, 138, 255, 1);
-                transform: rotate(0deg);
-                -webkit-transform: rotate(0deg);
-                transition: transform 0.2s linear;
-
-                &.open {
-                    -webkit-transform: rotate(180deg);
-                    transform: rotate(180deg);
-                    transition: transform 0.2s linear;
+                &:disabled {
+                    background-color: #F6F9FF;
                 }
 
-                .icon {
-                    width: 24px;
-                    height: 24px;
+                &.multiline {
+                    outline: 0;
+                    resize: none;
+                }
+
+                &:has(.ng-invalid) {
+                    border-color: $error;
+                }
+
+                &::placeholder,
+                &::-webkit-input-placeholder {
+                    color: rgba(10, 9, 8, 0.40);
+                    font-family: $raleway-500;
+                    font-size: 14px;
+                    font-style: normal;
+                    line-height: 24px;
+                    /* 171.429% */
                 }
             }
+
         }
 
-        .options-container {
-            position: absolute;
-            top: calc(100% + 12px);
-            width: 100%;
-            z-index: 9;
-            border-radius: 8px;
-            border: 1px solid #D8D8FF;
-            overflow: hidden;
+        .err-wrap {
+            margin-top: 2px;
+            display: flex;
+            flex-direction: column;
 
-            .options-wrap {
-                padding: 8px 0;
-                max-height: 250px;
-                overflow: hidden auto;
-                border-radius: inherit;
-                background-color: $base;
-
-                .option-wrap {
-                    padding: 8px 16px;
-                    display: flex;
-                    align-items: center;
-                    gap: 0 8px;
-                    cursor: pointer;
-
-                    .option {
-                        flex: 1;
-                        color: $on-base;
-                        font-family: $raleway-500;
-                        font-size: 12px;
-                        font-style: normal;
-                        line-height: 20px;
-                        text-transform: capitalize;
-                        @include elipses-1;
-                    }
-
-                    .icon-wrap {
-                        display: none;
-                        width: 20px;
-                        height: 20px;
-                        overflow: hidden;
-
-                        &.selected {
-                            display: block;
-                        }
-
-                        .icon {
-                            width: 20px;
-                            height: 20px;
-                            color: $on-base-blue;
-                        }
-                    }
-                }
+            .err-msg {
+                margin: 0;
+                color: $error;
+                font-family: $raleway-500;
+                font-size: 12px;
+                font-style: normal;
+                line-height: 18px;
             }
         }
+    }
+
+    .sign-label {
+        font-family: $raleway-500;
+        font-size: 14px;
+        line-height: 20px;
+        margin-bottom: 12px;
+    }
+    .link-wrapper {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        border: 1px solid rgb(216, 216, 255);
+        padding: 4px 12px;
+        border-radius: 8px;
+
+        .link {
+            flex: 1;
+            font-family: $raleway-400;
+            font-size: 14px;
+            line-height: 36px;
+        }
+
+        .copy-btn {
+            cursor: pointer;
+        }
+    }
+
+    .actions-container {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        .spinner {
+            height: 24px;
+            width: 24px;
+            border: 3px solid;
+            border-radius: 12px;
+            border-color: $primary $primary $primary transparent;
+            animation: spinner 350ms infinite linear;
+        }
+    }
+
+}
+@keyframes spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(90deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+    75% {
+        transform: rotate(270deg);
+    }
+    100% {
+        transform: rotate(360deg);
     }
 }

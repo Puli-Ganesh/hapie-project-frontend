@@ -155,6 +155,10 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this._facadeService.modalService.registerModal('migrateVersionModal');
   }
 
+  onExit() {
+    this._router.navigate([this.appRoutes.PROJECTS]);
+  }
+
   onBack() {
     console.log('currently not desided where to send');
   }

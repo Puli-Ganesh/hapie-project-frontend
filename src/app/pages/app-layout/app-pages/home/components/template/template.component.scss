@@ -67,7 +67,7 @@
             font-style: normal;
             font-weight: 600;
             line-height: normal;
-            text-transform: uppercase;
+            text-transform: capitalize;
             margin: 0;
         }
 
@@ -107,43 +107,6 @@
         }
     }
 
-    .templates-list-wrapper {
-        .app-table-wrap {
-            .tbl-tr {
-                grid-template-columns: minmax(320px, 1fr) minmax(220px, 0.6fr) minmax(220px, 0.6fr) 175px;
-
-                .tbl-td {
-                    &.with-icon {
-                        display: flex;
-                        align-items: center;
-                        gap: 12px;
-
-                        svg {
-                            color: $on-base-blue;
-                        }
-                    }
-
-                    .items-wrap {
-                        display: flex;
-                        align-items: center;
-                        justify-content: flex-end;
-                        gap: 0 34px;
-                    }
-
-                    .edit-action-wrap {
-                        display: inline-flex;
-                        align-items: center;
-                        color: $primary;
-                        cursor: pointer;
-                    }
-
-                    .delete-icon {
-                        cursor: pointer;
-                    }
-                }
-            }
-        }
-    }
 }
 
 
@@ -168,17 +131,6 @@
             border-radius: 4px;
             background-color: $light-base;
             border: 1px solid $border-color;
-
-            .tbl-th {
-                padding: 12px 10px 11px;
-                color: #637083;
-                font-family: $base-font-family;
-                font-size: 14px;
-                font-style: normal;
-                font-weight: 400;
-                line-height: normal;
-                text-transform: capitalize;
-            }
 
             .tbl-td {
                 padding: 12px 10px;
@@ -226,16 +178,12 @@
                         line-height: normal;
                     }
                 }
-
-                &.icons-tbl-td {
-                    color: #637083;
-                }
             }
 
-            .tbl-th,
             .tbl-td {
                 &:first-child {
                     padding-left: 28px;
+                    cursor: pointer;
                 }
 
                 &:last-child {
@@ -250,7 +198,6 @@
             &.selected,
             &:hover {
                 background-color: $light-primary;
-                cursor: pointer;
 
                 .tbl-td {
                     &.icons-tbl-td {
@@ -280,13 +227,51 @@
                 line-height: normal;
             }
         }
+
         .actions {
             align-self: center;
             display: flex;
             gap: 20px;
+
+            .icon {
+                cursor: pointer;
+            }
         }
 
     }
+}
+
+.delete-template-modal {
+    padding: 16px;
+    background-color: $base;
+    max-width: 400px;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+
+    .title {
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 1.5;
+        border-bottom: 1px solid $border-color;
+        margin-bottom: 24px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        margin-bottom: 16px;
+    }
+
+    .actions-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 12px;
+    }
+
 }
 
 :host {

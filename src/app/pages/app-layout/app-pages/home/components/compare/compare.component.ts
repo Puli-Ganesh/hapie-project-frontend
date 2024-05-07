@@ -120,9 +120,9 @@ export class CompareComponent implements OnInit {
     this.getTemplateAndVideoList();
   }
 
-  // onGoToProjects() {
-  //   this._router.navigateByUrl(Routes.HOME);
-  // }
+  onExit() {
+    this._router.navigateByUrl(Routes.PROJECTS);
+  }
 
   onGoBack() {
     this._router.navigate([this.appRoutes.PROJECTS]);

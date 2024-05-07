@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CkEditorConfig } from '@src/app/constants/ckEditorConfig';
 import { Permissions } from '@src/app/constants/permissions';
+import { Regex } from '@src/app/constants/regex';
 import { Routes } from '@src/app/constants/routes';
 import { FacadeService } from '@src/app/services/facade.service';
 import * as _ from 'lodash';
-import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -13,34 +15,43 @@ import { Subscription } from 'rxjs';
   templateUrl: './document.component.html',
   styleUrls: ['./document.component.scss']
 })
-export class DocumentComponent implements OnInit {
+export class DocumentComponent implements OnInit, OnDestroy {
 
   constructor(
     private _facadeService: FacadeService,
-    private _router: Router
+    private _router: Router,
+    private _formBuilder: FormBuilder,
+    private _clipboard: Clipboard
   ) {
     this.currentUser = this._facadeService.authService.getCurrentUser();
 
     this.projectDetailsSubscription = this._facadeService.projectService.projectDetails$.subscribe({
       next: (details: any) => {
         this.projectDetails = details;
-        this.getTemplateList();
+        this.getDocumentList();
       }
+    });
+
+    this.signDocumentForm = this._formBuilder.group({
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.pattern(Regex.EMAIL)]]
     });
   }
 
   projectDetailsSubscription: Subscription;
   projectDetails: any;
+  signDocumentForm: FormGroup;
+  isGenerating: boolean = false;
+  signLink: string = '';
 
   permissions = Permissions;
   currentUser: any;
-  isUploading = false;
   selectedNodeId: number | null = null;
 
   templateList: any = [];
   filteredTemplateList: any = []
   templateNodes: any = [];
-  docVersionDropdownToggler = false;
   selectedVersion = '';
   versionOptions = [];
   selectedDocument: any = null;
@@ -48,27 +59,83 @@ export class DocumentComponent implements OnInit {
   appRoutes = Routes;
 
   ngOnInit(): void {
-    this.getTemplateList();
+    this._facadeService.modalService.registerModal('signDocumentModal');
+    this.getDocumentList();
   }
+
+  get email(): AbstractControl {
+    return (this.signDocumentForm.get('email') as AbstractControl);
+  }
+  get firstName(): AbstractControl {
+    return (this.signDocumentForm.get('firstName') as AbstractControl);
+  }
+  get lastName(): AbstractControl {
+    return (this.signDocumentForm.get('lastName') as AbstractControl);
+  }
+
 
   onGoBack() {
     this.selectedDocument = null;
   }
 
   onExit() {
-    this._router.navigate([this.appRoutes.PROJECT_MEDIA]);
-  }
-
-  onSaveTemplate() {
-    console.log('saving')
+    this._router.navigate([this.appRoutes.PROJECTS]);
   }
 
   onSignDocument() {
-
+    this._facadeService.modalService.openModal('signDocumentModal')
   }
 
-  onToggleDocVersionDropdown() {
-    this.docVersionDropdownToggler = !this.docVersionDropdownToggler;
+  onGenerateLink() {
+    if (!this.selectedDocument?._id || !this.selectedDocument?.projectId || !this.selectedVersion) return;
+    if (this.signDocumentForm.invalid) {
+      this.signDocumentForm.markAllAsTouched();
+      return;
+    }
+
+    this.isGenerating = true;
+    // @ts-ignore
+    const html = window.editor.getData();
+
+    const body = {
+      templateId: this.selectedDocument._id,
+      projectId: this.selectedDocument.projectId,
+      html: html,
+      userDetails: {
+        firstName: this.signDocumentForm.value.firstName,
+        lastName: this.signDocumentForm.value.lastName,
+        email: this.signDocumentForm.value.email,
+      },
+      major: this.selectedVersion.split('.')[0],
+      minor: this.selectedVersion.split('.')[1]
+    };
+
+    this._facadeService.signedDocumentService.getSignLink(body).subscribe({
+      next: (res: any) => {
+        this.signLink = res.data.link;
+        this.isGenerating = false;
+        // this._facadeService.appService.openToaster('Link generated successfully', 'success');
+        this.onCopyLink();
+      },
+      error: (err: any) => {
+        this.signLink = '';
+        this.isGenerating = false;
+        this._facadeService.appService.openToaster('error while generating sign link', 'danger');
+      }
+    });
+  }
+
+  onCopyLink() {
+    if (this.signLink) {
+      this._clipboard.copy(this.signLink);
+      this._facadeService.appService.openToaster('Link copied successfully', 'success');
+    }
+  }
+
+  onCloseSignDocumentModel() {
+    this.signDocumentForm.reset();
+    this.signLink = '';
+    this.isGenerating = false;
   }
 
   setDocumentCKEditor() {
@@ -160,32 +227,28 @@ export class DocumentComponent implements OnInit {
     }
   }
 
-  onSelectDocVersion(version: any) {
-    this.selectedVersion = version;
-    this.setDocumentView();
-    this.docVersionDropdownToggler = false;
-  }
 
-  getTemplateList() {
+  getDocumentList() {
     if (this.projectDetails?._id) {
       this._facadeService.templateService.getListByProjectId(this.projectDetails._id).subscribe({
         next: (res: any) => {
           if (this.projectDetails?.workflowId?.nodes) {
+            this.templateList = res.data.list;
             this.templateNodes = this.projectDetails.workflowId.nodes.filter((n: any) => n.app == 'Document');
-            console.log(this.templateNodes)
-            if (this.templateNodes.length) {
-              this.selectedNodeId = this.templateNodes[0].id;
-            }
-            this.templateList = res.data.list.map((temp: any) => {
-              temp.uploadedOn = moment(temp.createdAt).format('DD MMMM YYYY')
-              return temp;
-            })
 
-            this.filteredTemplateList = [...this.templateList];
+            this.templateNodes = this.projectDetails.workflowId.nodes.filter((n: any) => n.app == 'Document');
+            if (this.templateNodes.length) {
+              this.selectPill(this.selectedNodeId ?? this.templateNodes[0].id);
+            }
           }
         }
       });
     }
+  }
+
+  selectPill(nodeId: number) {
+    this.selectedNodeId = nodeId;
+    this.filteredTemplateList = this.templateList.filter((template: any) => template.nodeId == this.selectedNodeId && template.isDefault);
   }
 
   onManageDocument(docIndex: number) {
@@ -193,6 +256,17 @@ export class DocumentComponent implements OnInit {
     this.versionOptions = this.selectedDocument.versions.map((version: any) => version.majorMinorCombination).sort((versionA: any, versionB: any) => +versionA - +versionB);
     this.selectedVersion = this.versionOptions[this.versionOptions.length - 1];
 
+    this.setDocumentView();
+  }
+
+  onDone() {
+    this.selectedDocument = null;
+    // @ts-ignore
+    window.editor = null;
+  }
+
+  onVersionChange(event: any) {
+    this.selectedVersion = event;
     this.setDocumentView();
   }
 
@@ -243,9 +317,8 @@ export class DocumentComponent implements OnInit {
     }
   }
 
-  onUploadClick() {
-    this.isUploading = true;
+  ngOnDestroy(): void {
+    this._facadeService.modalService.unregisterModal('signDocumentModal');
   }
-
 
 }

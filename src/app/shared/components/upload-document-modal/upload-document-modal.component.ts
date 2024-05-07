@@ -13,6 +13,7 @@ import { IResponse } from '@src/interfaces/response.interface';
 })
 export class UploadDocumentModalComponent implements OnInit, OnDestroy {
 
+  @Input() nodeId: number | null = null;
   @Input() projectId: string = '';
   @Output() onClose: EventEmitter<boolean> = new EventEmitter<boolean>()
   @Output() documentUpdated: EventEmitter<boolean> = new EventEmitter<boolean>()
@@ -84,6 +85,7 @@ export class UploadDocumentModalComponent implements OnInit, OnDestroy {
       this.documentForm.markAllAsTouched();
       return;
     }
+    if (this.nodeId == null) return;
     this.requestAlive = true;
     this.documentUploadProgress = 0;
 
@@ -91,10 +93,9 @@ export class UploadDocumentModalComponent implements OnInit, OnDestroy {
     if (this.dataType.value == 'withData') {
       const formData = new FormData();
       formData.append('title', (this.title as FormControl).value);
-      if (this.projectId) {
-        formData.append('projectId', this.projectId);
-      }
+      formData.append('projectId', this.projectId);
       formData.append('docFile', this.documentFile);
+      formData.append('nodeId', (this.nodeId as number).toString());
       formData.append('dataType', (this.documentForm.get('dataType') as any).value);
 
       const url = this._httpClientService.fullRequestURL(`template/create-from-doc`);
@@ -128,11 +129,10 @@ export class UploadDocumentModalComponent implements OnInit, OnDestroy {
     } else if (this.dataType.value === 'withBlank') {
       
       const body: any = {
-        title: this.title?.value
+        title: this.title?.value,
+        projectId: this.projectId,
+        nodeId: this.nodeId
       };
-      if (this.projectId) {
-        body.projectId = this.projectId;
-      }
       this._facadeService.templateService.createBlank(body).subscribe({
         next: (res: IResponse) => {
           this.requestAlive = false;
@@ -152,6 +152,7 @@ export class UploadDocumentModalComponent implements OnInit, OnDestroy {
       formData.append('title', (this.title as FormControl).value);
       formData.append('projectId', this.projectId);
       formData.append('docFile', this.documentFile);
+      formData.append('nodeId', (this.nodeId as number).toString());
       formData.append('dataType', (this.documentForm.get('dataType') as any).value);
 
       const url = this._httpClientService.fullRequestURL(`template/create-from-doc`);

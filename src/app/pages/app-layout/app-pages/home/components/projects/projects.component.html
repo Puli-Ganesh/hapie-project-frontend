@@ -73,10 +73,9 @@
                             <img *ngIf="project?.thumbnailUrl" src="{{project?.thumbnailUrl}}" alt="project">
                         </div>
                         <div class="project-details">
-                            <h2 class="project-name">{{project?.projectName}}</h2>
-                            <div class="project-desc">{{project?.projectDescription}}</div>
+                            <h2 class="project-name">{{ project?.projectName }}</h2>
+                            <div class="project-desc">{{ project?.projectDescription }}</div>
                         </div>
-
                         <div class="action-wrap"
                             *ngIf="permissions.PROJECT_EDIT.includes(loggedInUser.type) || permissions.PROJECT_DELETE.includes(loggedInUser.type)">
                             <div class="btn" (click)="onEditProject($event, projectIndex)"

@@ -131,8 +131,8 @@
 
         .workflow-list-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            grid-gap: 40px 56px;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-gap: 16px;
 
             .workflow-wrap {
                 position: relative;
@@ -158,6 +158,7 @@
 
                 .details {
                     padding: 16px;
+                    min-height: 100%;
                     background-color: $light-base;
                     color: $on-light-base;
 
