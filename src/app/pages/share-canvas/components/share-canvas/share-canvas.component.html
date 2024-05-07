@@ -7,36 +7,9 @@
             </div>
 
             <div class="right-side">
-                <div class="dropdown-container">
-                    <div class="dropdown-wrap" tabindex="0" (blur)="templateDropdownToggler = false;">
-                        <div class="selected-option-wrap" (click)="onToggleTemplateDropdown()">
-                            <div class="selected-option">
-                                {{selectedTemplate ? selectedTemplate.title : 'Select Template'}}
-                            </div>
-                            <div class="icon-wrap" [class.open]="templateDropdownToggler">
-                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M19 8.5L12 15.5L5 8.5" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round"></path>
-                                </svg>
-                            </div>
-                        </div>
-
-                        <div class="options-container" *ngIf="templateDropdownToggler">
-                            <div class="options-wrap">
-                                <div class="option-wrap" *ngFor="let template of templateList;"
-                                    (click)="onSelectTemplate(template)">
-                                    <span class="option">{{template.title}}</span>
-                                    <div class="icon-wrap" [class.selected]="selectedTemplate?._id === template?._id">
-                                        <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                            <path d="M7.0332 10.0003L9.01158 11.9778L12.9666 8.02286" stroke="currentColor"
-                                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <ng-container *ngIf="templateList.length > 0">
+                    <app-drop-down [optionsList]="templateList" displayKey="title" (onSelectChange)="onSelectTemplate($event)"></app-drop-down>
+                </ng-container>
 
                 <ng-container ngSwitch="{{hasEditAccess ? 'Y' : 'N'}}">
                     <button *ngSwitchCase="'N'" class="app-button primary" type="button"
@@ -66,10 +39,10 @@
                             <ng-container *ngIf="categories.hasMany">
                                 <div class="sub-title-wrap" (click)="category.toggler = !category.toggler;">
                                     <h2 class="sub-title">{{category.dTitle}}</h2>
-                                    <div class="icon" [class.open]="category.toggler">
-                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                            <path d="M15.8337 7.08333L10.0003 12.9167L4.16699 7.08333" stroke="#0A0908"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    <div class="toggle-icon-wrap" [class.open]="category.toggler">
+                                        <svg class="icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                            <circle cx="8" cy="8" r="7.25" stroke="#E4E7EC" stroke-width="1.5"/>
+                                            <path d="M5 7L8 10L11 7" stroke="#344051" stroke-width="1.5" stroke-linecap="round"/>
                                         </svg>
                                     </div>
                                 </div>
@@ -88,12 +61,10 @@
                                                 requirement.requirement }}</span>
                                             <div *ngSwitchCase="'close'" class="requirement-wrap">
                                                 <span class="requirement-txt">{{ requirement.requirement }}</span>
-                                                <div class="icon-wrap"
-                                                    (click)="requirement.toggler = !requirement.toggler;">
-                                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                                        <path d="M15.8337 7.08333L10.0003 12.9167L4.16699 7.08333"
-                                                            stroke="#0A0908" stroke-width="1.5" stroke-linecap="round"
-                                                            stroke-linejoin="round" />
+                                                <div class="toggle-icon-wrap" (click)="requirement.toggler = !requirement.toggler;">
+                                                    <svg class="inner-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                        <circle cx="8" cy="8" r="7.25" stroke="#E4E7EC" stroke-width="1.5"></circle>
+                                                        <path d="M5 7L8 10L11 7" stroke="#344051" stroke-width="1.5" stroke-linecap="round"></path>
                                                     </svg>
                                                 </div>
                                             </div>
@@ -109,13 +80,10 @@
                                                     (click)="onDeleteRequirement(categoriesIndex, catIndex, reqIndex)">
                                                     Delete</div>
                                             </ng-container>
-                                            <div class="icon-wrap"
-                                                (click)="requirement.toggler = !requirement.toggler;">
-                                                <svg class="icon" width="20" height="20" viewBox="0 0 20 20"
-                                                    fill="none">
-                                                    <path d="M4.16732 12.9167L10.0007 7.08341L15.834 12.9167"
-                                                        stroke="#0A0908" stroke-width="1.5" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
+                                            <div class="icon-wrap" (click)="requirement.toggler = !requirement.toggler;">
+                                                <svg class="icon" width="16" height="16" viewBox="0 0 16 16" fill="none" class="icon">
+                                                    <circle cx="8" cy="8" r="7.25" stroke="#E4E7EC" stroke-width="1.5"></circle>
+                                                    <path d="M5 7L8 10L11 7" stroke="#344051" stroke-width="1.5" stroke-linecap="round"></path>
                                                 </svg>
                                             </div>
                                         </div>
@@ -128,7 +96,7 @@
                                                 (keydown.enter)="$event.preventDefault();" appAutofocus
                                                 placeholder="Type here..."></textarea>
                                             <div class="upsert-action-wrap">
-                                                <button class="app-button white-bg"
+                                                <button class="app-button cancel"
                                                     (click)="resetEditingAndCancelUpserData()">cancel</button>
                                                 <button class="app-button primary" (click)="onSaveChanges()">save
                                                     changes</button>
@@ -183,7 +151,7 @@
         <form [formGroup]="requestEditAccessFrom" class="request-edit-access-form">
             <div class="input-container">
                 <div class="input-wrap">
-                    <label class="label" for="userName">name</label>
+                    <label class="label required" for="userName">name</label>
                     <input class="input" type="text" id="userName" formControlName="userName"
                         placeholder="Enter your Full Name">
                 </div>

@@ -4,9 +4,11 @@
 .canvas-container {
     padding: 32px;
     padding-bottom: 15px;
+    background-color: $base;
 
     .inner-header {
         gap: 30px;
+        align-items: center;
 
         .breadcrumb-wrap {
             .label {
@@ -32,12 +34,12 @@
     }
 
     .canvas-wrap-ctr {
-        height: calc(100vh - 32px - 50px - 32px - 10px - 10px);
+        height: calc(100vh - 32px - 15px - 42px - 12px - 10px);
 
         .canvas-wrap {
             .category-list-container {
                 .category-list-wrap {
-                    max-height: calc(100vh - 32px - 50px - 32px - 10px - 30px);
+                    max-height: calc(100vh - 32px - 15px - 42px - 12px - 26px - 26px);
 
                     .requirement-list-wrap {
                         .requirement-list {
@@ -76,12 +78,12 @@
     .title {
         margin-bottom: 32px;
         color: $on-base;
-        text-align: center;
-        font-family: $raleway-600;
+        font-family: $base-font-family;
         font-size: 24px;
         font-style: normal;
-        line-height: 36px;
-        /* 150% */
+        font-weight: 600;
+        line-height: normal;
+        text-align: center;
         text-transform: capitalize;
     }
 
@@ -89,7 +91,7 @@
 
         .input-container {
             &:first-of-type {
-                margin-bottom: 10px;
+                margin-bottom: 16px;
             }
 
             &:last-of-type {
@@ -99,26 +101,29 @@
             .input-wrap {
                 display: flex;
                 flex-direction: column;
-                gap: 8px 0;
+                gap: 4px 0;
 
                 .label {
-                    color: $on-base;
-                    font-family: $raleway-500;
-                    font-size: 12px;
+                    color: $on-light-base;
+                    font-family: $base-font-family;
+                    font-size: 14px;
                     font-style: normal;
-                    line-height: 20px;
+                    font-weight: 400;
+                    line-height: normal;
                     text-transform: capitalize;
                 }
 
                 .input {
-                    padding: 11px 16px;
-                    color: $on-base;
-                    font-family: $raleway-500;
+                    padding: 10px 16px;
+                    color: $on-light-base;
+                    font-family: $base-font-family;
                     font-size: 14px;
                     font-style: normal;
-                    line-height: 24px;
-                    border-radius: 12px;
-                    border: 1px solid rgba(216, 216, 255, 1);
+                    font-weight: 400;
+                    line-height: normal;
+                    border-radius: 4px;
+                    border: 1px solid $border-color;
+                    background-color: $light-base;
 
                     &.multiline {
                         outline: 0;

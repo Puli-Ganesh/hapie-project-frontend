@@ -55,7 +55,6 @@ export class ShareCanvasComponent implements OnInit, OnDestroy {
 
   protected templateList: Array<any> = [];
   protected selectedTemplate: any;
-  protected templateDropdownToggler: boolean = false;
 
   protected rawCategoryList: Array<any> = [];
   protected categoryList: Array<any> = [];
@@ -145,7 +144,6 @@ export class ShareCanvasComponent implements OnInit, OnDestroy {
       next: (res: IResponse) => {
         this.isRequestAlive = false;
         if (res.code == "OK") {
-          console.log(res.data);
           this.projectId = res.data.projectId;
           this.shareCanvasLinkId = res.data._id;
           this.hasEditAccess = res.data?.hasEditAccess ?? false;
@@ -169,10 +167,6 @@ export class ShareCanvasComponent implements OnInit, OnDestroy {
     });
   }
 
-  onToggleTemplateDropdown(): void {
-    this.templateDropdownToggler = !this.templateDropdownToggler;
-  }
-
   onSelectTemplate(template: any): void {
     if (this.selectedTemplate?._id === template?._id) {
       return;
@@ -185,7 +179,6 @@ export class ShareCanvasComponent implements OnInit, OnDestroy {
     }
 
     this.selectedTemplate = template;
-    this.templateDropdownToggler = false;
 
     if (this.selectedTemplate?._id) {
       this._appSocketService.joinCanvasRoom(`canvas-${this.projectId}-${this.selectedTemplate._id}`);
@@ -411,8 +404,8 @@ export class ShareCanvasComponent implements OnInit, OnDestroy {
             const newRequirements = res.data.requirements.filter((requirement: any) => requirement.isApproved)
               .map((requirement: any) => ({ ...requirement, toggler: true, upsertMode: false })) ?? [];
 
-            this.categoryList[this.editIndexes.categoriesIndex].list[this.editIndexes.categoryIndex].requirements = newRequirements;
-            this.rawCategoryList[this.editIndexes.categoriesIndex].list[this.editIndexes.categoryIndex].requirements = newRequirements;
+            this.categoryList[this.editIndexes.categoriesIndex].list[this.editIndexes.categoryIndex].requirements = _.cloneDeep(newRequirements);
+            this.rawCategoryList[this.editIndexes.categoriesIndex].list[this.editIndexes.categoryIndex].requirements = _.cloneDeep(newRequirements);
 
             this.editIndexes.resetIndexes();
           } else {
