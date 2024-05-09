@@ -48,13 +48,17 @@
     }
 
     .body {
+        margin-right: 16px;
+        padding: 16px;
+        height: 100%;
         position: relative;
         flex: 1;
+        display: flex;
+        flex-flow: column nowrap;
         background-color: $base;
         border: 1px solid $border-color;
         border-radius: 4px;
-        padding: 16px;
-        margin-right: 16px;
+        overflow: auto;
     }
 
     .inner-header {
@@ -80,13 +84,15 @@
     }
 
     .pills-wrapper {
+        flex-basis: 40px;
+        max-height: 40px;
         display: flex;
         align-items: center;
         justify-content: flex-start;
         flex-wrap: nowrap;
         gap: 24px;
         width: 100%;
-        overflow: auto;
+        overflow: auto hidden;
         padding-bottom: 8px;
         margin-bottom: 16px;
 
@@ -116,12 +122,13 @@
     overflow: hidden;
 
     .app-table-wrap {
+        height: 100%;
         display: grid;
         grid-template-columns: 1fr;
         gap: 16px 0;
         border-radius: inherit;
         background-color: $base;
-        overflow-x: auto;
+        overflow: auto;
 
         .tbl-tr {
             display: grid;
