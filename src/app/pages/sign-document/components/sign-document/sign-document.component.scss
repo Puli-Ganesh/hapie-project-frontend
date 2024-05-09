@@ -1,8 +1,12 @@
 @import 'src/styles/mixins';
 
 .sign-document-wrapper {
+    height: 100vh;
+    display: flex;
+    flex-flow: column nowrap;
+
     .iframe {
-        height: calc(100vh - 160px);
+        flex: 1 0;
         width: 100%;
     }
 }

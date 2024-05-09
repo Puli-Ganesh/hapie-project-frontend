@@ -94,16 +94,14 @@
                         </div>
                         <div class="tbl-td actions">
                             <!-- (click)="onViewTemplate(tIndex)" -->
-                            <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            <svg width="24" height="24" viewBox="0 0 16 16" fill="none" class="icon"
                                 (click)="onManageDocument(dIndex)">
-                                <path
-                                    d="M6 7H5C4.46957 7 3.96086 7.21071 3.58579 7.58579C3.21071 7.96086 3 8.46957 3 9V18C3 18.5304 3.21071 19.0391 3.58579 19.4142C3.96086 19.7893 4.46957 20 5 20H14C14.5304 20 15.0391 19.7893 15.4142 19.4142C15.7893 19.0391 16 18.5304 16 18V17"
-                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                                <path
-                                    d="M15 5.00011L18 8.00011M19.385 6.58511C19.7788 6.19126 20.0001 5.65709 20.0001 5.10011C20.0001 4.54312 19.7788 4.00895 19.385 3.61511C18.9912 3.22126 18.457 3 17.9 3C17.343 3 16.8088 3.22126 16.415 3.61511L8 12.0001V15.0001H11L19.385 6.58511Z"
-                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                    stroke-linejoin="round" />
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M10.1079 8.0354C10.1079 9.1994 9.16391 10.1427 7.99991 10.1427C6.83591 10.1427 5.89258 9.1994 5.89258 8.0354C5.89258 6.87073 6.83591 5.9274 7.99991 5.9274C9.16391 5.9274 10.1079 6.87073 10.1079 8.0354Z"
+                                    stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M7.99883 12.9033C10.5375 12.9033 12.8595 11.0779 14.1668 8.03527C12.8595 4.9926 10.5375 3.16727 7.99883 3.16727H8.0015C5.46283 3.16727 3.14083 4.9926 1.8335 8.03527C3.14083 11.0779 5.46283 12.9033 8.0015 12.9033H7.99883Z"
+                                    stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                             <!-- <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <path
@@ -171,7 +169,7 @@
                         <app-drop-down [optionsList]="versionOptions" [selectedOption]="selectedVersion"
                             (onSelectChange)="onVersionChange($event);"></app-drop-down>
 
-                        <button class="app-button primary" *ngIf="permissions.DOCUMENT_SIGN.includes(currentUser.type)"
+                        <button class="app-button primary" *ngIf="isSignDocumentVisible && permissions.DOCUMENT_SIGN.includes(currentUser.type)"
                             type="button" (click)="onSignDocument()">
                             <span class="btn-label">sign with pandaDoc</span>
                         </button>

@@ -88,7 +88,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   }
 
   onSelectProject(index: number) {
-    const projectData = this.projectList[index];
+    const projectData = this.filteredProjectList[index];
     if (projectData) {
       // localStorage.setItem(StorageKeys.PROJECT_ID, projectData._id);
       // localStorage.setItem(StorageKeys.PROJECT_NAME, projectData.projectName);
@@ -144,7 +144,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   onEditProject(event: Event, projectIndex: number) {
     event?.stopPropagation();
-    const project = this.projectList[projectIndex];
+    const project = this.filteredProjectList[projectIndex];
 
     if (project) {
       // this._router.navigateByUrl(`${this.appRoutes.PROJECT_MANAGE}${project._id ?? ''}`);

@@ -28,6 +28,13 @@ export class DocumentComponent implements OnInit, OnDestroy {
     this.projectDetailsSubscription = this._facadeService.projectService.projectDetails$.subscribe({
       next: (details: any) => {
         this.projectDetails = details;
+        const nodes = this.projectDetails?.workflowId?.nodes;
+        if (nodes?.length) {
+          const documentNode = nodes.find((n: any) => n.app == 'Document');
+          this.isSignDocumentVisible = documentNode ? true : false;
+        } else {
+          this.isSignDocumentVisible = false;
+        }
         this.getDocumentList();
       }
     });
@@ -39,11 +46,12 @@ export class DocumentComponent implements OnInit, OnDestroy {
     });
   }
 
-  projectDetailsSubscription: Subscription;
-  projectDetails: any;
-  signDocumentForm: FormGroup;
-  isGenerating: boolean = false;
-  signLink: string = '';
+  protected projectDetailsSubscription: Subscription;
+  protected projectDetails: any;
+  protected isSignDocumentVisible: boolean = false;
+  protected signDocumentForm: FormGroup;
+  protected isGenerating: boolean = false;
+  protected signLink: string = '';
 
   permissions = Permissions;
   currentUser: any;
