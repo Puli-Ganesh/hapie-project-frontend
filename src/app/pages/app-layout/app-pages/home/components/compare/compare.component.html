@@ -209,7 +209,7 @@
                 </ng-container>
             </div>
 
-            <div class="media-list-wrap" [class.empty]="!displayCategoryByMediaList.length">
+            <div class="media-list-wrap" [class.empty]="!displayCategoryByMediaList.length" #mediaListWrap>
                 <div class="media-wrap"
                     *ngFor="let displayCategoryByMedia of displayCategoryByMediaList; let mediaIndex = index;">
                     <h2 class="media-title">{{displayCategoryByMedia.title}}</h2>

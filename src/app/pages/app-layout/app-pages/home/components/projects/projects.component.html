@@ -53,7 +53,7 @@
 
             <div class="search-container">
                 <input type="text" name="searchQuery" [(ngModel)]="searchQuery" class="search-input"
-                    (ngModelChange)="onSearchQuery($event)" placeholder="Search by project name">
+                    (ngModelChange)="onSearchQuery($event)" placeholder="Search">
                 <div class="search-icon">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -149,7 +149,7 @@
             </div>
         </ng-template>
 
-        <app-modal id="projectCreateModal" (onClose)="onCloseNewProjectModal($event)">
+        <app-modal id="projectCreateModal" type="static" (onClose)="onCloseNewProjectModal($event)">
             <ng-container *ngIf="isProjectUpserting">
                 <app-manage-project [projectId]="selectedProject?._id" (upsertProject)="onUpsertProject($event)"
                     (onClose)="onCloseNewProjectModal($event)"></app-manage-project>

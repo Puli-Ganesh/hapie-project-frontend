@@ -91,7 +91,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
   }
 
   onSignDocument() {
-    this._facadeService.modalService.openModal('signDocumentModal')
+    this._facadeService.modalService.openModal('signDocumentModal');
   }
 
   onGenerateLink() {
@@ -179,7 +179,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
                 }
               } else {
                 for (let i = 0; i < category.requirements.length; i++) {
-                  requirementsHtmlStr += `<li><p>${category.requirements[i].requirement}</p></li>`;
+                  requirementsHtmlStr += `<li>${category.requirements[i].requirement}</li>`;
                 }
               }
 
@@ -327,6 +327,8 @@ export class DocumentComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this._facadeService.modalService.unregisterModal('signDocumentModal');
+    //@ts-ignore
+    window.editor = null;
   }
 
 }

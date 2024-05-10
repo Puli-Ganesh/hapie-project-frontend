@@ -50,10 +50,12 @@ export class TemplateComponent implements OnInit, OnDestroy {
   }
 
   onGoBack() {
+    this.reSetEditorWindowInstance();
     this.selectedTemplate = null;
   }
-
+  
   onExit() {
+    this.reSetEditorWindowInstance();
     this._router.navigate([this.appRoutes.PROJECTS]);
   }
 
@@ -185,8 +187,13 @@ export class TemplateComponent implements OnInit, OnDestroy {
     this.isUploading = true;
   }
 
+  reSetEditorWindowInstance(): void {
+    // @ts-ignore
+    window.editor = null;
+  }
 
   ngOnDestroy(): void {
+    this.reSetEditorWindowInstance();
     this._facadeService.modalService.unregisterModal('deleteTemplateModal')
   }
 

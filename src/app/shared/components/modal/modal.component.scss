@@ -24,15 +24,24 @@
         background-color: $base;
         border-radius: 4px;
 
-        // .close-button {
-        //     position: absolute;
-        //     top: 20px;
-        //     right: 20px;
-        //     padding: 0;
-        //     background-color: transparent;
-        //     color: $on-base;
-        //     border: none;
-        //     cursor: pointer;
-        // }
+        .close-button {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            padding: 0;
+            background-color: transparent;
+            color: $on-base;
+            border: none;
+            
+            &:hover {
+                cursor: pointer;
+            }
+
+            .close-icon {
+                display: block;
+                width: 24px;
+                height: 24px;
+            }
+        }
     }
 }

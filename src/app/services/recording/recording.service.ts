@@ -35,4 +35,8 @@ export class RecordingService {
   findById(id: string): Observable<any> {
     return this._httpClientService.get(`${this.endPoint}/find-by-id/${id}`);
   }
+
+  deleteById(id: string): Observable<any> {
+    return this._httpClientService.delete(`${this.endPoint}/${id}`);
+  }
 }

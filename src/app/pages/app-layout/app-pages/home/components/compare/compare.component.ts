@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 import * as _ from 'lodash';
@@ -105,6 +105,8 @@ export class CompareComponent implements OnInit {
     };
 
   protected mediaList: Array<any> = [];
+
+  @ViewChild('mediaListWrap') mediaListWrap!: ElementRef;
 
   protected isGetAISummaryClicked: boolean = false;
   protected isAIRequestAlive: boolean = false;
@@ -271,6 +273,10 @@ export class CompareComponent implements OnInit {
     for (const displayCategoryByMedia of this.displayCategoryByMediaList) {
       displayCategoryByMedia.categoryId = this.selectedCategory?._id;
       displayCategoryByMedia.requirements = _.cloneDeep(this.selectedCategory?.requirements?.filter((req: any) => req.recordingId == displayCategoryByMedia.recordingId));
+    }
+
+    if (this.mediaListWrap.nativeElement) {
+      this.mediaListWrap.nativeElement.scrollTop = 0;
     }
   }
 

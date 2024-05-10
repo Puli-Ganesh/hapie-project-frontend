@@ -21,11 +21,11 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder
   ) {
     // this.workspaceId = localStorage.getItem(StorageKeys.WORKSPACE_ID) ?? '';
-    this.viewType = 'g';
-    // this.viewType = (sessionStorage.getItem(StorageKeys.SST.PROJECT_VIEW_TYPE) as TViewType) ?? 'g';
-    // if (!['t', 'g'].includes(this.viewType)) {
-    //   this.viewType = 't';
-    // }
+    this.viewType = (sessionStorage.getItem(StorageKeys.SST.WORKFLOW_VIEW_TYPE) as TViewType) ?? 'g';
+    if (!['t', 'g'].includes(this.viewType)) {
+      this.viewType = 'g';
+      sessionStorage.setItem(StorageKeys.SST.WORKFLOW_VIEW_TYPE, this.viewType);
+    }
 
     this.workflowForm = this._fb.group({
       name: ['', [
@@ -37,13 +37,12 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     });
   }
 
-  appRoutes = Routes;
-  viewType!: TViewType;
+  protected readonly appRoutes = Routes;
+  protected viewType: TViewType = 'g';
   protected readonly permissions = Permissions;
-  loggedInUser: any = null;
-  query = '';
+  protected loggedInUser: any = null;
 
-  workflowForm: FormGroup;
+  protected workflowForm: FormGroup;
 
   ngOnInit(): void {
     this.loggedInUser = this._facadeService.authService.getCurrentUser();
@@ -60,15 +59,17 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     return this.workflowForm.get('description') as FormControl;
   }
 
-  protected searchQuery: string = '';
   protected workflowList: Array<any> = [];
-  selectedWorkflow: any = null;
+  protected selectedWorkflow: any = null;
   protected filteredWorkflowList: Array<any> = [];
+  protected searchQuery: string = '';
+  protected onSearchQueryDebounceTimeoutId: any;
 
   getWorkflowList() {
-    this._facadeService.workflowService.getList().subscribe({
+    this._facadeService.workflowService.getAggregateList().subscribe({
       next: (res: any) => {
         if (res.code == 'OK') {
+          this.workflowList = res.data.list;
           this.filteredWorkflowList = res.data.list;
         }
       }
@@ -80,20 +81,20 @@ export class WorkflowComponent implements OnInit, OnDestroy {
   }
 
   onSearchQuery(event: Event | string) {
-    // if (this.onSearchQueryDebounceTimeoutId) clearTimeout(this.onSearchQueryDebounceTimeoutId);
+    if (this.onSearchQueryDebounceTimeoutId) clearTimeout(this.onSearchQueryDebounceTimeoutId);
 
-    // this.onSearchQueryDebounceTimeoutId = setTimeout(() => {
-    //   this.filteredProjectList = this.projectList.filter(project => project.projectName.toLowerCase().includes(this.searchQuery.toLowerCase()));
-    // }, (event ? 300 : 0));
+    this.onSearchQueryDebounceTimeoutId = setTimeout(() => {
+      this.filteredWorkflowList = this.workflowList.filter(workflow => workflow.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
+    }, (event ? 300 : 0));
   }
 
   onChangeView() {
     this.viewType = (this.viewType === 't' ? 'g' : 't');
-    sessionStorage.setItem(StorageKeys.SST.PROJECT_VIEW_TYPE, this.viewType);
+    sessionStorage.setItem(StorageKeys.SST.WORKFLOW_VIEW_TYPE, this.viewType);
   }
 
   onCreateWorkflow() {
-    this._facadeService.modalService.openModal('createWorkflowModal')
+    this._facadeService.modalService.openModal('createWorkflowModal');
   }
 
   onViewWorkflow(index: number) {
@@ -128,11 +129,11 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     const body = {
       name: this.workflowForm.value.name,
       description: this.workflowForm.value.description,
-    }
+    };
     this._facadeService.workflowService.create(body).subscribe({
       next: (res: any) => {
         this.workflowForm.reset();
-        this._facadeService.modalService.closeModal('createWorkflowModal')
+        this._facadeService.modalService.closeModal('createWorkflowModal');
         this._facadeService.appService.openToaster('Workflow successfully created.', 'success');
         this._router.navigate([this.appRoutes.WORKFLOW_DETAILS, res.data._id], { state: { isCreating: true }});
       },
@@ -169,9 +170,9 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-    this._facadeService.modalService.unregisterModal('createWorkflowModal')
-    this._facadeService.modalService.unregisterModal('deleteWorkflowModal')
+  ngOnDestroy(): void {;
+    this._facadeService.modalService.unregisterModal('createWorkflowModal');
+    this._facadeService.modalService.unregisterModal('deleteWorkflowModal');
   }
 
 }

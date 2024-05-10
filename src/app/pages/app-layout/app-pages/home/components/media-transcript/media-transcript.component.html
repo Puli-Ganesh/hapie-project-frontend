@@ -163,10 +163,10 @@
             Are you sure to delete this media?
         </div>
         <div class="actions-container">
-            <button class="btn">
-                Yes, Cancel
+            <button class="btn" (click)="onConfirmDeleteMedia()">
+                Yes, Delete
             </button>
-            <button class="btn light">
+            <button class="btn light" (click)="onCancelDeleteMedia()">
                 Not Now
             </button>
         </div>

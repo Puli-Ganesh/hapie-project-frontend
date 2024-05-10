@@ -150,7 +150,7 @@
         </div>
 
 
-        <app-modal id="manageTeamModal" (onClose)="onModalClose($event)">
+        <app-modal id="manageTeamModal" type="static" (onClose)="onModalClose($event)">
             <ng-container *ngIf="modalToggler">
                 <app-add-member [memberDetails]="selectedMember" (close)="onModalClose($event)"
                     (memberUpdated)="onMemberUpdated($event)" (memberAdded)="onMemberAdded($event)"></app-add-member>

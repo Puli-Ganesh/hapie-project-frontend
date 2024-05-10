@@ -20,6 +20,10 @@ export class WorkflowService {
     return this._httpClientService.get(`${this.endPoint}`);
   }
 
+  getAggregateList() {
+    return this._httpClientService.get(`${this.endPoint}/agg-list`);
+  }
+
   getMasterList() {
     return this._httpClientService.get(`${this.endPoint}/master-list`);
   }

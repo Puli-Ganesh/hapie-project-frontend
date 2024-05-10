@@ -424,27 +424,39 @@
     }
 }
 
-.app-table-container {
+.app-table-ctrl {
     .app-table-wrap {
-        &:has(.tbl-tr > .tbl-td > .action-wrap:last-child:nth-child(1)) {
-            .tbl-tr {
-                grid-template-columns: minmax(180px, 0.6fr) minmax(280px, 1fr) minmax(200px, 0.7fr) 105px;
-            }
-        }
-
-        &:has(.tbl-tr > .tbl-td > .action-wrap:last-child:nth-child(2)) {
-            .tbl-tr {
-                grid-template-columns: minmax(180px, 0.6fr) minmax(280px, 1fr) minmax(200px, 0.7fr) 165px;
-            }
-        }
-
         .tbl-tr {
-            grid-template-columns: minmax(180px, 0.6fr) minmax(280px, 1fr) minmax(200px, 0.7fr) 215px;
+            grid-template-columns: max-content minmax(125px, 0.5fr) minmax(200px, 1fr) minmax(115px, 0.7fr) minmax(115px, 0.7fr) minmax(150px, 0.7fr) max-content;
 
             .tbl-td {
-                .action-wrap {
-                    &:not(:last-of-type) {
-                        margin-right: 12px;
+                &.name-desc {
+                    display: flex;
+                    flex-flow: column nowrap;
+                    gap: 4px 0;
+                    align-items: flex-start;
+                    justify-content: center;
+    
+                    .wf-title {
+                        color: $on-light-base;
+                        font-family: $base-font-family;
+                        font-size: 14px;
+                        font-style: normal;
+                        font-weight: 600;
+                        line-height: normal;
+                        word-break: break-all;
+                        text-transform: capitalize;
+                        @include elipses-1;
+                    }
+                    .wf-desc {
+                        color: $on-light-base;
+                        font-family: $base-font-family;
+                        font-size: 12px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: normal;
+                        word-break: break-all;
+                        @include elipses-2;
                     }
                 }
             }

@@ -84,16 +84,20 @@ export class MediaTranscriptComponent implements OnInit, OnDestroy {
     this.isRequestAlive = true;
     this._facadeService.recordingService.findById(this.recordingId).subscribe({
       next: (res: IResponse) => {
+        this.isRequestAlive = false;
         if (res.code === 'OK') {
           this.recordingDetails = res.data;
           this.mediaUrl = res.data.videoUrl;
           this.setSpeakerWiseTranscript(res.data.w2wTranscript);
-          this.isRequestAlive = false;
         }
       },
       error: (error: any) => {
         this.isRequestAlive = false;
-        console.error('There is an error while getting interview data', error);
+        if (error.error.code === 'E_NOT_FOUND') {
+          this._facadeService.appService.openToaster('Media not found.', 'danger');
+          this._router.navigateByUrl(this.appRoutes.PROJECT_MEDIA);
+        }
+        console.error('Error while getting media transcript', error.error);
       }
     });
   }
@@ -165,6 +169,29 @@ export class MediaTranscriptComponent implements OnInit, OnDestroy {
 
   onDeleteMedia() {
     this._facadeService.modalService.openModal('deleteMediaModal');
+  }
+
+  onConfirmDeleteMedia() {
+    if (!this.recordingDetails?._id) {
+      this._facadeService.modalService.closeModal('deleteMediaModal');
+      return;
+    }
+    
+    this._facadeService.recordingService.deleteById(this.recordingDetails._id).subscribe({
+      next: (res: IResponse) => {
+        if (res.code === "OK") {
+          this._facadeService.modalService.closeModal('deleteMediaModal');
+          this._router.navigateByUrl(this.appRoutes.PROJECT_MEDIA);
+        }
+      },
+      error: (err: any) => {
+        console.error('Error while deleting media', err.error);
+      }
+    });
+  }
+  
+  onCancelDeleteMedia() {
+    this._facadeService.modalService.closeModal('deleteMediaModal');
   }
 
   getSegmentTime(speakerIndex: number, wordIndex: number): string {
