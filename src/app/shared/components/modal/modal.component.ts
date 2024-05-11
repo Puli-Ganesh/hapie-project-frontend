@@ -19,7 +19,7 @@ export class ModalComponent {
   ) { }
 
   backdropClick(event: any) {
-    event.stopPropagation();
+    // event.stopPropagation();
 
     if (this.modalContainer && this.modalContainer.nativeElement.contains(event.target)) {
       return;

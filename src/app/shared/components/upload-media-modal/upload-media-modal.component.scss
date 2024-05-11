@@ -1,22 +1,28 @@
 @import 'src/styles/mixins';
 
 .upload-wrapper {
-    padding: 32px 56px;
-    width: 640px;
+    padding: 26px 26px;
+    width: 550px;
+    border-radius: 4px;
+    border: 1px solid $border-color;
 
     .title {
-        text-align: center;
-        font-family: $raleway-600;
-        font-size: 24px;
+        margin-bottom: 16px;
+        padding-bottom: 4px;
+        color: $on-light-base;
+        font-family: $base-font-family;
+        font-size: 14px;
         font-style: normal;
-        line-height: 36px;
-        margin-bottom: 32px;
+        font-weight: 600;
+        line-height: normal;
+        text-transform: capitalize;
+        border-bottom: 1px solid $border-color;
     }
 
     .scrollable-content {
+        margin-bottom: 16px;
         padding-right: 4px;
         max-height: 465px;
-        margin-bottom: 32px;
         overflow: hidden auto;
         position: relative;
 
@@ -46,7 +52,7 @@
 
         .media-upload-wrap {
             display: grid;
-            grid-template-columns: 1fr 136px 19px;
+            grid-template-columns: 1fr 136px max-content;
             gap: 0 12px;
 
             .media-upload {
@@ -55,13 +61,14 @@
                 grid-template-columns: 1fr;
                 gap: 6px 0;
                 align-items: center;
-                border-radius: 12px;
-                background: rgba(236, 236, 254, 0.50);
+                border-radius: 4px;
+                background: $light-base;
+                border: 1px solid $border-color;
 
                 .progress-bar-wrap {
                     height: 4px;
                     border-radius: 2px;
-                    background-color: #D8D8FF;
+                    background-color: $light-primary;
 
                     .bar {
                         width: 0%;
@@ -76,13 +83,13 @@
                 }
 
                 .media-title {
-                    color: rgba(10, 9, 8, 0.80);
-                    text-align: center;
-                    font-family: $raleway-500;
+                    color: $on-light-base;
+                    font-family: $base-font-family;
                     font-size: 10px;
                     font-style: normal;
-                    line-height: 20px;
-                    /* 200% */
+                    font-weight: 400;
+                    line-height: normal;
+                    text-align: center;
                     text-transform: uppercase;
                     word-break: break-all;
                     @include elipses-1;
@@ -100,33 +107,46 @@
                 @include user-select-none;
 
                 .delete-icon {
-                    width: 19px;
-                    height: 20px;
+                    width: 24px;
+                    height: 24px;
                     cursor: pointer;
                 }
             }
         }
     }
 
+    .upload-file-label {
+        margin-bottom: 2px;
+        display: inline-block;
+        color: $on-light-base;
+        font-family: $base-font-family;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
     .uploader-wrapper {
+        margin-bottom: 32px;
         padding: 24px 36px;
         width: 100%;
         height: 124px;
-        border-radius: 12px;
-        border: 1px dashed #5386E4;
-        background: rgba(236, 236, 254, 0.50);
+        border-radius: 4px;
+        border: 1px solid $border-color;
+        background: $light-base;
         overflow: hidden;
-        margin-bottom: 32px;
 
         .message-wrapper {
-            font-family: $raleway-600;
-            font-size: 16px;
+            color: $on-light-base;
+            font-family: $base-font-family;
+            font-size: 13px;
             font-style: normal;
-            line-height: 24px;
+            font-weight: 400;
+            line-height: normal;
             text-align: center;
 
             .label {
-                color: $on-secondary;
+                color: $primary;
                 cursor: pointer;
             }
 
@@ -134,51 +154,41 @@
                 display: none;
             }
 
-            .gray {
-                color: rgba(10, 9, 8, 0.80);
-            }
-
-            .small {
-                color: rgba(10, 9, 8, 0.80);
-                text-align: center;
-                font-family: $raleway-500;
-                font-size: 10px;
-                font-weight: 500;
-                line-height: 20px;
-                text-transform: uppercase;
+            .mime-types {
                 margin-top: 8px;
+                text-transform: uppercase;
             }
         }
     }
 
     .file-err {
         margin: -20px 0 16px;
-        font-family: $raleway-500;
         color: $error;
+        font-family: $base-font-family;
         font-size: 12px;
         font-style: normal;
         font-weight: 500;
-        line-height: 20px;
+        line-height: normal;
     }
 
     .or {
+        margin-bottom: 24px;
         position: relative;
-        color: rgba(10, 9, 8, 0.80);
-        text-align: center;
-        font-family: $raleway-500;
-        font-size: 12px;
+        color: #637083;
+        font-family: $base-font-family;
+        font-size: 13px;
         font-style: normal;
         font-weight: 500;
-        line-height: 20px;
+        line-height: normal;
+        text-align: center;
         text-transform: uppercase;
-        margin-bottom: 24px;
 
         &::before {
             content: '';
             position: absolute;
             display: block;
             height: 1px;
-            background: #ECECFE;
+            background: $border-color;
             width: 230px;
             left: 0px;
             top: 50%;
@@ -189,7 +199,7 @@
             position: absolute;
             display: block;
             height: 1px;
-            background: #ECECFE;
+            background: $border-color;
             width: 230px;
             right: 0px;
             top: 50%;
@@ -200,24 +210,27 @@
         // margin-bottom: 32px;
 
         label {
-            font-family: $raleway-500;
+            margin-bottom: 2px;
+            display: inline-block;
+            color: $on-light-base;
+            font-family: $base-font-family;
             font-size: 12px;
-            margin-bottom: 8px;
             font-style: normal;
-            font-weight: 500;
-            line-height: 20px;
+            font-weight: 400;
+            line-height: normal;
         }
 
         input {
             margin: 0;
-            padding: 12px 16px;
-            font-family: $raleway-500;
-            font-size: 14px;
+            padding: 8px 8px;
+            color: $on-base-light;
+            font-family: $base-font-family;
+            font-size: 13px;
             font-style: normal;
-            font-weight: 500;
-            line-height: 24px;
-            border-radius: 12px;
-            border: 1px solid #D8D8FF;
+            font-weight: 400;
+            line-height: normal;
+            border-radius: 4px;
+            border: 1px solid $border-color;
             outline: none;
             width: 100%;
 
@@ -228,112 +241,10 @@
     }
 }
 
-.dropdown-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 8px 0;
-
-    .dropdown-wrap {
-        position: relative;
-        border-radius: 8px;
-        outline: none;
-        background-color: rgba(236, 236, 254, 0.50);
-        @include user-select-none();
-
-        .selected-option-wrap {
-            padding: 12px 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 0 10px;
-            border-radius: inherit;
-            cursor: pointer;
-
-            .selected-option {
-                color: $primary;
-                font-family: $raleway-500;
-                font-size: 14px;
-                font-style: normal;
-                line-height: 24px;
-                text-transform: capitalize;
-                word-break: break-all;
-                @include elipses-1;
-            }
-
-            .icon-wrap {
-                width: 24px;
-                height: 24px;
-                color: rgba(138, 138, 255, 1);
-                transform: rotate(0deg);
-                -webkit-transform: rotate(0deg);
-                transition: transform 0.2s linear;
-
-                &.open {
-                    -webkit-transform: rotate(180deg);
-                    transform: rotate(180deg);
-                    transition: transform 0.2s linear;
-                }
-
-                .icon {
-                    width: 24px;
-                    height: 24px;
-                }
-            }
-        }
-
-        .options-container {
-            position: absolute;
-            top: calc(100% + 8px);
-            width: 100%;
-            z-index: 9;
-            border-radius: 8px;
-            border: 1px solid #D8D8FF;
-            overflow: hidden;
-
-            .options-wrap {
-                padding: 8px 0;
-                max-height: 250px;
-                overflow: hidden auto;
-                border-radius: inherit;
-                background-color: $base;
-
-                .option-wrap {
-                    padding: 8px 12px;
-                    display: flex;
-                    align-items: center;
-                    gap: 0 8px;
-                    cursor: pointer;
-
-                    .option {
-                        flex: 1;
-                        color: $on-base;
-                        font-family: $raleway-500;
-                        font-size: 12px;
-                        font-style: normal;
-                        line-height: 20px;
-                        text-transform: capitalize;
-                        @include elipses-1;
-                    }
-
-                    .icon-wrap {
-                        display: none;
-                        width: 20px;
-                        height: 20px;
-                        overflow: hidden;
-
-                        &.selected {
-                            display: block;
-                        }
-
-                        .icon {
-                            width: 20px;
-                            height: 20px;
-                            color: $on-base-blue;
-                        }
-                    }
-                }
-            }
+:host {
+    ::ng-deep {
+        .dropdown-wrap .selected-option-wrap {
+            padding: 11px 8px !important;
         }
     }
 }

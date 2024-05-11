@@ -102,7 +102,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
         localStorage.setItem(StorageKeys.USER_INFORMATION, JSON.stringify(userData));
       }
 
-      this._router.navigateByUrl(this.appRoutes.PROJECT_MEDIA);
+      // this._router.navigateByUrl(this.appRoutes.PROJECT_MEDIA);
     }
   }
 
@@ -123,7 +123,6 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   onUpsertProject(event: any) {
     if (event && event._id) {
-      this.isProjectUpserting = false;
       const projectIndex = this.filteredProjectList.findIndex((project: any) => project._id === event._id);
       if (projectIndex > -1) {
         this.filteredProjectList[projectIndex] = event;
@@ -135,10 +134,6 @@ export class ProjectsComponent implements OnInit, OnDestroy {
         this.projectList.push(event);
         this.onSearchQuery(this.searchQuery);
       }
-      if (this.selectedProject) {
-        this.selectedProject = null;
-      }
-      this._facadeService.modalService.closeModal('projectCreateModal');
     }
   }
 

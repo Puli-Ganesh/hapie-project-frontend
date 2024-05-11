@@ -315,7 +315,7 @@ export class ManageProjectComponent implements OnInit {
           this.isRequestAlive = false;
           if (res.code == "OK") {
             this.upsertProjectEvent.emit(res.data.project);
-            this.currentStep = 2;
+            // this.currentStep = 2;
             this._facadeService.appService.openToaster('Saved', 'success');
           }
         },
@@ -551,7 +551,7 @@ export class ManageProjectComponent implements OnInit {
         add: [],
         update: [],
         remove: []
-      }
+      };
       const oldMemberIds = this.projectDetails.members.map((m: any) => m.userId);
       const selectedMemberIds = this.selectedMembers.map((m: any) => m._id);
       for (let member of this.selectedMembers) {
@@ -564,7 +564,7 @@ export class ManageProjectComponent implements OnInit {
           body['update'].push({
             userId: member._id,
             color: member.color
-          })
+          });
         }
       }
       for (let oldId of oldMemberIds) {
@@ -591,7 +591,7 @@ export class ManageProjectComponent implements OnInit {
       const body = {
         projectId: this.projectDetails._id,
         add: this.selectedMembers.map((mem: any) => ({ userId: mem._id, color: mem.color }))
-      }
+      };
       this.isRequestAlive = true;
 
       this._facadeService.projectService.updateMembers(body).subscribe({

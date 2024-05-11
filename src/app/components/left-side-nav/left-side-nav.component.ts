@@ -6,6 +6,7 @@ import { Permissions } from '@src/app/constants/permissions';
 import { Routes } from '@src/app/constants/routes';
 import { FacadeService } from '@src/app/services/facade.service';
 import { Node } from '@src/app/pages/app-layout/app-pages/workflow/components/workflow-details/node';
+import { StorageKeys } from '@src/app/constants/storage-keys';
 
 @Component({
   selector: 'app-left-side-nav',
@@ -22,6 +23,10 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
     this.projectsSubscription = this._facadeService.projectService.projectsList$.subscribe({
       next: (res: Array<any>) => {
         this.projectList = [...res];
+        this.projectList?.map((p: any) => {
+          p.tooltip = p.projectName?.split(' ')?.map((pn: string) => pn.charAt(0).toUpperCase() + pn.slice(1))?.join(' ') ?? '';
+          return p;
+        });
       }
     });
 
@@ -48,6 +53,25 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
           if (documentIndex > -1) {
             this.hasAccessTo.push('Document');
           }
+
+          if (_router.routerState.snapshot.url === this.appRoutes.PROJECTS) {
+            switch (this.hasAccessTo[0]) {
+              case 'Analysis':
+                _router.navigateByUrl(this.appRoutes.PROJECT_MEDIA);
+                break;
+              case 'Compare Video':
+                _router.navigateByUrl(this.appRoutes.PROJECT_COMPARE);
+                break;
+              case 'Canvas':
+                _router.navigateByUrl(this.appRoutes.PROJECT_CANVAS);
+                break;
+              case 'Document':
+                _router.navigateByUrl(this.appRoutes.PROJECT_TEMPLATE);
+                break;
+              default:
+                break;
+            }
+          }
         }
       }
     });
@@ -64,7 +88,7 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
       filter((event: any) => event instanceof NavigationEnd)
     ).subscribe({
       next: (event: any) => {
-        this.setActiveMenu(event.urlAfterRedirects)
+        this.setActiveMenu(event.urlAfterRedirects);
       },
       error: (err) => {
         console.error('There is an error while navigation end', err);
@@ -168,10 +192,11 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
     if (this.activeMenu != 'project') {
       this.projectDetails = null;
       this.secondaryMenu = '';
+      localStorage.removeItem(StorageKeys.PROJECT_ID);
     }
 
     if (this.activeMenu != 'workflows') {
-      this.workflowToggler = false
+      this.workflowToggler = false;
     }
 
   }

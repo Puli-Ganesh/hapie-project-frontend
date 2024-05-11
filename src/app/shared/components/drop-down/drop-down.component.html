@@ -24,7 +24,7 @@
 
         <div class="options-wrap">
             <ng-container *ngIf="displayKey">
-                <div class="option-wrap" [class.selected]="selectedOption?._id === option?._id" *ngFor="let option of filteredList; let idx = index;"
+                <div class="option-wrap" [class.selected]="selectedOption?.[uniqueKey] === option?.[uniqueKey]" *ngFor="let option of filteredList; let idx = index;"
                     (click)="onSelectOption(idx)">
                     <span class="option">{{option[displayKey]}}</span>
                 </div>

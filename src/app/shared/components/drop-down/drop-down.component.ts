@@ -13,6 +13,7 @@ export class DropDownComponent implements OnInit {
 
   @Input('optionsList') optionsList: Array<any> = [];
   @Input('selectedOption') selectedOption!: any;
+  @Input('uniqueKey') uniqueKey: string = '_id';
   @Input('displayKey') displayKey: string = '';
   @Input('isWithSearch') withSearch: boolean = false;
   @Input('maxHeight') maxHeight: number = 256;

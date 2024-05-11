@@ -470,7 +470,7 @@
                 </div>
             </div>
             <ul class="list-wrapper" *ngIf="projectsToggler">
-                <li class="list-item" *ngFor="let project of projectList" (click)="onSelectProject(project._id)">
+                <li class="list-item" *ngFor="let project of projectList" (click)="onSelectProject(project._id)" title="{{project.tooltip}}">
                     <svg class="list-item-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M7 14L11.7498 9" stroke="currentColor" stroke-linecap="round" />
                         <path d="M18 14L11.7498 9" stroke="currentColor" stroke-linecap="round" />

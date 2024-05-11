@@ -33,14 +33,13 @@ export class UploadMediaModalComponent implements OnInit, OnDestroy {
     }
   }
 
-  appRoutes = Routes;
-  projectId: string = '';
-  videoForm: FormGroup;
-  languageList: Array<{ code: string, name: string }> = LanguageList.list;
-  mediaUploadForm: FormArray;
-  isMediaUploadRequestAlive: boolean = false;
-  mimeTypeNotSupportErr: string = '';
-  languageDropdownToggler: number = -1;
+  protected readonly appRoutes = Routes;
+  protected projectId: string = '';
+  protected videoForm: FormGroup;
+  protected languageList: Array<{ code: string, name: string }> = LanguageList.list;
+  protected mediaUploadForm: FormArray;
+  protected isMediaUploadRequestAlive: boolean = false;
+  protected mimeTypeNotSupportErr: string = '';
 
   /** mime types = MP3: audio/mpeg | MP4: video/mp4 | MOV: video/quicktime | WMV: video/x-ms-wmv | WAV: audio/x-wav */
   imageMimeTypes: Array<string> = ['video/mp4', 'video/quicktime', 'video/x-ms-wmv'];
@@ -53,27 +52,13 @@ export class UploadMediaModalComponent implements OnInit, OnDestroy {
     this._facadeService.modalService.openModal('uploadMediaModal');
   }
 
-  onUploadWrapper(event: Event) {
-    if (this.languageDropdown && this.languageDropdownToggler > -1) {
-      let tempIndex = -1;
-      this.languageDropdown.forEach((el: any, index: number) => {
-        if (el.nativeElement.contains(event.target)) {
-          tempIndex = index;
-        }
-      });
-      this.languageDropdownToggler = tempIndex;
-    }
-  }
-
-  onMediaLanguageSelect(event: Event, mediaUploadIndex: number, langIndex: number) {
-    event?.stopPropagation();
+  onMediaLanguageSelect(event: Event, mediaUploadIndex: number) {
     if (this.mediaUploadForm?.controls[mediaUploadIndex].value?.progress != 0) return;
 
     this.mediaUploadForm.controls[mediaUploadIndex].patchValue({
       isLanguageSelecting: false,
-      language: this.languageList[langIndex]
+      language: event
     });
-    this.languageDropdownToggler = -1;
   }
 
   onRemoveMedia(event: Event, mediaUploadIndex: number) {
@@ -164,19 +149,6 @@ export class UploadMediaModalComponent implements OnInit, OnDestroy {
     }
   }
 
-  toggleLanguageDropdown(event: Event, mediaUploadIndex: number) {
-    event?.stopPropagation();
-    if (this.mediaUploadForm?.controls[mediaUploadIndex].value?.progress != 0) return;
-
-    if (this.languageDropdownToggler == mediaUploadIndex) {
-      this.languageDropdownToggler = -1;
-    } else {
-      this.languageDropdownToggler = mediaUploadIndex;
-    }
-    this.mediaUploadForm.controls[mediaUploadIndex].patchValue({
-      isLanguageSelecting: !this.mediaUploadForm.controls[mediaUploadIndex].value.isLanguageSelecting
-    });
-  }
 
 
   onCloseModal(event: boolean): void {
