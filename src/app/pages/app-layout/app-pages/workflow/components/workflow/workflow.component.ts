@@ -115,6 +115,8 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     if (event.stopPropagation) {
       event.stopPropagation()
     }
+    const ele = document.getElementById('workflowContainer');
+    ele?.scroll({ top: 0 });
     this.selectedWorkflow = this.filteredWorkflowList[index];
     this._facadeService.modalService.openModal('deleteWorkflowModal');
 

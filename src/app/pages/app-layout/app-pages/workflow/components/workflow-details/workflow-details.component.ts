@@ -45,14 +45,14 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   mainRect: DOMRect | null = null;
   mainCTX: CanvasRenderingContext2D | null = null;
   canConnect: Array<any> = [];
-  nodeWidth: number = 170; //151;
-  nodeHeight: number = 48;
+  nodeWidth: number = 120;
+  nodeHeight: number = 120;
   gap: number = 70;
   radius: number = 8;
   nodeConnectorSize = 6;
   currentNodeId: number = 0;
   nodes: Array<Node> = [];
-  nodeImage: HTMLImageElement | null = null;
+  nodeImages: any = {};
   documentTitle = '';
   isCreating = false;
 
@@ -74,8 +74,49 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   childHeightSet: boolean = false;
 
   setNodeImage() {
-    this.nodeImage = new Image();
-    this.nodeImage.src = 'assets/images/component.svg';
+    console.log(this.canConnect);
+    for (let item of this.canConnect) {
+      this.nodeImages[item.title] = new Image();
+      switch (item.title) {
+        case 'Start':
+          this.nodeImages[item.title].src = 'assets/images/component.svg';
+          break;
+        case 'Teams':
+          this.nodeImages[item.title].src = 'assets/images/teams.png';
+          break;
+        case 'Zoom':
+          this.nodeImages[item.title].src = 'assets/images/zoom.png';
+          break;
+        case 'Meet':
+          this.nodeImages[item.title].src = 'assets/images/meet.png';
+          break;
+        case 'Video Upload':
+          this.nodeImages[item.title].src = 'assets/images/video-upload.png';
+          break;
+        case 'Analysis':
+          this.nodeImages[item.title].src = 'assets/images/analysis.png';
+          break;
+        case 'AI':
+          this.nodeImages[item.title].src = 'assets/images/ai.png';
+          break;
+        case 'Compare Video':
+          this.nodeImages[item.title].src = 'assets/images/compare-video.png';
+          break;
+        case 'Canvas':
+          this.nodeImages[item.title].src = 'assets/images/canvas.png';
+          break;
+        case 'Document':
+          this.nodeImages[item.title].src = 'assets/images/document.png';
+          break;
+        default:
+          break;
+      }
+    }
+
+
+    console.log(this.nodeImages)
+    // this.nodeImage = new Image();
+    // this.nodeImage.src = 'assets/images/component.svg';
   }
 
 
@@ -259,34 +300,48 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
 
   drawNode(node: Node, ctx: CanvasRenderingContext2D) {
     // ctx.fillRect(node.coords.x, node.coords.y, node.coords.width * this.scale, node.coords.height * this.scale);
-    const smallRect = {
+    const rect = {
       x: node.coords.x,
       y: node.coords.y,
       width: this.nodeHeight * this.scale,
       height: this.nodeHeight * this.scale
     };
-    roundedRect(ctx, smallRect, this.radius * this.scale, 'fill', '#F9FAFB', true, false, false, true);
-    if (this.nodeImage) {
-      const imageSize = smallRect.width / 2;
-      const x = smallRect.x + (smallRect.width - imageSize) / 2;
-      const y = smallRect.y + (smallRect.height - imageSize) / 2;
-      ctx.drawImage((this.nodeImage as HTMLImageElement), x, y, imageSize, imageSize);
+    roundedRect(ctx, rect, this.radius * this.scale, 'stroke', '#E4E7EC', true, true, true, true);
+    if (this.nodeImages[node.title]) {
+      const imageSize = rect.width / 2;
+      const x = rect.x + (rect.width - imageSize) / 2;
+      const y = rect.y + (rect.height - imageSize) / 2;
+      let image = this.nodeImages[node.title] as HTMLImageElement;
+
+      let ratio = 1, width = 0, height = 0;
+      if (image.naturalWidth > image.naturalHeight) {
+        ratio = image.naturalWidth / image.naturalHeight;
+        width = imageSize;
+        height = width / ratio;
+      } else {
+        ratio = image.naturalHeight / image.naturalWidth;
+        height = imageSize;
+        width = height / ratio;
+      }
+
+      ctx.drawImage(image, x, y - imageSize / 2 + (8 * this.scale), width, height);
     }
 
     const mainRect = {
-      x: node.coords.x + smallRect.width,
+      x: node.coords.x,
       y: node.coords.y,
-      width: this.nodeWidth * this.scale - smallRect.width,
+      width: this.nodeWidth * this.scale - node.coords.width,
       height: this.nodeHeight * this.scale
     };
-    roundedRect(ctx, mainRect, this.radius * this.scale, 'fill', '#FFFFFF', false, true, true, false);
+    // roundedRect(ctx, mainRect, this.radius * this.scale, 'fill', 'red', false, true, true, false);
     if (node?.config?.documentTitle) {
       ctx.font = `400 ${14 * this.scale}px Inter`;
       ctx.fillStyle = '#2D2E2E';
       ctx.textBaseline = 'middle';
 
       // ctx.fillText(node.config.documentTitle.toString(), mainRect.x + (8 * this.scale), mainRect.y + (mainRect.height) / 2);
-      let wrappedText: any = this.wrapText(ctx, node.config.documentTitle.toString(), mainRect.x + (8 * this.scale), mainRect.y + (mainRect.height) / 2, mainRect.width, 14 * this.scale);
+      let wrappedText: any = this.wrapText(ctx, node.config.documentTitle.toString(), rect.x + rect.width / 2, rect.y + (26 * this.scale) + (rect.height) / 2, rect.width, 14 * this.scale);
+      wrappedText.splice(3);
       for (let i = 0; i < wrappedText.length; i++) {
         const line = wrappedText[i];
         if (i > 2) break;
@@ -298,7 +353,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
             ctx.fillText(line[0], line[1], (line[2] - ((14 * this.scale) / 2)));
             break;
           default:
-            ctx.fillText(line[0], line[1], (line[2] - (14 * this.scale)));
+            ctx.fillText(line[0], line[1], (line[2] - ((14 * this.scale) / 2)));
             break;
         }
       }
@@ -306,23 +361,24 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
       ctx.font = `400 ${14 * this.scale}px Inter`;
       ctx.fillStyle = '#2D2E2E';
       ctx.textBaseline = 'middle';
-      ctx.fillText(node.title.toString(), mainRect.x + (8 * this.scale), mainRect.y + (mainRect.height) / 2);
+      ctx.textAlign = 'center'
+      ctx.fillText(node.title.toString(), rect.x + (rect.width / 2), rect.y + (rect.height / 2) + (22 * this.scale));
     }
 
-    ctx.save();
-    ctx.strokeStyle = '#E4E7EC';
-    ctx.beginPath();
-    ctx.moveTo(smallRect.x + smallRect.width, smallRect.y);
-    ctx.lineTo(smallRect.x + smallRect.width, smallRect.y + smallRect.height);
-    ctx.stroke();
-    ctx.restore();
+    // ctx.save();
+    // ctx.strokeStyle = '#E4E7EC';
+    // ctx.beginPath();
+    // ctx.moveTo(smallRect.x + smallRect.width, smallRect.y);
+    // ctx.lineTo(smallRect.x + smallRect.width, smallRect.y + smallRect.height);
+    // ctx.stroke();
+    // ctx.restore();
     const nodeRect = {
       x: node.coords.x,
       y: node.coords.y,
       width: node.coords.width * this.scale,
       height: node.coords.height * this.scale
     };
-    roundedRect(ctx, nodeRect, this.radius * this.scale, 'stroke', '#E4E7EC', true, true, true, true);
+    // roundedRect(ctx, nodeRect, this.radius * this.scale, 'stroke', '#E4E7EC', true, true, true, true);
 
     if (node.connection.to.length) {
       this.drawConnector(ctx, node.coords.x + (node.coords.width + this.nodeConnectorSize) * this.scale, node.coords.y + (node.coords.height * this.scale) / 2);
@@ -790,7 +846,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
       // }
     }
 
-    if (!node.isRoot) {
+    if (!node.isRoot && !node.connection.to.length) {
       const parentNode = this.nodes.find((n: Node) => n.connection.to.includes(node.id));
       if (parentNode) {
         const siblings = this.nodes.filter((n: Node) => n.id != node.id && parentNode.connection.to.includes(n.id));
