@@ -18,18 +18,6 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
     private _facadeService: FacadeService,
     private _router: Router
   ) {
-    this.qpSubscription = this._activatedRoute.params.subscribe({
-      next: async (params: Params) => {
-        if (params && params['workflowId']) {
-          if (this.workflowId && params['workflowId'] != this.workflowId) {
-            this.workflowId = params['workflowId'];
-            this.getWorkflowDetails();
-          } else {
-            this.workflowId = params['workflowId'];
-          }
-        }
-      }
-    });
     const state = this._router.getCurrentNavigation()?.extras.state;
     this.isCreating = state?.['isCreating'] ?? false;
   }
@@ -39,15 +27,15 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
 
   workflowName: string = '';
   workflowId: string = '';
-  qpSubscription: Subscription;
+  qpSubscription!: Subscription;
   appRoutes = Routes;
   mainCanvas: HTMLCanvasElement | null = null;
   mainRect: DOMRect | null = null;
   mainCTX: CanvasRenderingContext2D | null = null;
   canConnect: Array<any> = [];
-  nodeWidth: number = 120;
-  nodeHeight: number = 120;
-  gap: number = 70;
+  nodeWidth: number = 100;
+  nodeHeight: number = 87;
+  gap: number = 78;
   radius: number = 8;
   nodeConnectorSize = 6;
   currentNodeId: number = 0;
@@ -55,17 +43,31 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   nodeImages: any = {};
   documentTitle = '';
   isCreating = false;
+  animationId: any;
 
   async ngOnInit() {
     await this.getRootObject();
     // await this.getTemplatesList();
     this.setNodeImage();
     this.setCanvasSize();
-    await this.getWorkflowDetails();
 
-    // this.addNode(this.nodes[0]);
+    this.qpSubscription = this._activatedRoute.params.subscribe({
+      next: async (params: Params) => {
+        if (params && params['workflowId']) {
+          this.workflowId = params['workflowId'];
+          await this.getWorkflowDetails();
+          // if (this.workflowId && params['workflowId'] != this.workflowId) {
+          //   this.workflowId = params['workflowId'];
+          // } else {
+          //   this.getWorkflowDetails();
+          // }
+        }
+      }
+    });
 
-    window.requestAnimationFrame(this.animate);
+    // await this.getWorkflowDetails();
+
+    // window.requestAnimationFrame(this.animate);
   }
 
   repeatingChildParent: any = {};
@@ -74,39 +76,44 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   childHeightSet: boolean = false;
 
   setNodeImage() {
-    console.log(this.canConnect);
     for (let item of this.canConnect) {
       this.nodeImages[item.title] = new Image();
       switch (item.title) {
         case 'Start':
-          this.nodeImages[item.title].src = 'assets/images/component.svg';
+          this.nodeImages[item.title].src = 'assets/images/start.svg';
           break;
         case 'Teams':
-          this.nodeImages[item.title].src = 'assets/images/teams.png';
+          this.nodeImages[item.title].src = 'assets/images/teams.svg';
           break;
         case 'Zoom':
-          this.nodeImages[item.title].src = 'assets/images/zoom.png';
+          this.nodeImages[item.title].src = 'assets/images/zoom.svg';
           break;
         case 'Meet':
-          this.nodeImages[item.title].src = 'assets/images/meet.png';
+          this.nodeImages[item.title].src = 'assets/images/meet.svg';
           break;
         case 'Video Upload':
-          this.nodeImages[item.title].src = 'assets/images/video-upload.png';
+          this.nodeImages[item.title].src = 'assets/images/video-upload.svg';
           break;
         case 'Analysis':
-          this.nodeImages[item.title].src = 'assets/images/analysis.png';
+          this.nodeImages[item.title].src = 'assets/images/analysis.svg';
           break;
         case 'AI':
-          this.nodeImages[item.title].src = 'assets/images/ai.png';
+          this.nodeImages[item.title].src = 'assets/images/ai.svg';
           break;
         case 'Compare Video':
-          this.nodeImages[item.title].src = 'assets/images/compare-video.png';
+          this.nodeImages[item.title].src = 'assets/images/compare-video.svg';
           break;
         case 'Canvas':
-          this.nodeImages[item.title].src = 'assets/images/canvas.png';
+          this.nodeImages[item.title].src = 'assets/images/canvas.svg';
           break;
         case 'Document':
-          this.nodeImages[item.title].src = 'assets/images/document.png';
+          this.nodeImages[item.title].src = 'assets/images/document.svg';
+          break;
+        case 'Pandadoc':
+          this.nodeImages[item.title].src = 'assets/images/pandadoc.svg';
+          break;
+        case 'Email':
+          this.nodeImages[item.title].src = 'assets/images/email.svg';
           break;
         default:
           break;
@@ -298,80 +305,71 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
     return lineArray;
   }
 
-  drawNode(node: Node, ctx: CanvasRenderingContext2D) {
-    // ctx.fillRect(node.coords.x, node.coords.y, node.coords.width * this.scale, node.coords.height * this.scale);
-    const rect = {
-      x: node.coords.x,
-      y: node.coords.y,
-      width: this.nodeHeight * this.scale,
-      height: this.nodeHeight * this.scale
-    };
-    roundedRect(ctx, rect, this.radius * this.scale, 'stroke', '#E4E7EC', true, true, true, true);
-    if (this.nodeImages[node.title]) {
-      const imageSize = rect.width / 2;
-      const x = rect.x + (rect.width - imageSize) / 2;
-      const y = rect.y + (rect.height - imageSize) / 2;
-      let image = this.nodeImages[node.title] as HTMLImageElement;
-
-      let ratio = 1, width = 0, height = 0;
-      if (image.naturalWidth > image.naturalHeight) {
-        ratio = image.naturalWidth / image.naturalHeight;
-        width = imageSize;
-        height = width / ratio;
-      } else {
-        ratio = image.naturalHeight / image.naturalWidth;
-        height = imageSize;
-        width = height / ratio;
-      }
-
-      ctx.drawImage(image, x, y - imageSize / 2 + (8 * this.scale), width, height);
-    }
-
+   drawNode(node: Node, ctx: CanvasRenderingContext2D) {
     const mainRect = {
       x: node.coords.x,
       y: node.coords.y,
-      width: this.nodeWidth * this.scale - node.coords.width,
-      height: this.nodeHeight * this.scale
-    };
-    // roundedRect(ctx, mainRect, this.radius * this.scale, 'fill', 'red', false, true, true, false);
-    if (node?.config?.documentTitle) {
-      ctx.font = `400 ${14 * this.scale}px Inter`;
-      ctx.fillStyle = '#2D2E2E';
-      ctx.textBaseline = 'middle';
+      height: node.coords.height * this.scale,
+      width: node.coords.width * this.scale
+    }
+    const imageRect = {
+      x: node.coords.x,
+      y: node.coords.y,
+      width: node.coords.width * this.scale,
+      height: 64 * this.scale
+    }
+    
+    roundedRect(ctx, imageRect, this.radius * this.scale, 'fill', '#F9FAFB', true, true, false, false);
+    roundedRect(ctx, mainRect, this.radius * this.scale, 'stroke', '#E4E7EC', true, true, true, true);
 
-      // ctx.fillText(node.config.documentTitle.toString(), mainRect.x + (8 * this.scale), mainRect.y + (mainRect.height) / 2);
-      let wrappedText: any = this.wrapText(ctx, node.config.documentTitle.toString(), rect.x + rect.width / 2, rect.y + (26 * this.scale) + (rect.height) / 2, rect.width, 14 * this.scale);
-      wrappedText.splice(3);
-      for (let i = 0; i < wrappedText.length; i++) {
-        const line = wrappedText[i];
-        if (i > 2) break;
-        switch (wrappedText.length) {
-          case 1:
-            ctx.fillText(line[0], line[1], line[2]);
-            break;
-          case 2:
-            ctx.fillText(line[0], line[1], (line[2] - ((14 * this.scale) / 2)));
-            break;
-          default:
-            ctx.fillText(line[0], line[1], (line[2] - ((14 * this.scale) / 2)));
-            break;
-        }
-      }
-    } else if (node.title) {
-      ctx.font = `400 ${14 * this.scale}px Inter`;
-      ctx.fillStyle = '#2D2E2E';
-      ctx.textBaseline = 'middle';
-      ctx.textAlign = 'center'
-      ctx.fillText(node.title.toString(), rect.x + (rect.width / 2), rect.y + (rect.height / 2) + (22 * this.scale));
+    if (this.nodeImages[node.title]) {
+      const imageSize = 48 * this.scale;
+      let image = this.nodeImages[node.title] as HTMLImageElement;
+      ctx.drawImage(image, imageRect.x + imageRect.width / 2 - imageSize / 2, imageRect.y + imageRect.height / 2 - imageSize / 2, imageSize, imageSize);
     }
 
-    // ctx.save();
-    // ctx.strokeStyle = '#E4E7EC';
-    // ctx.beginPath();
-    // ctx.moveTo(smallRect.x + smallRect.width, smallRect.y);
-    // ctx.lineTo(smallRect.x + smallRect.width, smallRect.y + smallRect.height);
-    // ctx.stroke();
-    // ctx.restore();
+
+    ctx.save();
+    ctx.strokeStyle = '#E4E7EC';
+    ctx.beginPath();
+    ctx.moveTo(imageRect.x, imageRect.y + imageRect.height);
+    ctx.lineTo(imageRect.x + imageRect.width, imageRect.y + imageRect.height);
+    ctx.stroke();
+    ctx.restore();
+
+    let title = node.title;
+
+    if (node?.config?.documentTitle) {
+      if (node.config.documentTitle.length > 14) {
+        title = `${node.config.documentTitle.substr(0, 11)}...`
+      } else {
+        title = node.config.documentTitle;
+      }
+      // ctx.fillText(node.config.documentTitle.toString(), mainRect.x + (8 * this.scale), mainRect.y + (mainRect.height) / 2);
+      // let wrappedText: any = this.wrapText(ctx, node.config.documentTitle.toString(), rect.x + rect.width / 2, rect.y + (26 * this.scale) + (rect.height) / 2, rect.width, 14 * this.scale);
+      // wrappedText.splice(3);
+      // for (let i = 0; i < wrappedText.length; i++) {
+      //   const line = wrappedText[i];
+      //   if (i > 2) break;
+      //   switch (wrappedText.length) {
+      //     case 1:
+      //       ctx.fillText(line[0], line[1], line[2]);
+      //       break;
+      //     case 2:
+      //       ctx.fillText(line[0], line[1], (line[2] - ((14 * this.scale) / 2)));
+      //       break;
+      //     default:
+      //       ctx.fillText(line[0], line[1], (line[2] - ((14 * this.scale) / 2)));
+      //       break;
+      //   }
+      // }
+    }
+    ctx.font = `400 ${12 * this.scale}px Inter`;
+    ctx.fillStyle = '#2D2E2E';
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'center'
+    ctx.fillText(title, imageRect.x + imageRect.width / 2, imageRect.y + imageRect.height + (11.5 * this.scale));
+
     const nodeRect = {
       x: node.coords.x,
       y: node.coords.y,
@@ -398,6 +396,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
       const childIdx = this.nodes.findIndex(n => n.id === childId);
       height += this.setChildHeight(childIdx)
     };
+    // console.log('node index', this.nodes[nodeIdx].id)
 
     const parents = this.nodes.filter((n: Node) => n.connection.to.includes(nodeId));
     if (parents.length > 1) {
@@ -411,8 +410,10 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
       }
 
       let setHeight = 0;
+      if (this.repeatingChildren[this.nodes[nodeIdx].id].length != parents.length) {
+        this.repeatingChildren[this.nodes[nodeIdx].id].push(parents[this.repeatingChildren[this.nodes[nodeIdx].id].length].id);
+      }
 
-      this.repeatingChildren[this.nodes[nodeIdx].id].push(parents[this.repeatingChildren[this.nodes[nodeIdx].id].length].id);
       if (this.repeatingChildren[this.nodes[nodeIdx].id].length == parents.length) {
         let parentIndex = parents.findIndex((n: Node) => n.id == this.repeatingChildren[this.nodes[nodeIdx].id][this.repeatingChildren[this.nodes[nodeIdx].id].length - 1])
         parents[parentIndex as any].childHeight = (this.nodeHeight * this.scale) + (this.gap * this.scale);
@@ -474,7 +475,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   }
 
   onSaveData() {
-    if (!this.isCreating) return;
+    // if (!this.isCreating) return;
     const nodes = [];
     for (let node of this.nodes) {
       const n: any = {
@@ -546,38 +547,35 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
     }, 0);
   }
 
-  onAddNode(option: string) {
+  onAddNode(option: any) {
     // this.pauseEvent(event);
     if (this.selectedNodeId == null) return;
 
     const parentNode = this.nodes.find((n: Node) => n.id == this.selectedNodeId);
     if (parentNode) {
-      if (option.startsWith('Merge with - ')) {
-        const mergedTitle = option.split(' - ')[1];
+      if (option.title.startsWith('Merge with - ')) {
+        const mergingNodeId = option.nodeId;
+        const mergedTitle = option.title.split(' - ')[1];
         const [parentName, title] = mergedTitle.split('/');
         const gp = this.nodes.find((n: Node) => n.connection.to.includes(parentNode.id));
         if (gp) {
-          const siblings = this.nodes.filter((n: Node) => gp.connection.to.includes(n.id));
-          const siblingParent = siblings.find((n: Node) => n.title == parentName.trim());
-          if (siblingParent) {
-            const parentIndex = gp.connection.to.indexOf(parentNode.id);
+          const siblings = this.nodes.filter((n: Node) => gp.connection.to.includes(n.id) && n.connection.to.includes(mergingNodeId));
+          
+          if (!siblings.length) return;
+          const siblingParent = siblings[0];
 
-            const siblingParentIndex = gp.connection.to.indexOf(siblingParent.id);
-            const childrens = this.nodes.filter((n: Node) => siblingParent.connection.to.includes(n.id));
-            const connectedNode = childrens.find((n: Node) => n.title == title.trim());
-            if (connectedNode) {
-              if (parentIndex < siblingParentIndex) {
-                gp.connection.to.splice(parentIndex, 1)
-                gp.connection.to.splice(siblingParentIndex - 1, 0, parentNode.id)
-              } else {
-                gp.connection.to.splice(parentIndex, 1)
-                gp.connection.to.splice(siblingParentIndex + 1, 0, parentNode.id)
-              }
-              parentNode.connection.to.push(connectedNode.id);
-            }
+          const parentIndex = gp.connection.to.indexOf(parentNode.id);
+          const siblingParentIndex = gp.connection.to.indexOf(siblingParent.id);
+
+          if (parentIndex < siblingParentIndex) {
+            gp.connection.to.splice(parentIndex, 1)
+            gp.connection.to.splice(siblingParentIndex - 1, 0, parentNode.id)
+          } else {
+            gp.connection.to.splice(parentIndex, 1)
+            gp.connection.to.splice(siblingParentIndex + 1, 0, parentNode.id)
           }
+          parentNode.connection.to.push(mergingNodeId);
         }
-        console.log(this.nodes);
 
       } else {
         const newNode = new Node(++this.currentNodeId, {
@@ -586,15 +584,15 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
           width: this.nodeWidth,
           height: this.nodeHeight
         }, {
-          connectionType: 'none',
+          connectionType: 'none',    
           to: []
         },
           this.scale);
-        newNode.title = option;
+        newNode.title = option.title;
         parentNode.connection.to.push(newNode.id);
         this.nodes.push(newNode);
       }
-    }
+    } 
 
     this.childHeightSet = false;
     this.onClosePopup();
@@ -835,8 +833,14 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
 
     const connect = this.canConnect.find((d: any) => d.title == node.title);
     this.addList = [];
+    
     if (connect) {
-      this.addList = [...connect.to];
+      for (let item of connect.to) {
+        this.addList.push({
+          title: item
+        })
+      }
+      // this.addList = [...connect.to];
       // const siblings = this.nodes.filter((n: Node) => node.connection.to.includes(n.id));
       // for (let option of connect.to) {
       //   const existingNode = siblings.find((n: Node) => n.title == option);
@@ -849,14 +853,33 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
     if (!node.isRoot && !node.connection.to.length) {
       const parentNode = this.nodes.find((n: Node) => n.connection.to.includes(node.id));
       if (parentNode) {
-        const siblings = this.nodes.filter((n: Node) => n.id != node.id && parentNode.connection.to.includes(n.id));
-        for (let sibling of siblings) {
-          if (sibling.connection.to.length == 1 && !this.repeatingChildren[sibling.connection.to[0]]) {
-            const siblingChild = this.nodes.find((n: Node) => n.id == sibling.connection.to[0]);
+        const siblings = this.nodes.filter((n: Node) => n.id != node.id && parentNode.connection.to.includes(n.id) && n.connection.to.length == 1);
+        console.log(JSON.parse(JSON.stringify(siblings)))
 
-            if (siblingChild && this.addList.includes(siblingChild.title)) {
-              this.addList.push(`Merge with - ${sibling.title}/${(siblingChild as Node).title}`)
+        for (let sibling of siblings) {
+          const siblingChild = this.nodes.find((n: Node) => n.id == sibling.connection.to[0]);
+          if (!siblingChild) continue;
+
+          const mergingSiblings = siblings.filter((n: Node) => n.connection.to.includes(siblingChild.id));
+          if (mergingSiblings.length > 1) {
+            let groupName = '';
+            for (let z = 0; z < mergingSiblings.length; z++) {
+              let mSibling = mergingSiblings[z];
+              groupName += z == (mergingSiblings.length - 1) ? mSibling.title : `${mSibling.title}, `;
+              const index = siblings.indexOf(mSibling);
+              if (index > -1) {
+                siblings.splice(index, 1);
+              }
             }
+            this.addList.push({
+              title: `Merge with - ${groupName}/${(siblingChild as Node).title}`,
+              nodeId: siblingChild.id
+            });
+          } else {
+            this.addList.push({
+              title: `Merge with - ${sibling.title}/${(siblingChild as Node).title}`,
+              nodeId: siblingChild.id
+            });
           }
         }
       }
@@ -889,6 +912,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
       this._facadeService.workflowService.getById(this.workflowId).subscribe({
         next: (res: any) => {
           if (res.code == 'OK') {
+            console.log(res.data)
             this.workflowName = res.data.name;
             this.nodes = [];
             const coords = {
@@ -898,8 +922,10 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
               height: this.nodeHeight
             }
             for (let i = 0; i < res.data.nodes.length; i++) {
-
               let node = res.data.nodes[i];
+              if (i == 12) {
+                node.connection.to.push(14)
+              }
               let n = new Node(node.id, { ...coords }, node.connection, this.scale, i ? false : true);
               if (node?.config?.documentTitle) {
                 n.config['documentTitle'] = node.config.documentTitle;
@@ -914,6 +940,23 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
           }
           this.panOffset.x = (this.gap * this.scale);
           this.panOffset.y = ((this.mainRect as DOMRect).height / 2) - (this.nodeHeight * this.scale) / 2;
+
+          this.scale = 1;
+          this.panStartOffset = {
+            x: 0,
+            y: 0
+          }
+          this.childHeightSet = false;
+          this.processedChildren = [];
+          this.repeatingChildParent = {};
+          this.repeatingChildren = {};
+
+          if (this.animationId) {
+            window.cancelAnimationFrame(this.animationId)
+          }
+          console.log(this.nodes)
+          this.animationId = window.requestAnimationFrame(this.animate);
+
           resolve();
         },
         error: (err: any) => {
