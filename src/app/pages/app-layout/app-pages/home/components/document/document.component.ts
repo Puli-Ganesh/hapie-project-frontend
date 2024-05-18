@@ -30,7 +30,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
         this.projectDetails = details;
         const nodes = this.projectDetails?.workflowId?.nodes;
         if (nodes?.length) {
-          const documentNode = nodes.find((n: any) => n.app == 'Document');
+          const documentNode = nodes.find((n: any) => n.app == 'Pandadoc');
           this.isSignDocumentVisible = documentNode ? true : false;
         } else {
           this.isSignDocumentVisible = false;
@@ -153,7 +153,8 @@ export class DocumentComponent implements OnInit, OnDestroy {
       ?.replace(/<ul/g, '\n<ul')?.replace(/<\/ul>/g, '<\/ul>\n')
       ?.replace(/<ol/g, '\n<ol')?.replace(/<\/ol>/g, '<\/ol>\n') || '';
     const rawTemplateLines = rawTemplate.split(/\n+/);
-    const titleAndPromptRegex = (/{[\w\/ -?@]+[\[]+.*?[\]]+}/g);
+    /** old one (/{[\w\/ -?@]+[\[]+.*?[\]]+}/g) */
+    const titleAndPromptRegex = (/{[\w\/ -?@‘’“”]+[\[]+.*?[\]]+}/g);
     const spanWithStyleAtrRegex = /<span\s+style="([^"]*)">/g;
     const categories = _.cloneDeep(this.selectedDocumentCategoryList);
     let templateHtml = '';
@@ -212,7 +213,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
 
           categories.splice(categoryIndex, 1);
         } else {
-          templateHtml += line;
+          templateHtml += line.replace(titleAndPrompt, '');
         }
       } else {
         templateHtml += line;

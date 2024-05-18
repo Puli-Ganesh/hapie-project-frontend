@@ -41,7 +41,6 @@
 
     <div class="body">
         <div class="inner-header">
-    
             <div class="title">Canvas</div>
     
             <div class="right-side">
@@ -223,23 +222,21 @@
         </div>
     </div>
 
+
+    <app-modal id="migrateVersionModal" (onClose)="onCancelMigrateVersion()">
+        <div class="migrate-version-modal">
+            <div class="title">
+                Are you sure you want to Migrate to Version {{ currentVersion.major + 1 }}.{{ currentVersion.minor }}?
+            </div>
+            <div class="actions-container">
+                <button class="btn light" (click)="onCancelMigrateVersion()">
+                    Not Now
+                </button>
+                <button class="btn bg-{{projectColor}}-1" [class.disabled]="isRequestAlive" [disabled]="isRequestAlive"
+                    (click)="onConfirmMigrateVersion()">
+                    Yes, Migrate
+                </button>
+            </div>
+        </div>
+    </app-modal>
 </div>
-
-
-
-<app-modal id="migrateVersionModal" (onClose)="onCancelMigrateVersion()">
-    <div class="migrate-version-modal">
-        <div class="title">
-            Are you sure you want to Migrate to Version {{ currentVersion.major + 1 }}.{{ currentVersion.minor }}?
-        </div>
-        <div class="actions-container">
-            <button class="btn light" (click)="onCancelMigrateVersion()">
-                Not Now
-            </button>
-            <button class="btn bg-{{projectColor}}-1" [class.disabled]="isRequestAlive" [disabled]="isRequestAlive"
-                (click)="onConfirmMigrateVersion()">
-                Yes, Migrate
-            </button>
-        </div>
-    </div>
-</app-modal>

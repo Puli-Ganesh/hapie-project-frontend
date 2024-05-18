@@ -204,70 +204,68 @@
                 <div class="subtitle">Click create workflow to start creating workflow</div>
             </div>
         </ng-template>
-
-
-        <app-modal id="createWorkflowModal" type="static">
-            <div class="create-workflow-modal">
-                <div class="title">
-                    Create a workflow
-                </div>
-                
-                <form [formGroup]="workflowForm" (ngSubmit)="onConfirmCreate()">
-                    <div class="input-group">
-                        <label class="label" for="name">Name</label>
-                        <input class="input" type="text" formControlName="name" />
-                        <div class="err-list" *ngIf="name.touched && name?.errors">
-                            <div class="err" *ngIf="name.errors?.['required']">
-                                Workflow name is required.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label class="label" for="description">Description</label>
-                        <textarea class="input" name="description" id="description" formControlName="description"></textarea>
-                        <div class="err-list" *ngIf="description.touched && description?.errors">
-                            <div class="err" *ngIf="description.errors?.['required']">
-                                Workflow description is required.
-                            </div>
-                        </div>
-                    </div>
-                </form>
-
-                <div class="actions-container">
-                    <button class="app-button primary"
-                        (click)="onConfirmCreate()">
-                        Create Workflow
-                    </button>
-                    <button class="app-button" (click)="onCancelCreate()">
-                        Cancel
-                    </button>
-                </div>
-            </div>
-        </app-modal>
-
-        <app-modal id="deleteWorkflowModal" (onClose)="onCancelDelete()">
-            <div class="delete-project-modal">
-                <div class="title">
-                    Delete workflow
-                </div>
-                <div class="sub-title">
-                    Are you sure you want to delete
-                    {{selectedWorkflow?.name}} workflow?
-                </div>
-                <div class="actions-container">
-                    <button class="app-button primary"
-                        (click)="onConfirmDelete()">
-                        Yes, Delete
-                    </button>
-                    <button class="app-button" (click)="onCancelDelete()">
-                        Not Now
-                    </button>
-                </div>
-            </div>
-        </app-modal>
-
     </div>
 
+
+    <app-modal id="createWorkflowModal" type="static">
+        <div class="create-workflow-modal">
+            <div class="title">
+                Create a workflow
+            </div>
+            
+            <form [formGroup]="workflowForm" (ngSubmit)="onConfirmCreate()">
+                <div class="input-group">
+                    <label class="label" for="name">Name</label>
+                    <input class="input" type="text" formControlName="name" />
+                    <div class="err-list" *ngIf="name.touched && name?.errors">
+                        <div class="err" *ngIf="name.errors?.['required']">
+                            Workflow name is required.
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label class="label" for="description">Description</label>
+                    <textarea class="input" name="description" id="description" formControlName="description"></textarea>
+                    <div class="err-list" *ngIf="description.touched && description?.errors">
+                        <div class="err" *ngIf="description.errors?.['required']">
+                            Workflow description is required.
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="actions-container">
+                <button class="app-button primary"
+                    (click)="onConfirmCreate()">
+                    Create Workflow
+                </button>
+                <button class="app-button" (click)="onCancelCreate()">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </app-modal>
+
+    <app-modal id="deleteWorkflowModal" (onClose)="onCancelDelete()">
+        <div class="delete-project-modal">
+            <div class="title">
+                Delete workflow
+            </div>
+            <div class="sub-title">
+                Are you sure you want to delete
+                {{selectedWorkflow?.name}} workflow?
+            </div>
+            <div class="actions-container">
+                <button class="app-button primary"
+                    (click)="onConfirmDelete()">
+                    Yes, Delete
+                </button>
+                <button class="app-button" (click)="onCancelDelete()">
+                    Not Now
+                </button>
+            </div>
+        </div>
+    </app-modal>
 </div>
 
 <div class="projects-wrap" *ngIf="false">

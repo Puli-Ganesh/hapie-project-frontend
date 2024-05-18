@@ -10,6 +10,7 @@ export class ModalComponent {
 
   @Input() id: string = '';
   @Input() type: string = 'default';
+  @Input('isFullScreen') isFullScreen: boolean = false;
   @Output('onClose') onCloseEvent: EventEmitter<boolean> = new EventEmitter();
 
   @ViewChild('modalContainer') modalContainer!: ElementRef;

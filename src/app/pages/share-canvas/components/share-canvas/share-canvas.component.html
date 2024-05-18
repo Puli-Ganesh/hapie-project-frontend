@@ -144,7 +144,7 @@
 </div>
 
 
-<app-modal id="requestEditAccessModal" (onClose)="onCloseRequestEditAccessModal($event)">
+<app-modal id="requestEditAccessModal" [isFullScreen]="true" (onClose)="onCloseRequestEditAccessModal($event)">
     <div class="request-edit-access-wrap">
 
         <div class="title">request edit access</div>

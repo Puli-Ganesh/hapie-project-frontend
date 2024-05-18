@@ -192,71 +192,69 @@
                 </div>
             </div>
         </ng-template>
-
-
-        <app-modal id="signDocumentModal" (onClose)="onCloseSignDocumentModel()">
-            <div class="sign-document-modal">
-                <div class="title">
-                    Add user details
-                </div>
-                <form [formGroup]="signDocumentForm">
-                    <div class="input-container">
-                        <div class="input-wrap">
-                            <label class="label" for="firstName">First name</label>
-                            <input class="input" type="text" id="firstName" formControlName="firstName"
-                                placeholder="Enter first name">
-                        </div>
-        
-                        <div class="err-wrap" *ngIf="(firstName?.touched && firstName?.errors)">
-                            <p *ngIf="firstName?.errors?.['required']" class="err-msg">First name is required!</p>
-                        </div>
-                    </div>
-                    <div class="input-container">
-                        <div class="input-wrap">
-                            <label class="label" for="lastName">Last name</label>
-                            <input class="input" type="text" id="lastName" formControlName="lastName"
-                                placeholder="Enter last name">
-                        </div>
-        
-                        <div class="err-wrap" *ngIf="(lastName?.touched && lastName?.errors)">
-                            <p *ngIf="lastName?.errors?.['required']" class="err-msg">Last name is required!</p>
-                        </div>
-                    </div>
-                    <div class="input-container">
-                        <div class="input-wrap">
-                            <label class="label" for="name">User Email</label>
-                            <input class="input" type="text" id="name" formControlName="email" placeholder="Enter email">
-                        </div>
-        
-                        <div class="err-wrap" *ngIf="(email?.touched && email?.errors)">
-                            <p *ngIf="email?.errors?.['required']" class="err-msg">Email address is required!</p>
-                            <p *ngIf="email?.errors?.['pattern']" class="err-msg">Please enter valid email address!</p>
-                        </div>
-                    </div>
-                </form>
-        
-                <div class="sign-label" *ngIf="!isGenerating && signLink">Signing link</div>
-                <div class="link-wrapper" *ngIf="!isGenerating && signLink">
-                    <div class="link">{{ signLink }}</div>
-                    <div class="copy-btn" (click)="onCopyLink()">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M19 19H8C7.45 19 6.97917 18.8042 6.5875 18.4125C6.19583 18.0208 6 17.55 6 17V3C6 2.45 6.19583 1.97917 6.5875 1.5875C6.97917 1.19583 7.45 1 8 1H15L21 7V17C21 17.55 20.8042 18.0208 20.4125 18.4125C20.0208 18.8042 19.55 19 19 19ZM14 8V3H8V17H19V8H14ZM4 23C3.45 23 2.97917 22.8042 2.5875 22.4125C2.19583 22.0208 2 21.55 2 21V7H4V21H15V23H4Z"
-                                fill="#0B0BCF" />
-                        </svg>
-                    </div>
-                </div>
-        
-                <div class="actions-container">
-                    <button class="app-button primary" (click)="onGenerateLink()" [class.disabled]="isGenerating"
-                        [disabled]="isGenerating">
-                        <span class="label">Generate Link</span>
-                    </button>
-                    <div *ngIf="isGenerating" class="spinner"></div>
-                </div>
-            </div>
-        </app-modal>
-
     </div>
 
+
+    <app-modal id="signDocumentModal" (onClose)="onCloseSignDocumentModel()">
+        <div class="sign-document-modal">
+            <div class="title">
+                Add user details
+            </div>
+            <form [formGroup]="signDocumentForm">
+                <div class="input-container">
+                    <div class="input-wrap">
+                        <label class="label" for="firstName">First name</label>
+                        <input class="input" type="text" id="firstName" formControlName="firstName"
+                            placeholder="Enter first name">
+                    </div>
+    
+                    <div class="err-wrap" *ngIf="(firstName?.touched && firstName?.errors)">
+                        <p *ngIf="firstName?.errors?.['required']" class="err-msg">First name is required!</p>
+                    </div>
+                </div>
+                <div class="input-container">
+                    <div class="input-wrap">
+                        <label class="label" for="lastName">Last name</label>
+                        <input class="input" type="text" id="lastName" formControlName="lastName"
+                            placeholder="Enter last name">
+                    </div>
+    
+                    <div class="err-wrap" *ngIf="(lastName?.touched && lastName?.errors)">
+                        <p *ngIf="lastName?.errors?.['required']" class="err-msg">Last name is required!</p>
+                    </div>
+                </div>
+                <div class="input-container">
+                    <div class="input-wrap">
+                        <label class="label" for="name">User Email</label>
+                        <input class="input" type="text" id="name" formControlName="email" placeholder="Enter email">
+                    </div>
+    
+                    <div class="err-wrap" *ngIf="(email?.touched && email?.errors)">
+                        <p *ngIf="email?.errors?.['required']" class="err-msg">Email address is required!</p>
+                        <p *ngIf="email?.errors?.['pattern']" class="err-msg">Please enter valid email address!</p>
+                    </div>
+                </div>
+            </form>
+    
+            <div class="sign-label" *ngIf="!isGenerating && signLink">Signing link</div>
+            <div class="link-wrapper" *ngIf="!isGenerating && signLink">
+                <div class="link">{{ signLink }}</div>
+                <div class="copy-btn" (click)="onCopyLink()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M19 19H8C7.45 19 6.97917 18.8042 6.5875 18.4125C6.19583 18.0208 6 17.55 6 17V3C6 2.45 6.19583 1.97917 6.5875 1.5875C6.97917 1.19583 7.45 1 8 1H15L21 7V17C21 17.55 20.8042 18.0208 20.4125 18.4125C20.0208 18.8042 19.55 19 19 19ZM14 8V3H8V17H19V8H14ZM4 23C3.45 23 2.97917 22.8042 2.5875 22.4125C2.19583 22.0208 2 21.55 2 21V7H4V21H15V23H4Z"
+                            fill="#0B0BCF" />
+                    </svg>
+                </div>
+            </div>
+    
+            <div class="actions-container">
+                <button class="app-button primary" (click)="onGenerateLink()" [class.disabled]="isGenerating"
+                    [disabled]="isGenerating">
+                    <span class="label">Generate Link</span>
+                </button>
+                <div *ngIf="isGenerating" class="spinner"></div>
+            </div>
+        </div>
+    </app-modal>
 </div>

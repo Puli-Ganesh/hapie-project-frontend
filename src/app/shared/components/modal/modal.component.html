@@ -1,5 +1,8 @@
 <div class="modal-wrapper" (click)="backdropClick($event)"
-    [class.visible]="_facadeService.modalService.isModalVisible(id)">
+    [ngClass]="{
+        'visible': _facadeService.modalService.isModalVisible(id),
+        'full-screen': isFullScreen
+    }">
 
     <div class="modal-container" #modalContainer>
         <button class="close-button" *ngIf="type == 'static'" (click)="close()">

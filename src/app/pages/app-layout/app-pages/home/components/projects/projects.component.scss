@@ -2,6 +2,7 @@
 
 
 .projects-wrapper {
+    position: relative;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -322,6 +323,12 @@
                 color: $on-base;
             }
         }
+    }
+}
+@media only screen and (max-width: 1024px) {
+    .delete-project-modal {
+        width: 100%;
+        max-width: 640px;
     }
 }
 

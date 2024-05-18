@@ -148,30 +148,31 @@
                 <div class="subtitle">Click New Project to start creating Projects</div>
             </div>
         </ng-template>
-
-        <app-modal id="projectCreateModal" type="static" (onClose)="onCloseNewProjectModal($event)">
-            <ng-container *ngIf="isProjectUpserting">
-                <app-manage-project [projectId]="selectedProject?._id" (upsertProject)="onUpsertProject($event)"
-                    (onClose)="onCloseNewProjectModal($event)"></app-manage-project>
-            </ng-container>
-        </app-modal>
     </div>
+
+
+    <app-modal id="projectCreateModal" type="static" (onClose)="onCloseNewProjectModal($event)">
+        <ng-container *ngIf="isProjectUpserting">
+            <app-manage-project [projectId]="selectedProject?._id" (upsertProject)="onUpsertProject($event)"
+                (onClose)="onCloseNewProjectModal($event)"></app-manage-project>
+        </ng-container>
+    </app-modal>
+
+    <app-modal id="deleteProjectModal" (onClose)="onCancelDeleteProject()">
+        <div class="delete-project-modal">
+            <div class="title">
+                Are you sure you want to delete<br>
+                {{selectedProject?.projectName}} project?
+            </div>
+            <div class="actions-container">
+                <button class="btn" [class.disabled]="isRequestAlive" [disabled]="isRequestAlive"
+                    (click)="onConfirmDeleteProject()">
+                    Yes, Delete
+                </button>
+                <button class="btn light" (click)="onCancelDeleteProject()">
+                    Not Now
+                </button>
+            </div>
+        </div>
+    </app-modal>
 </div>
-
-<app-modal id="deleteProjectModal" (onClose)="onCancelDeleteProject()">
-    <div class="delete-project-modal">
-        <div class="title">
-            Are you sure you want to delete<br>
-            {{selectedProject?.projectName}} project?
-        </div>
-        <div class="actions-container">
-            <button class="btn" [class.disabled]="isRequestAlive" [disabled]="isRequestAlive"
-                (click)="onConfirmDeleteProject()">
-                Yes, Delete
-            </button>
-            <button class="btn light" (click)="onCancelDeleteProject()">
-                Not Now
-            </button>
-        </div>
-    </div>
-</app-modal>

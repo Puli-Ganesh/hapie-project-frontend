@@ -202,35 +202,32 @@
                 </div>
             </div>
         </ng-template>
-
-
-        <ng-container *ngIf="isUploading">
-            <app-upload-document-modal [projectId]="projectDetails?._id" [nodeId]="selectedNodeId" (onClose)="onCloseModal()"
-                (documentUpdated)="onDocumentUpdated($event)"></app-upload-document-modal>
-        </ng-container>
-
-        <ng-container *ngIf="deleteTemplateId">
-
-            <app-modal id="deleteTemplateModal" (onClose)="onDeleteCancel()">
-                <div class="delete-template-modal">
-                    <div class="title">
-                        Delete template
-                    </div>
-                    <div class="subtitle">
-                        Are you sure you want to delete this template?
-                    </div>
-                    <div class="actions-container">
-                        <button class="app-button primary" (click)="onDeleteConfirm()">
-                            <span class="btn-label">Yes, Delete</span>
-                        </button>
-                        <button class="app-button" (click)="onDeleteCancel()">
-                            <span class="btn-label">Not Now</span>
-                        </button>
-                    </div>
-                </div>
-            </app-modal>
-        </ng-container>
-
     </div>
 
+
+    <ng-container *ngIf="isUploading">
+        <app-upload-document-modal [projectId]="projectDetails?._id" [nodeId]="selectedNodeId" (onClose)="onCloseModal()"
+            (documentUpdated)="onDocumentUpdated($event)"></app-upload-document-modal>
+    </ng-container>
+
+    <ng-container *ngIf="deleteTemplateId">
+        <app-modal id="deleteTemplateModal" (onClose)="onDeleteCancel()">
+            <div class="delete-template-modal">
+                <div class="title">
+                    Delete template
+                </div>
+                <div class="subtitle">
+                    Are you sure you want to delete this template?
+                </div>
+                <div class="actions-container">
+                    <button class="app-button primary" (click)="onDeleteConfirm()">
+                        <span class="btn-label">Yes, Delete</span>
+                    </button>
+                    <button class="app-button" (click)="onDeleteCancel()">
+                        <span class="btn-label">Not Now</span>
+                    </button>
+                </div>
+            </div>
+        </app-modal>
+    </ng-container>
 </div>

@@ -37,8 +37,8 @@
         <app-header></app-header>
     </div>
 
+    
     <div class="body">
-
         <div class="inner-header">
             <div class="breadcrumb-wrap">
                 <!-- <div class="label" (click)="onGoToProjects()">projects</div>
@@ -154,21 +154,20 @@
         </div>
     </div>
 
+
+    <app-modal id="deleteMediaModal">
+        <div class="delete-media-modal">
+            <div class="title">
+                Are you sure to delete this media?
+            </div>
+            <div class="actions-container">
+                <button class="btn" (click)="onConfirmDeleteMedia()">
+                    Yes, Delete
+                </button>
+                <button class="btn light" (click)="onCancelDeleteMedia()">
+                    Not Now
+                </button>
+            </div>
+        </div>
+    </app-modal>
 </div>
-
-
-<app-modal id="deleteMediaModal">
-    <div class="delete-media-modal">
-        <div class="title">
-            Are you sure to delete this media?
-        </div>
-        <div class="actions-container">
-            <button class="btn" (click)="onConfirmDeleteMedia()">
-                Yes, Delete
-            </button>
-            <button class="btn light" (click)="onCancelDeleteMedia()">
-                Not Now
-            </button>
-        </div>
-    </div>
-</app-modal>

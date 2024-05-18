@@ -626,3 +626,10 @@
         }
     }
 }
+
+@media only screen and (max-width: 1024px) {
+    .migrate-version-modal {
+        width: 100%;
+        max-width: 640px;
+    }
+}
