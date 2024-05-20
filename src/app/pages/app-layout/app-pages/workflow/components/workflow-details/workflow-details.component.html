@@ -19,7 +19,7 @@
         </div>
         <div class="actions-wrapper">
             <!-- *ngIf="isCreating" -->
-            <button class="app-button primary" (click)="onSaveData()">
+            <button class="app-button primary" (click)="onSaveData()" *ngIf="isCreating">
                 <svg class="btn-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path
                         d="M11.4408 13.6667H4.5591C4.05718 13.6667 3.57583 13.4735 3.22092 13.1297C2.86601 12.7859 2.66663 12.3196 2.66663 11.8333V3.83333C2.66663 3.3471 2.86601 2.88079 3.22092 2.53697C3.57583 2.19315 4.05718 2 4.5591 2H9.72039C9.85723 2.00012 9.98842 2.05287 10.0851 2.14667L13.1819 5.16667C13.2787 5.26034 13.3332 5.38744 13.3333 5.52V11.8333C13.3333 12.3196 13.1339 12.7859 12.779 13.1297C12.4241 13.4735 11.9427 13.6667 11.4408 13.6667ZM4.5591 3C4.33096 3 4.11216 3.0878 3.95084 3.24408C3.78951 3.40036 3.69888 3.61232 3.69888 3.83333V11.8333C3.69888 12.0543 3.78951 12.2663 3.95084 12.4226C4.11216 12.5789 4.33096 12.6667 4.5591 12.6667H11.4408C11.669 12.6667 11.8878 12.5789 12.0491 12.4226C12.2104 12.2663 12.301 12.0543 12.301 11.8333V5.70667L9.50706 3H4.5591Z"
@@ -89,7 +89,7 @@
 
 <div class="options-popup" *ngIf="addToggler" #addPopup>
     <div class="search-wrapper">
-        <input type="text" [(ngModel)]="searchTerm" class="input" (keyup)="onSearchOption()" />
+        <input type="text" [(ngModel)]="searchTerm" class="input" (keyup)="onSearchOption()" placeholder="Search"/>
         <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path fill-rule="evenodd" clip-rule="evenodd"
                 d="M7.15455 2.12476C6.34673 2.12482 5.55064 2.31573 4.83269 2.68154C4.11475 3.04736 3.49577 3.57747 3.0274 4.22766C2.55903 4.87785 2.25485 5.62925 2.14024 6.41919C2.02562 7.20913 2.1039 8.01468 2.36855 8.76866C2.63319 9.52263 3.07651 10.2031 3.66154 10.7534C4.24657 11.3037 4.95633 11.7079 5.73161 11.9321C6.50689 12.1563 7.32521 12.1941 8.1183 12.0424C8.91138 11.8906 9.65623 11.5537 10.2907 11.0598L12.4673 13.2099C12.5797 13.3172 12.7302 13.3765 12.8865 13.3752C13.0428 13.3738 13.1923 13.3119 13.3028 13.2027C13.4133 13.0936 13.476 12.9459 13.4773 12.7915C13.4787 12.6372 13.4186 12.4884 13.31 12.3774L11.1334 10.2273C11.7223 9.48932 12.0889 8.60252 12.1914 7.66835C12.2939 6.73418 12.128 5.79038 11.7129 4.94497C11.2977 4.09955 10.65 3.38668 9.84388 2.88792C9.03774 2.38917 8.10575 2.12469 7.15455 2.12476ZM3.28056 7.12921C3.28056 6.11424 3.68871 5.14085 4.41522 4.42316C5.14174 3.70547 6.12711 3.30227 7.15455 3.30227C8.182 3.30227 9.16737 3.70547 9.89388 4.42316C10.6204 5.14085 11.0286 6.11424 11.0286 7.12921C11.0286 8.14417 10.6204 9.11757 9.89388 9.83526C9.16737 10.5529 8.182 10.9561 7.15455 10.9561C6.12711 10.9561 5.14174 10.5529 4.41522 9.83526C3.68871 9.11757 3.28056 8.14417 3.28056 7.12921Z"
@@ -101,8 +101,9 @@
         <div class="title">Components</div>
 
         <div class="options-list-container" *ngIf="filteredAddList.length">
-            <div *ngFor="let option of filteredAddList" class="option-wrapper" (mousedown)="onAddNode(option)">
-                <svg class="option-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <div *ngFor="let option of filteredAddList" class="option-wrapper" (mousedown)="onAddNode(option)" title="{{option.title}}">
+                <img *ngIf="option.src" width="16" height="16" src="assets/images/{{option.src}}" alt="{{option.title}}">
+                <svg *ngIf="!option.src" class="option-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path
                         d="M16 8.26707L12 1.33374H7.45804L5.9967 3.86707H10.537L13.0754 8.26707L10.537 12.6671H5.9967L7.45804 15.2004H12L16 8.26707Z"
                         fill="#2C76FF" />

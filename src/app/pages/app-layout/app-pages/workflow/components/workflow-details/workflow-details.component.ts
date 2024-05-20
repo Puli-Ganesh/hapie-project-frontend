@@ -78,52 +78,207 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   setNodeImage() {
     for (let item of this.canConnect) {
       this.nodeImages[item.title] = new Image();
+      let src = '';
       switch (item.title) {
         case 'Start':
-          this.nodeImages[item.title].src = 'assets/images/start.svg';
+          src = 'start.svg';
           break;
         case 'Teams':
-          this.nodeImages[item.title].src = 'assets/images/teams.svg';
+          src = 'teams.svg';
           break;
         case 'Zoom':
-          this.nodeImages[item.title].src = 'assets/images/zoom.svg';
+          src = 'zoom.svg';
           break;
         case 'Meet':
-          this.nodeImages[item.title].src = 'assets/images/meet.svg';
+          src = 'meet.svg';
           break;
         case 'Video Upload':
-          this.nodeImages[item.title].src = 'assets/images/video-upload.svg';
+          src = 'video-upload.svg';
           break;
         case 'Analysis':
-          this.nodeImages[item.title].src = 'assets/images/analysis.svg';
+          src = 'analysis.svg';
           break;
         case 'AI':
-          this.nodeImages[item.title].src = 'assets/images/ai.svg';
+          src = 'ai.svg';
           break;
         case 'Compare Video':
-          this.nodeImages[item.title].src = 'assets/images/compare-video.svg';
+          src = 'compare-video.svg';
           break;
         case 'Canvas':
-          this.nodeImages[item.title].src = 'assets/images/canvas.svg';
+          src = 'canvas.svg';
           break;
         case 'Document':
-          this.nodeImages[item.title].src = 'assets/images/document.svg';
+          src = 'document.svg';
           break;
         case 'Pandadoc':
-          this.nodeImages[item.title].src = 'assets/images/pandadoc.svg';
+          src = 'pandadoc.svg';
           break;
         case 'Email':
-          this.nodeImages[item.title].src = 'assets/images/email.svg';
+          src = 'email.svg';
+          break;
+        case 'Slack':
+          src = 'slack.svg';
+          break;
+        case 'Audio App':
+          src = 'audio-app.svg';
+          break;
+        case 'Chat Bot':
+          src = 'chat-bot.svg';
+          break;
+        case 'Document Upload':
+          src = 'document-upload.svg';
+          break;
+        case 'Image':
+          src = 'image.svg';
+          break;
+        case 'Hangouts':
+          src = 'hangouts.svg';
+          break;
+        case 'Google Chat':
+          src = 'google-chat.svg';
+          break;
+        case 'Machine Learning':
+          src = 'machine-learning.svg';
+          break;
+        case 'Salesforce':
+          src = 'salesforce.svg';
+          break;
+        case 'Video App':
+          src = 'video-app.svg';
+          break;
+        case 'Jenkins':
+          src = 'jenkins.svg';
+          break;
+        case 'Adobe Marketing Cloud':
+          src = 'adobe-marketing-cloud.svg';
+          break;
+        case 'Asana':
+          src = 'asana.svg';
+          break;
+        case 'AWS':
+          src = 'aws.svg';
+          break;
+        case 'Azure Devops':
+          src = 'azure-devops.svg';
+          break;
+        case 'BambooHR':
+          src = 'bamboo-hr.svg';
+          break;
+        case 'Bitbucket':
+          src = 'bitbucket.svg';
+          break;
+        case 'Bitbucket Agent':
+          src = 'bitbucket-agent.svg';
+          break;
+        case 'CircleCI':
+          src = 'circleci.svg';
+          break;
+        case 'Code Climate':
+          src = 'code-climate.svg';
+          break;
+        case 'Confluence':
+          src = 'confluence.svg';
+          break;
+        case 'Confluence Agent':
+          src = 'confluence-agent.svg';
+          break;
+        case 'Crowdstrike':
+          src = 'crowdstrike.svg';
+          break;
+        case 'GitHub':
+          src = 'github.svg';
+          break;
+        case 'GitLab':
+          src = 'gitlab.svg';
+          break;
+        case 'Google Analytics':
+          src = 'google-analytics.svg';
+          break;
+        case 'Google Cloud Platform':
+          src = 'google-cloud-platform.svg';
+          break;
+        case 'Google Workspace':
+          src = 'google-workspace.svg';
+          break;
+        case 'HubSpot CRM':
+          src = 'hubspot-crm.svg';
+          break;
+        case 'Jira':
+          src = 'jira.svg';
+          break;
+        case 'Jira Agent':
+          src = 'jira-agent.svg';
+          break;
+        case 'Mailchimp':
+          src = 'mailchimp.svg';
+          break;
+        case 'Marketo':
+          src = 'marketo.svg';
+          break;
+        case 'Microsoft 365':
+          src = 'microsoft-365.svg';
+          break;
+        case 'Microsoft Azure':
+          src = 'microsoft-azure.svg';
+          break;
+        case 'Microsoft Dynamic 365':
+          src = 'microsoft-dynamic-365.svg';
+          break;
+        case 'Microsoft Dynamic AX':
+          src = 'microsoft-dynamic-ax.svg';
+          break;
+        case 'Microsoft':
+          src = 'microsoft.svg';
+          break;
+        case 'Monday':
+          src = 'monday.svg';
+          break;
+        case 'OKTA':
+          src = 'okta.svg';
+          break;
+        case 'Oracle ERP Cloud':
+          src = 'oracle-erp-cloud.svg';
+          break;
+        case 'Palo Alto Network':
+          src = 'palo-alto-network.svg';
+          break;
+        case 'Power BI':
+          src = 'power-bi.svg';
+          break;
+        case 'Sap S/4HANA':
+          src = 'sap-s-4hana.svg';
+          break;
+        case 'Sap SuccessFactors':
+          src = 'sap-success-factors.svg';
+          break;
+        case 'SonarQube':
+          src = 'sonarqube.svg';
+          break;
+        case 'Tableau':
+          src = 'tableau.svg';
+          break;
+        case 'Trello':
+          src = 'trello.svg';
+          break;
+        case 'Workday':
+          src = 'workday.svg';
+          break;
+        case 'Super Agent (AI)':
+          src = 'super-agent-ai.png';
+          break;
+        case 'Vector Database':
+          src = 'vector-database.png';
           break;
         default:
           break;
       }
+
+      if (src) {
+        this.nodeImages[item.title].src = `assets/images/${src}`;
+      }
     }
 
-
     console.log(this.nodeImages)
-    // this.nodeImage = new Image();
-    // this.nodeImage.src = 'assets/images/component.svg';
   }
 
 
@@ -639,10 +794,10 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
     this.searchTerm = '';
   }
 
-  searchTerm = '';
+  protected searchTerm: string = '';
   onSearchOption() {
     console.log(this.searchTerm);
-    this.filteredAddList = this.addList.filter((op: any) => op.toLowerCase().includes(this.searchTerm.toLowerCase()))
+    this.filteredAddList = this.addList.filter((op: any) => op.title.toLowerCase().includes(this.searchTerm.toLowerCase()));
   }
 
   panStartOffset: IPosition = {
@@ -831,24 +986,41 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
     this.addToggler = true;
     this.selectedNodeId = node.id;
 
-    const connect = this.canConnect.find((d: any) => d.title == node.title);
-    this.addList = [];
-    
-    if (connect) {
-      for (let item of connect.to) {
-        this.addList.push({
-          title: item
-        })
+    this.addList = this.canConnect.reduce((ac, cv) => {
+      if (cv.title === 'Start') {
+        return ac;
       }
-      // this.addList = [...connect.to];
-      // const siblings = this.nodes.filter((n: Node) => node.connection.to.includes(n.id));
-      // for (let option of connect.to) {
-      //   const existingNode = siblings.find((n: Node) => n.title == option);
-      //   if (!existingNode) {
-      //     this.addList.push(option)
-      //   }
-      // }
-    }
+      if (this.nodeImages[cv.title]) {
+        ac.push({
+          title: cv.title,
+          src: this.nodeImages[cv.title].src.split('/images/').pop()
+        });
+      } else {
+        ac.push({
+          title: cv.title
+        });
+      }
+      return ac;
+    }, []);
+
+    // const connect = this.canConnect.find((d: any) => d.title == node.title);
+    // this.addList = [];
+
+    // if (connect) {
+    //   for (let item of connect.to) {
+    //     this.addList.push({
+    //       title: item
+    //     });
+    //   }
+    //   // this.addList = [...connect.to];
+    //   // const siblings = this.nodes.filter((n: Node) => node.connection.to.includes(n.id));
+    //   // for (let option of connect.to) {
+    //   //   const existingNode = siblings.find((n: Node) => n.title == option);
+    //   //   if (!existingNode) {
+    //   //     this.addList.push(option)
+    //   //   }
+    //   // }
+    // }
 
     if (!node.isRoot && !node.connection.to.length) {
       const parentNode = this.nodes.find((n: Node) => n.connection.to.includes(node.id));
@@ -920,11 +1092,11 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
               y: 0,
               width: this.nodeWidth,
               height: this.nodeHeight
-            }
+            };
             for (let i = 0; i < res.data.nodes.length; i++) {
               let node = res.data.nodes[i];
               if (i == 12) {
-                node.connection.to.push(14)
+                node.connection.to.push(14);
               }
               let n = new Node(node.id, { ...coords }, node.connection, this.scale, i ? false : true);
               if (node?.config?.documentTitle) {
@@ -933,7 +1105,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
               n.title = node.app;
               this.nodes.push(n);
               if (this.currentNodeId < node.id) {
-                this.currentNodeId = node.id
+                this.currentNodeId = node.id;
               }
             }
 
@@ -945,14 +1117,14 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
           this.panStartOffset = {
             x: 0,
             y: 0
-          }
+          };
           this.childHeightSet = false;
           this.processedChildren = [];
           this.repeatingChildParent = {};
           this.repeatingChildren = {};
 
           if (this.animationId) {
-            window.cancelAnimationFrame(this.animationId)
+            window.cancelAnimationFrame(this.animationId);
           }
           console.log(this.nodes)
           this.animationId = window.requestAnimationFrame(this.animate);
