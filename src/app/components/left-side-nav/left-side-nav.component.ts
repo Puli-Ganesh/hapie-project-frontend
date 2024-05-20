@@ -172,6 +172,8 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
       }
     } else if (url.startsWith('/team')) {
       this.activeMenu = 'team';
+    } else if (url.startsWith('/apps')) {
+      this.activeMenu = 'apps';
     } else if (url.startsWith('/templates')) {
       this.activeMenu = 'templates';
     } else if (url.startsWith('/project')) {
@@ -247,16 +249,19 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
   }
 
   onTeam() {
-    this._router.navigate([this.appRoutes.TEAM])
+    this._router.navigate([this.appRoutes.TEAM]);
+  }
+  onApps() {
+    this._router.navigate([this.appRoutes.APPS]);
   }
   onProjects() {
-    this._router.navigate([this.appRoutes.PROJECTS])
+    this._router.navigate([this.appRoutes.PROJECTS]);
   }
   onTemplates() {
-    this._router.navigate([this.appRoutes.TEMPLATES])
+    this._router.navigate([this.appRoutes.TEMPLATES]);
   }
   onWorkflows() {
-    this._router.navigate([this.appRoutes.WORKFLOWS])
+    this._router.navigate([this.appRoutes.WORKFLOWS]);
   }
 
   onApproveEditAccess(index: number): void {

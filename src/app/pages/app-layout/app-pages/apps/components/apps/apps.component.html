@@ -1,0 +1,27 @@
+<div class="apps-container">
+
+    <div class="apps-header">
+        <div class="breadcrumbs-wrapper"></div>
+        <app-header></app-header>
+    </div>
+
+    <div class="apps-wrapper">
+        <div class="title">apps Settings</div>
+
+        <div class="app-list" *ngIf="appList.length>0">
+            <div class="app-wrap" *ngFor="let app of appList;">
+                <div class="app-img-wrap">
+                    <img class="app-img" width="48" height="48" src="assets/images/{{app.src}}" alt="{{app.title}}">
+                </div>
+                <div class="content-wrap">
+                    <div class="desc-wrap">
+                        <div class="app-title">{{app.title}}</div>
+                        <div class="desc">Connect {{app.title}} to your workspace to easily invite contacts, share conversations, and get notifications</div>
+                    </div>
+                    <button class="app-button primary">add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

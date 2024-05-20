@@ -25,6 +25,11 @@ const routes: Routes = [
     loadChildren: () => import('./app-pages/team/team.module').then(m => m.TeamModule),
   },
   {
+    path: 'apps',
+    component: CommonOutletComponent,
+    loadChildren: () => import('./app-pages/apps/apps.module').then(m => m.AppsModule)
+  },
+  {
     path: 'templates',
     component: CommonOutletComponent,
     loadChildren: () => import('./app-pages/templates/templates.module').then(m => m.TemplatesModule),

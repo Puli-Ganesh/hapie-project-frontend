@@ -1,0 +1,105 @@
+@import 'src/styles/_mixins';
+
+
+.apps-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    position: relative;
+
+    .apps-header {
+        position: sticky;
+        top: 0;
+        left: 0;
+        display: flex;
+        background-color: $light-base;
+        z-index: 9;
+
+        .breadcrumbs-wrapper {
+            margin-right: auto;
+        }
+    }
+
+    .apps-wrapper {
+        flex: 1;
+        position: relative;
+        overflow: auto;
+        background-color: $base;
+        border: 1px solid transparent;
+        border-color: $border-color $border-color transparent $border-color;
+        border-radius: 4px;
+        margin-right: 16px;
+        padding: 16px;
+
+        .title {
+            margin-bottom: 16px;
+            color: $on-base;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            text-transform: capitalize;
+        }
+
+        .app-list {
+            margin: 0 auto;
+            max-width: 860px;
+            display: flex;
+            flex-flow: column nowrap;
+            gap: 24px 0;
+            background-color: $base;
+
+            .app-wrap {
+                display: grid;
+                grid-template-columns: max-content 1fr;
+                background-color: $light-base;
+                border: 1px solid $border-color;
+                border-radius: 4px;
+
+                .app-img-wrap {
+                    padding: 6px;
+                    background-color: $base;
+                    border-right: 1px solid $border-color;
+
+                    .app-img {
+                        display: block;
+                        width: 48px;
+                        height: 48px;
+                    }
+                }
+
+                .content-wrap {
+                    padding: 12px 24px;
+                    display: flex;
+                    flex-flow: row nowrap;
+                    gap: 0 24px;
+
+                    .desc-wrap {
+                        flex: 1;
+
+                        .app-title {
+                            margin-bottom: 4px;
+                            color: $on-light-base;
+                            font-family: $base-font-family;
+                            font-size: 14px;
+                            font-style: normal;
+                            font-weight: 600;
+                            line-height: normal;
+                            text-transform: capitalize;
+                        }
+
+                        .desc {
+                            color: $on-base-light;
+                            font-family: $base-font-family;
+                            font-size: 12px;
+                            font-style: normal;
+                            font-weight: 400;
+                            line-height: normal;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
