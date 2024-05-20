@@ -91,6 +91,7 @@ export class AppsComponent implements OnInit {
           if (res.code == 'OK') {
             this.appList = res.data;
             if (this.appList?.length) {
+              this.appList = this.appList.filter((app: any) => app.title !== 'Start');
               for (const app of this.appList) {
                 if (this.appsAssets[app.title]) {
                   app.src = this.appsAssets[app.title];
