@@ -68,6 +68,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._facadeService.modalService.registerModal('signDocumentModal');
+    this._facadeService.modalService.registerModal('documentMigrationModal');
     this.getDocumentList();
   }
 
@@ -243,7 +244,6 @@ export class DocumentComponent implements OnInit, OnDestroy {
         next: (res: any) => {
           if (this.projectDetails?.workflowId?.nodes) {
             this.templateList = res.data.list;
-            this.templateNodes = this.projectDetails.workflowId.nodes.filter((n: any) => n.app == 'Document');
 
             this.templateNodes = this.projectDetails.workflowId.nodes.filter((n: any) => n.app == 'Document');
             if (this.templateNodes.length) {
@@ -324,6 +324,44 @@ export class DocumentComponent implements OnInit, OnDestroy {
         });
       }, 100);
     }
+  }
+
+  onOpenConfirmMigrationModal() {
+    this._facadeService.modalService.toggleModal('documentMigrationModal');
+  }
+
+  onConfirmMigrateVersion(): void {
+    if (!this.selectedDocument || !this.projectDetails._id) return;
+    const body = {
+      templateId: this.selectedDocument._id,
+      projectId: this.projectDetails._id
+    };
+
+    this._facadeService.documentService.migrateVersion(body).subscribe({
+      next: (res: any) => {
+        if (res.code === "OK") {
+          this.selectedDocument.versions = res.data.templateVersion;
+          this.versionOptions = this.selectedDocument.versions.map((version: any) => version.majorMinorCombination).sort((versionA: any, versionB: any) => +versionA - +versionB);
+          this.selectedVersion = this.versionOptions[this.versionOptions.length - 1];
+          this.selectedDocument.latestMajor = +this.selectedVersion.split('.')[0];
+          this.selectedDocument.latestMinor = +this.selectedVersion.split('.')[1];
+          
+          this.selectedDocumentCategoryList = res.data.list.map(((category: any) => {
+            category.requirements = category.requirements.filter((requirement: any) => requirement.isApproved);
+            return category;
+          }));
+          this.setDocumentCKEditor();
+        }
+        this._facadeService.modalService.closeModal('documentMigrationModal');
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    });
+  }
+
+  onCancelMigrateVersion() {
+    this._facadeService.modalService.closeModal('documentMigrationModal');
   }
 
   ngOnDestroy(): void {

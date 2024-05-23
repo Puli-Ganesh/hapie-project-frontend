@@ -111,11 +111,11 @@ export class CkEditorConfig {
     // },
     cloudServices: {
       // Be careful - do not use the development token endpoint on production systems!
-      tokenUrl: 'https://107207.cke-cs.com/token/dev/EepKWFkThp2IXZcEVifOfkcdeVq57z2juDbM?limit=10',
-      webSocketUrl: 'wss://107207.cke-cs.com/ws',
-      uploadUrl: 'https://107207.cke-cs.com/easyimage/upload/'
+      tokenUrl: 'https://103353.cke-cs.com/token/dev/BmjhQmpvxH4fM65U7JufQ2XTP8uTIeOoCSpS?limit=10',
+      webSocketUrl: 'wss://103353.cke-cs.com/ws',
+      uploadUrl: 'https://103353.cke-cs.com/easyimage/upload/'
     },
-    licenseKey: 'c1hFUml6YXhNTnhDbjN4QVBEb24vRkdTL09tRlFZeFEyaEp1WWRWMjVmWmphL2FxTkJiMEpEc2ZURGVFLU1qQXlOREExTVRrPQ==',
+    licenseKey: 'Tzk5OGVhQ29xR012R2ZmSU1LM1RKd1A4dDRKdFM5MDJmQ00xWmovL1FsQmk3OWVsMzZZbkduVUJ5d1h5T3c9PS1NakF5TkRBMk1Uaz0=',
     removePlugins: [
       'Base64UploadAdapter',
       // Intentionally disabled, file uploads are handled by CKBox

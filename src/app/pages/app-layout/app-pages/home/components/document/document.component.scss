@@ -566,3 +566,52 @@
         transform: rotate(360deg);
     }
 }
+
+.document-migration-modal {
+    padding: 32px 56px;
+    width: 640px;
+
+    .title {
+        text-align: center;
+        font-family: $raleway-600;
+        font-size: 20px;
+        line-height: 36px;
+        margin-bottom: 24px;
+    }
+
+    .actions-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 36px;
+
+        .btn {
+            padding: 12px 36px;
+            border-radius: 8px;
+            background-color: #D12335;
+            color: $base;
+            outline: none;
+            border: none;
+            cursor: pointer;
+
+            .label {
+                color: inherit;
+                font-family: $raleway-500;
+                font-size: 16px;
+                line-height: 24px;
+            }
+
+            &.light {
+                background-color: #F4F4F4;
+                color: $on-base;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    .document-migration-modal {
+        width: 100%;
+        max-width: 640px;
+    }
+}

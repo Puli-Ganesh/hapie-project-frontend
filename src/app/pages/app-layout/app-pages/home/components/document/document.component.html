@@ -173,6 +173,11 @@
                             type="button" (click)="onSignDocument()">
                             <span class="btn-label">sign with pandaDoc</span>
                         </button>
+
+                        <button class="app-button primary" type="button" (click)="onOpenConfirmMigrationModal()">
+                            <span class="btn-label">Migrate to version {{selectedDocument.latestMajor + 1}}.{{selectedDocument?.latestMinor}}</span>
+                        </button>
+
                         <button class="app-button primary" type="button" (click)="onDone()">
                             <span class="btn-label">Done</span>
                         </button>
@@ -254,6 +259,18 @@
                     <span class="label">Generate Link</span>
                 </button>
                 <div *ngIf="isGenerating" class="spinner"></div>
+            </div>
+        </div>
+    </app-modal>
+
+    <app-modal id="documentMigrationModal">
+        <div class="document-migration-modal">
+            <div class="title">
+                Are you sure you want to Migrate to version {{ selectedDocument?.latestMajor + 1 }}.{{selectedDocument?.latestMinor}}?
+            </div>
+            <div class="actions-wrap">
+                <button class="btn light" (click)="onCancelMigrateVersion()">Cancel</button>
+                <button class="btn bg-1-1" (click)="onConfirmMigrateVersion()">Migrate</button>
             </div>
         </div>
     </app-modal>
