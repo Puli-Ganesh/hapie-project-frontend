@@ -617,3 +617,37 @@
         <div class="basic-title">Basic plan</div>
     </div>
 </nav>
+
+<!-- chat-box.component.html -->
+<div class="chat-box" *ngIf="isChatBoxVisible">
+    <div class="chat-header">
+        <span>Chat with AI</span>
+        <button class="close-button" (click)="toggleChatBox()">&times;</button>
+    </div>
+    <div class="chat-content">
+        <ng-container *ngFor="let chat of chats">
+            <div *ngIf="chat.ai" class="ai-message">
+                {{chat.ai}}
+            </div>
+            <div *ngIf="chat.user" class="user-message">
+                {{chat.user}}
+            </div>
+        </ng-container>
+     </div>
+    <div class="chat-input">
+        <textarea placeholder="Type your message..." #userInput (keydown)="handleKeyDown($event)"></textarea>
+        <div class="send-icon" (click)="sendMessage()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" x="0px" y="0px">
+                <g data-name="Layer 2">
+                    <path
+                        d="M28.725,11a.289.289,0,0,0-.106.021L8.085,18.657a.13.13,0,0,0-.005.242l8.257,3.413,6.257-6.257a1,1,0,1,1,1.414,1.414L17.72,23.758l2.742,8.069a.114.114,0,0,0,.119.088c.126,0,.113-.052.125-.082l8.271-20.446A.284.284,0,0,0,28.725,11Z" />
+                    <path
+                        d="M20,1A19,19,0,1,0,39,20,19.021,19.021,0,0,0,20,1ZM30.83,12.137,22.56,32.583a2.111,2.111,0,0,1-1.972,1.332h-.063a2.115,2.115,0,0,1-1.957-1.444l-2.8-8.229L7.316,20.748a2.131,2.131,0,0,1,.072-3.966L27.923,9.146a2.279,2.279,0,0,1,2.907,2.991Z" />
+                </g>
+            </svg>
+        </div>
+    </div>
+</div>
+<div class="chat-bot-icon">
+    <img class="chat-button" src="assets/images/chatbot.png" (click)="toggleChatBox()" />
+</div>

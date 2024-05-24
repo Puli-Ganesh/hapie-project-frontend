@@ -118,6 +118,9 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
 
   protected isNavCollapsed: boolean = false;
   protected avatarMenu: boolean = false;
+  protected isChatBoxVisible: boolean = false;
+
+  @ViewChild('userInput') userInputRef!: ElementRef<HTMLInputElement>;
   @ViewChild('avatarToggler') avatarToggler!: ElementRef;
   @ViewChild('avatarMenuWrapper') avatarMenuWrapper!: ElementRef;
 
@@ -320,6 +323,34 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
     this.projectDetailsSubscription?.unsubscribe();
     this._facadeService.projectService.removeSelectedProject();
     this.routerSubscription?.unsubscribe();
+  }
+
+
+
+  chats = [
+    { "user": "hello sfaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+    { "ai": "how are you dsfffffffffffffffffffffffffffffffffffffffffffffffffffffffff" },
+    { "user": "i am fine" }
+  ]
+
+  toggleChatBox() {
+    this.isChatBoxVisible = !this.isChatBoxVisible;
+  }
+
+  handleKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      if (event.shiftKey) {
+        return;
+      } else {
+        event.preventDefault();
+        this.sendMessage();
+      }
+    }
+  }
+
+  sendMessage(): void {
+    const userInput = this.userInputRef.nativeElement.value;
+    this.userInputRef.nativeElement.value='';
   }
 
 }

@@ -202,6 +202,10 @@ export class MediaTranscriptComponent implements OnInit, OnDestroy {
   onGoToProjects() {
     this._router.navigate([this.appRoutes.PROJECTS])
   }
+  
+  onGoBack() {
+    this._router.navigate([this.appRoutes.PROJECT_MEDIA_TRANSCRIPT])
+  }
 
   // onGoToProject() {
   //   this._router.navigate([this.appRoutes.PROJECT_PROFILE])
