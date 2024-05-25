@@ -333,6 +333,8 @@ export class DocumentComponent implements OnInit, OnDestroy {
   onConfirmMigrateVersion(): void {
     if (!this.selectedDocument || !this.projectDetails._id) return;
     const body = {
+      // @ts-ignore
+      html: window.editor.getData(),
       templateId: this.selectedDocument._id,
       projectId: this.projectDetails._id
     };

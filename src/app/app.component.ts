@@ -6,6 +6,7 @@ import { AES, enc } from 'crypto-js';
 import { IResponse } from '@src/interfaces/response.interface';
 import { AppSocketService } from './services/app-socket/app-socket.service';
 import { FacadeService } from './services/facade.service';
+import { CkEditorConfig } from './constants/ckEditorConfig';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +28,11 @@ export class AppComponent {
             this._appConfig.clientURL = data.clientUrl;
             this._appConfig.serverURL = data.serverUrl;
             this._appConfig.googleClientId = data.googleClientId;
+
+            CkEditorConfig.config.cloudServices.tokenUrl = data.ckEditorTokenUrl;
+            CkEditorConfig.config.cloudServices.webSocketUrl = data.ckEditorWebSocketUrl;
+            CkEditorConfig.config.cloudServices.uploadUrl = data.ckEditorUploadUrl;
+            CkEditorConfig.config.licenseKey = data.ckEditorLicenseKey;
 
             const currentUser = this._facadeService.authService.getCurrentUser();
             if (currentUser?._id) {

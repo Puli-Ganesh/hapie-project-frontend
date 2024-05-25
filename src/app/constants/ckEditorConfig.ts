@@ -8,7 +8,7 @@ export class CkEditorConfig {
     };
   }
 
-  static readonly config = {
+  static config = {
     toolbar: {
       items: [
         // 'aiCommands', 'aiAssistant', '|',
@@ -111,11 +111,11 @@ export class CkEditorConfig {
     // },
     cloudServices: {
       // Be careful - do not use the development token endpoint on production systems!
-      tokenUrl: 'https://103353.cke-cs.com/token/dev/BmjhQmpvxH4fM65U7JufQ2XTP8uTIeOoCSpS?limit=10',
-      webSocketUrl: 'wss://103353.cke-cs.com/ws',
-      uploadUrl: 'https://103353.cke-cs.com/easyimage/upload/'
+      tokenUrl: '',
+      webSocketUrl: '',
+      uploadUrl: ''
     },
-    licenseKey: 'Tzk5OGVhQ29xR012R2ZmSU1LM1RKd1A4dDRKdFM5MDJmQ00xWmovL1FsQmk3OWVsMzZZbkduVUJ5d1h5T3c9PS1NakF5TkRBMk1Uaz0=',
+    licenseKey: '',
     removePlugins: [
       'Base64UploadAdapter',
       // Intentionally disabled, file uploads are handled by CKBox

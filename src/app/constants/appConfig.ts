@@ -3,4 +3,8 @@ export class AppConfig {
 	clientURL: string = '';
 	serverURL: string = '';
 	helloSignClientId: string = '';
+	ckEditorTokenUrl: string = '';
+	ckEditorWebSocketUrl: string = '';
+	ckEditorUploadUrl: string = '';
+	ckEditorLicenseKey: string = '';
 }
