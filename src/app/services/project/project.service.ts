@@ -96,6 +96,10 @@ export class ProjectService {
     return this._httpClientService.put(body, `${this.endPoint}/update-members`);
   }
 
+  chatWithAI(projectId: string, prompt: string) {
+    return this._httpClientService.post({ prompt }, `${this.endPoint}/chat-with-ai/${projectId}`);
+  }
+
   deleteProject(projectId: string): Observable<IResponse> {
     return this._httpClientService.delete(`${this.endPoint}/${projectId}`);
   }

@@ -648,6 +648,6 @@
         </div>
     </div>
 </div>
-<div class="chat-bot-icon">
+<div class="chat-bot-icon" *ngIf="projectDetails?._id">
     <img class="chat-button" src="assets/images/chatbot.png" (click)="toggleChatBox()" />
 </div>

@@ -73,6 +73,10 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
             }
           }
         }
+
+        if (!this.projectDetails?._id) {
+          this.isChatBoxVisible = false;
+        }
       }
     });
 
@@ -327,11 +331,7 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
 
 
 
-  chats = [
-    { "user": "hello sfaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
-    { "ai": "how are you dsfffffffffffffffffffffffffffffffffffffffffffffffffffffffff" },
-    { "user": "i am fine" }
-  ]
+  chats: any = [];
 
   toggleChatBox() {
     this.isChatBoxVisible = !this.isChatBoxVisible;
@@ -350,6 +350,25 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
 
   sendMessage(): void {
     const userInput = this.userInputRef.nativeElement.value;
+    this.chats.push({
+      'user': userInput
+    })
+
+    this._facadeService.projectService.chatWithAI(this.projectDetails._id, userInput).subscribe({
+      next: (res: any) => {
+        if (res.code == 'OK') {
+          if (res.data.startsWith(this.projectDetails._id)) {
+            this.chats.push({
+              'ai': 'There are no data for ai system.'
+            });
+          } else {
+            this.chats.push({
+              'ai': res.data
+            })
+          }
+        }
+      }
+    });
     this.userInputRef.nativeElement.value='';
   }
 
