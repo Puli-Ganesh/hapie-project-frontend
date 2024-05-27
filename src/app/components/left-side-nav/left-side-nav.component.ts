@@ -309,6 +309,10 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         if (res.code == 'OK') {
           this.workflowList = res.data.list;
+          this.workflowList?.map((p: any) => {
+            p.tooltip = p.name?.split(' ')?.map((pn: string) => pn.charAt(0).toUpperCase() + pn.slice(1))?.join(' ') ?? '';
+            return p;
+          });
         }
       }, error: (err: any) => {
         console.error('Error while getting workflow list', err.error);

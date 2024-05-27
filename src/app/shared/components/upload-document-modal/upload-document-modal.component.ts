@@ -122,7 +122,14 @@ export class UploadDocumentModalComponent implements OnInit, OnDestroy {
             clearInterval(this.documentUplaodIntervalId)
             this.documentUplaodIntervalId = null;
           }
-          this._facadeService.appService.openToaster('Error while uploading document', 'danger');
+          switch (err?.error?.code) {
+            case 'UNPROCESSABLE_ENTITY':
+              this._facadeService.appService.openToaster(err.error.message, 'danger');
+              break;
+            default:
+              this._facadeService.appService.openToaster('Error while uploading document', 'danger');
+              break;
+          }
         }
       });
       // @ts-ignore
@@ -143,7 +150,14 @@ export class UploadDocumentModalComponent implements OnInit, OnDestroy {
         },
         error: (err: any) => {
           this.requestAlive = false;
-          this._facadeService.appService.openToaster('Error while uploading document', 'danger');
+          switch (err?.error?.code) {
+            case 'UNPROCESSABLE_ENTITY':
+              this._facadeService.appService.openToaster(err.error.message, 'danger');
+              break;
+            default:
+              this._facadeService.appService.openToaster('Error while uploading document', 'danger');
+              break;
+          }
         }
       });
 
@@ -164,7 +178,14 @@ export class UploadDocumentModalComponent implements OnInit, OnDestroy {
         },
         error: (err: any) => {
           this.requestAlive = false;
-          this._facadeService.appService.openToaster('Error while uploading document', 'danger');
+          switch (err?.error?.code) {
+            case 'UNPROCESSABLE_ENTITY':
+              this._facadeService.appService.openToaster(err.error.message, 'danger');
+              break;
+            default:
+              this._facadeService.appService.openToaster('Error while uploading document', 'danger');
+              break;
+          }
         }
       });
     }

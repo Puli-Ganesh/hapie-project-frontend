@@ -433,7 +433,8 @@
                 </div>
             </div>
             <ul class="list-wrapper" *ngIf="workflowToggler">
-                <li class="list-item" [class.active]="selectedWorkflowId == workflow._id" *ngFor="let workflow of workflowList; let index = index;" (click)="onViewWorkflow(index)">
+                <li class="list-item" [class.active]="selectedWorkflowId == workflow._id"
+                    *ngFor="let workflow of workflowList; let index = index;" (click)="onViewWorkflow(index)" title="{{workflow.tooltip}}">
                     <svg class="list-item-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M7 14L11.7498 9" stroke="currentColor" stroke-linecap="round" />
                         <path d="M18 14L11.7498 9" stroke="currentColor" stroke-linecap="round" />
@@ -487,7 +488,6 @@
 
         <div class="divider"></div>
 
-
         <!-- <div class="menu" [class.active]="activeMenu == 'templates'"
             *ngIf="permissions.MENU_TEMPLATES.includes(currentUser?.type)" (click)="onTemplates()">
             <div class="menu-icon-wrapper">
@@ -500,7 +500,7 @@
             </div>
             <div class="menu-title">templates</div>
         </div> -->
-        <div class="menu" [class.active]="activeMenu == 'apps'" (click)="onApps()">
+        <div class="menu" [class.active]="activeMenu == 'apps'" (click)="onApps()" title="Apps">
             <div class="menu-icon-wrapper">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <mask id="path-1-inside-1_152_1448" fill="white">
@@ -528,7 +528,7 @@
             <div class="menu-title">apps</div>
         </div>
         <div class="menu" [class.active]="activeMenu == 'team'" (click)="onTeam()"
-            *ngIf="permissions.MENU_TEAM.includes(currentUser?.type)">
+            *ngIf="permissions.MENU_TEAM.includes(currentUser?.type)" title="Team">
             <div class="menu-icon-wrapper">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <path
@@ -542,7 +542,7 @@
         <div class="divider"></div>
 
         <div class="project-menus-wrapper" *ngIf="projectDetails?.projectName">
-            <div class="menu" [class.active]="activeMenu == 'project'">
+            <div class="menu" [class.active]="activeMenu == 'project'" title="{{projectDetails?.projectName}}">
                 <div class="menu-icon-wrapper">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path
@@ -555,7 +555,8 @@
                 </div>
                 <div class="menu-title">{{ projectDetails?.projectName }}</div>
             </div>
-            <div class="menu" (click)="onGoToMedia()" *ngIf="hasAccessTo.includes('Analysis')" [class.active]="secondaryMenu == 'media'">
+            <div class="menu" (click)="onGoToMedia()" *ngIf="hasAccessTo.includes('Analysis')"
+                [class.active]="secondaryMenu == 'media'" title="Media">
                 <div class="menu-icon-wrapper">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
                         <circle cx="6" cy="6" r="6" fill="currentColor" />
@@ -563,7 +564,8 @@
                 </div>
                 <div class="menu-title">Media</div>
             </div>
-            <div class="menu" (click)="onGoToCompare()" *ngIf="hasAccessTo.includes('Compare Video')" [class.active]="secondaryMenu == 'compare'">
+            <div class="menu" (click)="onGoToCompare()" *ngIf="hasAccessTo.includes('Compare Video')"
+                [class.active]="secondaryMenu == 'compare'" title="Compare">
                 <div class="menu-icon-wrapper">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
                         <circle cx="6" cy="6" r="6" fill="currentColor" />
@@ -571,7 +573,8 @@
                 </div>
                 <div class="menu-title">Compare</div>
             </div>
-            <div class="menu" (click)="onGoToCanvas()" *ngIf="hasAccessTo.includes('Canvas')" [class.active]="secondaryMenu == 'canvas'">
+            <div class="menu" (click)="onGoToCanvas()" *ngIf="hasAccessTo.includes('Canvas')"
+                [class.active]="secondaryMenu == 'canvas'" title="Canvas">
                 <div class="menu-icon-wrapper">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
                         <circle cx="6" cy="6" r="6" fill="currentColor" />
@@ -579,7 +582,8 @@
                 </div>
                 <div class="menu-title">Canvas</div>
             </div>
-            <div class="menu" (click)="onGoToTemplate()" *ngIf="hasAccessTo.includes('Document')" [class.active]="secondaryMenu == 'template'">
+            <div class="menu" (click)="onGoToTemplate()" *ngIf="hasAccessTo.includes('Document')"
+                [class.active]="secondaryMenu == 'template'" title="Template">
                 <div class="menu-icon-wrapper">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
                         <circle cx="6" cy="6" r="6" fill="currentColor" />
@@ -587,7 +591,8 @@
                 </div>
                 <div class="menu-title">Template</div>
             </div>
-            <div class="menu" (click)="onGoToDocument()" *ngIf="hasAccessTo.includes('Document')" [class.active]="secondaryMenu == 'document'">
+            <div class="menu" (click)="onGoToDocument()" *ngIf="hasAccessTo.includes('Document')"
+                [class.active]="secondaryMenu == 'document'" title="Document">
                 <div class="menu-icon-wrapper">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
                         <circle cx="6" cy="6" r="6" fill="currentColor" />
@@ -595,7 +600,6 @@
                 </div>
                 <div class="menu-title">Document</div>
             </div>
-
         </div>
 
     </div>
@@ -655,6 +659,7 @@
         </div>
     </div>
 </div>
+
 <div class="chat-bot-icon" *ngIf="projectDetails?._id">
     <img class="chat-button" src="assets/images/chatbot.png" (click)="toggleChatBox()" />
 </div>

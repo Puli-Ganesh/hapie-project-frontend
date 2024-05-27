@@ -368,6 +368,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this._facadeService.modalService.unregisterModal('signDocumentModal');
+    this._facadeService.modalService.unregisterModal('documentMigrationModal');
     //@ts-ignore
     window.editor = null;
   }
