@@ -333,6 +333,7 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
 
   chats: any = [];
 
+  aiLoader: boolean = false;
   toggleChatBox() {
     this.isChatBoxVisible = !this.isChatBoxVisible;
   }
@@ -354,6 +355,15 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
       'user': userInput
     })
 
+    this.aiLoader = true;
+    
+    setTimeout(() => {
+      const element = document.getElementById('ai-loader');
+      if (element) {
+        element.scrollIntoView();
+      }
+    }, 100);
+
     this._facadeService.projectService.chatWithAI(this.projectDetails._id, userInput).subscribe({
       next: (res: any) => {
         if (res.code == 'OK') {
@@ -366,10 +376,11 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
               'ai': res.data
             })
           }
+          this.aiLoader = false;
         }
       }
     });
-    this.userInputRef.nativeElement.value='';
+    this.userInputRef.nativeElement.value = '';
   }
 
 }

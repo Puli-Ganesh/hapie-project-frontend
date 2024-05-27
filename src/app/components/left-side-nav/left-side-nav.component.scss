@@ -878,6 +878,7 @@ $primary-hover: rgba(170, 196, 255, 0.25);
             font-size: 12px;
             font-style: normal;
             font-weight: 400;
+            word-break: break-all;
             color: #141C25;
             margin: 5px 0;
             padding: 10px;
@@ -895,6 +896,55 @@ $primary-hover: rgba(170, 196, 255, 0.25);
             align-self: flex-end;
             background-color: #C9DCFF;
         }
+
+        .jumping-dots {
+            span {
+                display: inline-block;
+                position: relative;
+                margin-left: auto;
+                margin-right: auto;
+                animation: jump 1s infinite;
+            }
+
+            .dot-1,
+            .dot-2,
+            .dot-3 {
+                width: 10px;
+                height: 10px;
+                background-color: $primary;
+                opacity: 0.5;
+                border-radius: 50%;
+                margin-right: 3px;
+            }
+            
+            .dot-1{
+                animation-delay: 200ms;
+            }
+            
+            .dot-2 {
+                animation-delay: 400ms;
+            }
+
+            .dot-3 {
+                animation-delay: 600ms;
+            }
+
+            @keyframes jump {
+                0% {
+                    bottom: 0px;
+                }
+
+                20% {
+                    bottom: 5px;
+                }
+
+                40% {
+                    bottom: 0px;
+                }
+            }
+        }
+
+
     }
 
     .chat-input {

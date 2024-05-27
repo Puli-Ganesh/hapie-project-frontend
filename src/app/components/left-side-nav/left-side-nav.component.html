@@ -633,7 +633,14 @@
                 {{chat.user}}
             </div>
         </ng-container>
-     </div>
+        <div id="ai-loader" *ngIf="aiLoader" class="my message">
+            <span class="jumping-dots">
+                <span class="dot-1"></span>
+                <span class="dot-2"></span>
+                <span class="dot-3"></span>
+            </span>
+        </div>
+    </div>
     <div class="chat-input">
         <textarea placeholder="Type your message..." #userInput (keydown)="handleKeyDown($event)"></textarea>
         <div class="send-icon" (click)="sendMessage()">
