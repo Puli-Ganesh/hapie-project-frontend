@@ -208,6 +208,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this._facadeService.modalService.unregisterModal('deleteProjectModal');
+    this._facadeService.modalService.unregisterModal('projectCreateModal');
     this.projectsSubscription?.unsubscribe();
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { FacadeService } from '@src/app/services/facade.service';
 import { Roles } from '@src/app/constants/roles';
@@ -8,7 +8,7 @@ import { Roles } from '@src/app/constants/roles';
   templateUrl: './team.component.html',
   styleUrls: ['./team.component.scss']
 })
-export class TeamComponent implements OnInit {
+export class TeamComponent implements OnInit, OnDestroy {
 
   constructor(
     private _facadeService: FacadeService
@@ -143,6 +143,10 @@ export class TeamComponent implements OnInit {
     this.onSearchQueryDebounceTimeoutId = setTimeout(() => {
       this.filteredDisplayUserList = this.displayUsers.filter(({ firstName, lastName }: any) => `${firstName.toLowerCase()} ${lastName.toLowerCase()}`.includes(this.searchQuery.toLowerCase()));
     }, 300);
+  }
+
+  ngOnDestroy(): void {
+    this._facadeService.modalService.unregisterModal('manageTeamModal');
   }
 
 }

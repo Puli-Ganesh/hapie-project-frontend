@@ -588,12 +588,17 @@ export class ManageProjectComponent implements OnInit {
       });
 
     } else {
+      if (!this.selectedMembers.length) {
+        this.onCancelAndSkip();
+        return;
+      }
+
       const body = {
         projectId: this.projectDetails._id,
         add: this.selectedMembers.map((mem: any) => ({ userId: mem._id, color: mem.color }))
       };
-      this.isRequestAlive = true;
 
+      this.isRequestAlive = true;
       this._facadeService.projectService.updateMembers(body).subscribe({
         next: (res: any) => {
           this.onCancelAndSkip();
