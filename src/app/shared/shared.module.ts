@@ -13,6 +13,7 @@ import { AutofocusDirective } from '../directives/autofocus.directive';
 import { SafePipe } from '../pipes/safe.pipe';
 import { HeaderComponent } from './components/header/header.component';
 import { DropDownComponent } from './components/drop-down/drop-down.component';
+import { UploadDocModalComponent } from './components/upload-doc-modal/upload-doc-modal.component';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { DropDownComponent } from './components/drop-down/drop-down.component';
     ModalComponent,
     UploadDocumentModalComponent,
     UploadMediaModalComponent,
+    UploadDocModalComponent,
     DragDropFileDirective,
     AutofocusDirective,
     SafePipe,
@@ -37,6 +39,7 @@ import { DropDownComponent } from './components/drop-down/drop-down.component';
     ModalComponent,
     UploadDocumentModalComponent,
     UploadMediaModalComponent,
+    UploadDocModalComponent,
     DragDropFileDirective,
     AutofocusDirective,
     SafePipe,

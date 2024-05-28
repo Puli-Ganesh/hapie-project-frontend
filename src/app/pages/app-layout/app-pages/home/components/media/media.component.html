@@ -82,10 +82,6 @@
                 <div class="subtitle">Click Upload to upload media files</div>
             </div>
         </ng-template>
-
-        <ng-container *ngIf="isUploadingMedia">
-            <app-upload-media-modal (onClose)="onCloseUploadMediaModal($event)"></app-upload-media-modal>
-        </ng-container>
     </div>
     <!-- 
     <div class="inner-header">
@@ -142,4 +138,7 @@
     </div> -->
 
 
+    <ng-container *ngIf="isUploadingMedia">
+        <app-upload-media-modal (onClose)="onCloseUploadMediaModal($event)"></app-upload-media-modal>
+    </ng-container>
 </div>

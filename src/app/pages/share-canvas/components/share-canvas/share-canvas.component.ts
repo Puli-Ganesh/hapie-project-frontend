@@ -223,29 +223,58 @@ export class ShareCanvasComponent implements OnInit, OnDestroy {
   setCategories(): void {
     this.categoryList = [];
 
-    for (const rawCategory of this.rawCategoryList) {
-      const categoryExist = this.categoryList.find((cat: any) => rawCategory.title.includes(cat.title));
-      if (categoryExist) {
-        const title = rawCategory.title.split('/').slice(1)?.join(' / ')?.trim();
-        categoryExist.list.push({
-          ...rawCategory,
-          dTitle: title,
-          toggler: false
-        });
-        if (!categoryExist.hasMany) { categoryExist.hasMany = true; }
-      } else {
-        const title = rawCategory.title.split('/');
-        const dTitle = (title.length === 1) ? title[0] : title.slice(1).join(' / ');
-        this.categoryList.push({
-          title: rawCategory.title.split('/')[0],
-          list: [{
-            ...rawCategory,
+    // for (const rawCategory of this.rawCategoryList) {
+    //   const categoryExist = this.categoryList.find((cat: any) => rawCategory.title.includes(cat.title));
+    //   if (categoryExist) {
+    //     const title = rawCategory.title.split('/').slice(1)?.join(' / ')?.trim();
+    //     categoryExist.list.push({
+    //       ...rawCategory,
+    //       dTitle: title,
+    //       toggler: false
+    //     });
+    //     if (!categoryExist.hasMany) { categoryExist.hasMany = true; }
+    //   } else {
+    //     const title = rawCategory.title.split('/');
+    //     const dTitle = (title.length === 1) ? title[0] : title.slice(1).join(' / ');
+    //     this.categoryList.push({
+    //       title: rawCategory.title.split('/')[0],
+    //       list: [{
+    //         ...rawCategory,
+    //         dTitle: dTitle?.trim(),
+    //         toggler: false
+    //       }],
+    //       hasMany: false
+    //     });
+    //   }
+    // }
+
+    for (let i = 0; i < this.rawCategoryList.length; i++) {
+      const title = this.rawCategoryList[i].title.split(/ *\/ */);
+      const dTitle = (title.length === 1) ? title[0] : title.slice(1).join(' / ');
+      const subCategories = [{
+        ...this.rawCategoryList[i],
+        dTitle: dTitle,
+        toggler: false
+      }];
+
+      for (let j = i + 1; j < this.rawCategoryList.length; j++) {
+        if (this.rawCategoryList[j].title.startsWith(`${this.rawCategoryList[i].title.split(/ *\/ */)?.at(0)} /`)) {
+          const title = this.rawCategoryList[j].title.split(/ *\/ */);
+          const dTitle = (title.length === 1) ? title[0] : title.slice(1).join(' / ');
+          subCategories.push({
+            ...this.rawCategoryList[j],
             dTitle: dTitle?.trim(),
             toggler: false
-          }],
-          hasMany: false
-        });
+          });
+          i++;
+        } else { break; }
       }
+
+      this.categoryList.push({
+        title: title[0]?.trim(),
+        list: subCategories,
+        hasMany: subCategories.length > 1
+      });
     }
 
     this.rawCategoryList = _.cloneDeep(this.categoryList);

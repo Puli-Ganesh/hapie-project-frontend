@@ -53,6 +53,10 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
           if (documentIndex > -1) {
             this.hasAccessTo.push('Document');
           }
+          const videoUploadIndex = nodes.findIndex((n: any) => n.app == 'Video Upload');
+          if (videoUploadIndex > -1) {
+            this.hasAccessTo.push('Video Upload');
+          }
 
           if (_router.routerState.snapshot.url === this.appRoutes.PROJECTS) {
             switch (this.hasAccessTo[0]) {
@@ -67,6 +71,9 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
                 break;
               case 'Document':
                 _router.navigateByUrl(this.appRoutes.PROJECT_TEMPLATE);
+                break;
+              case 'Video Upload':
+                _router.navigateByUrl(this.appRoutes.PROJECT_DOCUMENT_UPLOAD);
                 break;
               default:
                 break;
@@ -191,6 +198,8 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
         this.secondaryMenu = 'compare'
       } else if (url.includes('/canvas')) {
         this.secondaryMenu = 'canvas'
+      } else if (url.includes('/document-upload')) {
+        this.secondaryMenu = 'document-upload';
       } else if (url.includes('/document')) {
         this.secondaryMenu = 'document';
       } else if (url.includes('/template')) {
@@ -269,6 +278,9 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
   }
   onWorkflows() {
     this._router.navigate([this.appRoutes.WORKFLOWS]);
+  }
+  onDocumentUpload() {
+    this._router.navigate([this.appRoutes.PROJECT_DOCUMENT_UPLOAD]);
   }
 
   onApproveEditAccess(index: number): void {

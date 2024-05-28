@@ -14,6 +14,7 @@ import { MediaComponent } from './components/media/media.component';
 import { MediaTranscriptComponent } from './components/media-transcript/media-transcript.component';
 import { TemplateComponent } from './components/template/template.component';
 import { DocumentComponent } from './components/document/document.component';
+import { DocumentUploadComponent } from './components/document-upload/document-upload.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { DocumentComponent } from './components/document/document.component';
     MediaComponent,
     MediaTranscriptComponent,
     TemplateComponent,
-    DocumentComponent
+    DocumentComponent,
+    DocumentUploadComponent
   ],
   imports: [
     CommonModule,

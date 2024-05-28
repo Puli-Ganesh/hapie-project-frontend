@@ -1,0 +1,89 @@
+<app-modal id="uploadDocModal" (onClose)="onCloseModal($event)">
+    <div class="upload-wrapper">
+        <div class="title">Document Upload</div>
+
+        <div class="scrollable-content">
+            <div class="media-upload-list" *ngIf="documentUploadForm.controls.length > 0">
+                <div class="media-upload-wrap"
+                    *ngFor="let mediaUpload of documentUploadForm.controls; let fileIndex = index;">
+                    <div class="media-upload">
+                        <span class="media-title">
+                            {{mediaUpload.value?.mediaFile?.name || mediaUpload.value?.mediaUrl?.split('/')?.pop()}}
+                        </span>
+                        <div class="progress-bar-wrap">
+                            <div class="bar" [class.success]="mediaUpload.value?.progress == 100"
+                                [style.width.%]="mediaUpload.value.progress"></div>
+                        </div>
+                    </div>
+
+                    <!-- <app-drop-down [selectedOption]="mediaUpload.value.language" [optionsList]="languageList"
+                        uniqueKey="code" displayKey="name"
+                        (onSelectChange)="onFileLanguageSelect($event, fileIndex)"></app-drop-down> -->
+
+                    <div class="delete-icon-wrap" *ngIf="mediaUpload.value.progress === 0">
+                        <svg class="delete-icon" (click)="onRemoveMedia($event, fileIndex)" width="24"
+                            height="24" viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M10.2 6.6H13.8C13.8 6.12261 13.6104 5.66477 13.2728 5.32721C12.9352 4.98964 12.4774 4.8 12 4.8C11.5226 4.8 11.0648 4.98964 10.7272 5.32721C10.3896 5.66477 10.2 6.12261 10.2 6.6ZM8.4 6.6C8.4 5.64522 8.77928 4.72955 9.45442 4.05442C10.1295 3.37928 11.0452 3 12 3C12.9548 3 13.8705 3.37928 14.5456 4.05442C15.2207 4.72955 15.6 5.64522 15.6 6.6H20.1C20.3387 6.6 20.5676 6.69482 20.7364 6.8636C20.9052 7.03239 21 7.2613 21 7.5C21 7.73869 20.9052 7.96761 20.7364 8.1364C20.5676 8.30518 20.3387 8.4 20.1 8.4H19.3062L18.5088 17.706C18.4321 18.6046 18.021 19.4417 17.3567 20.0517C16.6924 20.6617 15.8233 21.0001 14.9214 21H9.0786C8.17672 21.0001 7.30765 20.6617 6.64333 20.0517C5.97902 19.4417 5.56786 18.6046 5.4912 17.706L4.6938 8.4H3.9C3.66131 8.4 3.43239 8.30518 3.2636 8.1364C3.09482 7.96761 3 7.73869 3 7.5C3 7.2613 3.09482 7.03239 3.2636 6.8636C3.43239 6.69482 3.66131 6.6 3.9 6.6H8.4ZM14.7 12C14.7 11.7613 14.6052 11.5324 14.4364 11.3636C14.2676 11.1948 14.0387 11.1 13.8 11.1C13.5613 11.1 13.3324 11.1948 13.1636 11.3636C12.9948 11.5324 12.9 11.7613 12.9 12V15.6C12.9 15.8387 12.9948 16.0676 13.1636 16.2364C13.3324 16.4052 13.5613 16.5 13.8 16.5C14.0387 16.5 14.2676 16.4052 14.4364 16.2364C14.6052 16.0676 14.7 15.8387 14.7 15.6V12ZM10.2 11.1C10.4387 11.1 10.6676 11.1948 10.8364 11.3636C11.0052 11.5324 11.1 11.7613 11.1 12V15.6C11.1 15.8387 11.0052 16.0676 10.8364 16.2364C10.6676 16.4052 10.4387 16.5 10.2 16.5C9.96131 16.5 9.73239 16.4052 9.5636 16.2364C9.39482 16.0676 9.3 15.8387 9.3 15.6V12C9.3 11.7613 9.39482 11.5324 9.5636 11.3636C9.73239 11.1948 9.96131 11.1 10.2 11.1ZM7.284 17.553C7.32234 18.0025 7.52805 18.4211 7.8604 18.7262C8.19275 19.0312 8.6275 19.2003 9.0786 19.2H14.9214C15.3722 19.1998 15.8065 19.0305 16.1385 18.7255C16.4704 18.4206 16.6759 18.0022 16.7142 17.553L17.499 8.4H6.501L7.284 17.553Z"
+                                fill="#344051" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <label for="file-select" class="upload-file-label">Upload file</label>
+            <div class="uploader-wrapper" appDragDropFile (fileDropped)="onFileDrop($event)">
+                <div class="message-wrapper">
+                    <label class="label" for="file-select">
+                        Click here to select a file(s)
+                        <input class="file-select" id="file-select" type="file" accept="{{imageMimeTypes.join(', ')}}"
+                            (change)="onFileChoose($event)">
+                    </label>
+                    <div>
+                        or Drag and drop here
+                    </div>
+                    <div class="mime-types">
+                        DOCX, TXT, JSON
+                    </div>
+                </div>
+            </div>
+            <p class="file-err" *ngIf="mimeTypeNotSupportErr">{{mimeTypeNotSupportErr}}</p>
+
+            <div class="or">or</div>
+
+            <form class="url-form" [formGroup]="videoForm">
+                <label for="url">Paste Link</label>
+                <input type="text" formControlName="url" name="url" placeholder="Google Document link" />
+            </form>
+        </div>
+
+
+        <button class="app-button primary wide" [disabled]="!documentUploadForm.value?.length || documentUploadForm.invalid"
+            (click)="onUploadMedia()">
+            <span class="btn-icon">
+                <svg width="15" height="18" viewBox="0 0 15 18" fill="none">
+                    <mask id="mask0_539_584" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0"
+                        width="15" height="18">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M0.5 0.676392H14.7101V17.221H0.5V0.676392Z"
+                            fill="white" />
+                    </mask>
+                    <g mask="url(#mask0_539_584)">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M4.31089 1.92639C2.93006 1.92639 1.78339 3.04472 1.75089 4.42389V13.3564C1.72089 14.7739 2.83756 15.9406 4.24172 15.9714H10.9776C12.3684 15.9214 13.4692 14.7739 13.4601 13.3606V5.94972L9.59839 1.92639H4.32089H4.31089ZM4.32089 17.2214H4.21589C2.12256 17.1764 0.45589 15.4364 0.50089 13.3431V4.40889C0.550057 2.34139 2.25672 0.676392 4.30839 0.676392H4.32339H9.86422C10.0342 0.676392 10.1967 0.745558 10.3151 0.868058L14.5367 5.26556C14.6476 5.38139 14.7101 5.53722 14.7101 5.69806V13.3564C14.7234 15.4472 13.0934 17.1464 10.9992 17.2214H4.32089Z"
+                            fill="white" />
+                    </g>
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M14.0815 6.48687H11.7865C10.2607 6.4827 9.02148 5.23937 9.02148 3.71604V1.29187C9.02148 0.94687 9.30148 0.66687 9.64648 0.66687C9.99148 0.66687 10.2715 0.94687 10.2715 1.29187V3.71604C10.2715 4.5527 10.9515 5.23437 11.7882 5.23687H14.0815C14.4265 5.23687 14.7065 5.51687 14.7065 5.86187C14.7065 6.20687 14.4265 6.48687 14.0815 6.48687"
+                        fill="white" />
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M7.28418 12.9167C6.93918 12.9167 6.65918 12.6367 6.65918 12.2917V7.25757C6.65918 6.91257 6.93918 6.63257 7.28418 6.63257C7.62918 6.63257 7.90918 6.91257 7.90918 7.25757V12.2917C7.90918 12.6367 7.62918 12.9167 7.28418 12.9167"
+                        fill="white" />
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M5.33085 9.84545C5.17168 9.84545 5.01168 9.78461 4.89002 9.66295C4.64585 9.41961 4.64418 9.02461 4.88835 8.77961L6.84168 6.81628C7.07668 6.58045 7.49335 6.58045 7.72751 6.81628L9.68252 8.77961C9.92585 9.02461 9.92502 9.41961 9.68085 9.66295C9.43585 9.90628 9.04001 9.90628 8.79668 9.66128L7.28502 8.14295L5.77335 9.66128C5.65168 9.78461 5.49085 9.84545 5.33085 9.84545"
+                        fill="white" />
+                </svg>
+            </span>
+            <span class="btn-label">Upload Document</span>
+        </button>
+    </div>
+</app-modal>

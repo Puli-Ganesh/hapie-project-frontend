@@ -1,0 +1,10 @@
+@import '../../../../styles/main.scss';
+
+
+.upload-wrapper {
+    .media-upload-list {
+        .media-upload-wrap {
+            grid-template-columns: 1fr max-content !important;
+        }
+    }
+}

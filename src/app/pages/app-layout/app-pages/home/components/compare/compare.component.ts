@@ -215,33 +215,64 @@ export class CompareComponent implements OnInit {
       return;
     }
 
+    // const localPromptList: Array<any> = [];
+    // for (const prompt of list) {
+    //   const promptExist = localPromptList.find((cat: any) => prompt.title.includes(cat.title));
+    //   if (promptExist) {
+    //     const title = prompt.title.split('/').slice(1)?.join(' / ')?.trim();
+    //     promptExist.list.push({
+    //       ...prompt,
+    //       dTitle: title,
+    //       selected: false
+    //     });
+    //     if (!promptExist.hasMany) {
+    //       promptExist.hasMany = true;
+    //       promptExist.selected = false;
+    //     }
+    //   } else {
+    //     const title = prompt.title.split('/');
+    //     const dTitle = (title.length === 1) ? title[0] : title.slice(1).join(' / ');
+    //     localPromptList.push({
+    //       title: title[0]?.trim(),
+    //       list: [{
+    //         ...prompt,
+    //         dTitle: dTitle?.trim(),
+    //         selected: false
+    //       }],
+    //       hasMany: false
+    //     });
+    //   }
+    // }
+
     const localPromptList: Array<any> = [];
-    for (const prompt of list) {
-      const promptExist = localPromptList.find((cat: any) => prompt.title.includes(cat.title));
-      if (promptExist) {
-        const title = prompt.title.split('/').slice(1)?.join(' / ')?.trim();
-        promptExist.list.push({
-          ...prompt,
-          dTitle: title,
-          selected: false
-        });
-        if (!promptExist.hasMany) {
-          promptExist.hasMany = true;
-          promptExist.selected = false;
-        }
-      } else {
-        const title = prompt.title.split('/');
-        const dTitle = (title.length === 1) ? title[0] : title.slice(1).join(' / ');
-        localPromptList.push({
-          title: title[0]?.trim(),
-          list: [{
-            ...prompt,
+    for (let i = 0; i < list.length; i++) {
+      const title = list[i].title.split(/ *\/ */);
+      const dTitle = (title.length === 1) ? title[0] : title.slice(1).join(' / ');
+      const subPromptList = [{
+        ...list[i],
+        dTitle: dTitle,
+        selected: false
+      }];
+
+      for (let j = i + 1; j < list.length; j++) {
+        if (list[j].title.startsWith(`${list[i].title.split(/ *\/ */)?.at(0)} /`)) {
+          const title = list[j].title.split(/ *\/ */);
+          const dTitle = (title.length === 1) ? title[0] : title.slice(1).join(' / ');
+          subPromptList.push({
+            ...list[j],
             dTitle: dTitle?.trim(),
             selected: false
-          }],
-          hasMany: false
-        });
+          });
+          i++;
+        } else { break; }
       }
+
+      localPromptList.push({
+        title: title[0]?.trim(),
+        list: subPromptList,
+        hasMany: subPromptList.length > 1,
+        selected: false
+      });
     }
 
     this.promptList = _.cloneDeep(localPromptList);
