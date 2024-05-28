@@ -115,6 +115,7 @@ export class UploadDocumentModalComponent implements OnInit, OnDestroy {
           this.documentUplaodIntervalId = null;
           this.documentUploadProgress = 100;
           // this.saveTemplate(res.data.html);
+          this._facadeService.appService.openToaster('File uploaded successfully.', 'success');
         },
         error: (err: any) => {
           this.requestAlive = false;
@@ -146,6 +147,7 @@ export class UploadDocumentModalComponent implements OnInit, OnDestroy {
           if (res.code == "OK") {
             this.documentUpdated.next(true);
             this.resetData();
+            this._facadeService.appService.openToaster('File uploaded successfully.', 'success');
           }
         },
         error: (err: any) => {
@@ -175,6 +177,7 @@ export class UploadDocumentModalComponent implements OnInit, OnDestroy {
           this.documentUpdated.next(true);
           this.resetData();
           this.requestAlive = false;
+          this._facadeService.appService.openToaster('File uploaded successfully.', 'success');
         },
         error: (err: any) => {
           this.requestAlive = false;
