@@ -44,7 +44,7 @@ export class UploadDocumentModalComponent implements OnInit, OnDestroy {
 
   documentFile: any;
   documentUploadProgress = 0;
-  documentUplaodIntervalId: any;
+  documentUploadIntervalId: any;
   requestAlive = false;
 
   ngOnInit(): void {
@@ -80,6 +80,11 @@ export class UploadDocumentModalComponent implements OnInit, OnDestroy {
     }
   }
 
+  onRemoveFile(event: Event): void {
+    event?.stopPropagation();
+    this.documentFile = undefined;
+  }
+
   onUploadDocument() {
     if (this.documentForm.invalid || this.requestAlive) {
       this.documentForm.markAllAsTouched();
@@ -99,11 +104,11 @@ export class UploadDocumentModalComponent implements OnInit, OnDestroy {
       formData.append('dataType', (this.documentForm.get('dataType') as any).value);
 
       const url = this._httpClientService.fullRequestURL(`template/create-from-doc`);
-      this.documentUplaodIntervalId = setInterval(() => {
+      this.documentUploadIntervalId = setInterval(() => {
         this.documentUploadProgress += 2;
         if (this.documentUploadProgress >= 95) {
-          clearInterval(this.documentUplaodIntervalId);
-          this.documentUplaodIntervalId = null;
+          clearInterval(this.documentUploadIntervalId);
+          this.documentUploadIntervalId = null;
         }
       }, 800);
       this._httpClient.post(url, formData).subscribe({
@@ -111,17 +116,17 @@ export class UploadDocumentModalComponent implements OnInit, OnDestroy {
           this.documentUpdated.next(true);
           this.resetData();
           this.requestAlive = false;
-          clearInterval(this.documentUplaodIntervalId);
-          this.documentUplaodIntervalId = null;
+          clearInterval(this.documentUploadIntervalId);
+          this.documentUploadIntervalId = null;
           this.documentUploadProgress = 100;
           // this.saveTemplate(res.data.html);
           this._facadeService.appService.openToaster('File uploaded successfully.', 'success');
         },
         error: (err: any) => {
           this.requestAlive = false;
-          if (this.documentUplaodIntervalId) {
-            clearInterval(this.documentUplaodIntervalId)
-            this.documentUplaodIntervalId = null;
+          if (this.documentUploadIntervalId) {
+            clearInterval(this.documentUploadIntervalId)
+            this.documentUploadIntervalId = null;
           }
           switch (err?.error?.code) {
             case 'UNPROCESSABLE_ENTITY':
@@ -237,15 +242,15 @@ export class UploadDocumentModalComponent implements OnInit, OnDestroy {
     if (this.projectId) {
       body.projectId = this.projectId;
     }
-    if (this.documentUplaodIntervalId) {
-      clearInterval(this.documentUplaodIntervalId)
-      this.documentUplaodIntervalId = null;
+    if (this.documentUploadIntervalId) {
+      clearInterval(this.documentUploadIntervalId)
+      this.documentUploadIntervalId = null;
     }
-    this.documentUplaodIntervalId = setInterval(() => {
+    this.documentUploadIntervalId = setInterval(() => {
       this.documentUploadProgress += 2;
       if (this.documentUploadProgress >= 95) {
-        clearInterval(this.documentUplaodIntervalId);
-        this.documentUplaodIntervalId = null;
+        clearInterval(this.documentUploadIntervalId);
+        this.documentUploadIntervalId = null;
       }
     }, 200);
     this._facadeService.templateService.saveModifiedTemplate(body).subscribe({
@@ -257,9 +262,9 @@ export class UploadDocumentModalComponent implements OnInit, OnDestroy {
         }, 100);
       },
       error: (err: any) => {
-        if (this.documentUplaodIntervalId) {
-          clearInterval(this.documentUplaodIntervalId);
-          this.documentUplaodIntervalId = null;
+        if (this.documentUploadIntervalId) {
+          clearInterval(this.documentUploadIntervalId);
+          this.documentUploadIntervalId = null;
         }
         this.requestAlive = false;
         this._facadeService.appService.openToaster('Error while uploading document', 'danger');

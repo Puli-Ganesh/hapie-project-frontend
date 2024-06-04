@@ -494,7 +494,7 @@ export class ManageProjectComponent implements OnInit {
       this._facadeService.userService.getListByWorkspaceId().subscribe({
         next: (res: IResponse) => {
           if (res.data) {
-            this.membersList = res.data.filter((m: any) => ![Roles.SYSTEM_OWNER, Roles.ADMIN].includes(m.type));
+            this.membersList = res.data.filter((m: any) => ![Roles.ADMIN].includes(m.type));
             this.filteredMembersList = [...this.membersList];
           }
           resolve();

@@ -68,7 +68,7 @@
         <div class="app-table-ctrl">
             <div class="app-table-wrap">
                 <div class="tbl-tr">
-                    <div class="tbl-th d-flex" [ngSwitch]="!true ? 'checked' : ''">
+                    <!-- <div class="tbl-th d-flex" [ngSwitch]="!true ? 'checked' : ''">
                         <svg *ngSwitchCase="'checked'" class="d-block c-p" width="18" height="18" viewBox="0 0 18 18" fill="none">
                             <rect x="0.5" y="0.5" width="17" height="17" rx="3.5" fill="#2C76FF" stroke="#2C76FF"/>
                             <path d="M4 9.33333L6.12973 13.3088C6.30235 13.6311 6.75113 13.6652 6.97047 13.3727L14 4" stroke="white" stroke-width="2" stroke-linecap="round"/>
@@ -76,7 +76,7 @@
                         <svg *ngSwitchDefault class="d-block c-p" width="18" height="18" viewBox="0 0 18 18" fill="none">
                             <rect x="0.5" y="0.5" width="17" height="17" rx="3.5" fill="#FFFFFF" stroke="#E4E7EC" />
                         </svg>
-                    </div>
+                    </div> -->
                     <div class="tbl-th d-flex">profile</div>
                     <div class="tbl-th d-flex">Email</div>
                     <div class="tbl-th d-flex">role</div>
@@ -99,7 +99,7 @@
                     </div>
                 </div>
                 <div class="tbl-tr" *ngFor="let user of filteredDisplayUserList;">
-                    <div class="tbl-td d-flex" [ngSwitch]="false ? 'checked' : ''">
+                    <!-- <div class="tbl-td d-flex" [ngSwitch]="false ? 'checked' : ''">
                         <svg *ngSwitchCase="'checked'" class="d-block c-p" width="18" height="18" viewBox="0 0 18 18" fill="none">
                             <rect x="0.5" y="0.5" width="17" height="17" rx="3.5" fill="#2C76FF" stroke="#2C76FF"/>
                             <path d="M4 9.33333L6.12973 13.3088C6.30235 13.6311 6.75113 13.6652 6.97047 13.3727L14 4" stroke="white" stroke-width="2" stroke-linecap="round"/>
@@ -107,7 +107,7 @@
                         <svg *ngSwitchDefault class="d-block c-p" width="18" height="18" viewBox="0 0 18 18" fill="none">
                             <rect x="0.5" y="0.5" width="17" height="17" rx="3.5" fill="#FFFFFF" stroke="#E4E7EC" />
                         </svg>
-                    </div>
+                    </div> -->
                     <div class="tbl-td d-flex profile text-cap">
                         <div class="profile-wrap">
                             <svg *ngIf="!user.profilePicture" width="32" height="32" viewBox="0 0 60 60" fill="none">

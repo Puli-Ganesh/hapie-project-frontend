@@ -215,7 +215,7 @@
             
             <form [formGroup]="workflowForm" (ngSubmit)="onConfirmCreate()">
                 <div class="input-group">
-                    <label class="label" for="name">Name</label>
+                    <label class="label required" for="name">Name</label>
                     <input class="input" type="text" formControlName="name" />
                     <div class="err-list" *ngIf="name.touched && name?.errors">
                         <div class="err" *ngIf="name.errors?.['required']">
@@ -224,7 +224,7 @@
                     </div>
                 </div>
                 <div class="input-group">
-                    <label class="label" for="description">Description</label>
+                    <label class="label required" for="description">Description</label>
                     <textarea class="input" name="description" id="description" formControlName="description"></textarea>
                     <div class="err-list" *ngIf="description.touched && description?.errors">
                         <div class="err" *ngIf="description.errors?.['required']">

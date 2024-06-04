@@ -131,7 +131,7 @@
 
                     <!-- Workflow  template css reused -->
                     <div class="template-dropdown" *ngIf="workflowList.length > 0">
-                        <div class="label">Project Workflow</div>
+                        <div class="label required">Project Workflow</div>
                         <div class="selected-template" (click)="workflowToggler = !workflowToggler"
                             [ngClass]="{
                                 'active': getWorkflow.value,
