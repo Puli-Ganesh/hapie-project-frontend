@@ -1,5 +1,6 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { FacadeService } from '@src/app/services/facade.service';
@@ -16,10 +17,18 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _facadeService: FacadeService,
-    private _router: Router
+    private _router: Router,
+    private _fb: FormBuilder
   ) {
     const state = this._router.getCurrentNavigation()?.extras.state;
     this.isCreating = state?.['isCreating'] ?? false;
+
+    this.confluenceConfigForm = this._fb.group({
+      confluenceUrl: ['', [Validators.required]],
+      confluenceUsername: ['', [Validators.required]],
+      confluencePassword: ['', [Validators.required]],
+      confluenceSpaceKey: ['', [Validators.required]]
+    });
   }
 
   @ViewChild('addPopup') addPopup!: ElementRef;
@@ -44,6 +53,9 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   documentTitle = '';
   isCreating = false;
   animationId: any;
+
+  protected confluenceConfigForm!: FormGroup;
+
 
   async ngOnInit() {
     await this.getRootObject();
@@ -285,8 +297,21 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   onDetailsSave() {
     const node = this.nodes.find((n: Node) => n.id == this.selectedNodeId);
     if (node) {
-      node.config.documentTitle = this.documentTitle.trim();
+      switch (node.title) {
+        case 'Document':
+          node.config.documentTitle = this.documentTitle.trim();
+          break;
+        case 'Confluence':
+          if (this.confluenceConfigForm.invalid) {
+            this.confluenceConfigForm.markAllAsTouched();
+            return;
+          } else { node.config = this.confluenceConfigForm.value; }
+          break;
+        default:
+          return;
+      }
     }
+    console.log(node)
     this.onDetailsCancel();
   }
 
@@ -617,15 +642,30 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   addList: any = [];
   filteredAddList: any = [];
   drawerToggler: boolean = false;
+  openDrawerFor: string = '';
 
   openDrawer(node: Node) {
     if (!node.title) {
       return;
     }
-    this.selectedNodeId = node.id;
-    if (node?.config?.documentTitle) {
-      this.documentTitle = node.config.documentTitle;
+
+    switch (node.title) {
+      case 'Document':
+        if (node?.config?.documentTitle) {
+          this.documentTitle = node.config.documentTitle;
+        }
+        break;
+      case 'Confluence':
+        console.log(node.config)
+        if (Object.keys(node?.config).length > 0) {
+          this.confluenceConfigForm.patchValue(node.config);
+        }
+        break;
+      default:
+        return;
     }
+    this.openDrawerFor = node.title;
+    this.selectedNodeId = node.id;
     this.drawerToggler = true;
   }
 
@@ -637,9 +677,18 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
         id: node.id,
         app: node.title,
         connection: node.connection
-      }
-      if (Object.keys(node.config).length) {
-        n['config'] = node.config
+      };
+      switch (node.title) {
+        case 'Document':
+          if (Object.keys(node.config).length) { n['config'] = node.config; }
+          break;
+        case 'Confluence':
+          if (this.confluenceConfigForm.invalid) {
+            this._facadeService.appService.openToaster('Confluence configuration is messing.', 'danger');
+            this.confluenceConfigForm.markAllAsTouched();
+            return;
+          } else { n['config'] = node.config; }
+          break;
       }
       nodes.push(n);
     }
@@ -889,7 +938,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
       // console.log(this.panOffset)
       return;
     }
-    if (this.selectedNodeId == null && this.mainRect) {
+    if (!this.selectedNodeId && this.mainRect) {
       this.setHoverState({ x: event.x - (this.mainRect as DOMRect).left, y: event.y - (this.mainRect as DOMRect).top });
     }
   }
@@ -909,7 +958,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   @HostListener('window:mousedown', ['$event'])
   onMouseDown(event: MouseEvent) {
     if (this.detailsDrawer && !this.detailsDrawer.nativeElement.contains(event.target)) {
-      this.drawerToggler = false;
+      this.onDetailsCancel();
     }
 
     const hoveredNode = this.nodes.find((node: Node) => node.isHovered);
@@ -936,7 +985,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
         this.addNode(hoveredNode);
         return;
       }
-      if (!hoveredNode.isRoot && hoveredNode.title == 'Document') {
+      if (!hoveredNode.isRoot) {
         if (cp.x >= hoveredNode.coords.x && cp.x <= hoveredNode.coords.x + (hoveredNode.coords.width * this.scale) && cp.y >= hoveredNode.coords.y && cp.y <= hoveredNode.coords.y + (hoveredNode.coords.height * this.scale)) {
           this.openDrawer(hoveredNode);
           return;
@@ -1099,9 +1148,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
                 node.connection.to.push(14);
               }
               let n = new Node(node.id, { ...coords }, node.connection, this.scale, i ? false : true);
-              if (node?.config?.documentTitle) {
-                n.config['documentTitle'] = node.config.documentTitle;
-              }
+              n.config = node.config;
               n.title = node.app;
               this.nodes.push(n);
               if (this.currentNodeId < node.id) {

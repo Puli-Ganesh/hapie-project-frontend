@@ -11,6 +11,7 @@ import { DocumentsComponent } from './components/documents/documents.component';
 import { TemplateComponent } from './components/template/template.component';
 import { DocumentComponent } from './components/document/document.component';
 import { DocumentUploadComponent } from './components/document-upload/document-upload.component';
+import { ChatBotComponent } from './components/chat-bot/chat-bot.component';
 
 const routes: Routes = [
   {
@@ -57,6 +58,11 @@ const routes: Routes = [
     path: 'document-upload',
     title: 'Document Upload | NexGen Force',
     component: DocumentUploadComponent
+  },
+  {
+    path: 'chat',
+    title: 'Chat Bot | NexGen Force',
+    component: ChatBotComponent
   },
   {
     path: '**',

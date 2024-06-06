@@ -70,10 +70,23 @@
                     </div>
                 </div>
             </div> -->
-            <div class="input-wrapper">
-                <div class="label">Document's Title</div>
-                <input type="text" [(ngModel)]="documentTitle" class="input">
-            </div>
+            <ng-container [ngSwitch]="openDrawerFor">
+                <div *ngSwitchCase="'Document'" class="input-wrapper">
+                    <div class="label">Document's Title</div>
+                    <input type="text" [(ngModel)]="documentTitle" class="input">
+                </div>
+            
+                <div *ngSwitchCase="'Confluence'" [formGroup]="confluenceConfigForm" class="input-wrapper">
+                    <div class="label required">URL</div>
+                    <input type="text" formControlName="confluenceUrl" class="input">
+                    <div class="label required">Username</div>
+                    <input type="text" formControlName="confluenceUsername" class="input">
+                    <div class="label required">Password</div>
+                    <input type="text" formControlName="confluencePassword" class="input">
+                    <div class="label required">Space Key</div>
+                    <input type="text" formControlName="confluenceSpaceKey" class="input">
+                </div>
+            </ng-container>
 
             <div class="actions-wrapper">
                 <button class="app-button primary" (click)="onDetailsSave()">

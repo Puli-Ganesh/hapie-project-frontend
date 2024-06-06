@@ -7,6 +7,7 @@ export class StorageKeys {
 	static readonly PROJECT_COLOR = 'nexGen.projectColor';
 	static readonly WORKSPACE_ID = 'nexGen.workspaceId';
 	static readonly WORKSPACE_NAME = 'nexGen.workspaceName';
+	static readonly WORKFLOW_ID = 'nexGen.workflowId';
 
 	/** sessionStorage */
 	static readonly SST = {

@@ -17,6 +17,7 @@ import { CompareVideoService } from './compare-video/compare-video.service';
 import { SignedDocumentService } from './signed-document/signed-document.service';
 import { ShareCanvasService } from './share-canvas/share-canvas.service';
 import { WorkflowService } from './workflow/workflow.service';
+import { ConfluenceService } from './confluence/confluence.service';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +45,7 @@ export class FacadeService {
   private _signedDocumentService!: SignedDocumentService;
   private _reportIssueService!: ReportIssueService;
   private _workflowService!: WorkflowService;
+  private _confluenceService!: ConfluenceService;
 
 
   /** App Service getter */
@@ -173,11 +175,20 @@ export class FacadeService {
     }
     return this._reportIssueService;
   }
+
   /** ReportIssue Service getter */
   public get workflowService(): WorkflowService {
     if (!this._workflowService) {
       this._workflowService = this._injector.get(WorkflowService);
     }
     return this._workflowService;
+  }
+
+  /** Confluence Service getter */
+  public get confluenceService(): ConfluenceService {
+    if (!this._confluenceService) {
+      this._confluenceService = this._injector.get(ConfluenceService);
+    }
+    return this._confluenceService;
   }
 }

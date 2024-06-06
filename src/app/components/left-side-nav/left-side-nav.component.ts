@@ -57,6 +57,12 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
           if (videoUploadIndex > -1) {
             this.hasAccessTo.push('Video Upload');
           }
+          const confluenceChatBotIndex = nodes.findIndex((n: any) => (n.app == 'Confluence'));
+          if (confluenceChatBotIndex > -1) {
+            if (nodes.find((n: any) => n.app == 'Chat Bot')) {
+              this.hasAccessTo.push('Chat');
+            }
+          }
 
           if (_router.routerState.snapshot.url === this.appRoutes.PROJECTS) {
             switch (this.hasAccessTo[0]) {
@@ -74,6 +80,9 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
                 break;
               case 'Video Upload':
                 _router.navigateByUrl(this.appRoutes.PROJECT_DOCUMENT_UPLOAD);
+                break;
+              case 'Chat':
+                _router.navigateByUrl(this.appRoutes.PROJECT_CHAT);
                 break;
               default:
                 break;
@@ -145,7 +154,7 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
   projectsToggler = false;
   projectDetails: any;
   hasAccessTo = [''];
-  selectedWorkflowId = ''
+  selectedWorkflowId = '';
 
   protected workflowList: Array<any> = [];
   protected projectList: Array<any> = [];
@@ -204,6 +213,8 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
         this.secondaryMenu = 'document';
       } else if (url.includes('/template')) {
         this.secondaryMenu = 'template';
+      } else if (url.includes('/chat')) {
+        this.secondaryMenu = 'chat';
       }
     }
 
@@ -237,6 +248,10 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
 
   onGoToTemplate() {
     this._router.navigate([this.appRoutes.PROJECT_TEMPLATE]);
+  }
+
+  onChat() {
+    this._router.navigate([this.appRoutes.PROJECT_CHAT]);
   }
 
   onViewWorkflow(index: number) {

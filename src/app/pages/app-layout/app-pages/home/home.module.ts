@@ -15,6 +15,7 @@ import { MediaTranscriptComponent } from './components/media-transcript/media-tr
 import { TemplateComponent } from './components/template/template.component';
 import { DocumentComponent } from './components/document/document.component';
 import { DocumentUploadComponent } from './components/document-upload/document-upload.component';
+import { ChatBotComponent } from './components/chat-bot/chat-bot.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { DocumentUploadComponent } from './components/document-upload/document-u
     MediaTranscriptComponent,
     TemplateComponent,
     DocumentComponent,
-    DocumentUploadComponent
+    DocumentUploadComponent,
+    ChatBotComponent
   ],
   imports: [
     CommonModule,
