@@ -181,12 +181,12 @@
                     flex: 1;
                     padding: 6px 12px 6px 20px;
                     width: 100%;
-                    max-height: 3lh;
+                    field-sizing: content;
+                    max-height: 4lh;
                     align-content: center;
                     border: none;
-                    border-radius: 25px;
+                    border-radius: inherit;
                     resize: none;
-                    overflow-y: auto;
 
                     &:focus-visible {
                         outline: none;

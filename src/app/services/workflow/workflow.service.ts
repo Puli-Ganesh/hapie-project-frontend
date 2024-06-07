@@ -40,6 +40,10 @@ export class WorkflowService {
     return this._httpClientService.put(body, `${this.endPoint}/${id}`);
   }
 
+  updateWorkflowNodeConfig(body: { workflowId: string, nodeId: number, config: any }) {
+    return this._httpClientService.put(body, `${this.endPoint}/update-workflow-node-config`);
+  }
+
   deleteById(id: string) {
     return this._httpClientService.delete(`${this.endPoint}/${id}`);
   }

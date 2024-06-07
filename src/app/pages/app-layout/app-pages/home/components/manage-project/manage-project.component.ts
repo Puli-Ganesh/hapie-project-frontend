@@ -239,12 +239,12 @@ export class ManageProjectComponent implements OnInit {
 
   protected projectImageDeleted: Boolean = false;
   onRemovePicture() {
-    if (this.projectDetails.thumbnailUrl && this.projectCoverImg) {
+    if (this.projectDetails?.thumbnailUrl && this.projectCoverImg) {
       this.thumbnailUrl.patchValue(this.projectDetails.thumbnailUrl?.split('/')?.pop() || '');
       this.thumbnailUrl.updateValueAndValidity();
       this.projectCoverImgPreview = this.projectDetails.thumbnailUrl;
       this.projectCoverImg = null;
-    } else if (this.projectDetails.thumbnailUrl && this.projectCoverImgPreview) {
+    } else if (this.projectDetails?.thumbnailUrl && this.projectCoverImgPreview) {
       this.thumbnailUrl.patchValue('');
       this.thumbnailUrl.updateValueAndValidity();
       this.projectCoverImgPreview = '';

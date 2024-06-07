@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { FacadeService } from '@src/app/services/facade.service';
 import { IConnection, ICoordinates, IPosition, Node, roundedRect } from './node';
 import { Routes } from '@src/app/constants/routes';
+import { NodeImages } from '@src/app/constants/node-images';
 
 @Component({
   selector: 'app-workflow-details',
@@ -34,10 +35,11 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   @ViewChild('addPopup') addPopup!: ElementRef;
   @ViewChild('detailsDrawer') detailsDrawer!: ElementRef;
 
+  protected readonly appRoutes = Routes;
+  private readonly _nodeImages = NodeImages;
   workflowName: string = '';
   workflowId: string = '';
   qpSubscription!: Subscription;
-  appRoutes = Routes;
   mainCanvas: HTMLCanvasElement | null = null;
   mainRect: DOMRect | null = null;
   mainCTX: CanvasRenderingContext2D | null = null;
@@ -90,207 +92,12 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   setNodeImage() {
     for (let item of this.canConnect) {
       this.nodeImages[item.title] = new Image();
-      let src = '';
-      switch (item.title) {
-        case 'Start':
-          src = 'start.svg';
-          break;
-        case 'Teams':
-          src = 'teams.svg';
-          break;
-        case 'Zoom':
-          src = 'zoom.svg';
-          break;
-        case 'Meet':
-          src = 'meet.svg';
-          break;
-        case 'Video Upload':
-          src = 'video-upload.svg';
-          break;
-        case 'Analysis':
-          src = 'analysis.svg';
-          break;
-        case 'AI':
-          src = 'ai.svg';
-          break;
-        case 'Compare Video':
-          src = 'compare-video.svg';
-          break;
-        case 'Canvas':
-          src = 'canvas.svg';
-          break;
-        case 'Document':
-          src = 'document.svg';
-          break;
-        case 'Pandadoc':
-          src = 'pandadoc.svg';
-          break;
-        case 'Email':
-          src = 'email.svg';
-          break;
-        case 'Slack':
-          src = 'slack.svg';
-          break;
-        case 'Audio App':
-          src = 'audio-app.svg';
-          break;
-        case 'Chat Bot':
-          src = 'chat-bot.svg';
-          break;
-        case 'Document Upload':
-          src = 'document-upload.svg';
-          break;
-        case 'Image':
-          src = 'image.svg';
-          break;
-        case 'Hangouts':
-          src = 'hangouts.svg';
-          break;
-        case 'Google Chat':
-          src = 'google-chat.svg';
-          break;
-        case 'Machine Learning':
-          src = 'machine-learning.svg';
-          break;
-        case 'Salesforce':
-          src = 'salesforce.svg';
-          break;
-        case 'Video App':
-          src = 'video-app.svg';
-          break;
-        case 'Jenkins':
-          src = 'jenkins.svg';
-          break;
-        case 'Adobe Marketing Cloud':
-          src = 'adobe-marketing-cloud.svg';
-          break;
-        case 'Asana':
-          src = 'asana.svg';
-          break;
-        case 'AWS':
-          src = 'aws.svg';
-          break;
-        case 'Azure Devops':
-          src = 'azure-devops.svg';
-          break;
-        case 'BambooHR':
-          src = 'bamboo-hr.svg';
-          break;
-        case 'Bitbucket':
-          src = 'bitbucket.svg';
-          break;
-        case 'Bitbucket Agent':
-          src = 'bitbucket-agent.svg';
-          break;
-        case 'CircleCI':
-          src = 'circleci.svg';
-          break;
-        case 'Code Climate':
-          src = 'code-climate.svg';
-          break;
-        case 'Confluence':
-          src = 'confluence.svg';
-          break;
-        case 'Confluence Agent':
-          src = 'confluence-agent.svg';
-          break;
-        case 'Crowdstrike':
-          src = 'crowdstrike.svg';
-          break;
-        case 'GitHub':
-          src = 'github.svg';
-          break;
-        case 'GitLab':
-          src = 'gitlab.svg';
-          break;
-        case 'Google Analytics':
-          src = 'google-analytics.svg';
-          break;
-        case 'Google Cloud Platform':
-          src = 'google-cloud-platform.svg';
-          break;
-        case 'Google Workspace':
-          src = 'google-workspace.svg';
-          break;
-        case 'HubSpot CRM':
-          src = 'hubspot-crm.svg';
-          break;
-        case 'Jira':
-          src = 'jira.svg';
-          break;
-        case 'Jira Agent':
-          src = 'jira-agent.svg';
-          break;
-        case 'Mailchimp':
-          src = 'mailchimp.svg';
-          break;
-        case 'Marketo':
-          src = 'marketo.svg';
-          break;
-        case 'Microsoft 365':
-          src = 'microsoft-365.svg';
-          break;
-        case 'Microsoft Azure':
-          src = 'microsoft-azure.svg';
-          break;
-        case 'Microsoft Dynamic 365':
-          src = 'microsoft-dynamic-365.svg';
-          break;
-        case 'Microsoft Dynamic AX':
-          src = 'microsoft-dynamic-ax.svg';
-          break;
-        case 'Microsoft':
-          src = 'microsoft.svg';
-          break;
-        case 'Monday':
-          src = 'monday.svg';
-          break;
-        case 'OKTA':
-          src = 'okta.svg';
-          break;
-        case 'Oracle ERP Cloud':
-          src = 'oracle-erp-cloud.svg';
-          break;
-        case 'Palo Alto Network':
-          src = 'palo-alto-network.svg';
-          break;
-        case 'Power BI':
-          src = 'power-bi.svg';
-          break;
-        case 'Sap S/4HANA':
-          src = 'sap-s-4hana.svg';
-          break;
-        case 'Sap SuccessFactors':
-          src = 'sap-success-factors.svg';
-          break;
-        case 'SonarQube':
-          src = 'sonarqube.svg';
-          break;
-        case 'Tableau':
-          src = 'tableau.svg';
-          break;
-        case 'Trello':
-          src = 'trello.svg';
-          break;
-        case 'Workday':
-          src = 'workday.svg';
-          break;
-        case 'Super Agent (AI)':
-          src = 'super-agent-ai.png';
-          break;
-        case 'Vector Database':
-          src = 'vector-database.png';
-          break;
-        default:
-          break;
-      }
+      const src = this._nodeImages.NODES[item.title];
 
       if (src) {
         this.nodeImages[item.title].src = `assets/images/${src}`;
       }
     }
-
-    console.log(this.nodeImages)
   }
 
 
@@ -311,7 +118,21 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
           return;
       }
     }
-    console.log(node)
+
+    /** Only save at Edit time */
+    if (!this.isCreating && node && this.workflowId) {
+      this._facadeService.workflowService.updateWorkflowNodeConfig({ workflowId: this.workflowId, nodeId: node.id, config: node.config }).subscribe({
+        next: (res: any) => {
+          if (res.code === 'OK') {
+            this._facadeService.appService.openToaster('Application Config successfully saved.', 'success');
+          }
+        },
+        error: (err: any) => {
+          this._facadeService.appService.openToaster('Internal server error.', 'danger');
+          console.log('Error', err);
+        }
+      });
+    }
     this.onDetailsCancel();
   }
 
@@ -329,7 +150,6 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
       this.processedChildren = []
       this.repeatingChildren = {};
       this.setChildHeight(0);
-      // console.log(this.nodes.map((n => n.childHeight)))
       this.childHeightSet = true;
     }
 
@@ -576,7 +396,6 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
       const childIdx = this.nodes.findIndex(n => n.id === childId);
       height += this.setChildHeight(childIdx)
     };
-    // console.log('node index', this.nodes[nodeIdx].id)
 
     const parents = this.nodes.filter((n: Node) => n.connection.to.includes(nodeId));
     if (parents.length > 1) {
@@ -656,7 +475,6 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
         }
         break;
       case 'Confluence':
-        console.log(node.config)
         if (Object.keys(node?.config).length > 0) {
           this.confluenceConfigForm.patchValue(node.config);
         }
@@ -800,10 +618,6 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
 
     this.childHeightSet = false;
     this.onClosePopup();
-    // setTimeout(() => {
-    //   console.log(this.repeatingChildParent);
-    //   console.log(this.repeatingChildren)
-    // }, 100);
   }
 
   onDeleteNode(node: Node) {
@@ -845,7 +659,6 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
 
   protected searchTerm: string = '';
   onSearchOption() {
-    console.log(this.searchTerm);
     this.filteredAddList = this.addList.filter((op: any) => op.title.toLowerCase().includes(this.searchTerm.toLowerCase()));
   }
 
@@ -885,13 +698,10 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
 
   @HostListener('window:wheel', ['$event'])
   onWheel(event: any) {
-    // console.log(event);
-
     if (event.ctrlKey) {
       this.onZoom(event);
       return;
     }
-
   }
 
   onZoom(event: any) {
@@ -935,7 +745,6 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
       this.panStartOffset.y = event.y;
       this.nodes[0].coords.x = this.panOffset.x;
       this.nodes[0].coords.y = this.panOffset.y;
-      // console.log(this.panOffset)
       return;
     }
     if (!this.selectedNodeId && this.mainRect) {
@@ -1075,7 +884,6 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
       const parentNode = this.nodes.find((n: Node) => n.connection.to.includes(node.id));
       if (parentNode) {
         const siblings = this.nodes.filter((n: Node) => n.id != node.id && parentNode.connection.to.includes(n.id) && n.connection.to.length == 1);
-        console.log(JSON.parse(JSON.stringify(siblings)))
 
         for (let sibling of siblings) {
           const siblingChild = this.nodes.find((n: Node) => n.id == sibling.connection.to[0]);
@@ -1133,7 +941,6 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
       this._facadeService.workflowService.getById(this.workflowId).subscribe({
         next: (res: any) => {
           if (res.code == 'OK') {
-            console.log(res.data)
             this.workflowName = res.data.name;
             this.nodes = [];
             const coords = {
@@ -1155,8 +962,8 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
                 this.currentNodeId = node.id;
               }
             }
-
           }
+
           this.panOffset.x = (this.gap * this.scale);
           this.panOffset.y = ((this.mainRect as DOMRect).height / 2) - (this.nodeHeight * this.scale) / 2;
 
@@ -1173,7 +980,6 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
           if (this.animationId) {
             window.cancelAnimationFrame(this.animationId);
           }
-          console.log(this.nodes)
           this.animationId = window.requestAnimationFrame(this.animate);
 
           resolve();

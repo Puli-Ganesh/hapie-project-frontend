@@ -495,12 +495,16 @@ export class ShareCanvasComponent implements OnInit, OnDestroy {
         }
       },
       error: (err: any) => {
-        if (err.error.status === 401) {
-          this._facadeService.appService.openToaster(err.error.message, 'danger');
-        } else {
-          this._facadeService.appService.openToaster('Unable to send request, try after some time.', 'danger');
+        console.log('Error while send request edit access', err);
+        switch (err?.status) {
+          case 401:
+          case 422:
+            this._facadeService.appService.openToaster(err.error.message, 'danger');
+            break;
+          default:
+            this._facadeService.appService.openToaster('Unable to send request, try after some time.', 'danger');
+            break;
         }
-        console.error('Error while send request edit access', err);
       }
     });
   }

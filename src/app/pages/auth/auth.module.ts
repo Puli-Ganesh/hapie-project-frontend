@@ -11,6 +11,7 @@ import { SetupProfileComponent } from './components/setup-profile/setup-profile.
 
 import { AuthRoutingModule } from './auth-routing.module';
 import { AuthRedirectComponent } from './components/auth-redirect/auth-redirect.component';
+import { SharedModule } from '@src/app/shared/shared.module';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { AuthRedirectComponent } from './components/auth-redirect/auth-redirect.
   imports: [
     CommonModule,
     AuthRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule
   ]
 })
 export class AuthModule { }

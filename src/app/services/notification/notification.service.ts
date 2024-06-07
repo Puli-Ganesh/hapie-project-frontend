@@ -24,7 +24,9 @@ export class NotificationService {
   receivedNotification(notification: any) {
     this.hasNewNotification = true;
     this.notificationCount = this.notificationCount + 1;
-    this.newNotification.next(notification);
+    setTimeout(() => {
+      this.newNotification.next(notification);
+    }, 0);
   }
 
   markAllAsRead() {

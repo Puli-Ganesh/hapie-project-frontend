@@ -33,10 +33,10 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
     this.projectDetailsSubscription = this._facadeService.projectService.projectDetails$.subscribe({
       next: (projectDetails: any) => {
         this.projectDetails = projectDetails;
+        this.hasAccessTo = [];
         if (this.projectDetails?.workflowId?.nodes) {
           const nodes = this.projectDetails?.workflowId?.nodes;
           // console.log(nodes)
-          this.hasAccessTo = [];
           const analysisIndex = nodes.findIndex((n: any) => n.app == 'Analysis');
           if (analysisIndex > -1) {
             this.hasAccessTo.push('Analysis');
