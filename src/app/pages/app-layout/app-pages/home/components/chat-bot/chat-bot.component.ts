@@ -31,7 +31,11 @@ export class ChatBotComponent implements OnInit, OnDestroy {
   protected projectDetailsSubscription: Subscription;
   protected projectDetails: any;
 
-  protected chats: Array<any> = [];
+  protected chats: Array<{
+    type: 'user' | 'ai',
+    message: string,
+    hallucination: string
+  }> = [];
   protected aiLoader: boolean = false;
   @ViewChild('userInput') userInputRef!: ElementRef<HTMLInputElement>;
 
@@ -66,9 +70,8 @@ export class ChatBotComponent implements OnInit, OnDestroy {
       query: this.userInputRef.nativeElement.value,
       workflowId: localStorage.getItem(StorageKeys.WORKFLOW_ID) ?? ''
     };
-    this.chats.push({
-      'user': bodyToSend.query
-    });
+
+    this.pushInChat('user', bodyToSend.query, '');
 
     this.aiLoader = true;
     setTimeout(() => {
@@ -83,26 +86,28 @@ export class ChatBotComponent implements OnInit, OnDestroy {
         console.log(res)
         if (res.code == 'OK') {
           if (!res.data.response) {
-            this.chats.push({
-              'ai': 'There are no data for ai system.'
-            });
+            this.pushInChat('ai', 'There are no data for ai system.', '');
           } else {
-            this.chats.push({
-              'ai': res.data.response
-            });
+            this.pushInChat('ai', res.data.response, '');
           }
           this.aiLoader = false;
         }
       },
       error: (err: any) => {
         this.aiLoader = false;
-        this.chats.push({
-          'ai': 'There are no data for ai system.'
-        });
+        this.pushInChat('ai', 'There are no data for ai system.', '');
         console.log('Error while chatting with chatbot', err.error);
       }
     });
     this.userInputRef.nativeElement.value = '';
+  }
+
+  pushInChat(type: 'user' | 'ai', message: string, hallucination: string): void {
+    this.chats.push({
+      type: type,
+      message: message,
+      hallucination: hallucination
+    });
   }
 
   ngOnDestroy(): void {
