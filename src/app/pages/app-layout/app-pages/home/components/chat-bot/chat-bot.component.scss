@@ -52,11 +52,12 @@
         margin-right: 16px;
         padding: 16px;
         flex: 1;
+        display: flex;
+        flex-flow: column nowrap;
         border: 1px solid $border-color;
         border-radius: 4px;
         background-color: $base;
-        display: flex;
-        flex-flow: column nowrap;
+        overflow: auto;
 
         .title-wrapper {
             display: flex;
@@ -74,17 +75,21 @@
 
         .chat-box {
             height: 100%;
+            display: flex;
+            flex-flow: column nowrap;
+            gap: 18px;
             border-radius: 5px;
-            overflow: hidden;
+            overflow: auto;
 
             .chat-content {
+                margin: auto;
                 padding: 10px;
-                height: calc(100% - 70px);
+                max-width: 800px;
+                flex: 1;
                 display: flex;
                 flex-direction: column;
                 gap: 10px;
                 overflow-y: auto;
-                background-color: white;
                 white-space: pre-line;
 
                 .ai-message,
@@ -96,18 +101,19 @@
                     font-weight: 400;
                     word-break: break-all;
                     color: #141C25;
-                    border-radius: 5px;
                 }
 
                 .ai-message {
                     align-self: flex-start;
                     background-color: #F9FAFB;
-                    border: 1px solid #E4E7EC
+                    border: 1px solid #E4E7EC;
+                    border-radius: 10px 10px 10px 0px;
                 }
 
                 .user-message {
                     align-self: flex-end;
                     background-color: #C9DCFF;
+                    border-radius: 10px 10px 0px 10px;
                 }
 
                 .jumping-dots {
@@ -159,24 +165,27 @@
 
             }
 
-            .chat-input {
+            .chat-input-wrap {
+                margin: auto;
+                padding: 4px 0;
+                width: 100%;
+                max-width: 800px;
                 display: flex;
-                border: 1px solid #ddd;
-                border-radius: 25px;
-                background-color: #ffff;
                 align-items: center;
-                margin: 10px;
+                border: 1px solid $border-color;
+                border-radius: 25px;
+                background-color: $base;
 
-                textarea {
-                    field-sizing: content;
+                .chat-input {
                     flex: 1;
-                    padding: 12px 12px 12px 20px;
-                    margin: 4px 0px;
+                    padding: 6px 12px 6px 20px;
+                    width: 100%;
+                    max-height: 3lh;
+                    align-content: center;
                     border: none;
                     border-radius: 25px;
                     resize: none;
-                    width: 100%;
-                    max-height: 3lh;
+                    overflow-y: auto;
 
                     &:focus-visible {
                         outline: none;
@@ -186,20 +195,19 @@
                 .send-icon {
                     padding: 0 5px;
 
-                    svg {
+                    .icon {
                         display: block;
-                        fill: $primary;
-                        cursor: pointer;
                         height: 34px;
                         width: 34px;
+                        fill: $primary;
+                        cursor: pointer;
 
                         &:hover {
-                            fill: #C9DCFF;
+                            opacity: 0.85;
                         }
                     }
                 }
             }
         }
     }
-
 }

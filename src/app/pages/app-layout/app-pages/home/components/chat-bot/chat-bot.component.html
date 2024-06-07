@@ -62,10 +62,10 @@
                     </span>
                 </div>
             </div>
-            <div class="chat-input">
-                <textarea placeholder="Type your message..." #userInput (keydown)="handleKeyDown($event)"></textarea>
+            <div class="chat-input-wrap">
+                <textarea class="chat-input" placeholder="Type your message..." #userInput (keydown)="handleKeyDown($event)"></textarea>
                 <div class="send-icon" (click)="sendMessage()">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" x="0px" y="0px">
+                    <svg class="icon" viewBox="0 0 40 40" x="0px" y="0px">
                         <g data-name="Layer 2">
                             <path
                                 d="M28.725,11a.289.289,0,0,0-.106.021L8.085,18.657a.13.13,0,0,0-.005.242l8.257,3.413,6.257-6.257a1,1,0,1,1,1.414,1.414L17.72,23.758l2.742,8.069a.114.114,0,0,0,.119.088c.126,0,.113-.052.125-.082l8.271-20.446A.284.284,0,0,0,28.725,11Z" />
