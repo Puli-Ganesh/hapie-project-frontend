@@ -16,9 +16,9 @@ export class DropDownComponent implements OnInit {
   @Input('uniqueKey') uniqueKey: string = '_id';
   @Input('displayKey') displayKey: string = '';
   @Input('isWithSearch') withSearch: boolean = false;
-  @Input('maxHeight') maxHeight: number = 256;
-  @Input('minWidth') minWidth: number | undefined = undefined;
-  @Input('maxWidth') maxWidth: number | undefined = undefined;
+  @Input('maxHeight') maxHeight: string = '256px';
+  @Input('minWidth') minWidth: string = '';
+  @Input('maxWidth') maxWidth: string = '';
   @Input('isWithOverflowVisible') withOverflowVisible: boolean = false;
   @Output() onSelectChange: EventEmitter<any> = new EventEmitter<any>();
 
@@ -39,11 +39,11 @@ export class DropDownComponent implements OnInit {
 
     setTimeout(() => {
       if (this.dropdownWrapper.nativeElement) {
-        if (this.minWidth !== undefined) {
-          this._renderer2.setStyle(this.dropdownWrapper.nativeElement, 'min-width', `${this.minWidth}px`);
+        if (this.minWidth?.trim()) {
+          this._renderer2.setStyle(this.dropdownWrapper.nativeElement, 'min-width', this.minWidth);
         }
-        if (this.maxWidth !== undefined) {
-          this._renderer2.setStyle(this.dropdownWrapper.nativeElement, 'max-width', `${this.maxWidth}px`);
+        if (this.maxWidth?.trim()) {
+          this._renderer2.setStyle(this.dropdownWrapper.nativeElement, 'max-width', this.maxWidth);
         }
       }
     }, 10);
@@ -79,7 +79,7 @@ export class DropDownComponent implements OnInit {
 
     const optionsWrap = this.dropdownWrapper?.nativeElement?.querySelector('.options-wrap');
     if (optionsWrap) {
-      this._renderer2.setStyle(optionsWrap, 'max-height', `${this.maxHeight}px`);
+      this._renderer2.setStyle(optionsWrap, 'max-height', this.maxHeight);
     }
   }
 

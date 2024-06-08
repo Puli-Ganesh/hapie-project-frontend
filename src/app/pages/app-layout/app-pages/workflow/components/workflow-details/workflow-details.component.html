@@ -75,7 +75,7 @@
                     <div class="label">Document's Title</div>
                     <input type="text" [(ngModel)]="documentTitle" class="input">
                 </div>
-            
+
                 <div *ngSwitchCase="'Confluence'" [formGroup]="confluenceConfigForm" class="input-wrapper">
                     <div class="label required">URL</div>
                     <input type="text" formControlName="confluenceUrl" class="input">
@@ -85,6 +85,19 @@
                     <input type="text" formControlName="confluencePassword" class="input">
                     <div class="label required">Space Key</div>
                     <input type="text" formControlName="confluenceSpaceKey" class="input">
+                </div>
+                
+                <div *ngSwitchCase="'Confluence Agent'" class="input-wrapper">
+                    <div class="label required">Agent</div>
+                    <div class="options-wrap">
+                        <app-drop-down [optionsList]="_agentList" [selectedOption]="confluenceAgentConfig.agent"
+                         (onSelectChange)="onSelectConfluenceAgentConfig($event, 'agent')" minWidth="100%"></app-drop-down>
+                    </div>
+                    <div class="label required">AI Model</div>
+                    <div class="options-wrap">
+                        <app-drop-down [optionsList]="_aiModelList" [selectedOption]="confluenceAgentConfig.aiModel"
+                         (onSelectChange)="onSelectConfluenceAgentConfig($event, 'aiModel')" minWidth="100%"></app-drop-down>
+                    </div>
                 </div>
             </ng-container>
 

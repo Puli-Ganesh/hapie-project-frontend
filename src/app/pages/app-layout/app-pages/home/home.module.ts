@@ -16,6 +16,7 @@ import { TemplateComponent } from './components/template/template.component';
 import { DocumentComponent } from './components/document/document.component';
 import { DocumentUploadComponent } from './components/document-upload/document-upload.component';
 import { ChatBotComponent } from './components/chat-bot/chat-bot.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { ChatBotComponent } from './components/chat-bot/chat-bot.component';
     TemplateComponent,
     DocumentComponent,
     DocumentUploadComponent,
-    ChatBotComponent
+    ChatBotComponent,
+    DashboardComponent
   ],
   imports: [
     CommonModule,

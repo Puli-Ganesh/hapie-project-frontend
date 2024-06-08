@@ -35,6 +35,9 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
         this.projectDetails = projectDetails;
         this.hasAccessTo = [];
         if (this.projectDetails?.workflowId?.nodes) {
+          /** temporary set dashboard without any condition */
+          this.hasAccessTo.push('Dashboard');
+
           const nodes = this.projectDetails?.workflowId?.nodes;
           // console.log(nodes)
           const analysisIndex = nodes.findIndex((n: any) => n.app == 'Analysis');
@@ -66,6 +69,9 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
 
           if (_router.routerState.snapshot.url === this.appRoutes.PROJECTS) {
             switch (this.hasAccessTo[0]) {
+              case 'Dashboard':
+                _router.navigateByUrl(this.appRoutes.PROJECT_DASHBOARD);
+                break;
               case 'Analysis':
                 _router.navigateByUrl(this.appRoutes.PROJECT_MEDIA);
                 break;
@@ -215,6 +221,8 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
         this.secondaryMenu = 'template';
       } else if (url.includes('/chat')) {
         this.secondaryMenu = 'chat';
+      } else if (url.includes('/dashboard')) {
+        this.secondaryMenu = 'dashboard';
       }
     }
 
@@ -228,6 +236,10 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
       this.workflowToggler = false;
     }
 
+  }
+
+  onDashboard() {
+    this._router.navigate([this.appRoutes.PROJECT_DASHBOARD]);
   }
 
   onGoToMedia() {
@@ -362,9 +374,8 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
 
 
 
-  chats: any = [];
-
-  aiLoader: boolean = false;
+  protected chats: any = [];
+  protected aiLoader: boolean = false;
   toggleChatBox() {
     this.isChatBoxVisible = !this.isChatBoxVisible;
   }

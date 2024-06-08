@@ -12,8 +12,14 @@ import { TemplateComponent } from './components/template/template.component';
 import { DocumentComponent } from './components/document/document.component';
 import { DocumentUploadComponent } from './components/document-upload/document-upload.component';
 import { ChatBotComponent } from './components/chat-bot/chat-bot.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 const routes: Routes = [
+  {
+    path: 'dashboard',
+    title: 'Dashboard | NexGen Force',
+    component: DashboardComponent
+  },
   {
     path: 'create',
     title: 'Create Project | NexGen Force',

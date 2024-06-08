@@ -8,6 +8,12 @@ import { IConnection, ICoordinates, IPosition, Node, roundedRect } from './node'
 import { Routes } from '@src/app/constants/routes';
 import { NodeImages } from '@src/app/constants/node-images';
 
+
+interface IConfluenceAgentConfig {
+  agent: string,
+  aiModel: string
+  isInvalid: () => boolean
+}
 @Component({
   selector: 'app-workflow-details',
   templateUrl: './workflow-details.component.html',
@@ -57,6 +63,19 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   animationId: any;
 
   protected confluenceConfigForm!: FormGroup;
+  protected readonly _agentList: Array<string> = ['llamaindex', 'langchain'];
+  protected readonly _aiModelList: Array<string> = ['mistral', 'llama2', 'llama3'];
+  /**
+   * agent = llamaindex | langchain,
+   * aiModel = mistral | llama2
+   */
+  protected confluenceAgentConfig: IConfluenceAgentConfig = {
+    agent: 'llamaindex',
+    aiModel: 'mistral',
+    isInvalid: function(): boolean {
+      return !this.agent.trim() || !this.aiModel.trim();
+    }
+  };
 
 
   async ngOnInit() {
@@ -113,6 +132,14 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
             this.confluenceConfigForm.markAllAsTouched();
             return;
           } else { node.config = this.confluenceConfigForm.value; }
+          break;
+        case 'Confluence Agent':
+          if (this.confluenceAgentConfig.isInvalid()) {
+            return;
+          } else {
+            const { isInvalid, ...config } = this.confluenceAgentConfig;
+            node.config = config;
+          }
           break;
         default:
           return;
@@ -305,7 +332,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
     return lineArray;
   }
 
-   drawNode(node: Node, ctx: CanvasRenderingContext2D) {
+  drawNode(node: Node, ctx: CanvasRenderingContext2D) {
     const mainRect = {
       x: node.coords.x,
       y: node.coords.y,
@@ -475,8 +502,17 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
         }
         break;
       case 'Confluence':
-        if (Object.keys(node?.config).length > 0) {
+        if (node.config && Object.keys(node?.config).length > 0) {
           this.confluenceConfigForm.patchValue(node.config);
+        }
+        break;
+      case 'Confluence Agent':
+        if (node.config && Object.keys(node?.config).length > 0) {
+          for (const key in node.config) {
+            if (key in this.confluenceAgentConfig && key !== 'isInvalid') {
+              this.confluenceAgentConfig[key as keyof IConfluenceAgentConfig] = node.config[key];
+            }
+          }
         }
         break;
       default:
@@ -498,7 +534,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
       };
       switch (node.title) {
         case 'Document':
-          if (Object.keys(node.config).length) { n['config'] = node.config; }
+          if (node.config && Object.keys(node.config).length) { n['config'] = node.config; }
           break;
         case 'Confluence':
           if (this.confluenceConfigForm.invalid) {
@@ -506,6 +542,15 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
             this.confluenceConfigForm.markAllAsTouched();
             return;
           } else { n['config'] = node.config; }
+          break;
+        case 'Confluence Agent':
+          if (this.confluenceAgentConfig.isInvalid()) {
+            this._facadeService.appService.openToaster('Confluence Agent configuration is messing.', 'danger');
+            return;
+          } else {
+            const { isInvalid, ...config } = this.confluenceAgentConfig;
+            n['config'] = config;
+          }
           break;
       }
       nodes.push(n);
@@ -990,6 +1035,14 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
         }
       });
     });
+  }
+
+  onSelectConfluenceAgentConfig(event: any, key: string): void {
+    if (key in this.confluenceAgentConfig && key !== 'isInvalid') {
+      setTimeout(() => {
+        this.confluenceAgentConfig[key as keyof IConfluenceAgentConfig] = event;
+      }, 0);
+    }
   }
 
   ngOnDestroy(): void {
