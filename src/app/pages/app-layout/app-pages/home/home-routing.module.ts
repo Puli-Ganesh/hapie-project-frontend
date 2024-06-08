@@ -13,6 +13,7 @@ import { DocumentComponent } from './components/document/document.component';
 import { DocumentUploadComponent } from './components/document-upload/document-upload.component';
 import { ChatBotComponent } from './components/chat-bot/chat-bot.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { MomComponent } from './components/mom/mom.component';
 
 const routes: Routes = [
   {
@@ -69,6 +70,11 @@ const routes: Routes = [
     path: 'chat',
     title: 'Chat Bot | NexGen Force',
     component: ChatBotComponent
+  },
+  {
+    path: 'mom',
+    title: 'MoM | NexGen Force',
+    component: MomComponent
   },
   {
     path: '**',

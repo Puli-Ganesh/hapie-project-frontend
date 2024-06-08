@@ -996,9 +996,6 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
             };
             for (let i = 0; i < res.data.nodes.length; i++) {
               let node = res.data.nodes[i];
-              if (i == 12) {
-                node.connection.to.push(14);
-              }
               let n = new Node(node.id, { ...coords }, node.connection, this.scale, i ? false : true);
               n.config = node.config;
               n.title = node.app;

@@ -63,5 +63,6 @@ export class NodeImages {
 		'Workday': 'workday.svg',
 		'Super Agent (AI)': 'super-agent-ai.png',
 		'Vector Database': 'vector-database.png',
+		'MoM': 'mom.png',
 	};
 }

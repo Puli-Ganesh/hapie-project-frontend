@@ -36,6 +36,10 @@ export class RecordingService {
     return this._httpClientService.get(`${this.endPoint}/find-by-id/${id}`);
   }
 
+  getMomData(recordingId: string): Observable<any> {
+    return this._httpClientService.get(`${this.endPoint}/mom-data/${recordingId}`);
+  }
+
   deleteById(id: string): Observable<any> {
     return this._httpClientService.delete(`${this.endPoint}/${id}`);
   }

@@ -19,6 +19,7 @@ export class Routes {
 	static readonly PROJECT_DOCUMENT_UPLOAD: string = '/project/document-upload';
 	static readonly PROJECT_CHAT: string = '/project/chat';
 	static readonly PROJECT_DASHBOARD: string = '/project/dashboard';
+	static readonly PROJECT_MOM: string = '/project/mom';
 
 	static readonly TEAM: string = '/team';
 	static readonly APPS: string = '/apps';

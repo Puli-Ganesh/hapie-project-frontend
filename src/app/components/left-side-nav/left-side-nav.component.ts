@@ -39,27 +39,13 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
           this.hasAccessTo.push('Dashboard');
 
           const nodes = this.projectDetails?.workflowId?.nodes;
-          // console.log(nodes)
-          const analysisIndex = nodes.findIndex((n: any) => n.app == 'Analysis');
-          if (analysisIndex > -1) {
-            this.hasAccessTo.push('Analysis');
+
+          for (const node of nodes) {
+            if (this._accessibleMenu[node.app]) {
+              this.hasAccessTo.push(this._accessibleMenu[node.app]);
+            }
           }
-          const compareIndex = nodes.findIndex((n: any) => n.app == 'Compare Video');
-          if (compareIndex > -1) {
-            this.hasAccessTo.push('Compare Video');
-          }
-          const canvasIndex = nodes.findIndex((n: any) => n.app == 'Canvas');
-          if (canvasIndex > -1) {
-            this.hasAccessTo.push('Canvas');
-          }
-          const documentIndex = nodes.findIndex((n: any) => n.app == 'Document');
-          if (documentIndex > -1) {
-            this.hasAccessTo.push('Document');
-          }
-          const videoUploadIndex = nodes.findIndex((n: any) => n.app == 'Video Upload');
-          if (videoUploadIndex > -1) {
-            this.hasAccessTo.push('Video Upload');
-          }
+
           const confluenceChatBotIndex = nodes.findIndex((n: any) => (n.app == 'Confluence'));
           if (confluenceChatBotIndex > -1) {
             if (nodes.find((n: any) => n.app == 'Chat Bot')) {
@@ -70,7 +56,7 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
           if (_router.routerState.snapshot.url === this.appRoutes.PROJECTS) {
             switch (this.hasAccessTo[0]) {
               case 'Dashboard':
-                _router.navigateByUrl(this.appRoutes.PROJECT_DASHBOARD);
+                _router.navigateByUrl(this.appRoutes.PROJECT_MOM);// PROJECT_DASHBOARD
                 break;
               case 'Analysis':
                 _router.navigateByUrl(this.appRoutes.PROJECT_MEDIA);
@@ -89,6 +75,9 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
                 break;
               case 'Chat':
                 _router.navigateByUrl(this.appRoutes.PROJECT_CHAT);
+                break;
+              case 'MoM':
+                _router.navigateByUrl(this.appRoutes.PROJECT_MOM);
                 break;
               default:
                 break;
@@ -124,6 +113,16 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
 
   protected readonly permissions = Permissions;
   protected readonly appRoutes = Routes;
+  protected readonly _accessibleMenu: { [key: string]: string } = {
+    'Analysis': 'Analysis',
+    'Compare Video': 'Compare Video',
+    'Canvas': 'Canvas',
+    'Document': 'Document',
+    'Video Upload': 'Video Upload',
+    'MoM': 'MoM',
+    // 'Confluence': 'Confluence',
+    // 'Chat Bot': 'Chat',
+  };
   protected currentUser: any;
   protected userSubscription!: Subscription;
   protected projectsSubscription!: Subscription;
@@ -207,7 +206,9 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
       this.activeMenu = 'templates';
     } else if (url.startsWith('/project')) {
       this.activeMenu = 'project';
-      if (url.includes('/media')) {
+      if (url.includes('/dashboard')) {
+        this.secondaryMenu = 'dashboard';
+      } else if (url.includes('/media')) {
         this.secondaryMenu = 'media'
       } else if (url.includes('/compare')) {
         this.secondaryMenu = 'compare'
@@ -221,8 +222,8 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
         this.secondaryMenu = 'template';
       } else if (url.includes('/chat')) {
         this.secondaryMenu = 'chat';
-      } else if (url.includes('/dashboard')) {
-        this.secondaryMenu = 'dashboard';
+      } else if (url.includes('/mom')) {
+        this.secondaryMenu = 'mom';
       }
     }
 
@@ -264,6 +265,10 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
 
   onChat() {
     this._router.navigate([this.appRoutes.PROJECT_CHAT]);
+  }
+
+  onMom() {
+    this._router.navigate([this.appRoutes.PROJECT_MOM]);
   }
 
   onViewWorkflow(index: number) {

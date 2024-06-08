@@ -52,15 +52,15 @@ export class DashboardComponent implements OnInit {
     this.sentimentByRatingChartData.categories = ['Label 1', 'Label 2', 'Label 3', 'Label 4'];
     this.sentimentByRatingChartData.series = [{
       name: 'Title 1',
-      color: 'red',
+      color: '#EA4335',
       data: [30, 50, 10, 130]
     }, {
       name: 'Title 2',
-      color: 'orange',
+      color: '#FBBC05',
       data: [140, 80, 80, 120]
     }, {
       name: 'Title 3',
-      color: 'green',
+      color: '#34A853',
       data: [0, 20, 60, 30]
     }];
 
