@@ -30,21 +30,23 @@ export class ChatBotComponent implements OnInit, OnDestroy {
 
   protected projectDetailsSubscription: Subscription;
   protected projectDetails: any;
+  protected hallucinationToggler: boolean = false;
 
   protected chats: Array<{
     type: 'user' | 'ai',
     message: string,
-    hallucination: string
+    hallucination: number
   }> = [];
   protected aiLoader: boolean = false;
-  @ViewChild('userInput') userInputRef!: ElementRef<HTMLInputElement>;
+  protected userQuery: string = '';
+  @ViewChild('chatBoxContainer') chatBoxContainer!: ElementRef;
 
 
   ngOnInit(): void {
   }
 
   onGoBack() {
-    this._router.navigate([this.appRoutes.PROJECTS]);
+    this._router.navigateByUrl(this.appRoutes.PROJECTS);
   }
 
   onExit() {
@@ -63,51 +65,59 @@ export class ChatBotComponent implements OnInit, OnDestroy {
   }
 
   sendMessage(): void {
-    if (!this.userInputRef.nativeElement.value) {
+    if (!this.userQuery) {
       return;
     }
+
     const bodyToSend = {
-      query: this.userInputRef.nativeElement.value,
+      query: this.userQuery,
       workflowId: localStorage.getItem(StorageKeys.WORKFLOW_ID) ?? ''
     };
 
-    this.pushInChat('user', bodyToSend.query, '');
-
+    this.pushInChat('user', bodyToSend.query, 0);
     this.aiLoader = true;
-    setTimeout(() => {
-      const element = document.getElementById('ai-loader');
-      if (element) {
-        element.scrollIntoView();
-      }
-    }, 100);
+    this.scrollToBottomChat();
+    this.userQuery = '';
 
     this._facadeService.confluenceService.chat(bodyToSend).subscribe({
       next: (res: any) => {
         console.log(res)
         if (res.code == 'OK') {
-          if (!res.data.response) {
-            this.pushInChat('ai', 'There are no data for ai system.', '');
+          if (res.data?.response) {
+            this.pushInChat('ai', res.data.response, this.extractPercentage(res.data?.hallucinatingPercentage?.response));
           } else {
-            this.pushInChat('ai', res.data.response, '');
+            this.pushInChat('ai', 'There are no data for ai system.', 0);
           }
           this.aiLoader = false;
         }
+        this.scrollToBottomChat();
       },
       error: (err: any) => {
         this.aiLoader = false;
-        this.pushInChat('ai', 'There are no data for ai system.', '');
+        this.scrollToBottomChat();
+        this.pushInChat('ai', 'There are no data for ai system.', 0);
         console.log('Error while chatting with chatbot', err.error);
       }
     });
-    this.userInputRef.nativeElement.value = '';
   }
 
-  pushInChat(type: 'user' | 'ai', message: string, hallucination: string): void {
+  extractPercentage(inputString: string) {
+    const match = inputString?.match(/(\d+)%/);
+    return (match?.length) ? parseInt(match[1]) : 0;
+  }
+
+  pushInChat(type: 'user' | 'ai', message: string, hallucination: number): void {
     this.chats.push({
       type: type,
       message: message,
       hallucination: hallucination
     });
+  }
+
+  scrollToBottomChat(): void {
+    setTimeout(() => {
+      this.chatBoxContainer.nativeElement.scroll({ top: this.chatBoxContainer.nativeElement.scrollHeight, behavior: 'smooth' });
+    }, 0);
   }
 
   ngOnDestroy(): void {

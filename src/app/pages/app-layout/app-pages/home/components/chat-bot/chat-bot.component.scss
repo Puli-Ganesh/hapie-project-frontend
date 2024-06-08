@@ -70,6 +70,62 @@
                 color: $on-base;
                 margin: 0;
             }
+
+            .hallucination-wrap {
+                margin: 7px 0;
+                display: flex;
+                gap: 0 12px;
+            
+                label[for="hallucinationToggler"] {
+                    height: 20px;
+                }
+            
+                .hallucination {
+                    position: relative;
+                    width: 36px;
+                    height: 20px;
+                    display: inline-block;
+                    border-radius: 10px;
+                    background-color: $light-primary;
+                    cursor: pointer;
+            
+                    .tap-round {
+                        width: 16px;
+                        height: 16px;
+                        position: absolute;
+                        left: 2px;
+                        top: 2px;
+                        overflow: hidden;
+                        border-radius: 10px;
+                        background-color: $base;
+                    }
+            
+                    &.on {
+                        background-color: $primary;
+            
+                        .tap-round {
+                            left: unset;
+                            right: 2px;
+                        }
+                    }
+            
+                    input[type="checkbox"] {
+                        display: none;
+                    }
+                }
+            
+                .label-title {
+                    color: $on-base;
+                    font-family: $base-font-family;
+                    font-size: 14px;
+                    font-style: normal;
+                    line-height: 20px;
+                    /* 142.857% */
+                    text-transform: capitalize;
+                    cursor: pointer;
+                    @include user-select-none;
+                }
+            }
         }
 
 
@@ -113,44 +169,58 @@
                 .user-message {
                     padding: 10px;
                     max-width: 70%;
+                    font-family: $base-font-family;
                     font-size: 14px;
                     font-style: normal;
                     font-weight: 400;
-                    word-break: break-all;
-                    color: #141C25;
+                    line-height: normal;
+                    text-align: justify;
                 }
 
                 .ai-message {
                     align-self: flex-start;
-                    background-color: #F9FAFB;
-                    border: 1px solid #E4E7EC;
-                    border-radius: 10px 10px 10px 0px;
+                    background-color: $light-base;
+                    color: $on-light-base;
+                    border: 1px solid $border-color;
+                    border-radius: 10px 10px 10px 2px;
+                    
+                    &.high {
+                        box-shadow: 0 2px 4px rgb(52, 168, 83);
+                        // box-shadow: inset 0px -6px 3px -3px rgb(52, 168, 83);
+                    }
+
+                    &.medium {
+                        box-shadow: 0 2px 4px rgb(251, 188, 5);
+                        // box-shadow: inset 0px -6px 3px -3px rgb(251, 188, 5);
+                    }
+
+                    &.low {
+                        box-shadow: 0 2px 4px rgb(234, 67, 53);
+                        // box-shadow: inset 0px -6px 3px -3px rgb(234, 67, 53);
+                    }
                 }
 
                 .user-message {
                     align-self: flex-end;
+                    color: #141C25;
                     background-color: #C9DCFF;
                     border-radius: 10px 10px 0px 10px;
                 }
 
-                .jumping-dots {
-                    span {
+                .jumping-loader {
+                    .loader {
                         display: inline-block;
                         position: relative;
-                        margin-left: auto;
-                        margin-right: auto;
-                        animation: jump 1s infinite;
-                    }
-
-                    .dot-1,
-                    .dot-2,
-                    .dot-3 {
                         width: 10px;
                         height: 10px;
+                        border-radius: 50%;
                         background-color: $primary;
                         opacity: 0.5;
-                        border-radius: 50%;
-                        margin-right: 3px;
+                        animation: jump 1s infinite;
+
+                        &:not(:last-child) {
+                            margin-right: 3px;
+                        }
                     }
 
                     .dot-1 {

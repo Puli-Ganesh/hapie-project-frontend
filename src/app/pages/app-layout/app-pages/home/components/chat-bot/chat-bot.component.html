@@ -41,14 +41,30 @@
     <div class="chatbot-container">
         <div class="title-wrapper">
             <h2 class="title">Chat With Confluence</h2>
+
+            <div class="hallucination-wrap">
+                <label for="hallucinationToggler">
+                    <div class="label-title">Show Hallucination</div>
+                </label>
+                <label for="hallucinationToggler">
+                    <div class="hallucination" [class.on]="hallucinationToggler">
+                        <div class="tap-round"></div>
+                        <input type="checkbox" id="hallucinationToggler" name="hallucinationToggler" [(ngModel)]="hallucinationToggler">
+                    </div>
+                </label>
+            </div>
         </div>
 
-
-        <div class="chat-box">
+        <div class="chat-box" #chatBoxContainer>
             <div class="chat-content">
                 <ng-container *ngFor="let chat of chats">
                     <ng-container [ngSwitch]="chat.type">
-                        <div *ngSwitchCase="'ai'" class="ai-message">
+                        <div *ngSwitchCase="'ai'" class="ai-message"
+                        [ngClass]="{
+                            'high': hallucinationToggler && chat.hallucination && chat.hallucination >= 75,
+                            'medium': hallucinationToggler && chat.hallucination && chat.hallucination >= 50 && chat.hallucination < 75,
+                            'low': hallucinationToggler && chat.hallucination && chat.hallucination < 50
+                        }">
                             {{chat.message}}
                         </div>
                         <div *ngSwitchCase="'user'" class="user-message">
@@ -56,17 +72,17 @@
                         </div>
                     </ng-container>
                 </ng-container>
-                <div id="ai-loader" *ngIf="aiLoader" class="my message">
-                    <span class="jumping-dots">
-                        <span class="dot-1"></span>
-                        <span class="dot-2"></span>
-                        <span class="dot-3"></span>
+                <div *ngIf="aiLoader">
+                    <span class="jumping-loader">
+                        <span class="loader dot-1"></span>
+                        <span class="loader dot-2"></span>
+                        <span class="loader dot-3"></span>
                     </span>
                 </div>
             </div>
             <div class="chat-footer">
                 <div class="chat-input-wrap">
-                    <textarea class="chat-input" placeholder="Type your message..." #userInput (keydown)="handleKeyDown($event)"></textarea>
+                    <textarea class="chat-input" placeholder="Type your message..." [(ngModel)]="userQuery" (keydown)="handleKeyDown($event)"></textarea>
                     <div class="send-icon" (click)="sendMessage()">
                         <svg class="icon" viewBox="0 0 40 40" x="0px" y="0px">
                             <g data-name="Layer 2">
