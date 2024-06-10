@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import * as moment from 'moment';
+
 import { Routes } from '@src/app/constants/routes';
 import { FacadeService } from '@src/app/services/facade.service';
 import { IResponse } from '@src/interfaces/response.interface';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-mom',
@@ -15,6 +17,7 @@ export class MomComponent implements OnInit {
   constructor(
     private _router: Router,
     private _facadeService: FacadeService,
+    protected _renderer2: Renderer2,
   ) {
     this.projectDetailsSubscription = this._facadeService.projectService.projectDetails$.subscribe({
       next: (details: any) => {
@@ -30,13 +33,18 @@ export class MomComponent implements OnInit {
   protected isRequestAlive: boolean = false;
   protected projectDetailsSubscription: Subscription;
   protected projectDetails: any;
-  /** review code before change list.  */
+  /** use index based on value.
+   * 
+   * 0 'Summary', 1 'Action Items', 2 'Sentiment Analysis'
+  */
   protected readonly _tabList = ['Summary', 'Action Items', 'Sentiment Analysis'];
   protected selectedTab: string = '';
 
   protected recordingList: Array<any> = [];
   protected selectedRecording!: any;
+  protected selectedSentimentAnalysis!: any;
   protected momData!: any;
+  protected _moment = moment;
 
 
   ngOnInit(): void {
@@ -48,7 +56,11 @@ export class MomComponent implements OnInit {
   }
 
   onGoBack() {
-    this._router.navigate([this.appRoutes.PROJECT_MEDIA_TRANSCRIPT])
+    if (!this.selectedRecording) {
+      this._router.navigate([this.appRoutes.PROJECTS]);
+    } else {
+      this.goToRecordingListView();
+    }
   }
 
 
@@ -78,7 +90,8 @@ export class MomComponent implements OnInit {
   goToRecordingListView() {
     this.selectedRecording = null;
     this.momData = null;
-    this.selectedTab = this._tabList[0];
+    this.selectedTab = '';
+    this.selectedSentimentAnalysis = null;
   }
 
   onSelectTab(tab: string) {
@@ -89,13 +102,13 @@ export class MomComponent implements OnInit {
         case this._tabList[0]:
           const meetingSummarySections = this.formatMeetingSummary(this.momData.momSummary);
           setTimeout(() => {
-            const meetingSummaryContainer = document.getElementById("meeting-summary");
+            const meetingSummaryContainer = document.getElementById('meeting-summary');
             if (meetingSummaryContainer) {
               meetingSummarySections.forEach(section => {
-                meetingSummaryContainer.appendChild(section);
+                this._renderer2.appendChild(meetingSummaryContainer, section);
               });
             }
-          }, 100);
+          }, 10);
           break;
         case this._tabList[1]:
           const meetingActionsSections = this.formatMeetingSummary(this.momData.momActionItems);
@@ -103,11 +116,10 @@ export class MomComponent implements OnInit {
             const meetingActionsContainer = document.getElementById('meeting-actions');
             if (meetingActionsContainer) {
               meetingActionsSections.forEach(section => {
-                meetingActionsContainer.appendChild(section);
+                this._renderer2.appendChild(meetingActionsContainer, section);
               });
             }
-          }, 100);
-
+          }, 10);
           break;
         case this._tabList[2]:
           setTimeout(() => {
@@ -144,23 +156,23 @@ export class MomComponent implements OnInit {
       const heading = parts[i].trim();
       const content = parts[i + 1].trim().replace(/\n/g, '<br>');
 
-      const section = document.createElement("div");
-      section.classList.add("meeting-section");
+      const section = this._renderer2.createElement('div');
+      this._renderer2.addClass(section, 'meeting-section');
 
-      const headingElement = document.createElement("h2");
-      headingElement.textContent = heading;
-      section.appendChild(headingElement);
+      const headingElement = this._renderer2.createElement('h2');
+      this._renderer2.setProperty(headingElement, 'textContent', heading);
+      this._renderer2.appendChild(section, headingElement);
 
-      const ul = document.createElement("ul");
+      const ul = this._renderer2.createElement('ul');
       content.split(/\d+\./).forEach(item => {
         if (item.trim() !== '') {
-          const li = document.createElement("li");
-          li.innerHTML = item.trim();
-          ul.appendChild(li);
+          const li = this._renderer2.createElement('li');
+          this._renderer2.setProperty(li, 'innerHTML', item.trim());
+          this._renderer2.appendChild(ul, li);
         }
       });
 
-      section.appendChild(ul);
+      this._renderer2.appendChild(section, ul);
       sections.push(section);
     }
 
@@ -177,7 +189,7 @@ export class MomComponent implements OnInit {
       categories: [],
       series: [{
         type: 'pie',
-        name: 'Browser share',
+        name: 'Sentiment Analysis',
         innerSize: '50%',
         data: [
           ['Positive', this.momData.sentimentAnalysis.positivePercentage],
@@ -224,7 +236,16 @@ export class MomComponent implements OnInit {
           startAngle: -90,
           endAngle: 90,
           center: ['50%', '75%'],
-          size: '110%'
+          size: '110%',
+          cursor: 'pointer',
+          events: {
+            click: (event: any) => {
+              if (event.point.name) {
+                this.momData.sentimentAnalysis.pointName = event.point.name;
+                this.momData.sentimentAnalysis.selectFrom = `${event.point.name?.toLowerCase()}Points`;
+              }
+            }
+          }
         }
       },
       credits: {

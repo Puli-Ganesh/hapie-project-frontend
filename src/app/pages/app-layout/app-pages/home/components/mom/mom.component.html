@@ -49,9 +49,11 @@
         
                 <div class="media-wrap" *ngIf="recordingList.length; else noMediaView;">
                     <div class="media-item" *ngFor="let recording of recordingList;" (click)="onSelectRecording(recording)">
-                        <div class="media-img"></div>
+                        <div class="media-img">
+                            <img class="img" src="{{recording?.thumbnailUrl}}" alt="project">
+                        </div>
                         <div class="media-details">
-                            <h2 class="media-name">Meeting of {{recording.createdAt | date:'d LLLL'}}</h2>
+                            <h2 class="media-name">Meeting of {{_moment(recording.createdAt).format('Do MMM, [At] h:mm A')}}</h2>
                             <div class="media-desc">Author: {{ recording?.userId ? (recording.userId?.firstName + " " +
                                 recording.userId?.lastName) : "--" }}</div>
                         </div>
@@ -70,7 +72,8 @@
 
             <ng-container *ngSwitchCase="'selectedView'">
                 <div class="inner-header">
-                    <h2 class="title">Meeting of {{selectedRecording.createdAt | date:'d LLLL'}}</h2>
+                    <!-- <h2 class="title large">Meeting of {{selectedRecording.createdAt | date:'d LLLL'}}</h2> -->
+                    <h2 class="title large">Meeting of {{_moment(selectedRecording.createdAt).format('Do MMM, [At] h:mm A')}}</h2>
 
                     <div class="right-side">
                         <button class="app-button primary" (click)="goToRecordingListView()">
@@ -93,7 +96,17 @@
                         <div id="meeting-actions"></div>
                     </ng-container>
                     <ng-container *ngSwitchCase="_tabList[2]">
-                        <div id="SentimentAnalysisSemiCircleDonutChart" class="sentiment-analysis-semi-circle-donut-chart-wrap"></div>
+                        <div class="sentiment-analysis-wrap">
+                            <div id="SentimentAnalysisSemiCircleDonutChart" class="sentiment-analysis-semi-circle-donut-chart-wrap"></div>
+                            <div *ngIf="momData?.sentimentAnalysis?.pointName" class="selected-point-wrap">
+                                <h2 class="point-title">{{momData?.sentimentAnalysis?.pointName}} Points</h2>
+                                <ul class="points-wrap" *ngIf="momData.sentimentAnalysis[momData.sentimentAnalysis?.selectFrom]?.length">
+                                    <li class="point" *ngFor="let point of momData.sentimentAnalysis[momData.sentimentAnalysis.selectFrom]">
+                                        {{point}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </ng-container>
                 </ng-container>
             </ng-container>

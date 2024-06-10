@@ -18,6 +18,7 @@ import { SignedDocumentService } from './signed-document/signed-document.service
 import { ShareCanvasService } from './share-canvas/share-canvas.service';
 import { WorkflowService } from './workflow/workflow.service';
 import { ConfluenceService } from './confluence/confluence.service';
+import { DashboardService } from './dashboard/dashboard.service';
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +47,7 @@ export class FacadeService {
   private _reportIssueService!: ReportIssueService;
   private _workflowService!: WorkflowService;
   private _confluenceService!: ConfluenceService;
+  private _dashboardService!: DashboardService;
 
 
   /** App Service getter */
@@ -190,5 +192,13 @@ export class FacadeService {
       this._confluenceService = this._injector.get(ConfluenceService);
     }
     return this._confluenceService;
+  }
+
+  /** Dashboard Service getter */
+  public get dashboardService(): DashboardService {
+    if (!this._dashboardService) {
+      this._dashboardService = this._injector.get(DashboardService);
+    }
+    return this._dashboardService;
   }
 }

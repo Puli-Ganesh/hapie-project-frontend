@@ -75,3 +75,20 @@ body {
         color: nth($family-4, $i) !important;
     }
 }
+
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: darkgray;
+    border-radius: 50em;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: $primary;
+    width: 8px;
+    border-radius: 50em;
+}

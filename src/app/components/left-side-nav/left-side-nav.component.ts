@@ -56,7 +56,7 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
           if (_router.routerState.snapshot.url === this.appRoutes.PROJECTS) {
             switch (this.hasAccessTo[0]) {
               case 'Dashboard':
-                _router.navigateByUrl(this.appRoutes.PROJECT_MOM);// PROJECT_DASHBOARD
+                _router.navigateByUrl(this.appRoutes.PROJECT_DASHBOARD);
                 break;
               case 'Analysis':
                 _router.navigateByUrl(this.appRoutes.PROJECT_MEDIA);

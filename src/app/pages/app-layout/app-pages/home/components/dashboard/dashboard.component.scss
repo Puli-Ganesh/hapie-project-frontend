@@ -55,6 +55,7 @@
         border-radius: 4px;
         border: 1px solid $border-color;
         background-color: $base;
+        overflow: auto;
 
         .title-wrapper {
             display: flex;
@@ -72,11 +73,13 @@
         .dashboard-body-wrap {
             width: 100%;
 
-            .sentiment-by-rating-chart-wrap{
+            .sentiment-by-rating-chart-wrap {
+                margin: 0 auto;
                 padding: 24px;
                 width: 100%;
-                max-width: 548px;
+                max-width: 1248px;
                 aspect-ratio: 16/9;
+                min-height: 450px;
                 border-radius: 8px;
                 box-shadow: 0 0 3px rgba($color: #000000, $alpha: 0.4);
             }
