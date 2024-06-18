@@ -138,6 +138,8 @@ export class MomComponent implements OnInit {
       this._facadeService.recordingService.getMomData(this.selectedRecording?._id).subscribe({
         next: (res: IResponse) => {
           this.momData = res.data;
+          console.log('momSummary response \n\n', this.momData.momSummary);
+          console.log('momActionItems response \n\n', this.momData.momActionItems);
           resolve();
         },
         error: (error: any) => {
@@ -164,8 +166,8 @@ export class MomComponent implements OnInit {
       this._renderer2.appendChild(section, headingElement);
 
       const ul = this._renderer2.createElement('ul');
-      content.split(/\d+\./).forEach(item => {
-        if (item.trim() !== '') {
+      content.split(/\d+\. *|\- /).forEach(item => {
+        if (item.trim() !== '' && item.trim() !== '-') {
           const li = this._renderer2.createElement('li');
           this._renderer2.setProperty(li, 'innerHTML', item.trim());
           this._renderer2.appendChild(ul, li);
