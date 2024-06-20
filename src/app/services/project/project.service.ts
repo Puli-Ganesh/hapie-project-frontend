@@ -45,8 +45,19 @@ export class ProjectService {
   async selectProject(projectId: string) {
     this.getProject(projectId).subscribe({
       next: (res: any) => {
-        localStorage.setItem(StorageKeys.PROJECT_ID, projectId);
-        this._projectDetails.next(res.data);
+        const projectDetails = res.data;
+        if (projectDetails?._id) {
+          localStorage.setItem(StorageKeys.PROJECT_ID, projectId);
+          localStorage.setItem(StorageKeys.WORKFLOW_ID, projectDetails.workflowId?._id ?? projectDetails.workflowId);
+          let userData: any = localStorage.getItem(StorageKeys.USER_INFORMATION);
+          if (userData) {
+            userData = JSON.parse(userData) ?? {};
+            const asMember = projectDetails.members.find((m: any) => m.userId == userData._id);
+            userData.color = asMember?.color ?? 1;
+            localStorage.setItem(StorageKeys.USER_INFORMATION, JSON.stringify(userData));
+          }
+          this._projectDetails.next(projectDetails);
+        }
       },
       error: (err: any) => {
         console.log('There is an error while fetching project details', err);
@@ -57,7 +68,14 @@ export class ProjectService {
 
   removeSelectedProject() {
     localStorage.removeItem(StorageKeys.PROJECT_ID);
-    // this._projectId.next('');
+    if (this._projectDetails.value) {
+      this._projectDetails.next(null);
+      return;
+    }
+  }
+
+  get isProjectDetails$Empty(): boolean {
+    return !this._projectDetails.value;
   }
 
   getListByUserId(userId: string): Observable<IResponse> {

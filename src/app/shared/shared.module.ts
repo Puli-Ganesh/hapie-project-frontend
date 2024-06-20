@@ -14,6 +14,8 @@ import { SafePipe } from '../pipes/safe.pipe';
 import { HeaderComponent } from './components/header/header.component';
 import { DropDownComponent } from './components/drop-down/drop-down.component';
 import { UploadDocModalComponent } from './components/upload-doc-modal/upload-doc-modal.component';
+import { ProjectExitBtnComponent } from './components/project-exit-btn/project-exit-btn.component';
+import { ProjectGoBackBtnComponent } from './components/project-go-back-btn/project-go-back-btn.component';
 
 
 @NgModule({
@@ -27,7 +29,9 @@ import { UploadDocModalComponent } from './components/upload-doc-modal/upload-do
     AutofocusDirective,
     SafePipe,
     HeaderComponent,
-    DropDownComponent
+    DropDownComponent,
+    ProjectExitBtnComponent,
+    ProjectGoBackBtnComponent
   ],
   imports: [
     CommonModule,
@@ -44,7 +48,9 @@ import { UploadDocModalComponent } from './components/upload-doc-modal/upload-do
     AutofocusDirective,
     SafePipe,
     HeaderComponent,
-    DropDownComponent
+    DropDownComponent,
+    ProjectExitBtnComponent,
+    ProjectGoBackBtnComponent
   ]
 })
 export class SharedModule { }

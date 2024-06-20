@@ -58,27 +58,18 @@ export class MediaComponent implements OnInit, OnDestroy {
   }
 
   getRecordingList() {
-    if (!this.projectDetails?._id) {
-      console.log('project id not found');
-      this._router.navigate([this.appRoutes.PROJECTS]);
-      return;
-    }
+    if (!this.projectDetails?._id) { return; }
+
     this._facadeService.recordingService.list({ projectId: this.projectDetails?._id }).subscribe({
       next: (res: IResponse) => {
-        this.recordings = res.data.list;
+        if (res.code === 'OK') {
+          this.recordings = res.data.list;
+        }
       },
       error: (error: any) => {
         console.error('Error while getting recordings', error);
       }
-    })
-  }
-
-  onGoBack() {
-    this._router.navigate([this.appRoutes.PROJECTS]);
-  }
-
-  onExit() {
-    this._router.navigateByUrl(this.appRoutes.PROJECTS);
+    });
   }
 
   onUploadMedia() {
@@ -95,7 +86,7 @@ export class MediaComponent implements OnInit, OnDestroy {
   navigateOnMediaTranscript(recording: any) {
     if (!recording?._id) { return; }
 
-    this._router.navigateByUrl(`${this.appRoutes.PROJECT_MEDIA_TRANSCRIPT}${recording._id}`);
+    this._router.navigateByUrl(this._facadeService.appService.getReplacedUrl(`${this.appRoutes.PROJECT_MEDIA_TRANSCRIPT}${recording._id}`));
   }
 
   ngOnDestroy(): void {

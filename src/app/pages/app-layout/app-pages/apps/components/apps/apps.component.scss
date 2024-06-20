@@ -59,6 +59,7 @@
 
                 .app-img-wrap {
                     padding: 6px;
+                    align-content: center;
                     background-color: $base;
                     border-right: 1px solid $border-color;
 
@@ -97,6 +98,10 @@
                             font-weight: 400;
                             line-height: normal;
                         }
+                    }
+
+                    .app-button.primary {
+                        align-self: center;
                     }
                 }
             }

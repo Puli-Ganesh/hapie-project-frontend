@@ -28,15 +28,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
   }
 
-  appRoutes = Routes;
-  profileToggler= false;
+  protected appRoutes = Routes;
+  protected profileToggler = false;
   @ViewChild('profileMenuWrapper') profileMenuWrapper!: ElementRef;
 
   currentUser: any;
   notificationSubscription: Subscription;
   userSubscription: Subscription;
-  isNotifCenterOpen = false;
-  isRequestAlive = false;
+  isNotifCenterOpen: boolean = false;
+  isRequestAlive: boolean = false;
   notificationList: Array<{
     message: string
     projectId: any
@@ -45,7 +45,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       hasEditAccess: boolean
     }
   }> = [];
-  notificationCount = 0;
+  notificationCount: number = 0;
   @ViewChild('notificationContainer') notificationContainer!: ElementRef;
 
 
@@ -59,11 +59,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onLogout() {
+    this._router.navigateByUrl(this._facadeService.appService.getReplacedUrl(this.appRoutes.LOGIN));
+    this._facadeService.projectService.removeSelectedProject();
     this._facadeService.authService.logOut();
-    this._router.navigateByUrl(this.appRoutes.LOGIN);
   }
 
   onNotificationToggle() {

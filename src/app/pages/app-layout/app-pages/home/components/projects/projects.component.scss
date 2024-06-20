@@ -141,11 +141,12 @@
                 border: 1px solid $border-color;
                 // aspect-ratio: 1.3043478261/1;
                 overflow: hidden;
-                cursor: pointer;
                 filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.08));
 
                 &:hover {
+                    cursor: pointer;
                     border-color: $light-primary;
+
                     .project-details {
                         background-color: $light-primary;
                     }
@@ -235,8 +236,7 @@
                     background: $base;
 
                     .btn {
-                        display: inline-block;
-                        padding: 8px 16px;
+                        padding: 8px 8px;
                         color: $on-base;
                         font-family: $raleway-600;
                         font-size: 12px;
@@ -245,11 +245,21 @@
                         text-transform: capitalize;
                         cursor: pointer;
                     }
+                    .export-link-btn-wrap {
+                        padding: 6px 6px;
+
+                        .copy-link-icon {
+                            display: block;
+                            width: 24px;
+                            height: 24px;
+                        }
+                    }
                 }
 
                 &:hover {
                     .action-wrap {
-                        display: inline-block;
+                        display: inline-flex;
+                        align-items: center;
                     }
                 }
             }
@@ -336,21 +346,37 @@
     .app-table-wrap {
         &:has(.tbl-tr > .tbl-td > .action-wrap:last-child:nth-child(1)) {
             .tbl-tr {
-                grid-template-columns: minmax(180px, 0.6fr) minmax(280px, 1fr) minmax(200px, 0.7fr) 105px;
+                grid-template-columns: minmax(180px, 0.6fr) minmax(280px, 1fr) minmax(200px, 0.7fr) 100px;
             }
         }
 
         &:has(.tbl-tr > .tbl-td > .action-wrap:last-child:nth-child(2)) {
             .tbl-tr {
-                grid-template-columns: minmax(180px, 0.6fr) minmax(280px, 1fr) minmax(200px, 0.7fr) 165px;
+                grid-template-columns: minmax(180px, 0.6fr) minmax(280px, 1fr) minmax(200px, 0.7fr) 141px;
+            }
+        }
+
+        &:has(.tbl-tr > .tbl-td > .action-wrap:last-child:nth-child(3)) {
+            .tbl-tr {
+                grid-template-columns: minmax(180px, 0.6fr) minmax(280px, 1fr) minmax(200px, 0.7fr) 200px;
             }
         }
 
         .tbl-tr {
-            grid-template-columns: minmax(180px, 0.6fr) minmax(280px, 1fr) minmax(200px, 0.7fr) 215px;
+            grid-template-columns: minmax(180px, 0.6fr) minmax(280px, 1fr) minmax(200px, 0.7fr) 251px;
 
             .tbl-td {
                 .action-wrap {
+                    vertical-align: middle;
+
+                    .export-link-btn-wrap {
+                        .copy-link-icon {
+                            display: block;
+                            width: 24px;
+                            height: 24px;
+                        }
+                    }
+
                     &:not(:last-of-type) {
                         margin-right: 12px;
                     }

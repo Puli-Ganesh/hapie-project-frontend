@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 import { FacadeService } from '@src/app/services/facade.service';
 import { Permissions } from '@src/app/constants/permissions';
@@ -8,6 +9,7 @@ import { Routes } from '@src/app/constants/routes';
 import { StorageKeys } from '@src/app/constants/storage-keys';
 import { IResponse } from '@src/interfaces/response.interface';
 import { Subscription } from 'rxjs';
+import { AppConfig } from '@src/app/constants/appConfig';
 
 type TViewType = 't' | 'g';
 
@@ -21,6 +23,8 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   constructor(
     private _router: Router,
     private _facadeService: FacadeService,
+    private _appConfig: AppConfig,
+    private _clipboard: Clipboard,
   ) {
     this.projectsSubscription = this._facadeService.projectService.projectsList$.subscribe({
       next: (projects: any) => {
@@ -90,20 +94,15 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   onSelectProject(index: number) {
     const projectData = this.filteredProjectList[index];
     if (projectData) {
-      // localStorage.setItem(StorageKeys.PROJECT_ID, projectData._id);
-      // localStorage.setItem(StorageKeys.PROJECT_NAME, projectData.projectName);
-      // localStorage.setItem(StorageKeys.PROJECT_COLOR, projectData.color);
       this._facadeService.projectService.selectProject(projectData._id);
-      localStorage.setItem(StorageKeys.WORKFLOW_ID, projectData.workflowId);
-      let userData: any = localStorage.getItem(StorageKeys.USER_INFORMATION);
-      if (userData) {
-        userData = JSON.parse(userData) ?? {};
-        const asMember = projectData.members.find((m: any) => m.userId == userData._id);
-        userData.color = asMember?.color ?? 1;
-        localStorage.setItem(StorageKeys.USER_INFORMATION, JSON.stringify(userData));
-      }
-
-      // this._router.navigateByUrl(this.appRoutes.PROJECT_MEDIA);
+      // localStorage.setItem(StorageKeys.WORKFLOW_ID, projectData.workflowId);
+      // let userData: any = localStorage.getItem(StorageKeys.USER_INFORMATION);
+      // if (userData) {
+      //   userData = JSON.parse(userData) ?? {};
+      //   const asMember = projectData.members.find((m: any) => m.userId == userData._id);
+      //   userData.color = asMember?.color ?? 1;
+      //   localStorage.setItem(StorageKeys.USER_INFORMATION, JSON.stringify(userData));
+      // }
     }
   }
 
@@ -204,6 +203,12 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   onChangeView() {
     this.viewType = (this.viewType === 't' ? 'g' : 't');
     sessionStorage.setItem(StorageKeys.SST.PROJECT_VIEW_TYPE, this.viewType);
+  }
+
+  onExportProject(event: Event, projectId: string): void {
+    event?.stopPropagation();
+    this._clipboard.copy(`${this._appConfig.clientURL}/${projectId}${this.appRoutes.LOGIN}`);
+    this._facadeService.appService.openToaster('Project export link copied successfully.', 'success');
   }
 
 

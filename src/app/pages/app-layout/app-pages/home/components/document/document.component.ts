@@ -83,12 +83,10 @@ export class DocumentComponent implements OnInit, OnDestroy {
   }
 
 
-  onGoBack() {
-    this.selectedDocument = null;
-  }
-
-  onExit() {
-    this._router.navigate([this.appRoutes.PROJECTS]);
+  onGoBack(event: string) {
+    if (event === 'skip' && this.selectedDocument?._id) {
+      this.onDone();
+    }
   }
 
   onSignDocument() {
@@ -262,7 +260,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
 
   onManageDocument(docIndex: number) {
     this.selectedDocument = this.filteredTemplateList[docIndex];
-    this.versionOptions = this.selectedDocument.versions.map((version: any) => version.majorMinorCombination).sort((versionA: any, versionB: any) => +versionA - +versionB);
+    this.versionOptions = this.selectedDocument.versions.map((version: any) => version.majorMinorCombination).sort((versionA: string, versionB: string) => parseFloat(versionA) - parseFloat(versionB));
     this.selectedVersion = this.versionOptions[this.versionOptions.length - 1];
 
     this.setDocumentView();
@@ -285,8 +283,8 @@ export class DocumentComponent implements OnInit, OnDestroy {
     this._facadeService.documentService.categoryList({
       templateId: this.selectedDocument._id,
       projectId: this.selectedDocument.projectId,
-      latestMajor: +this.selectedVersion.split('.')[0],
-      latestMinor: +this.selectedVersion.split('.')[1]
+      latestMajor: parseInt(this.selectedVersion?.split('.')[0]) || 0,
+      latestMinor: parseInt(this.selectedVersion?.split('.')[1]) || 1
     }).subscribe({
       next: (res: any) => {
         if (res.code == "OK") {

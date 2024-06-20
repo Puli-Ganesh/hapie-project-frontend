@@ -1,25 +1,18 @@
-<div class="app-container" [ngClass]="{
-    'sidebar-hide': isSidebarHidden
-}">
+<!-- [ngClass]="{ 'sidebar-hide': isSidebarHidden }" -->
+<div class="app-container">
 
-    <app-left-side-nav *ngIf="!isSidebarHidden"></app-left-side-nav>
+    <!-- *ngIf="!isSidebarHidden" -->
+    <app-left-side-nav></app-left-side-nav>
 
     <div class="main-content-wrap">
         <router-outlet></router-outlet>
-        <!-- <div class="main-content">
-
-            <div class="main" [ngStyle]="{
-                'padding': !isSidebarHidden ? '25px' : '0px'
-            }">
-            </div>
-        </div> -->
     </div>
 </div>
 
 
 <app-toaster></app-toaster>
 
-<ng-container *ngIf="_facadeService.appService?.isHeaderShow">
+<!-- <ng-container *ngIf="_facadeService.appService?.isHeaderShow">
     <div class="report-issue-container">
         <div class="report-issue-wrap" #reportIssueContainer *ngIf="toggleReportIssue">
             <h2 class="title">report your issue!</h2>
@@ -81,4 +74,4 @@
             </svg>
         </div>
     </div>
-</ng-container>
+</ng-container> -->

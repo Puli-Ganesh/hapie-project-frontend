@@ -12,6 +12,7 @@ export class StorageKeys {
 	/** sessionStorage */
 	static readonly SST = {
 		PROJECT_VIEW_TYPE: 'nexGen.projectViewType',
-		WORKFLOW_VIEW_TYPE: 'nexGen.workflowViewType'
+		WORKFLOW_VIEW_TYPE: 'nexGen.workflowViewType',
+		PROJECT_ID_FOR_MICROSOFT: 'nexGen.projectIdForMicrosoft',
 	};
 }

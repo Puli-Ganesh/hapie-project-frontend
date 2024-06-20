@@ -5,13 +5,15 @@ import { Router } from '@angular/router';
 import { AppConfig } from '@src/app/constants/appConfig';
 import { Regex } from '@src/app/constants/regex';
 import { Routes } from '@src/app/constants/routes';
+import { StorageKeys } from '@src/app/constants/storage-keys';
 import { FacadeService } from '@src/app/services/facade.service';
 import { IResponse } from '@src/interfaces/response.interface';
 
 export interface ILoginCredentials {
   email: string,
-  password: string
-}
+  password: string,
+  projectId?: string
+};
 
 
 @Component({
@@ -37,20 +39,27 @@ export class LoginComponent implements OnInit {
         Validators.required,
       ]],
     });
+
+    this.projectId = this._router.url.match(/^\/([a-f\d]{24})\/auth\//)?.[1];
   }
 
   protected readonly appRoutes = Routes;
   protected isRequestAlive: boolean = false;
 
   protected loginForm: FormGroup;
+  protected projectId?: string;
   protected isPasswordEyeOpen: boolean = false;
   protected serverError: string | null = null;
-  client: any;
+  protected client: any;
 
   ngOnInit(): void {
     // navigating user to home page if already logged in.
     if (this._facadeService.authService.isLoggedIn()) {
-      this._router.navigateByUrl(this.appRoutes.PROJECTS);
+      if (this.projectId) {
+        this._router.navigateByUrl(`/${this.projectId}`);
+      } else {
+        this._router.navigateByUrl(this.appRoutes.PROJECTS);
+      }
     } else {
       localStorage.clear();
     }
@@ -65,7 +74,6 @@ export class LoginComponent implements OnInit {
         }
       },
     });
-
   }
 
   get email(): AbstractControl | null {
@@ -89,13 +97,24 @@ export class LoginComponent implements OnInit {
       email: this.loginForm.value.email.toLowerCase().trim(),
       password: this.loginForm.value.password.trim()
     };
+    if (this.projectId) {
+      userCredentials.projectId = this.projectId;
+    }
+
     this._facadeService.authService.login(userCredentials).subscribe({
       next: (res: IResponse) => {
         this.isRequestAlive = false;
         // after successfully login navigating user
         if (res.code == "OK") {
           this.serverError = '';
-          this._router.navigateByUrl(this.appRoutes.PROJECTS);
+          if (this.projectId) {
+            this._router.navigateByUrl(`/${this.projectId}`).then(() => {
+              /** navigated based on project access via projectDetails$ observable subscription on project select */
+              this._facadeService.projectService.selectProject(this.projectId!);
+            });
+          } else {
+            this._router.navigateByUrl(this.appRoutes.PROJECTS);
+          }
         }
         this._facadeService.appService.clearToasters();
       },
@@ -106,12 +125,14 @@ export class LoginComponent implements OnInit {
         }
       }
     });
-
   }
 
   onLoginWithMicrosoft() {
     this._facadeService.authService.loginWithMicrosoft().subscribe({
       next: (res: any) => {
+        if (this.projectId) {
+          sessionStorage.setItem(StorageKeys.SST.PROJECT_ID_FOR_MICROSOFT, this.projectId);
+        }
         window.location.href = res.data.url;
       }
     });
@@ -124,26 +145,37 @@ export class LoginComponent implements OnInit {
   loginUserWithGoogle(accessToken: string) {
     this.isRequestAlive = true;
 
-    this._facadeService.authService.loginWithGoogle({ accessToken }).subscribe({
+    const body: any = { accessToken };
+    if (this.projectId) {
+      body.projectId = this.projectId;
+    }
+
+    this._facadeService.authService.loginWithGoogle(body).subscribe({
       next: (res: any) => {
         this.isRequestAlive = false;
         if (res.code == 'OK') {
           this._facadeService.authService.setSession(res);
-          this._router.navigateByUrl(Routes.PROJECTS);
+          if (this.projectId) {
+            this._router.navigateByUrl(`/${this.projectId}`).then(() => {
+              /** navigated based on project access via projectDetails$ observable subscription on project select */
+              this._facadeService.projectService.selectProject(this.projectId!);
+            });
+          } else {
+            this._router.navigateByUrl(this.appRoutes.PROJECTS);
+          }
         }
       },
       error: (err: any) => {
         this.isRequestAlive = false;
         if (err.error.code == 'E_USER_NOT_FOUND') {
           this.serverError = 'You are not registered yet. Contact support to register.';
-          this._facadeService.appService.openToaster('You are not registered yet. Contact support to register.', 'danger')
+          this._facadeService.appService.openToaster('You are not registered yet. Contact support to register.', 'danger');
         }
         if (err.error.code == 'E_INTERNAL_SERVER_ERROR') {
           this.serverError = err.error.message ?? 'Something bad happened on server.';
         }
       }
     });
-
   }
 
 }

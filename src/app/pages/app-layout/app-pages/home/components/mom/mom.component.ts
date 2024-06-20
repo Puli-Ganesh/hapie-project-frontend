@@ -51,14 +51,8 @@ export class MomComponent implements OnInit {
     this.getMomData();
   }
 
-  onGoToProjects() {
-    this._router.navigate([this.appRoutes.PROJECTS])
-  }
-
-  onGoBack() {
-    if (!this.selectedRecording) {
-      this._router.navigate([this.appRoutes.PROJECTS]);
-    } else {
+  onGoBack(event: string) {
+    if (event === 'skip' && this.selectedRecording?._id) {
       this.goToRecordingListView();
     }
   }

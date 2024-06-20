@@ -45,14 +45,6 @@ export class ChatBotComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
   }
 
-  onGoBack() {
-    this._router.navigateByUrl(this.appRoutes.PROJECTS);
-  }
-
-  onExit() {
-    this._router.navigateByUrl(this.appRoutes.PROJECTS);
-  }
-
   handleKeyDown(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
       if (event.shiftKey) {

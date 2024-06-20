@@ -78,6 +78,12 @@
                         </div>
                         <div class="action-wrap"
                             *ngIf="permissions.PROJECT_EDIT.includes(loggedInUser.type) || permissions.PROJECT_DELETE.includes(loggedInUser.type)">
+                            <div class="export-link-btn-wrap" (click)="onExportProject($event, project._id)">
+                                <svg class="copy-link-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path fill="#141C25"
+                                        d="M19 19H8C7.45 19 6.97917 18.8042 6.5875 18.4125C6.19583 18.0208 6 17.55 6 17V3C6 2.45 6.19583 1.97917 6.5875 1.5875C6.97917 1.19583 7.45 1 8 1H15L21 7V17C21 17.55 20.8042 18.0208 20.4125 18.4125C20.0208 18.8042 19.55 19 19 19ZM14 8V3H8V17H19V8H14ZM4 23C3.45 23 2.97917 22.8042 2.5875 22.4125C2.19583 22.0208 2 21.55 2 21V7H4V21H15V23H4Z"></path>
+                                </svg>
+                            </div>
                             <div class="btn" (click)="onEditProject($event, projectIndex)"
                                 *ngIf="permissions.PROJECT_EDIT.includes(loggedInUser.type)">
                                 edit
@@ -104,6 +110,14 @@
                             <div class="tbl-td">{{ project?.projectDescription }}</div>
                             <div class="tbl-td">{{ project?.projectDescription }}</div>
                             <div class="tbl-td text-end">
+                                <div class="action-wrap"
+                                    *ngIf="permissions.PROJECT_EDIT.includes(loggedInUser.type) || permissions.PROJECT_DELETE.includes(loggedInUser.type)"
+                                    (click)="onExportProject($event, project._id)">
+                                    <svg class="copy-link-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path fill="#2C76FF"
+                                            d="M19 19H8C7.45 19 6.97917 18.8042 6.5875 18.4125C6.19583 18.0208 6 17.55 6 17V3C6 2.45 6.19583 1.97917 6.5875 1.5875C6.97917 1.19583 7.45 1 8 1H15L21 7V17C21 17.55 20.8042 18.0208 20.4125 18.4125C20.0208 18.8042 19.55 19 19 19ZM14 8V3H8V17H19V8H14ZM4 23C3.45 23 2.97917 22.8042 2.5875 22.4125C2.19583 22.0208 2 21.55 2 21V7H4V21H15V23H4Z"></path>
+                                    </svg>
+                                </div>
                                 <div class="action-wrap" (click)="onSelectProject(projectIndex)">
                                     View
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">

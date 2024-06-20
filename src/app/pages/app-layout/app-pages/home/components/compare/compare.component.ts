@@ -115,21 +115,12 @@ export class CompareComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.projectId) {
-      this._router.navigateByUrl(this.appRoutes.PROJECT_MEDIA);
+      this._router.navigateByUrl(this._facadeService.appService.getReplacedUrl(this.appRoutes.PROJECT_MEDIA));
       return;
     }
     this.currentUser = this._facadeService.authService.getCurrentUser();
     this.getTemplateAndVideoList();
   }
-
-  onExit() {
-    this._router.navigateByUrl(Routes.PROJECTS);
-  }
-
-  onGoBack() {
-    this._router.navigate([this.appRoutes.PROJECTS]);
-  }
-  
 
   getTemplateAndVideoList(): void {
     if (this.isRequestAlive) {

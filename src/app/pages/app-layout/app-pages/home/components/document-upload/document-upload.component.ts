@@ -34,15 +34,6 @@ export class DocumentUploadComponent implements OnInit {
   ngOnInit(): void {
   }
 
-
-  onGoBack() {
-    this._router.navigate([this.appRoutes.PROJECTS]);
-  }
-
-  onExit() {
-    this._router.navigateByUrl(this.appRoutes.PROJECTS);
-  }
-
   onUploadMedia() {
     this.isUploadingDocs = true;
   }

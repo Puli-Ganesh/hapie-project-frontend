@@ -64,12 +64,12 @@ export class AuthService {
     const userDetails = {
       ...authResult.data.user,
       type: authResult.data.role.type
-    }
+    };
     localStorage.setItem(StorageKeys.USER_INFORMATION, JSON.stringify(userDetails));
     localStorage.setItem(StorageKeys.USER_TOKEN_EXPIRES_AT, JSON.stringify(expiresAt));
 
     this._appSocketService.establishSocketConnection();
-    this._appSocketService.joinUserRoom(`user-${authResult.data.user._id}`)
+    this._appSocketService.joinUserRoom(`user-${authResult.data.user._id}`);
 
     // if (authResult.data.workspaceName) {
     //   this._workspaceService.setWorkspaceName(authResult.data.workspaceName);
@@ -79,7 +79,7 @@ export class AuthService {
 
 
   getCurrentUser() {
-    const userInfo: string | null = localStorage.getItem(StorageKeys.USER_INFORMATION); return userInfo ? JSON.parse(userInfo) : null
+    const userInfo: string | null = localStorage.getItem(StorageKeys.USER_INFORMATION); return userInfo ? JSON.parse(userInfo) : null;
   }
 
   getCurrentUser$() {
@@ -108,15 +108,15 @@ export class AuthService {
 
   getAuthToken(): string | null {
     const authToken: string | null = localStorage.getItem(StorageKeys.USER_TOKEN);
-    return authToken ? JSON.parse(authToken) : null
+    return authToken ? JSON.parse(authToken) : null;
   }
 
   getExpiration() {
     let expiration = JSON.stringify(moment().valueOf() - 1000);
     if (localStorage.getItem(StorageKeys.USER_TOKEN_EXPIRES_AT)) {
-      expiration = localStorage.getItem(StorageKeys.USER_TOKEN_EXPIRES_AT)!
+      expiration = localStorage.getItem(StorageKeys.USER_TOKEN_EXPIRES_AT)!;
     }
-    return moment(JSON.parse(expiration))
+    return moment(JSON.parse(expiration));
   }
 
   isLoggedIn() {

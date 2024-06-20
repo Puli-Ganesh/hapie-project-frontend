@@ -49,14 +49,15 @@ export class TemplateComponent implements OnInit, OnDestroy {
     this._facadeService.modalService.registerModal('deleteTemplateModal');
   }
 
-  onGoBack() {
-    this.reSetEditorWindowInstance();
-    this.selectedTemplate = null;
+  onGoBack(event: string) {
+    if (event === 'skip' && this.selectedTemplate?._id) {
+      this.reSetEditorWindowInstance();
+      this.selectedTemplate = null;
+    }
   }
   
-  onExit() {
+  onExit(event: boolean) {
     this.reSetEditorWindowInstance();
-    this._router.navigate([this.appRoutes.PROJECTS]);
   }
 
   onSaveTemplate() {

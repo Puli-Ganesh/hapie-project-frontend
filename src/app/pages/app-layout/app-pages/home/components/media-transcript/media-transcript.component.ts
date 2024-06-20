@@ -70,7 +70,7 @@ export class MediaTranscriptComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.currentUser = this._facadeService.authService.getCurrentUser();
     if (!this.recordingId) {
-      this._router.navigateByUrl(this.appRoutes.PROJECT_MEDIA);
+      this.navigateOnMedia();
       return;
     } else {
       this.getRecordingDetails();
@@ -95,7 +95,7 @@ export class MediaTranscriptComponent implements OnInit, OnDestroy {
         this.isRequestAlive = false;
         if (error.error.code === 'E_NOT_FOUND') {
           this._facadeService.appService.openToaster('Media not found.', 'danger');
-          this._router.navigateByUrl(this.appRoutes.PROJECT_MEDIA);
+          this.navigateOnMedia();
         }
         console.error('Error while getting media transcript', error.error);
       }
@@ -176,12 +176,12 @@ export class MediaTranscriptComponent implements OnInit, OnDestroy {
       this._facadeService.modalService.closeModal('deleteMediaModal');
       return;
     }
-    
+
     this._facadeService.recordingService.deleteById(this.recordingDetails._id).subscribe({
       next: (res: IResponse) => {
         if (res.code === "OK") {
           this._facadeService.modalService.closeModal('deleteMediaModal');
-          this._router.navigateByUrl(this.appRoutes.PROJECT_MEDIA);
+          this.navigateOnMedia();
         }
       },
       error: (err: any) => {
@@ -189,7 +189,7 @@ export class MediaTranscriptComponent implements OnInit, OnDestroy {
       }
     });
   }
-  
+
   onCancelDeleteMedia() {
     this._facadeService.modalService.closeModal('deleteMediaModal');
   }
@@ -199,20 +199,12 @@ export class MediaTranscriptComponent implements OnInit, OnDestroy {
     return `${parseInt(this.speakerWiseTranscript[speakerIndex].words[wordIndex].start / 60)}:${parseInt(this.speakerWiseTranscript[speakerIndex].words[wordIndex].start % 60)}`;
   }
 
-  onGoToProjects() {
-    this._router.navigate([this.appRoutes.PROJECTS])
-  }
-  
-  onGoBack() {
-    this._router.navigate([this.appRoutes.PROJECT_MEDIA_TRANSCRIPT])
-  }
-
   // onGoToProject() {
   //   this._router.navigate([this.appRoutes.PROJECT_PROFILE])
   // }
 
   navigateOnMedia() {
-    this._router.navigateByUrl(this.appRoutes.PROJECT_MEDIA);
+    this._router.navigateByUrl(this._facadeService.appService.getReplacedUrl(this.appRoutes.PROJECT_MEDIA));
   }
 
   ngOnDestroy(): void {

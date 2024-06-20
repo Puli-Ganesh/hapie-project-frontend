@@ -155,14 +155,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this._facadeService.modalService.registerModal('migrateVersionModal');
   }
 
-  onExit() {
-    this._router.navigate([this.appRoutes.PROJECTS]);
-  }
-
-  onBack() {
-    console.log('currently not desided where to send');
-  }
-
   setLiveEditing() {
     for (let categoryData of this.categoryList) {
       for (let category of categoryData.list) {
@@ -185,14 +177,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
       }
     }
   }
-
-  // onGoToProjects() {
-  //   this._router.navigateByUrl(Routes.PROJECTS);
-  // }
-
-  // onGoToProject() {
-  //   this._router.navigateByUrl(Routes.PROJECT_PROFILE);
-  // }
 
   getTemplateList() {
     this._facadeService.templateService.getDefaultListByProjectId(this.projectId).subscribe({

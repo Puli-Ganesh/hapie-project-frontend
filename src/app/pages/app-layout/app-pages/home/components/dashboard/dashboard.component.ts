@@ -39,14 +39,6 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  onGoBack() {
-    this._router.navigateByUrl(this.appRoutes.PROJECTS);
-  }
-
-  onExit() {
-    this._router.navigateByUrl(this.appRoutes.PROJECTS);
-  }
-
   getData() {
     if (!this.projectDetails?._id) {
       return;

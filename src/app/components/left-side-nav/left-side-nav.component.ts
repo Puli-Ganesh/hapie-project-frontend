@@ -1,11 +1,10 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 
 import { Permissions } from '@src/app/constants/permissions';
 import { Routes } from '@src/app/constants/routes';
 import { FacadeService } from '@src/app/services/facade.service';
-import { Node } from '@src/app/pages/app-layout/app-pages/workflow/components/workflow-details/node';
 import { StorageKeys } from '@src/app/constants/storage-keys';
 
 @Component({
@@ -38,56 +37,81 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
           /** temporary set dashboard without any condition */
           this.hasAccessTo.push('Dashboard');
 
-          const nodes = this.projectDetails?.workflowId?.nodes;
+          const nodesObj = this.projectDetails.workflowId.nodes.reduce((ac: any, cv: any) => {
+            if (!ac[cv.app]) { ac[cv.app] = cv.app; } return ac;
+          }, {});
 
-          for (const node of nodes) {
-            if (this._accessibleMenu[node.app]) {
-              this.hasAccessTo.push(this._accessibleMenu[node.app]);
+          for (const menuKey in this._accessibleMenu) {
+            if (menuKey in nodesObj) {
+              this.hasAccessTo.push(this._accessibleMenu[menuKey]);
             }
           }
 
-          const confluenceChatBotIndex = nodes.findIndex((n: any) => (n.app == 'Confluence'));
-          if (confluenceChatBotIndex > -1) {
-            if (nodes.find((n: any) => n.app == 'Chat Bot')) {
-              this.hasAccessTo.push('Chat');
-            }
+          if (nodesObj['Confluence'] && nodesObj['Chat Bot']) {
+            this.hasAccessTo.push('Chat');
           }
 
-          if (_router.routerState.snapshot.url === this.appRoutes.PROJECTS) {
+          // const nodes = this.projectDetails.workflowId.nodes;
+          // for (const node of nodes) {
+          //   if (this._accessibleMenu[node.app]) {
+          //     this.hasAccessTo.push(this._accessibleMenu[node.app]);
+          //   }
+          // }
+
+          // const confluenceChatBotIndex = nodes.findIndex((n: any) => (n.app == 'Confluence'));
+          // if (confluenceChatBotIndex > -1) {
+          //   if (nodes.find((n: any) => n.app == 'Chat Bot')) {
+          //     this.hasAccessTo.push('Chat');
+          //   }
+          // }
+
+          const projectSubRoute = _router.routerState.snapshot.url.match(/^\/([a-f\d]{24}|project)/i);
+          if (_router.routerState.snapshot.url === this.appRoutes.PROJECTS || /^\/[a-f\d]{24}$/.test(_router.routerState.snapshot.url)) {
             switch (this.hasAccessTo[0]) {
               case 'Dashboard':
-                _router.navigateByUrl(this.appRoutes.PROJECT_DASHBOARD);
+                _router.navigateByUrl(this.getReplacedUrl(this.appRoutes.PROJECT_DASHBOARD));
                 break;
               case 'Analysis':
-                _router.navigateByUrl(this.appRoutes.PROJECT_MEDIA);
+                _router.navigateByUrl(this.getReplacedUrl(this.appRoutes.PROJECT_MEDIA));
                 break;
               case 'Compare Video':
-                _router.navigateByUrl(this.appRoutes.PROJECT_COMPARE);
+                _router.navigateByUrl(this.getReplacedUrl(this.appRoutes.PROJECT_COMPARE));
                 break;
               case 'Canvas':
-                _router.navigateByUrl(this.appRoutes.PROJECT_CANVAS);
+                _router.navigateByUrl(this.getReplacedUrl(this.appRoutes.PROJECT_CANVAS));
                 break;
               case 'Document':
-                _router.navigateByUrl(this.appRoutes.PROJECT_TEMPLATE);
+                _router.navigateByUrl(this.getReplacedUrl(this.appRoutes.PROJECT_TEMPLATE));
                 break;
               case 'Video Upload':
-                _router.navigateByUrl(this.appRoutes.PROJECT_DOCUMENT_UPLOAD);
+                _router.navigateByUrl(this.getReplacedUrl(this.appRoutes.PROJECT_DOCUMENT_UPLOAD));
                 break;
               case 'Chat':
-                _router.navigateByUrl(this.appRoutes.PROJECT_CHAT);
+                _router.navigateByUrl(this.getReplacedUrl(this.appRoutes.PROJECT_CHAT));
                 break;
               case 'MoM':
-                _router.navigateByUrl(this.appRoutes.PROJECT_MOM);
+                _router.navigateByUrl(this.getReplacedUrl(this.appRoutes.PROJECT_MOM));
                 break;
               default:
                 break;
             }
+          } else if (projectSubRoute) {
+            const routeKey = projectSubRoute.input?.replace(new RegExp(`${projectSubRoute[0]}/?`), '')?.split('/')?.[0] ?? '';
+            if (!routeKey || !(this._projectSubRoutes[routeKey] && this.hasAccessTo.some((item: string) => item === this._projectSubRoutes[routeKey]))) {
+              _router.navigateByUrl(projectSubRoute[0]);
+            }
+          } else if (!projectSubRoute && this.hasAccessTo.length) {
+            this.projectDetails = null;
+            this.hasAccessTo = [];
+            localStorage.removeItem(StorageKeys.PROJECT_ID);
           }
         }
 
         if (!this.projectDetails?._id) {
           this.isChatBoxVisible = false;
         }
+
+        this.isExportedProject = !!this._facadeService.appService.exportedProjectId;
       }
     });
 
@@ -128,10 +152,22 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
   protected projectsSubscription!: Subscription;
   protected projectDetailsSubscription!: Subscription;
 
+  protected readonly _projectSubRoutes: { [key: string]: string } = {
+    'dashboard': 'Dashboard',
+    'compare': 'Compare Video',
+    'media': 'Analysis',
+    'canvas': 'Canvas',
+    'template': 'Document',
+    'documents': 'Document',
+    'document-upload': 'Video Upload',
+    'chat': 'Chat',
+    'mom': 'MoM',
+  };
+
+  protected isExportedProject: boolean = false;
   protected isRequestAlive: boolean = false;
 
   protected notificationCount: number = 0;
-
   protected notificationList: Array<{
     message: string
     projectId: any
@@ -152,14 +188,14 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
   protected isNotifCenterOpen: boolean = false;
   @ViewChild('notificationContainer') notificationContainer!: ElementRef;
 
-  routerSubscription: Subscription;
-  activeMenu = '';
-  secondaryMenu = '';
-  workflowToggler = false;
-  projectsToggler = false;
-  projectDetails: any;
-  hasAccessTo = [''];
-  selectedWorkflowId = '';
+  protected routerSubscription: Subscription;
+  protected activeMenu: string = '';
+  protected secondaryMenu: string = '';
+  protected workflowToggler: boolean = false;
+  protected projectsToggler: boolean = false;
+  protected projectDetails: any;
+  protected hasAccessTo: Array<string> = [];
+  protected selectedWorkflowId: string = '';
 
   protected workflowList: Array<any> = [];
   protected projectList: Array<any> = [];
@@ -179,9 +215,12 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
     // this.getProjectList();
   }
 
+  getReplacedUrl(url: string): string {
+    return this._facadeService.appService.getReplacedUrl(url);
+  }
+
   onSelectProject(projectId: string) {
     this._facadeService.projectService.selectProject(projectId);
-    this._router.navigate([this.appRoutes.PROJECT_MEDIA]);
     this.projectsToggler = false;
   }
 
@@ -204,7 +243,7 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
       this.activeMenu = 'apps';
     } else if (url.startsWith('/templates')) {
       this.activeMenu = 'templates';
-    } else if (url.startsWith('/project')) {
+    } else if (url.startsWith('/project') || /^\/[a-f\d]{24}/.test(url)) {
       this.activeMenu = 'project';
       if (url.includes('/dashboard')) {
         this.secondaryMenu = 'dashboard';
@@ -225,12 +264,23 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
       } else if (url.includes('/mom')) {
         this.secondaryMenu = 'mom';
       }
+
+      setTimeout(() => {
+        if (!url.startsWith('/project') && this._facadeService.projectService.isProjectDetails$Empty) {
+          const exportedProjectId = this._facadeService.appService.exportedProjectId;
+          const projectIdAsRoute = url.match(/^\/([a-f\d]{24})/);
+          if (projectIdAsRoute && projectIdAsRoute[1] === exportedProjectId) {
+            this._facadeService.projectService.selectProject(exportedProjectId);
+          }
+        }
+      }, 1000);
     }
 
     if (this.activeMenu != 'project') {
       this.projectDetails = null;
       this.secondaryMenu = '';
       localStorage.removeItem(StorageKeys.PROJECT_ID);
+      this.projectsToggler = false;
     }
 
     if (this.activeMenu != 'workflows') {
@@ -239,36 +289,14 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
 
   }
 
-  onDashboard() {
-    this._router.navigate([this.appRoutes.PROJECT_DASHBOARD]);
-  }
+  onNavigateTo(url: string, parseUrl: boolean = true, extras: any | undefined = undefined): void {
+    if (!url?.trim()) return;
 
-  onGoToMedia() {
-    this._router.navigate([this.appRoutes.PROJECT_MEDIA]);
-  }
-
-  onGoToCompare() {
-    this._router.navigate([this.appRoutes.PROJECT_COMPARE]);
-  }
-
-  onGoToCanvas() {
-    this._router.navigate([this.appRoutes.PROJECT_CANVAS]);
-  }
-
-  onGoToDocument() {
-    this._router.navigate([this.appRoutes.PROJECT_DOCUMENTS]);
-  }
-
-  onGoToTemplate() {
-    this._router.navigate([this.appRoutes.PROJECT_TEMPLATE]);
-  }
-
-  onChat() {
-    this._router.navigate([this.appRoutes.PROJECT_CHAT]);
-  }
-
-  onMom() {
-    this._router.navigate([this.appRoutes.PROJECT_MOM]);
+    if (parseUrl) {
+      this._router.navigateByUrl(this.getReplacedUrl(url), extras);
+    } else {
+      this._router.navigateByUrl(url, extras);
+    }
   }
 
   onViewWorkflow(index: number) {
@@ -294,25 +322,6 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
         console.error('Error while getting notification list', err);
       }
     });
-  }
-
-  onTeam() {
-    this._router.navigate([this.appRoutes.TEAM]);
-  }
-  onApps() {
-    this._router.navigate([this.appRoutes.APPS]);
-  }
-  onProjects() {
-    this._router.navigate([this.appRoutes.PROJECTS]);
-  }
-  onTemplates() {
-    this._router.navigate([this.appRoutes.TEMPLATES]);
-  }
-  onWorkflows() {
-    this._router.navigate([this.appRoutes.WORKFLOWS]);
-  }
-  onDocumentUpload() {
-    this._router.navigate([this.appRoutes.PROJECT_DOCUMENT_UPLOAD]);
   }
 
   onApproveEditAccess(index: number): void {
@@ -364,21 +373,6 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
     });
   }
 
-  onLogout() {
-    this._facadeService.authService.logOut();
-    this._router.navigateByUrl(this.appRoutes.LOGIN);
-  }
-
-  ngOnDestroy(): void {
-    this.userSubscription?.unsubscribe();
-    this.projectsSubscription?.unsubscribe();
-    this.projectDetailsSubscription?.unsubscribe();
-    this._facadeService.projectService.removeSelectedProject();
-    this.routerSubscription?.unsubscribe();
-  }
-
-
-
   protected chats: any = [];
   protected aiLoader: boolean = false;
   toggleChatBox() {
@@ -400,10 +394,10 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
     const userInput = this.userInputRef.nativeElement.value;
     this.chats.push({
       'user': userInput
-    })
+    });
 
     this.aiLoader = true;
-    
+
     setTimeout(() => {
       const element = document.getElementById('ai-loader');
       if (element) {
@@ -430,4 +424,16 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
     this.userInputRef.nativeElement.value = '';
   }
 
+  onLogout() {
+    this._facadeService.authService.logOut();
+    this._router.navigateByUrl(this.appRoutes.LOGIN);
+  }
+
+  ngOnDestroy(): void {
+    this.userSubscription?.unsubscribe();
+    this.projectsSubscription?.unsubscribe();
+    this.projectDetailsSubscription?.unsubscribe();
+    this._facadeService.projectService.removeSelectedProject();
+    this.routerSubscription?.unsubscribe();
+  }
 }
