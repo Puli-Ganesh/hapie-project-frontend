@@ -283,8 +283,8 @@ export class DocumentComponent implements OnInit, OnDestroy {
     this._facadeService.documentService.categoryList({
       templateId: this.selectedDocument._id,
       projectId: this.selectedDocument.projectId,
-      latestMajor: parseInt(this.selectedVersion?.split('.')[0]) || 0,
-      latestMinor: parseInt(this.selectedVersion?.split('.')[1]) || 1
+      latestMajor: parseInt(this.selectedVersion?.split('.')[0]) ?? 0,
+      latestMinor: parseInt(this.selectedVersion?.split('.')[1]) ?? 1
     }).subscribe({
       next: (res: any) => {
         if (res.code == "OK") {
@@ -332,21 +332,24 @@ export class DocumentComponent implements OnInit, OnDestroy {
     if (!this.selectedDocument || !this.projectDetails._id) return;
     const body = {
       // @ts-ignore
-      html: window.editor.getData(),
+      html: window.editor?.getData(),
       templateId: this.selectedDocument._id,
       projectId: this.projectDetails._id
     };
+
+    if (!body.html) {
+      return;
+    }
 
     this._facadeService.documentService.migrateVersion(body).subscribe({
       next: (res: any) => {
         if (res.code === "OK") {
           this.selectedDocument.versions = res.data.templateVersion;
-          this.versionOptions = this.selectedDocument.versions.map((version: any) => version.majorMinorCombination).sort((versionA: any, versionB: any) => +versionA - +versionB);
+          this.versionOptions = this.selectedDocument.versions.map((version: any) => version.majorMinorCombination).sort((versionA: any, versionB: any) => parseInt(versionA) - parseInt(versionB));
           this.selectedVersion = this.versionOptions[this.versionOptions.length - 1];
-          this.selectedDocument.latestMajor = +this.selectedVersion.split('.')[0];
-          this.selectedDocument.latestMinor = +this.selectedVersion.split('.')[1];
-          
-          this.selectedDocumentCategoryList = res.data.list.map(((category: any) => {
+          this.selectedDocument.latestMajor = parseFloat(this.selectedVersion.split('.')[0] ?? 0);
+          this.selectedDocument.latestMinor = parseFloat(this.selectedVersion.split('.')[1] ?? 1);
+          this.selectedDocumentCategoryList = res.data.list?.map(((category: any) => {
             category.requirements = category.requirements.filter((requirement: any) => requirement.isApproved);
             return category;
           }));

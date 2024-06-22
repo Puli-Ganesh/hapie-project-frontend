@@ -18,7 +18,7 @@
         <div class="title-wrapper">
             <h2 class="title">Media</h2>
             <button class="app-button primary"
-                *ngIf="isUploadVisible && permissions.PROJECT_UPLOAD.includes(currentUser.type)"
+                *ngIf="hasVideoUploadAccess && permissions.PROJECT_UPLOAD.includes(currentUser.type)"
                 (click)="onUploadMedia()">
                 <svg class="btn-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path

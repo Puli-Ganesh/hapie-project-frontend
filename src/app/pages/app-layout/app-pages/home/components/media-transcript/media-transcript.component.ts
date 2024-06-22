@@ -7,6 +7,7 @@ import { StorageKeys } from '@src/app/constants/storage-keys';
 import { IResponse } from '@src/interfaces/response.interface';
 import { Permissions } from '@src/app/constants/permissions';
 import { Subscription } from 'rxjs';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -19,7 +20,8 @@ export class MediaTranscriptComponent implements OnInit, OnDestroy {
   constructor(
     private _router: Router,
     private _facadeService: FacadeService,
-    private _activatedRoute: ActivatedRoute
+    private _activatedRoute: ActivatedRoute,
+    private _location: Location,
   ) {
 
     this.recordingId = this._activatedRoute.snapshot.params['id'];
@@ -30,6 +32,13 @@ export class MediaTranscriptComponent implements OnInit, OnDestroy {
     this.projectDetailsSubscription = this._facadeService.projectService.projectDetails$.subscribe({
       next: (details: any) => {
         this.projectDetails = details;
+
+        const nodes = this.projectDetails?.workflowId?.nodes;
+        if (nodes?.length) {
+          this.hasAnalysisAccess = nodes.some((n: any) => n.app === 'Analysis');
+        } else {
+          this.hasAnalysisAccess = false;
+        }
       }
     });
   }
@@ -42,8 +51,10 @@ export class MediaTranscriptComponent implements OnInit, OnDestroy {
 
   // protected projectId: string = '';
   // protected projectName: string = '';
-  projectDetailsSubscription: Subscription;
-  projectDetails: any;
+  protected projectDetailsSubscription: Subscription;
+  protected projectDetails: any;
+  protected hasAnalysisAccess: boolean = false;
+
 
   protected recordingId: string = '';
   protected recordingDetails: any;
@@ -69,6 +80,10 @@ export class MediaTranscriptComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.currentUser = this._facadeService.authService.getCurrentUser();
+    if (!this.hasAnalysisAccess) {
+      this._location.back();
+      return;
+    }
     if (!this.recordingId) {
       this.navigateOnMedia();
       return;

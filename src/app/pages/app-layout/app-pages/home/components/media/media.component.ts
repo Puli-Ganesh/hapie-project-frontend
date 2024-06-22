@@ -27,10 +27,10 @@ export class MediaComponent implements OnInit, OnDestroy {
         this.projectDetails = details;
         const nodes = this.projectDetails?.workflowId?.nodes;
         if (nodes?.length) {
-          const videoNode = nodes.find((n: any) => n.app == 'Video Upload');
-          this.isUploadVisible = videoNode ? true : false;
+          this.hasVideoUploadAccess = nodes.some((n: any) => n.app === 'Video Upload');
+          this.hasAnalysisAccess = nodes.some((n: any) => n.app === 'Analysis');
         } else {
-          this.isUploadVisible = false;
+          this.hasVideoUploadAccess = false;
         }
         if (this.projectDetails) {
           this.getRecordingList();
@@ -44,7 +44,8 @@ export class MediaComponent implements OnInit, OnDestroy {
   protected readonly appRoutes = Routes;
   projectDetailsSubscription: Subscription;
   projectDetails: any;
-  isUploadVisible = false;
+  protected hasVideoUploadAccess: boolean = false;
+  protected hasAnalysisAccess: boolean = false;
 
   projectColor: any;
 
@@ -84,7 +85,7 @@ export class MediaComponent implements OnInit, OnDestroy {
   }
 
   navigateOnMediaTranscript(recording: any) {
-    if (!recording?._id) { return; }
+    if (!recording?._id || !this.hasAnalysisAccess) { return; }
 
     this._router.navigateByUrl(this._facadeService.appService.getReplacedUrl(`${this.appRoutes.PROJECT_MEDIA_TRANSCRIPT}${recording._id}`));
   }

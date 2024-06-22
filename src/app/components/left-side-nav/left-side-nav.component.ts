@@ -47,6 +47,10 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
             }
           }
 
+          if (!this.hasAccessTo.some((a: any) => a === 'Analysis') && 'Video Upload' in nodesObj) {
+            this.hasAccessTo.push(this._accessibleMenu['Analysis']);
+          }
+
           if (nodesObj['Confluence'] && nodesObj['Chat Bot']) {
             this.hasAccessTo.push('Chat');
           }
@@ -83,7 +87,7 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
               case 'Document':
                 _router.navigateByUrl(this.getReplacedUrl(this.appRoutes.PROJECT_TEMPLATE));
                 break;
-              case 'Video Upload':
+              case 'Document Upload':
                 _router.navigateByUrl(this.getReplacedUrl(this.appRoutes.PROJECT_DOCUMENT_UPLOAD));
                 break;
               case 'Chat':
@@ -142,7 +146,7 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
     'Compare Video': 'Compare Video',
     'Canvas': 'Canvas',
     'Document': 'Document',
-    'Video Upload': 'Video Upload',
+    'Document Upload': 'Document Upload',
     'MoM': 'MoM',
     // 'Confluence': 'Confluence',
     // 'Chat Bot': 'Chat',
@@ -154,14 +158,14 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
 
   protected readonly _projectSubRoutes: { [key: string]: string } = {
     'dashboard': 'Dashboard',
-    'compare': 'Compare Video',
     'media': 'Analysis',
+    'compare': 'Compare Video',
     'canvas': 'Canvas',
     'template': 'Document',
     'documents': 'Document',
-    'document-upload': 'Video Upload',
-    'chat': 'Chat',
+    'document-upload': 'Document Upload',
     'mom': 'MoM',
+    'chat': 'Chat',
   };
 
   protected isExportedProject: boolean = false;
@@ -265,6 +269,7 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
         this.secondaryMenu = 'mom';
       }
 
+      this.isChatBoxVisible = false;
       setTimeout(() => {
         if (!url.startsWith('/project') && this._facadeService.projectService.isProjectDetails$Empty) {
           const exportedProjectId = this._facadeService.appService.exportedProjectId;
@@ -287,6 +292,9 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
       this.workflowToggler = false;
     }
 
+    if (!this.projectDetails?._id) {
+      this.isChatBoxVisible = false;
+    }
   }
 
   onNavigateTo(url: string, parseUrl: boolean = true, extras: any | undefined = undefined): void {
@@ -391,7 +399,11 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
   }
 
   sendMessage(): void {
-    const userInput = this.userInputRef.nativeElement.value;
+    const userInput = this.userInputRef.nativeElement.value?.trim();
+    if (!userInput) {
+      return;
+    }
+
     this.chats.push({
       'user': userInput
     });
@@ -419,6 +431,12 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
           }
           this.aiLoader = false;
         }
+      },
+      error: (err: any) => {
+        this.chats.push({
+          'ai': 'There are no data for ai system.'
+        });
+        this.aiLoader = false;
       }
     });
     this.userInputRef.nativeElement.value = '';

@@ -150,7 +150,7 @@ export class MomComponent implements OnInit {
 
     for (let i = 1; i < parts.length; i += 2) {
       const heading = parts[i].trim();
-      const content = parts[i + 1].trim().replace(/\n/g, '<br>');
+      const content = parts[i + 1].trim().replace(/\n/g, '');
 
       const section = this._renderer2.createElement('div');
       this._renderer2.addClass(section, 'meeting-section');
@@ -160,10 +160,10 @@ export class MomComponent implements OnInit {
       this._renderer2.appendChild(section, headingElement);
 
       const ul = this._renderer2.createElement('ul');
-      content.split(/\d+\. *|\- /).forEach(item => {
+      content.split(/\d+\. +|\- +|\+ +/).forEach(item => {
         if (item.trim() !== '' && item.trim() !== '-') {
           const li = this._renderer2.createElement('li');
-          this._renderer2.setProperty(li, 'innerHTML', item.trim());
+          this._renderer2.setProperty(li, 'innerHTML', item.trim().replace(/( *\- *| *\+ *)$/, ''));
           this._renderer2.appendChild(ul, li);
         }
       });

@@ -2,7 +2,7 @@
 
     <div class="media-transcript-header">
         <div class="breadcrumbs-wrapper">
-            <app-project-go-back-btn navigateTo="{{this.appRoutes.PROJECT_MEDIA}}" [parseUrl]="true"></app-project-go-back-btn>
+            <app-project-go-back-btn navigateTo="{{appRoutes.PROJECT_MEDIA}}" [parseUrl]="true"></app-project-go-back-btn>
 
             <h2 class="breadcrumb-item">
                 {{ projectDetails?.projectName }}
@@ -15,7 +15,7 @@
     </div>
 
     
-    <div class="body">
+    <div class="body" *ngIf="hasAnalysisAccess">
         <div class="inner-header">
             <div class="breadcrumb-wrap">
                 <!-- <div class="label" (click)="onGoToProjects()">projects</div>
@@ -113,7 +113,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="delete-wrapper" *ngIf="permissions.MEDIA_DELETE.includes(currentUser.type)"
+                <div class="delete-wrapper" *ngIf="permissions.MEDIA_DELETE.includes(currentUser?.type)"
                     (click)="onDeleteMedia()">
                     <svg class="icon" width="16" height="18" viewBox="0 0 16 18" fill="none">
                         <path
