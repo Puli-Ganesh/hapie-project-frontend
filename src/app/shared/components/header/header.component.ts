@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Routes } from '@src/app/constants/routes';
 import { FacadeService } from '@src/app/services/facade.service';
@@ -13,7 +13,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     private _facadeService: FacadeService,
-    private _router: Router
+    private _router: Router,
+    private _cdRef: ChangeDetectorRef 
   ) {
     this.userSubscription = this._facadeService.authService.getCurrentUser$().subscribe({
       next: (user: any) => {
@@ -24,6 +25,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.notificationSubscription = this._facadeService.notificationService.newNotification$.subscribe({
       next: (event: any) => {
         this.notificationCount = this._facadeService.notificationService.notificationCount;
+        this._cdRef.detectChanges();
       }
     });
   }

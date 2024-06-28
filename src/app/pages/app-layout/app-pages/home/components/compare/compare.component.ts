@@ -111,6 +111,7 @@ export class CompareComponent implements OnInit {
   protected isGetAISummaryClicked: boolean = false;
   protected isAIRequestAlive: boolean = false;
   protected aiSummaryList: Array<any> = [];
+  protected selectedCategoryAISummary: any = {};
 
 
   ngOnInit(): void {
@@ -297,6 +298,10 @@ export class CompareComponent implements OnInit {
       displayCategoryByMedia.requirements = _.cloneDeep(this.selectedCategory?.requirements?.filter((req: any) => req.recordingId == displayCategoryByMedia.recordingId));
     }
 
+    if (this.aiSummaryList?.length > 0 && this.selectedCategory._id) {
+      this.selectedCategoryAISummary = this.aiSummaryList.find((item: any) => item._id === this.selectedCategory._id);
+    }
+
     if (this.mediaListWrap.nativeElement) {
       this.mediaListWrap.nativeElement.scrollTop = 0;
     }
@@ -432,7 +437,7 @@ export class CompareComponent implements OnInit {
         return acc;
       }, '');
 
-      const category = { _id: catCv._id, requirements: [] };
+      const category = { _id: catCv._id, requirements: '' };
       if (requirementsPoints) {
         category.requirements = requirementsPoints;
       }
@@ -463,7 +468,10 @@ export class CompareComponent implements OnInit {
     if (!Array.isArray(list)) {
       return;
     }
-    this.aiSummaryList = list;
+    this.aiSummaryList = list.map((obj: any) => {
+      obj.requirements = obj.requirements.map((item: any) => ({ requirement: item, isSelected: false }));
+      return obj;
+    });
   }
 
   onSelectRequirement(categoryId: string, requirementId: string) {
@@ -484,6 +492,10 @@ export class CompareComponent implements OnInit {
             const oldRequirement = this.selectedCategory?.requirements?.find((rq: any) => rq._id === requirementId);
             if (oldRequirement) {
               oldRequirement.isApproved = rawRequirement.isApproved;
+            }
+            const aiSummaryReqIndex = this.selectedCategoryAISummary?.requirements?.findIndex((item: any) => item.requirement === rawRequirement.requirement);
+            if (aiSummaryReqIndex > -1) {
+              this.selectedCategoryAISummary.requirements[aiSummaryReqIndex].isSelected = rawRequirement.isApproved;
             }
           } else {
             rawRequirement.isApproved = !rawRequirement.isApproved;
@@ -511,15 +523,25 @@ export class CompareComponent implements OnInit {
       if (rawPrevAddedRequirement) {
         rawPrevAddedRequirement.isApproved = prevAddedRequirement.isApproved;
       }
+      const aiSummaryReqIndex = this.selectedCategoryAISummary?.requirements?.findIndex((item: any) => item.requirement === requirementStr);
+      if (aiSummaryReqIndex > -1) {
+        this.selectedCategoryAISummary.requirements[aiSummaryReqIndex].isSelected = prevAddedRequirement.isApproved;
+      }
       this._facadeService.compareVideoService.toggleRequirementApproval(categoryId, prevAddedRequirement._id, prevAddedRequirement.isApproved).subscribe({
         next: (res: any) => {
           if (res.code !== 'OK') {
             prevAddedRequirement.isApproved = !prevAddedRequirement.isApproved;
             rawPrevAddedRequirement.isApproved = prevAddedRequirement.isApproved;
+            if (aiSummaryReqIndex > -1) {
+              this.selectedCategoryAISummary.requirements[aiSummaryReqIndex].isSelected = prevAddedRequirement.isApproved;
+            }
           }
         },
         error: (err: any) => {
           prevAddedRequirement.isApproved = !prevAddedRequirement.isApproved;
+          if (rawPrevAddedRequirement) {
+            rawPrevAddedRequirement.isApproved = prevAddedRequirement.isApproved;
+          }
           console.error('Error while update requirement approval', err);
         }
       });
@@ -531,6 +553,10 @@ export class CompareComponent implements OnInit {
             this.selectedCategory.requirements.push({ ...res.data.newRequirement });
             /** select category based on current select prompt */
             this.categoryList.find((cat: any) => (cat._id === categoryId && cat.templateId == this.selectedTemplate?._id))?.requirements?.push({ ...res.data.newRequirement });
+            const aiSummaryReqIndex = this.selectedCategoryAISummary?.requirements?.findIndex((item: any) => item.requirement === requirementStr);
+            if (aiSummaryReqIndex > -1) {
+              this.selectedCategoryAISummary.requirements[aiSummaryReqIndex].isSelected = true;
+            }
           }
         },
         error: (err: IResponse) => {
