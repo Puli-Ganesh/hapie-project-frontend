@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 
@@ -15,7 +14,6 @@ import { IResponse } from '@src/interfaces/response.interface';
 export class DashboardComponent implements OnInit {
 
   constructor(
-    private _router: Router,
     private _facadeService: FacadeService,
   ) {
     this.projectDetailsSubscription = this._facadeService.projectService.projectDetails$.subscribe({
@@ -26,6 +24,8 @@ export class DashboardComponent implements OnInit {
         }
       }
     });
+
+    this.isMicrosoftUser = this._facadeService.appService.isMicrosoftUser;
   }
 
   protected readonly appRoutes = Routes;
@@ -36,8 +36,22 @@ export class DashboardComponent implements OnInit {
     categories: []
   };
 
+  protected isMicrosoftUser: boolean = false;
+  protected calendar: Array<Array<{ day: number, date: moment.Moment, isCurrentMonth: boolean }>> = [];
+  protected currentDate!: moment.Moment;
+  protected toDayDate: moment.Moment = moment();
+  protected selectedDate!: moment.Moment;
+  protected calendarMeetingDetailsObj: { [key: string]: Array<any> } = {};
+  protected meetingListOfSelectedDate!: any;
 
-  ngOnInit(): void { }
+
+  ngOnInit(): void {
+    if (this.isMicrosoftUser) {
+      this.currentDate = moment();
+      this.selectedDate = this.currentDate.clone();
+      this.generateCalendar();
+    }
+  }
 
   getData() {
     if (!this.projectDetails?._id) {
@@ -139,6 +153,124 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  generateCalendar(): void {
+    const startOfMonth = moment(this.currentDate).startOf('month');
+    const endOfMonth = moment(this.currentDate).endOf('month').startOf('day');
+    const firstDayOfWeek = startOfMonth.day();
+    const daysInMonth = endOfMonth.date();
+    const weeks: any[] = [];
+
+    let day = 1;
+    let week: any[] = [];
+
+    /** Fill in the first week */
+    const previousMonth = moment(startOfMonth).subtract(1, 'month');
+    const previousMonthDays = previousMonth.daysInMonth();
+    let previousMonthDay = previousMonthDays - firstDayOfWeek + 1;
+    for (let i = 0; i < firstDayOfWeek; i++) {
+      week.push({
+        day: previousMonthDay,
+        date: previousMonth.clone().set({ date: previousMonthDay }),
+        isCurrentMonth: false
+      });
+      previousMonthDay++;
+    }
+
+    while (day <= daysInMonth) {
+      week.push({
+        day: day,
+        date: startOfMonth.clone().set({ date: day }),
+        isCurrentMonth: true
+      });
+      day++;
+
+      if (week.length === 7) {
+        weeks.push(week);
+        week = [];
+      }
+    }
+
+    /** Fill in the last week */
+    if (week.length > 0) {
+      let nextMonthDay = 1;
+      const nextMonth = moment(endOfMonth).add(1, 'day');
+      while (week.length < 7) {
+        week.push({
+          day: nextMonthDay,
+          date: nextMonth.clone().set({ date: nextMonthDay }),
+          isCurrentMonth: false
+        });
+        nextMonthDay++;
+      }
+      weeks.push(week);
+    }
+
+    this.calendar = weeks;
+    this.getCalendarData();
+  }
+
+  previousMonth(): void {
+    this.currentDate = moment(this.currentDate).subtract(1, 'month');
+    this.generateCalendar();
+  }
+
+  nextMonth(): void {
+    this.currentDate = moment(this.currentDate).add(1, 'month');
+    this.generateCalendar();
+  }
+
+  today(): void {
+    this.currentDate = moment();
+    this.selectedDate = this.currentDate.clone();
+    this.meetingListOfSelectedDate = [];
+    this.generateCalendar();
+  }
+
+  getCalendarData() {
+    if (!this.calendar?.length || !this.isMicrosoftUser) { return; }
+
+    const body = {
+      startDate: moment(this.currentDate).startOf('month').format(),
+      endDate: moment(this.currentDate).endOf('month').startOf('day').format()
+    };
+
+    this._facadeService.dashboardService.getCalendarData(body).subscribe({
+      next: (res: IResponse) => {
+        if (res.code === "OK") {
+          if (!this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')] && res.data.eventList) {
+            this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')] = res.data.eventList;
+
+            this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')]?.map((item) => {
+              item.startTime = moment.utc(item.start.dateTime);
+              item.endTime = moment.utc(item.end.dateTime);
+              return item;
+            });
+
+            const singleDateList = this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')]?.filter((item: any) => item.startTime.format('YYYY-MM-DD') === this.selectedDate.format('YYYY-MM-DD'));
+            this.meetingListOfSelectedDate = singleDateList;
+          }
+        }
+      },
+      error: (err: any) => {
+        console.log('Error while getting calendar data', err);
+      }
+    });
+  }
+
+  onSelectDate(weekIndex: number, dayIndex: number) {
+    const selectedDate = this.calendar[weekIndex][dayIndex];
+    if (selectedDate.isCurrentMonth) {
+      this.selectedDate = this.calendar[weekIndex][dayIndex].date.clone();
+      const singleDateList = this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')]?.filter((item: any) => item.startTime.format('YYYY-MM-DD') === this.selectedDate.format('YYYY-MM-DD'));
+      this.meetingListOfSelectedDate = singleDateList;
+    } else if (selectedDate.isCurrentMonth === false && weekIndex === 0) {
+      this.selectedDate = this.calendar[weekIndex][dayIndex].date.clone();
+      this.previousMonth();
+    } else if (selectedDate.isCurrentMonth === false && weekIndex !== 0) {
+      this.selectedDate = this.calendar[weekIndex][dayIndex].date.clone();
+      this.nextMonth();
+    }
+  }
 
   ngOnDestroy(): void {
     this.projectDetailsSubscription?.unsubscribe();

@@ -8,6 +8,7 @@ import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 import { HttpClientService } from '@app/services/http-client/http-client.service';
 import { StorageKeys } from '@src/app/constants/storage-keys';
 import { AppSocketService } from '../app-socket/app-socket.service';
+import { FacadeService } from '../facade.service';
 
 
 
@@ -18,7 +19,8 @@ export class AuthService {
 
   constructor(
     private _httpClientService: HttpClientService,
-    private _appSocketService: AppSocketService
+    private _appSocketService: AppSocketService,
+    private _facadeService: FacadeService,
   ) {
     this.encodeKey = `${window.screen.height}${window.screen.width}${window.screen.colorDepth}${new Date().getTime()}`;
     this.currentUser$.next(this.getCurrentUser())
@@ -146,6 +148,7 @@ export class AuthService {
   logOut() {
     const userData = this.getCurrentUser();
     localStorage.clear();
+    this._facadeService.appService.clearTokenData();
     if (userData?._id) {
       this._appSocketService.leaveUserRoom(`user-${userData._id}`);
       setTimeout(() => {

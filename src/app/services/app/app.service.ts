@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 
 import { jwtDecode } from "jwt-decode";
 import { StorageKeys } from '@src/app/constants/storage-keys';
+import { LoggedInVia } from '@src/app/constants/loggedInVia';
 
 export type ToasterType = 'success' | 'danger';
 export interface Toaster {
@@ -56,8 +57,16 @@ export class AppService {
     }
   }
 
+  clearTokenData(): void {
+    this.decodeTokenData = null;
+  }
+
   get exportedProjectId(): string {
     return this.decodeToken()?.projectId ?? '';
+  }
+
+  get isMicrosoftUser(): boolean {
+    return LoggedInVia.MICROSOFT === this.decodeToken()?.loggedInVia;
   }
 
   getReplacedUrl(url: string): string {

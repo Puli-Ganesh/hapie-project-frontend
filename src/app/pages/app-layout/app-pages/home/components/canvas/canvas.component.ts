@@ -285,12 +285,12 @@ export class CanvasComponent implements OnInit, OnDestroy {
       projectId: this.projectId
     };
 
-    this._facadeService.documentService.migrateVersion(body).subscribe({
+    this._facadeService.documentService.migrateMinorVersion(body).subscribe({
       next: (res: IResponse) => {
         this.rawCategoryList = res.data.list;
         this.currentVersion = {
-          major: this.currentVersion.major + 1,
-          minor: 1
+          major: this.currentVersion.major,
+          minor: this.currentVersion.minor + 1
         };
         const template = this.templatesList.find((t: any) => t._id == this.selectedTemplate._id);
         if (template) {
@@ -303,7 +303,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
           return category;
         }));
         this.setCategories();
-        this._facadeService.appService.openToaster('Migration has been done successfully', 'success');
+        this._facadeService.appService.openToaster('Migration has been done successfully.', 'success');
         this._facadeService.modalService.closeModal('migrateVersionModal');
       },
       error: (err: any) => {

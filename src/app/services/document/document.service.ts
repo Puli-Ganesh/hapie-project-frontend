@@ -32,4 +32,8 @@ export class DocumentService {
   migrateVersion(body: any): Observable<IResponse> {
     return this._httpClientService.post(body, `${this.endPoint}/migrate-version`);
   }
+
+  migrateMinorVersion(body: any): Observable<IResponse> {
+    return this._httpClientService.post(body, `${this.endPoint}/migrate-minor-version`);
+  }
 }

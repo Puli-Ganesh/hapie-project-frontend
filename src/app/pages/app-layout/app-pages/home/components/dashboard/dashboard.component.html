@@ -20,8 +20,115 @@
             <h2 class="title">Dashboard</h2>
         </div>
 
-        <div class="dashboard-body-wrap">
-            <div id="sentimentByRatingChart" class="sentiment-by-rating-chart-wrap"></div>
+        <div class="chart-and-calendar-wrap">
+            <div class="dashboard-body-wrap">
+                <div id="sentimentByRatingChart" class="sentiment-by-rating-chart-wrap"></div>
+            </div>
+
+            <div class="calendar-container" *ngIf="isMicrosoftUser">
+                <div class="calendar-wrap">
+                    <div class="calendar-header">
+                        <div class="header-details">
+                            <span class="calendar-month">{{ currentDate.format('MMMM YYYY') }}</span>
+                            <button class="app-button primary" (click)="today()"><span
+                                    class="btn-label">Today</span></button>
+                        </div>
+                        <div class="calendar-indicator-wrap">
+                            <button class="app-button primary" (click)="previousMonth()">
+                                <svg class="btn-icon" fill="none" viewBox="1.25 2 9.5 8" fit="" height="12" width="12"
+                                    preserveAspectRatio="xMidYMid meet" focusable="false">
+                                    <path d="M10.125 6L1.875 6" stroke="currentColor" stroke-width="1"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                    </path>
+                                    <path d="M5.25 9.375L1.875 6L5.25 2.625" stroke="currentColor" stroke-width="1"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                                <span class="btn-label">{{currentDate.clone().subtract(1,
+                                    'month').format('MMM')}}</span>
+                            </button>
+                            <button class="app-button primary" (click)="nextMonth()">
+                                <span class="btn-label">{{currentDate.clone().add(1, 'month').format('MMM')}}</span>
+                                <svg class="btn-icon" fill="none" viewBox="1.25 2 9.5 8" fit="" height="12" width="12"
+                                    preserveAspectRatio="xMidYMid meet" focusable="false">
+                                    <path d="M1.875 6L10.125 6" stroke="currentColor" stroke-width="1"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                    </path>
+                                    <path d="M6.75 2.625L10.125 6L6.75 9.375" stroke="currentColor" stroke-width="1"
+                                        stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="calendar-body">
+                        <div class="calendar-weekdays">
+                            <span class="week-day">Sun</span>
+                            <span class="week-day">Mon</span>
+                            <span class="week-day">Tue</span>
+                            <span class="week-day">Wed</span>
+                            <span class="week-day">Thu</span>
+                            <span class="week-day">Fri</span>
+                            <span class="week-day">Sat</span>
+                        </div>
+                        <div class="calendar-grid">
+                            <div *ngFor="let week of calendar; let weekIndex = index;" class="calendar-week">
+                                <div *ngFor="let day of week; let dayIndex = index;" class="calendar-day" [ngClass]="{
+                                        'current-month': day.isCurrentMonth,
+                                        'to-day': toDayDate.format('YYYY-MM-DD') === day.date.format('YYYY-MM-DD'),
+                                        'selected-date': selectedDate.format('YYYY-MM-DD') === day.date.format('YYYY-MM-DD')
+                                    }" (click)="onSelectDate(weekIndex, dayIndex)">
+                                    <span>{{ day.day }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="calendar-event-details">
+                    <div class="not-found-msg" *ngIf="!meetingListOfSelectedDate?.length">
+                        You don’t have any meetings.
+                    </div>
+                    <div *ngIf="meetingListOfSelectedDate?.length" class="calendar-events-wrap">
+                        <h2 class="today-date-title">today, {{toDayDate.format('MMM Do')}}</h2>
+
+                        <div class="calendar-event" *ngFor="let event of meetingListOfSelectedDate;">
+                            <div class="event-details-wrap">
+                                <div class="event-detail-wrap">
+                                    <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                                        <circle cx="12" cy="12" r="10" fill="#fff" stroke="#000" stroke-width="1" />
+                                        <line x1="12" y1="12" x2="12" y2="6" stroke="#000" stroke-width="1" />
+                                        <line x1="12" y1="11.8" x2="16" y2="15" stroke="#000" stroke-width="1" />
+                                    </svg>
+                                    <span>{{event?.startTime?.format('hh:mma')}} -
+                                        {{event?.endTime?.format('hh:mma')}}</span>
+                                </div>
+                                <a class="event-detail-wrap c-p" href="{{event?.onlineMeeting?.joinUrl}}" target="_blank">
+                                    <svg class="icon" width="22" height="22" viewBox="0 0 48 48" fill="none">
+                                        <rect width="48" height="48" rx="4" fill="white" />
+                                        <path
+                                            d="M28.2622 20.4263H43.9999V29.6066C43.9999 33.9525 40.4769 37.4755 36.1311 37.4755C31.7852 37.4755 28.2622 33.9524 28.2622 29.6066V20.4263Z"
+                                            fill="#4F58CA" />
+                                        <path
+                                            d="M15.8032 20.4263H35.4754V32.2296C35.4754 37.6619 31.0716 42.0656 25.6393 42.0656C20.207 42.0656 15.8032 37.6619 15.8032 32.2296V20.4263Z"
+                                            fill="#7C84EC" />
+                                        <circle cx="25.9673" cy="12.2295" r="6.22951" fill="#7C84EC" />
+                                        <circle cx="38.7542" cy="14.5245" r="3.93443" fill="#4F58CA" />
+                                        <rect x="4" y="14.5247" width="20.9836" height="20.9836" rx="4"
+                                            fill="#565FC3" />
+                                        <path
+                                            d="M9.75186 20.3445V20.4945H9.90186H13.351V30.5606V30.7106H13.501H14.887H15.037V30.5606V20.4945H18.4861H18.6361V20.3445V19.115V18.965H18.4861H9.90186H9.75186V19.115V20.3445Z"
+                                            fill="white" stroke="white" stroke-width="0.3" />
+                                    </svg>
+                                    <span>join meeting</span>
+                                </a>
+                            </div>
+                            <div class="event-title">{{event?.startTime?.format('MMMM Do')}} -
+                                {{event?.subject}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

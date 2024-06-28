@@ -137,49 +137,9 @@
                 border-radius: 4px;
                 border: 1px solid $border-color;
                 // aspect-ratio: 1.3043478261/1;
-                overflow: hidden;
+                display: grid;
+                grid-template-rows: auto 1fr;
                 filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.08));
-
-                &:hover {
-                    cursor: pointer;
-                    border-color: $light-primary;
-
-                    .project-details {
-                        background-color: $light-primary;
-                    }
-                }
-
-                &.border-1 {
-                    border-color: $color-1-2;
-
-                    &:hover {
-                        border-color: $color-1-1;
-                    }
-                }
-
-                &.border-2 {
-                    border-color: $color-2-2;
-
-                    &:hover {
-                        border-color: $color-2-1;
-                    }
-                }
-
-                &.border-3 {
-                    border-color: $color-3-2;
-
-                    &:hover {
-                        border-color: $color-3-1;
-                    }
-                }
-
-                &.border-4 {
-                    border-color: $color-4-2;
-
-                    &:hover {
-                        border-color: $color-4-1;
-                    }
-                }
 
                 .project-img {
                     width: 100%;
@@ -199,10 +159,9 @@
 
                 .project-details {
                     padding: 16px;
-                    min-height: 100%;
                     background-color: $light-base;
 
-                    .project-name{
+                    .project-name {
                         color: $on-base;
                         font-size: 14px;
                         font-style: normal;
@@ -224,16 +183,19 @@
                 }
 
                 .action-wrap {
-                    display: none;
+                    visibility: hidden;
                     position: absolute;
-                    top: 12px;
-                    right: 12px;
+                    top: 6px;
+                    right: 6px;
+                    width: fit-content;
+                    display: flex;
+                    align-items: center;
                     border-radius: 4px;
-                    border: 1px solid #F4F4F4;
+                    border: 1px solid $border-color;
                     background: $base;
 
                     .btn {
-                        padding: 8px 8px;
+                        padding: 5px 8px;
                         color: $on-base;
                         font-family: $raleway-600;
                         font-size: 12px;
@@ -242,21 +204,28 @@
                         text-transform: capitalize;
                         cursor: pointer;
                     }
+
                     .export-link-btn-wrap {
-                        padding: 6px 6px;
+                        padding: 5px 6px;
 
                         .copy-link-icon {
                             display: block;
-                            width: 24px;
-                            height: 24px;
+                            width: 20px;
+                            height: 20px;
                         }
                     }
                 }
 
                 &:hover {
+                    cursor: pointer;
+                    border-color: $light-primary;
+
+                    .project-details {
+                        background-color: $light-primary;
+                    }
+
                     .action-wrap {
-                        display: inline-flex;
-                        align-items: center;
+                        visibility: visible;
                     }
                 }
             }
@@ -332,6 +301,7 @@
         }
     }
 }
+
 @media only screen and (max-width: 1024px) {
     .delete-project-modal {
         width: 100%;

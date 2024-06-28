@@ -19,4 +19,9 @@ export class DashboardService {
   getData(projectId: string): Observable<IResponse> {
     return this._httpClientService.get(`${this.endPoint}/data/${projectId}`);
   }
+
+  getCalendarData(body: { startDate: string, endDate: string }): Observable<IResponse> {
+
+    return this._httpClientService.post(body, `${this.endPoint}/get-calendar-data`);
+  }
 }

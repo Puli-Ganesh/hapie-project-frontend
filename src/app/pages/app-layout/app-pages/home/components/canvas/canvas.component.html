@@ -73,8 +73,7 @@
     
                 <button class="app-button primary" type="button"
                     *ngIf="permissions.CANVAS_MIGRATE.includes(currentUser.type)" (click)="onMigrateVersion()">
-                    <span class="btn-label">migrate to version {{ currentVersion.major + 1 }}.{{ currentVersion.minor
-                        }}</span>
+                    <span class="btn-label">migrate to version {{ currentVersion.major }}.{{ currentVersion.minor + 1 }}</span>
                 </button>
             </div>
         </div>
@@ -203,7 +202,7 @@
     <app-modal id="migrateVersionModal" (onClose)="onCancelMigrateVersion()">
         <div class="migrate-version-modal">
             <div class="title">
-                Are you sure you want to Migrate to Version {{ currentVersion.major + 1 }}.{{ currentVersion.minor }}?
+                Are you sure you want to Migrate to Version {{ currentVersion.major }}.{{ currentVersion.minor + 1 }}?
             </div>
             <div class="actions-container">
                 <button class="btn light" (click)="onCancelMigrateVersion()">

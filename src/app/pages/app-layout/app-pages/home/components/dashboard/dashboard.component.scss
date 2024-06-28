@@ -70,18 +70,214 @@
             }
         }
 
-        .dashboard-body-wrap {
-            width: 100%;
+        .chart-and-calendar-wrap {
+            margin: 0 0 24px;
+            display: flex;
+            flex-flow: row wrap;
+            gap: 32px;
 
-            .sentiment-by-rating-chart-wrap {
-                margin: 0 auto;
-                padding: 24px;
+            .dashboard-body-wrap {
                 width: 100%;
-                max-width: 1248px;
-                aspect-ratio: 16/9;
-                min-height: 450px;
-                border-radius: 8px;
-                box-shadow: 0 0 3px rgba($color: #000000, $alpha: 0.4);
+                flex: 1 0 550px;
+    
+                .sentiment-by-rating-chart-wrap {
+                    margin: 0 auto;
+                    padding: 24px;
+                    width: 100%;
+                    max-width: 1248px;
+                    // aspect-ratio: 16/9;
+                    min-height: 450px;
+                    border-radius: 8px;
+                    box-shadow: 0 0 3px rgba($color: #000000, $alpha: 0.4);
+                }
+            }
+    
+            .calendar-container {
+                max-width: 300px;
+                flex: 1 0 300px;
+    
+                .calendar-wrap {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    width: 100%;
+    
+                    .calendar-header {
+                        margin: 0 0 12px;
+                        width: 100%;
+    
+                        .header-details {
+                            margin: 0 0 12px;
+                            display: flex;
+                            justify-content: space-between;
+                            gap: 16px;
+    
+                            .calendar-month {
+                                font-size: 24px;
+                                font-weight: 600;
+                                color: $on-base;
+                                text-transform: capitalize;
+                            }
+                        }
+    
+                        .calendar-indicator-wrap {
+                            display: flex;
+                            justify-content: space-between;
+    
+                            .app-button {
+                                padding: 4px 8px 5px;
+                                color: $on-light-base;
+                                border-color: transparent;
+                                background-color: transparent;
+    
+                                .btn-icon {
+                                    width: 12px;
+                                    height: 12px;
+                                }
+    
+                                &:last-child {
+                                    .btn-icon {
+                                        margin: 0 0 0 4px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+    
+                    .calendar-body {
+                        width: 100%;
+                        background-color: $base;
+    
+                        .calendar-weekdays {
+                            margin: 0 0 6px;
+                            display: flex;
+                            justify-content: space-around;
+                            width: 100%;
+    
+                            .week-day {
+                                flex: 1 0;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                font-size: 16px;
+                                font-weight: 500;
+                                color: inherit;
+                                text-transform: capitalize;
+                            }
+                        }
+    
+                        .calendar-grid {
+                            display: flex;
+                            flex-flow: column nowrap;
+                            gap: 6px;
+                            width: 100%;
+    
+                            .calendar-week {
+                                display: flex;
+                                flex-flow: row nowrap;
+                                gap: 6px;
+                                width: 100%;
+    
+                                .calendar-day {
+                                    flex: 1 0;
+                                    aspect-ratio: 1/1;
+                                    border: 1px solid $border-color;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    font-size: 0.8rem;
+                                    border-radius: 14px;
+    
+                                    &.current-month {
+                                        background-color: $light-base;
+                                    }
+    
+                                    &.to-day {
+                                        border-color: $primary;
+                                    }
+    
+                                    &.selected-date {
+                                        border-color: $primary;
+                                        color: $on-primary;
+                                        background-color: $primary;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+    
+                .divider {
+                    margin: 16px 0px;
+                    height: 1px;
+                    background-color: $border-color;
+                }
+    
+                .calendar-event-details {
+    
+                    .calendar-events-wrap {
+                        display: flex;
+                        flex-flow: column nowrap;
+                        gap: 16px;
+
+                        .today-date-title {
+                            margin: 0;
+                            font-size: 16px;
+                            font-weight: 600;
+                            color: $primary;
+                            text-transform: capitalize;
+                        }
+    
+                        .calendar-event {
+                            border-radius: 12px;
+                            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    
+                            .event-details-wrap {
+                                padding: 8px 14px;
+                                display: flex;
+                                flex-flow: row nowrap;
+                                gap: 16px;
+                                border-bottom: 1px solid $border-color;
+    
+                                .event-detail-wrap {
+                                    display: flex;
+                                    flex-flow: row nowrap;
+                                    gap: 6px;
+                                    align-items: center;
+                                    font-size: 13px;
+                                    color: $on-base;
+                                    font-style: normal;
+                                    text-decoration-line: none;
+    
+                                    .icon {
+                                        width: 18px;
+                                        height: 18px;
+                                    }
+                                }
+                            }
+    
+                            .event-title {
+                                margin: 14px;
+                                font-size: 14px;
+                                font-weight: 600;
+                                text-transform: capitalize;
+                                word-break: break-all;
+                                @include elipses-1;
+                            }
+                        }
+                    }
+
+                    .c-p {
+                       cursor: pointer; 
+                    }
+    
+                    .not-found-msg {
+                        font-size: 16px;
+                        font-weight: 400;
+                        text-align: center;
+                        color: darkgray;
+                    }
+                }
             }
         }
     }
