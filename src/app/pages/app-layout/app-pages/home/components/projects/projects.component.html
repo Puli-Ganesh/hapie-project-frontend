@@ -102,13 +102,13 @@
                         <div class="tbl-tr">
                             <div class="tbl-th">Project Name</div>
                             <div class="tbl-th">Project Description</div>
-                            <div class="tbl-th">Templates</div>
+                            <!-- <div class="tbl-th">Templates</div> -->
                             <div class="tbl-th"></div>
                         </div>
                         <div class="tbl-tr" *ngFor="let project of filteredProjectList;let projectIndex = index;">
                             <div class="tbl-td text-cap">{{project?.projectName}}</div>
                             <div class="tbl-td">{{ project?.projectDescription }}</div>
-                            <div class="tbl-td">{{ project?.projectDescription }}</div>
+                            <!-- <div class="tbl-td">{{ project?.projectDescription }}</div> -->
                             <div class="tbl-td text-end">
                                 <div class="action-wrap"
                                     *ngIf="permissions.PROJECT_EDIT.includes(loggedInUser.type) || permissions.PROJECT_DELETE.includes(loggedInUser.type)"

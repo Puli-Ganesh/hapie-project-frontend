@@ -7,6 +7,7 @@ import { FacadeService } from '@src/app/services/facade.service';
 import { IConnection, ICoordinates, IPosition, Node, roundedRect } from './node';
 import { Routes } from '@src/app/constants/routes';
 import { NodeImages } from '@src/app/constants/node-images';
+import { Permissions } from '@src/app/constants/permissions';
 
 
 interface IConfluenceAgentConfig {
@@ -43,6 +44,8 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
 
   protected readonly appRoutes = Routes;
   private readonly _nodeImages = NodeImages;
+  protected readonly permissions = Permissions;
+  protected loggedInUser: any = null;
   workflowName: string = '';
   workflowId: string = '';
   qpSubscription!: Subscription;
@@ -79,6 +82,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
 
 
   async ngOnInit() {
+    this.loggedInUser = this._facadeService.authService.getCurrentUser();
     await this.getRootObject();
     // await this.getTemplatesList();
     this.setNodeImage();
@@ -824,7 +828,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
         y: hoveredNode.deleteButton.y - hoveredNode.deleteButton.height / 2,
         width: hoveredNode.deleteButton.width,
         height: hoveredNode.deleteButton.height
-      }
+      };
       if (cp.x >= deleteButtonCoords.x && cp.x <= deleteButtonCoords.x + deleteButtonCoords.width && cp.y >= deleteButtonCoords.y && cp.y <= deleteButtonCoords.y + deleteButtonCoords.height) {
         this.onDeleteNode(hoveredNode);
         return;
@@ -834,7 +838,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
         y: hoveredNode.addButton.y - hoveredNode.addButton.height / 2,
         width: hoveredNode.addButton.width,
         height: hoveredNode.addButton.height
-      }
+      };
       if (cp.x >= addButtonCoords.x && cp.x <= addButtonCoords.x + addButtonCoords.width && cp.y >= addButtonCoords.y && cp.y <= addButtonCoords.y + addButtonCoords.height) {
         this.addNode(hoveredNode);
         return;

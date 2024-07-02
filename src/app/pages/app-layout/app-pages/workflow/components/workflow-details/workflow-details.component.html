@@ -102,7 +102,7 @@
             </ng-container>
 
             <div class="actions-wrapper">
-                <button class="app-button primary" (click)="onDetailsSave()">
+                <button class="app-button primary" *ngIf="permissions.WORKFLOW_EDIT.includes(loggedInUser.type)" (click)="onDetailsSave()">
                     <div class="btn-label">Save</div>
                 </button>
                 <button class="app-button" (click)="onDetailsCancel()">

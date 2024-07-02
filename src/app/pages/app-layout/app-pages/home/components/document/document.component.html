@@ -152,7 +152,8 @@
                             <span class="btn-label">sign with pandaDoc</span>
                         </button>
 
-                        <button class="app-button primary" type="button" (click)="onOpenConfirmMigrationModal()">
+                        <button class="app-button primary" type="button" *ngIf="permissions.DOCUMENT_MIGRATE.includes(currentUser?.type)"
+                            (click)="onOpenConfirmMigrationModal()">
                             <span class="btn-label">Migrate to version {{selectedDocument.latestMajor + 1}}.1</span>
                         </button>
 
@@ -242,7 +243,7 @@
     </app-modal>
 
     <app-modal id="documentMigrationModal">
-        <div class="document-migration-modal">
+        <div class="document-migration-modal" *ngIf="permissions.DOCUMENT_MIGRATE.includes(currentUser?.type)">
             <div class="title">
                 Are you sure you want to Migrate to version {{ selectedDocument?.latestMajor + 1 }}.1?
             </div>

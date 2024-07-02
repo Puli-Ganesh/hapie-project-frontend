@@ -33,7 +33,7 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(tap({
       error: (err: any) => {
         if (err instanceof HttpErrorResponse) {
-          if (err.status == 401) {
+          if (err.status == 401 && this._authService.isLoggedIn()) {
             this._authService.logOut();
             this._router.navigateByUrl(this.appRoutes.LOGIN);
           }

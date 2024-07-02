@@ -141,9 +141,13 @@ export class TemplateComponent implements OnInit, OnDestroy {
   }
 
   onMakeDefault(templateId: any) {
+    if (!this.permissions.TEMPLATE_UPLOAD.includes(this.currentUser?.type)) {
+      return;
+    }
+
     const body = {
       templateId: templateId
-    }
+    };
     this._facadeService.templateService.setDefaultTemplate(body).subscribe({
       next: (res: any) => {
         this.getTemplateList();

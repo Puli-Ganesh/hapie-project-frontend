@@ -330,7 +330,7 @@
         }
 
         .tbl-tr {
-            grid-template-columns: minmax(180px, 0.6fr) minmax(280px, 1fr) minmax(200px, 0.7fr) 251px;
+            grid-template-columns: minmax(180px, 0.6fr) minmax(280px, 1fr) 251px;
 
             .tbl-td {
                 .action-wrap {

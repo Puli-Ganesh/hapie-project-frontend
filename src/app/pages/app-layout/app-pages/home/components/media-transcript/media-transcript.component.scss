@@ -93,14 +93,19 @@
                 label[for="autoHighlightUsingAi"] {
                     height: 20px;
                 }
+
                 .auto-highlight-using-ai {
                     position: relative;
                     width: 36px;
                     height: 20px;
                     display: inline-block;
                     border-radius: 10px;
-                    background-color: $secondary;
+                    background-color: $light-primary;
                     cursor: pointer;
+
+                    &:has(.on) {
+                        background-color: $primary;
+                    }
 
                     .tap-round {
                         width: 16px;
