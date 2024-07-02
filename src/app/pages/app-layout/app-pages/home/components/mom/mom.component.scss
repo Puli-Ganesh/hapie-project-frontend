@@ -290,15 +290,13 @@
     }
 }
 
-.meeting-section {
-    margin-bottom: 20px !important;
+h2, h3 {
+    font-weight: bold !important;
+    margin-top: 16px;
+    margin-bottom: 12px;
+}
 
-    h2 {
-        font-weight: bold !important;
-    }
-
-    ul {
-        list-style-type: disc !important;
-        margin-left: 20px !important;
-    }
+ul {
+    list-style-type: disc !important;
+    margin: 0 !important;
 }

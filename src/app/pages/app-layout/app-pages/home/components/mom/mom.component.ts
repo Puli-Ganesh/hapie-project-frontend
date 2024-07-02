@@ -94,25 +94,13 @@ export class MomComponent implements OnInit {
 
       switch (this.selectedTab) {
         case this._tabList[0]:
-          const meetingSummarySections = this.formatMeetingSummary(this.momData.momSummary);
           setTimeout(() => {
-            const meetingSummaryContainer = document.getElementById('meeting-summary');
-            if (meetingSummaryContainer) {
-              meetingSummarySections.forEach(section => {
-                this._renderer2.appendChild(meetingSummaryContainer, section);
-              });
-            }
+            this.generateHTMLFromString('meeting-summary', this.momData.momSummary);
           }, 10);
           break;
         case this._tabList[1]:
-          const meetingActionsSections = this.formatMeetingSummary(this.momData.momActionItems);
           setTimeout(() => {
-            const meetingActionsContainer = document.getElementById('meeting-actions');
-            if (meetingActionsContainer) {
-              meetingActionsSections.forEach(section => {
-                this._renderer2.appendChild(meetingActionsContainer, section);
-              });
-            }
+            this.generateHTMLFromString('meeting-actions', this.momData.momActionItems);
           }, 10);
           break;
         case this._tabList[2]:
@@ -144,35 +132,197 @@ export class MomComponent implements OnInit {
     });
   }
 
-  formatMeetingSummary(inputString: string) {
-    const parts = inputString.split("**");
-    const sections = [];
+  generateHTMLFromString(elementId: string, input: string) {
+    const contentDiv = document.getElementById(elementId)!;
+    this._renderer2.setProperty(contentDiv, 'innerHTML', '');// Clear any existing content
 
-    for (let i = 1; i < parts.length; i += 2) {
-      const heading = parts[i].trim();
-      const content = parts[i + 1].trim().replace(/\n/g, '');
+    // Split the input string by new lines
+    const lines = input.split('\n');
 
-      const section = this._renderer2.createElement('div');
-      this._renderer2.addClass(section, 'meeting-section');
+    let ulElement: any;
+    let currentSection = '';
+    let currentSubsection = '';
 
-      const headingElement = this._renderer2.createElement('h2');
-      this._renderer2.setProperty(headingElement, 'textContent', heading);
-      this._renderer2.appendChild(section, headingElement);
+    lines.forEach(line => {
+      // Trim leading and trailing spaces
+      line = line.trim();
 
-      const ul = this._renderer2.createElement('ul');
-      content.split(/\d+\. +|\- +|\+ +/).forEach(item => {
-        if (item.trim() !== '' && item.trim() !== '-') {
-          const li = this._renderer2.createElement('li');
-          this._renderer2.setProperty(li, 'innerHTML', item.trim().replace(/( *\- *| *\+ *)$/, ''));
-          this._renderer2.appendChild(ul, li);
+      if (line.startsWith('**') && line.endsWith('**')) {
+        // Add previous ulElement if exists
+        if (ulElement) {
+          this._renderer2.appendChild(contentDiv, ulElement);
+          ulElement = null;
         }
-      });
+        // Main sections
+        currentSection = line.slice(2, -2);
+        const h2 = this._renderer2.createElement('h2');
+        h2.textContent = currentSection;
+        this._renderer2.appendChild(contentDiv, h2);
+      } else if (line.startsWith('- **') && line.includes('**:')) {
+        // Add previous ulElement if exists
+        if (ulElement) {
+          this._renderer2.appendChild(contentDiv, ulElement);
+          ulElement = null;
+        }
+        // Subsections
+        const subsectionEndIndex = line.indexOf('**:');
+        currentSubsection = line.slice(4, subsectionEndIndex);
+        const h3 = this._renderer2.createElement('h3');
+        h3.textContent = currentSubsection;
+        this._renderer2.appendChild(contentDiv, h3);
+        ulElement = this._renderer2.createElement('ul');
+        if (line.slice(subsectionEndIndex + 3)) {
+          const li = this._renderer2.createElement('li');
+          li.innerHTML = line.slice(subsectionEndIndex + 3).replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>');
+          this._renderer2.appendChild(ulElement, li);
+        }
+      } else if (line.startsWith('- **') && line.includes(':**')) {
+        // Add previous ulElement if exists
+        if (ulElement) {
+          this._renderer2.appendChild(contentDiv, ulElement);
+          ulElement = null;
+        }
+        // Subsections
+        const subsectionEndIndex = line.indexOf(':**');
+        currentSubsection = line.slice(4, subsectionEndIndex);
+        const h3 = this._renderer2.createElement('h3');
+        h3.textContent = currentSubsection;
+        this._renderer2.appendChild(contentDiv, h3);
+        ulElement = this._renderer2.createElement('ul');
+        if (line.slice(subsectionEndIndex + 3)) {
+          const li = this._renderer2.createElement('li');
+          li.innerHTML = line.slice(subsectionEndIndex + 3).replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>');
+          this._renderer2.appendChild(ulElement, li);
+        }
+      } else if (line.match(/^\d+\.\s*\*\*(.*?):\*\*/)) {
+        // Add previous ulElement if exists
+        if (ulElement) {
+          this._renderer2.appendChild(contentDiv, ulElement);
+          ulElement = null;
+        }
+        // Subsections
+        const subsectionMatch = line.match(/^\d+\.\s*\*\*(.*?):\*\*/);
+        if (subsectionMatch) {
+          currentSubsection = subsectionMatch[1];
+          const h3 = this._renderer2.createElement('h3');
+          h3.textContent = currentSubsection;
+          this._renderer2.appendChild(contentDiv, h3);
+          ulElement = this._renderer2.createElement('ul');
+          let liLine = line.replace(/^\d+\.\s*\*\*(.*?):\*\*/, '');
+          if (liLine) {
+            const li = this._renderer2.createElement('li');
+            li.innerHTML = liLine.replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>');
+            this._renderer2.appendChild(ulElement, li);
+          }
+        }
+      } else if (line.match(/^\d+\.\s*\*\*(.*?)\*\*:/)) {
+        // Add previous ulElement if exists
+        if (ulElement) {
+          this._renderer2.appendChild(contentDiv, ulElement);
+          ulElement = null;
+        }
+        // Subsections
+        const subsectionMatch = line.match(/^\d+\.\s*\*\*(.*?)\*\*:/);
+        if (subsectionMatch) {
+          currentSubsection = subsectionMatch[1];
+          const h3 = this._renderer2.createElement('h3');
+          h3.textContent = currentSubsection;
+          this._renderer2.appendChild(contentDiv, h3);
+          ulElement = this._renderer2.createElement('ul');
+          let liLine = line.replace(/^\d+\.\s*\*\*(.*?)\*\*:/, '');
+          if (liLine) {
+            const li = this._renderer2.createElement('li');
+            li.innerHTML = liLine.replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>');
+            this._renderer2.appendChild(ulElement, li);
+          }
+        }
+      } else if (line.startsWith('* ') && line.endsWith(':')) {
+        if (ulElement) {
+          this._renderer2.appendChild(contentDiv, ulElement);
+          ulElement = null;
+        }
+        const subsectionEndIndex = line.indexOf(':');
+        currentSubsection = line.slice(2, subsectionEndIndex);
+        const h3 = this._renderer2.createElement('h3');
+        h3.textContent = currentSubsection;
+        this._renderer2.appendChild(contentDiv, h3);
+        ulElement = this._renderer2.createElement('ul');
+      } else if (line.startsWith('*') && line.endsWith('*')) {
+        if (ulElement) {
+          this._renderer2.appendChild(contentDiv, ulElement);
+          ulElement = null;
+        }
+        currentSubsection = line.replace(/\*/g, '');
+        const h3 = this._renderer2.createElement('h3');
+        h3.textContent = currentSubsection;
+        this._renderer2.appendChild(contentDiv, h3);
+        ulElement = this._renderer2.createElement('ul');
+      } else if (line.startsWith('- ')) {
+        if (!ulElement) {
+          ulElement = this._renderer2.createElement('ul');
+        }
+        // Regular list items
+        const li = this._renderer2.createElement('li');
+        li.innerHTML = line.slice(2).replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>');
+        this._renderer2.appendChild(ulElement, li);
+      } else if (line.match(/^\d+\./)) {
+        if (!ulElement) {
+          ulElement = this._renderer2.createElement('ul');
+        }
+        // Numbered list items
+        const li = this._renderer2.createElement('li');
+        li.innerHTML = line.slice(line.indexOf('.') + 1).trim().replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>');
+        this._renderer2.appendChild(ulElement, li);
+      } else if (line.startsWith('- **')) {
+        if (!ulElement) {
+          ulElement = this._renderer2.createElement('ul');
+        }
+        // List items with bold text
+        const li = this._renderer2.createElement('li');
+        li.innerHTML = line.slice(2).replace(/\*\*(.*?)\*\*/, '<span class="bold">$1</span>');
+        this._renderer2.appendChild(ulElement, li);
+      } else if (line.startsWith('*') && line.endsWith(':*')) {
+        // Add previous ulElement if exists
+        if (ulElement) {
+          this._renderer2.appendChild(contentDiv, ulElement);
+          ulElement = null;
+        }
+        // Subsections
+        currentSubsection = line.slice(1, -1);
+        const h3 = this._renderer2.createElement('h3');
+        h3.textContent = currentSubsection;
+        this._renderer2.appendChild(contentDiv, h3);
+      } else if (line.startsWith('- ')) {
+        if (!ulElement) {
+          ulElement = this._renderer2.createElement('ul');
+        }
+        // Regular list items
+        const li = this._renderer2.createElement('li');
+        li.innerHTML = line.slice(2).replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>');
+        this._renderer2.appendChild(ulElement, li);
+      } else if (line.startsWith('+ ')) {
+        if (!ulElement) {
+          ulElement = this._renderer2.createElement('ul');
+        }
+        // Regular list items
+        const li = this._renderer2.createElement('li');
+        li.innerHTML = line.slice(2).replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>');
+        this._renderer2.appendChild(ulElement, li);
+      } else if (line.match(/^\d+\./)) {
+        if (!ulElement) {
+          ulElement = this._renderer2.createElement('ul');
+        }
+        // Numbered list items
+        const li = this._renderer2.createElement('li');
+        li.innerHTML = line.slice(line.indexOf('.') + 1).trim().replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>');
+        this._renderer2.appendChild(ulElement, li);
+      }
+    });
 
-      this._renderer2.appendChild(section, ul);
-      sections.push(section);
+    // Append any remaining ulElement
+    if (ulElement) {
+      this._renderer2.appendChild(contentDiv, ulElement);
     }
-
-    return sections;
   }
 
   get Highcharts() {
