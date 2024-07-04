@@ -96,11 +96,6 @@
                 }
             }
 
-            .media-language-wrap {
-                border-radius: 12px;
-                background: rgba(236, 236, 254, 0.50);
-            }
-
             .delete-icon-wrap {
                 display: flex;
                 align-items: center;
@@ -223,7 +218,7 @@
         input {
             margin: 0;
             padding: 8px 8px;
-            color: $on-base-light;
+            color: $on-light-base;
             font-family: $base-font-family;
             font-size: 13px;
             font-style: normal;
@@ -237,6 +232,16 @@
             &::placeholder {
                 color: rgba(10, 9, 8, 0.40);
             }
+        }
+
+        .error-msg {
+            margin: 6px 0;
+            color: $error;
+            font-family: $base-font-family;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
         }
     }
 }

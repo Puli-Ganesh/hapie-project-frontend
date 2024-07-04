@@ -1,6 +1,6 @@
 import { HttpEventType } from '@angular/common/http';
 import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChildren } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import LanguageList from '@src/app/constants/language-list';
@@ -20,9 +20,9 @@ export class UploadMediaModalComponent implements OnInit, OnDestroy {
     private _facadeService: FacadeService,
     private _router: Router
   ) {
-    this.mediaUploadForm = this._formBuilder  .array([]);
+    this.mediaUploadForm = this._formBuilder.array([]);
     this.videoForm = this._formBuilder.group({
-      url: ['', [Validators.required]]
+      url: ['', [Validators.required, Validators.pattern(/^https?:\/\/[^\\]*\.mp4$/)]]
     });
 
     this.projectId = localStorage.getItem(StorageKeys.PROJECT_ID) ?? '';
@@ -50,6 +50,11 @@ export class UploadMediaModalComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this._facadeService.modalService.registerModal('uploadMediaModal');
     this._facadeService.modalService.openModal('uploadMediaModal');
+    this.videoForm.get('url')
+  }
+
+  get mediaUrl(): FormControl {
+    return this.videoForm.get('url') as FormControl;
   }
 
   onMediaLanguageSelect(event: Event, mediaUploadIndex: number) {
@@ -75,25 +80,29 @@ export class UploadMediaModalComponent implements OnInit, OnDestroy {
       }
     });
   }
-  
+
   onUploadMedia() {
-    if (!this.mediaUploadForm.value.length || this.mediaUploadForm.invalid) return;
+    if (this.isMediaUploadRequestAlive || (this.videoForm.invalid && (!this.mediaUploadForm.value.length || this.mediaUploadForm.invalid))) return;
     this.mimeTypeNotSupportErr = '';
 
     if (this.videoForm.value.url) {
       const body = {
         projectId: this.projectId,
         language: 'en',
-        url: this.videoForm.value.url
-      }
+        url: this.mediaUrl.value
+      };
+      this.isMediaUploadRequestAlive = true;
+
       this._facadeService.recordingService.uploadRecordingByUrl(body).subscribe({
         next: (res: any) => {
           if (res.code == 'OK') {
+            this.isMediaUploadRequestAlive = false;
             this._facadeService.appService.openToaster('File uploaded successfully', 'success');
             this.videoForm.reset();
           }
         },
         error: (err: any) => {
+          this.isMediaUploadRequestAlive = false;
           this._facadeService.appService.openToaster('File uploading error', 'danger');
         }
       });
@@ -131,7 +140,7 @@ export class UploadMediaModalComponent implements OnInit, OnDestroy {
       this.isMediaUploadRequestAlive = !this.mediaUploadForm.value?.every((item: any) => item.progress === 100);
     }
   }
-    
+
   onUploadProjectCoverThumb(event: any) {
     if (this.imageMimeTypes.includes(event.target.files[0]?.type)) {
       this.mediaUploadForm.push(this._formBuilder.group({

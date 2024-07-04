@@ -51,12 +51,18 @@
 
             <form class="url-form" [formGroup]="videoForm">
                 <label for="url">Paste Link</label>
-                <input type="text" formControlName="url" name="url" placeholder="YouTube or Google Drive link" />
+                <input type="text" formControlName="url" name="url" placeholder="Downloadable .mp4 Link" />
+                <p class="error-msg" *ngIf="mediaUrl.touched && mediaUrl.errors?.['required']">
+                    Field is required.
+                </p>
+                <p class="error-msg" *ngIf="mediaUrl.touched && mediaUrl.errors?.['pattern']">
+                    Please enter valid URL, URL must be end with .mp4.
+                </p>
             </form>
         </div>
 
 
-        <button class="app-button primary wide" [disabled]="!mediaUploadForm.value?.length || mediaUploadForm.invalid"
+        <button class="app-button primary wide" [disabled]="videoForm.invalid && (!mediaUploadForm.value?.length || mediaUploadForm.invalid)"
             (click)="onUploadMedia()">
             <span class="btn-icon">
                 <svg width="15" height="18" viewBox="0 0 15 18" fill="none">
