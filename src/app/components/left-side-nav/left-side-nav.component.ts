@@ -420,23 +420,23 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
     this._facadeService.projectService.chatWithAI(this.projectDetails._id, userInput).subscribe({
       next: (res: any) => {
         if (res.code == 'OK') {
-          if (res.data.startsWith(this.projectDetails._id)) {
+          this.aiLoader = false;
+          if (res.data?.trim?.()?.startsWith?.(this.projectDetails._id)) {
             this.chats.push({
               'ai': 'There are no data for ai system.'
             });
           } else {
             this.chats.push({
               'ai': res.data
-            })
+            });
           }
-          this.aiLoader = false;
         }
       },
       error: (err: any) => {
+        this.aiLoader = false;
         this.chats.push({
           'ai': 'There are no data for ai system.'
         });
-        this.aiLoader = false;
       }
     });
     this.userInputRef.nativeElement.value = '';

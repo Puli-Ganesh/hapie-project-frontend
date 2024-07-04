@@ -75,12 +75,12 @@ export class ChatBotComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         console.log(res)
         if (res.code == 'OK') {
+          this.aiLoader = false;
           if (res.data?.response) {
-            this.pushInChat('ai', res.data.response, this.extractPercentage(res.data?.hallucinatingPercentage?.response));
+            this.pushInChat('ai', res.data.response, this.extractPercentage(res.data?.hallucinatingPercentage));
           } else {
             this.pushInChat('ai', 'There are no data for ai system.', 0);
           }
-          this.aiLoader = false;
         }
         this.scrollToBottomChat();
       },
@@ -94,7 +94,7 @@ export class ChatBotComponent implements OnInit, OnDestroy {
   }
 
   extractPercentage(inputString: string) {
-    const match = inputString?.match(/(\d+)%/);
+    const match = inputString?.match?.(/Matching: [[]?(\d+(?:\.\d+)?)[\]]?%/); // Matching: [[]?(\d+(?:\.\d+)?)[\]]?%
     return (match?.length) ? parseInt(match[1]) : 0;
   }
 
