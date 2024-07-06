@@ -1,10 +1,10 @@
 <!-- [ngClass]="{ 'sidebar-hide': isSidebarHidden }" -->
-<div class="app-container">
+<div class="app-main-container">
 
     <!-- *ngIf="!isSidebarHidden" -->
     <app-left-side-nav></app-left-side-nav>
 
-    <div class="main-content-wrap">
+    <div class="app-main-wrapper">
         <router-outlet></router-outlet>
     </div>
 </div>

@@ -1,26 +1,25 @@
-<div class="canvas-container">
+<div class="app-container">
 
-    <div class="canvas-header">
-        <div class="breadcrumbs-wrapper">
+    <div class="main-header">
+        <div class="main-nav-wrap">
             <app-project-go-back-btn></app-project-go-back-btn>
-
-            <h2 class="breadcrumb-item">
-                {{ projectDetails?.projectName }}
-            </h2>
+            <h2 class="header-title">{{ projectDetails?.projectName }}</h2>
         </div>
 
-        <div class="actions-wrapper">
+        <div class="main-action-wrap">
             <app-project-exit-btn></app-project-exit-btn>
+            <app-header></app-header>
         </div>
-        <app-header></app-header>
     </div>
     
 
-    <div class="body">
-        <div class="inner-header">
-            <div class="title">Canvas</div>
+    <div class="app-content">
+        <div class="inner-header-wrap">
+            <div class="left-action-wrap align-self-start">
+                <h2 class="main-title">Canvas</h2>
+            </div>
     
-            <div class="right-side">
+            <div class="right-action-wrap">
                 <div class="copy-button-wrapper" *ngIf="permissions.CANVAS_SHARE_LINK.includes(currentUser.type)"
                     (click)="onCopyShareLink()">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -36,37 +35,7 @@
                         <div class="name">{{ liveUser?.firstName?.[0] + liveUser?.lastName?.[0] }}</div>
                     </div>
                 </div>
-    
-                <!-- <div class="dropdown-container">
-                    <div class="dropdown-wrap" tabindex="0" (blur)="templateDropdownToggler = false;">
-                        <div class="selected-option-wrap bg-{{projectColor}}-2" (click)="onToggleTemplateDropdown()">
-                            <div class="selected-option fg-{{projectColor}}-1">
-                                {{selectedTemplate ? selectedTemplate.title : 'Select Template'}}
-                            </div>
-                            <div class="icon-wrap fg-{{projectColor}}-1" [class.open]="templateDropdownToggler">
-                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M19 8.5L12 15.5L5 8.5" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round"></path>
-                                </svg>
-                            </div>
-                        </div>
-    
-                        <div class="options-container" *ngIf="templateDropdownToggler">
-                            <div class="options-wrap">
-                                <div class="option-wrap" *ngFor="let template of templateDropdownList;"
-                                    (click)="onSelectTemplate(template)">
-                                    <span class="option">{{template.title}}</span>
-                                    <div class="icon-wrap" [class.selected]="selectedTemplate?._id === template?._id">
-                                        <svg class="icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                            <path d="M7.0332 10.0003L9.01158 11.9778L12.9666 8.02286" stroke="currentColor"
-                                                stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
+
                 <ng-container *ngIf="templateDropdownList.length > 0">
                     <app-drop-down [optionsList]="templateDropdownList" displayKey="title" (onSelectChange)="onSelectTemplate($event)"></app-drop-down>
                 </ng-container>
@@ -77,7 +46,6 @@
                 </button>
             </div>
         </div>
-
 
 
         <div class="canvas-wrap-ctr">

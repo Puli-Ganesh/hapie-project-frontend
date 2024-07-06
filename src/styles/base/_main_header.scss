@@ -1,0 +1,43 @@
+@import 'src/styles/_mixins';
+
+
+.main-header {
+    position: relative;
+    min-height: 64px;
+    height: auto;
+    display: flex;
+    align-items: center;
+    background-color: $light-base;
+    z-index: 109;
+
+    .main-nav-wrap {
+        margin-right: auto;
+        display: flex;
+        flex-flow: row nowrap;
+        gap: 0 16px;
+        align-items: center;
+
+        .back-icon {
+            height: 20px;
+            width: 20px;
+            cursor: pointer;
+        }
+
+        .header-title {
+            margin: 0;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            text-transform: capitalize;
+            @include elipses-1();
+        }
+    }
+
+    .main-action-wrap {
+        display: flex;
+        flex-flow: row wrap;
+        gap: 6px 18px;
+        align-items: center;
+    }
+}

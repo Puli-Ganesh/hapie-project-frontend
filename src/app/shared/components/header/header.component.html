@@ -17,7 +17,7 @@
                 <div class="count">{{ notificationCount }}</div>
             </div>
 
-            <div class="notif-center-wrap" *ngIf="isNotifCenterOpen">
+            <div class="notif-center-wrap" [class.show]="isNotifCenterOpen">
                 <div class="notif-center">
                     <div class="notif-header">
                         <h3 class="title">notifications</h3>
@@ -71,7 +71,7 @@
                 <img *ngIf="!currentUser?.profile" class="avatar-img default" src="assets/images/profile_picture.svg">
             </div>
 
-            <div class="profile-menu-wrapper" *ngIf="profileToggler">
+            <div class="profile-menu-wrapper" [class.show]="profileToggler">
                 <div class="header">
                     <h3 class="title">Signed in as</h3>
                     <h3 class="name">

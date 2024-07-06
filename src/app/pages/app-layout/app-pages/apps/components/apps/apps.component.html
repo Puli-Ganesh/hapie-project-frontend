@@ -1,18 +1,21 @@
-<div class="apps-container">
+<div class="app-container">
 
-    <div class="apps-header">
-        <div class="breadcrumbs-wrapper"></div>
-        <app-header></app-header>
+    <div class="main-header">
+        <div class="main-nav-wrap"></div>
+        <div class="main-action-wrap">
+            <app-header></app-header>
+        </div>
     </div>
 
-    <div class="apps-wrapper">
-        <div class="title">apps Settings</div>
+    <div class="app-content">
+        <h2 class="main-title mb-16">apps Settings</h2>
 
-        <div class="app-list" *ngIf="appList.length>0">
+        <div class="app-list" *ngIf="appList.length > 0">
             <div class="app-wrap" *ngFor="let app of appList;">
                 <div class="app-img-wrap">
                     <img class="app-img" width="48" height="48" src="assets/images/{{app.src}}" alt="{{app.title}}">
                 </div>
+
                 <div class="content-wrap">
                     <div class="desc-wrap">
                         <div class="app-title">{{app.title}}</div>

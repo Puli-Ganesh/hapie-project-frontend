@@ -872,8 +872,9 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
     this.mainCanvas = (document.getElementById('mainCanvas') as HTMLCanvasElement);
     if (this.mainCanvas) {
       const wrapperRect = wrapper.getBoundingClientRect();
-      this.mainCanvas.width = wrapperRect.width;
-      this.mainCanvas.height = wrapperRect.height;
+      /** parent element height - padding(x 16 + 16, y 16 + 16) */
+      this.mainCanvas.width = wrapperRect.width - 32;
+      this.mainCanvas.height = wrapperRect.height - 32;
       this.mainRect = this.mainCanvas?.getBoundingClientRect() ?? null;
       this.mainCTX = this.mainCanvas?.getContext('2d');
     }

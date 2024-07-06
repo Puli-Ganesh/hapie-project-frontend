@@ -1,47 +1,8 @@
 @import 'src/styles/_mixins';
 
 
-.apps-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-    position: relative;
-
-    .apps-header {
-        position: sticky;
-        top: 0;
-        left: 0;
-        display: flex;
-        background-color: $light-base;
-        z-index: 9;
-
-        .breadcrumbs-wrapper {
-            margin-right: auto;
-        }
-    }
-
-    .apps-wrapper {
-        flex: 1;
-        position: relative;
-        overflow: auto;
-        background-color: $base;
-        border: 1px solid transparent;
-        border-color: $border-color $border-color transparent $border-color;
-        border-radius: 4px;
-        margin-right: 16px;
-        padding: 16px;
-
-        .title {
-            margin-bottom: 16px;
-            color: $on-base;
-            font-size: 16px;
-            font-style: normal;
-            font-weight: 600;
-            line-height: normal;
-            text-transform: capitalize;
-        }
-
+.app-container {
+    .app-content {
         .app-list {
             margin: 0 auto;
             max-width: 860px;

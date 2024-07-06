@@ -1,0 +1,158 @@
+@import 'src/styles/_mixins';
+
+.main-title {
+	margin: 0;
+	color: $on-base;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 600;
+	line-height: normal;
+	text-transform: capitalize;
+	word-break: break-all;
+	@include elipses-1();
+
+	&.large {
+		font-size: 28px;
+	}
+
+	&.mb-16 {
+		margin-bottom: 16px;
+	}
+}
+
+.inner-header-wrap {
+	margin: 0 0 16px;
+	display: flex;
+	gap: 6px 24px;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+
+	.left-action-wrap {
+		display: flex;
+		flex-flow: row wrap;
+		align-items: center;
+		gap: 6px 24px;
+
+		&.align-self-start {
+			align-self: flex-start;
+		}
+
+		.breadcrumb-wrap {
+			display: flex;
+			gap: 0 10px;
+			color: $on-base-light;
+			font-size: 14px;
+			font-style: normal;
+			line-height: 20px;
+			font-weight: 500;
+			text-transform: capitalize;
+
+			.label {
+				font-size: 14px;
+				line-height: 20px;
+			}
+		}
+	}
+
+	.right-action-wrap {
+		display: flex;
+		flex-flow: row wrap;
+		align-items: center;
+		gap: 6px 16px;
+
+		.view-tab-wrapper {
+			min-width: 64px;
+			display: flex;
+			align-items: center;
+			flex-wrap: nowrap;
+			border-radius: 4px;
+			border: 1px solid $border-color;
+			overflow: hidden;
+			@include user-select-none;
+
+			.view-tab {
+				padding: 8px;
+				width: 32px;
+				height: 32px;
+				background-color: $light-base;
+				color: $on-light-base;
+				cursor: pointer;
+
+				&.active {
+					color: $on-primary;
+					background-color: $primary;
+				}
+
+				.tab-icon {
+					display: block;
+					width: 16px;
+					aspect-ratio: 1/1;
+					color: inherit;
+				}
+			}
+		}
+
+		.filter-wrapper {
+			padding: 8px 16px;
+			display: flex;
+			flex-flow: row nowrap;
+			align-items: center;
+			gap: 8px;
+			border: 1px solid $border-color;
+			background-color: $light-base;
+			border-radius: 4px;
+			cursor: pointer;
+
+			.filter-icon-wrap {
+				color: $on-base-blue;
+
+				.filter-icon {
+					display: block;
+					width: 16px;
+					height: 16px;
+					color: inherit;
+				}
+			}
+
+			.filter-label {
+				font-size: 14px;
+				font-style: normal;
+				font-weight: 500;
+				line-height: normal;
+			}
+		}
+
+		.search-wrapper {
+			position: relative;
+
+			.search-input {
+				padding: 8px 16px;
+				padding-left: 34px;
+				border-radius: 4px;
+				font-size: 14px;
+				font-style: normal;
+				font-weight: 500;
+				line-height: normal;
+				border: 1px solid $border-color;
+				background-color: $light-base;
+				color: $on-light-base;
+
+				&::placeholder,
+				&::-webkit-input-placeholder {
+					color: $on-base-light;
+				}
+			}
+
+			.search-icon {
+				display: block;
+				width: 18px;
+				height: 18px;
+				position: absolute;
+				top: 50%;
+				left: 10px;
+				transform: translateY(-50%);
+			}
+		}
+	}
+}

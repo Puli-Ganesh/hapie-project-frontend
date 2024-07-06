@@ -1,45 +1,33 @@
-<div class="media-transcript-container">
+<div class="app-container">
 
-    <div class="media-transcript-header">
-        <div class="breadcrumbs-wrapper">
+    <div class="main-header">
+        <div class="main-nav-wrap">
             <app-project-go-back-btn navigateTo="{{appRoutes.PROJECT_MEDIA}}" [parseUrl]="true"></app-project-go-back-btn>
 
-            <h2 class="breadcrumb-item">
-                {{ projectDetails?.projectName }}
-            </h2>
+            <h2 class="header-title">{{ projectDetails?.projectName }}</h2>
         </div>
-        <div class="actions-wrapper">
+        <div class="main-action-wrap">
             <app-project-exit-btn></app-project-exit-btn>
+            <app-header></app-header>
         </div>
-        <app-header></app-header>
     </div>
 
     
-    <div class="body" *ngIf="hasAnalysisAccess">
-        <div class="inner-header">
-            <div class="breadcrumb-wrap">
-                <!-- <div class="label" (click)="onGoToProjects()">projects</div>
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M7.29289 14.7071C6.90237 14.3166 6.90237 13.6834 7.29289 13.2929L10.5858 10L7.29289 6.70711C6.90237 6.31658 6.90237 5.68342 7.29289 5.29289C7.68342 4.90237 8.31658 4.90237 8.70711 5.29289L12.7071 9.29289C13.0976 9.68342 13.0976 10.3166 12.7071 10.7071L8.70711 14.7071C8.31658 15.0976 7.68342 15.0976 7.29289 14.7071Z"
-                        fill="#8A8A8A" />
-                </svg>
-                <div class="label" (click)="onGoToProject()">{{projectName}}</div>
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M7.29289 14.7071C6.90237 14.3166 6.90237 13.6834 7.29289 13.2929L10.5858 10L7.29289 6.70711C6.90237 6.31658 6.90237 5.68342 7.29289 5.29289C7.68342 4.90237 8.31658 4.90237 8.70711 5.29289L12.7071 9.29289C13.0976 9.68342 13.0976 10.3166 12.7071 10.7071L8.70711 14.7071C8.31658 15.0976 7.68342 15.0976 7.29289 14.7071Z"
-                        fill="#8A8A8A" />
-                </svg>
-                <div class="label" (click)="navigateOnMedia()" style="cursor: pointer;">media</div>
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M7.29289 14.7071C6.90237 14.3166 6.90237 13.6834 7.29289 13.2929L10.5858 10L7.29289 6.70711C6.90237 6.31658 6.90237 5.68342 7.29289 5.29289C7.68342 4.90237 8.31658 4.90237 8.70711 5.29289L12.7071 9.29289C13.0976 9.68342 13.0976 10.3166 12.7071 10.7071L8.70711 14.7071C8.31658 15.0976 7.68342 15.0976 7.29289 14.7071Z"
-                        fill="#8A8A8A" />
-                </svg> -->
-                <div class="label">media &nbsp;&nbsp;>&nbsp;&nbsp; media upload {{recordingDetails?.version}}</div>
+    <div class="app-content" *ngIf="hasAnalysisAccess">
+        <div class="inner-header-wrap">
+            <div class="left-action-wrap">
+                <div class="breadcrumb-wrap">
+                    <div class="label">media</div>
+                    <svg width="18" height="20" viewBox="0 0 20 20" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M7.29289 14.7071C6.90237 14.3166 6.90237 13.6834 7.29289 13.2929L10.5858 10L7.29289 6.70711C6.90237 6.31658 6.90237 5.68342 7.29289 5.29289C7.68342 4.90237 8.31658 4.90237 8.70711 5.29289L12.7071 9.29289C13.0976 9.68342 13.0976 10.3166 12.7071 10.7071L8.70711 14.7071C8.31658 15.0976 7.68342 15.0976 7.29289 14.7071Z"
+                            fill="#8A8A8A" />
+                    </svg>
+                    <div class="label">media upload {{recordingDetails?.version}}</div>
+                </div>
             </div>
     
-            <div class="right-side">
+            <div class="right-action-wrap">
                 <div class="auto-highlight-using-ai-wrap">
                     <label for="autoHighlightUsingAi">
                         <div class="auto-highlight-using-ai">

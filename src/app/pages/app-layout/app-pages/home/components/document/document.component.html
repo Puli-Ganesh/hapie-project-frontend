@@ -1,24 +1,23 @@
-<div class="documents-wrapper">
+<div class="app-container">
 
-    <div class="documents-header">
-        <div class="breadcrumbs-wrapper">
+    <div class="main-header">
+        <div class="main-nav-wrap">
             <app-project-go-back-btn [skipNavigation]="!!selectedDocument?._id" (onClick)="onGoBack($event)"></app-project-go-back-btn>
 
-            <h2 class="breadcrumb-item">
-                {{ projectDetails?.projectName }}
-            </h2>
+            <h2 class="header-title">{{ projectDetails?.projectName }}</h2>
         </div>
-        <div class="actions-wrapper">
-            <app-project-exit-btn></app-project-exit-btn>
+        <div class="main-action-wrap">
+            <app-project-exit-btn (onClick)="onDone()"></app-project-exit-btn>
+            <app-header></app-header>
         </div>
-
-        <app-header></app-header>
     </div>
 
-    <div class="body">
+    <div class="app-content">
         <ng-container *ngIf="!selectedDocument; else documentView">
-            <div class="inner-header">
-                <h1 class="title">Document</h1>
+            <div class="inner-header-wrap">
+                <div class="left-action-wrap">
+                    <h2 class="main-title">Document</h2>
+                </div>
             </div>
 
             <div class="pills-wrapper">
@@ -139,11 +138,12 @@
 
         <ng-template #documentView>
             <div class="editor-wrapper">
+                <div class="inner-header-wrap">
+                    <div class="left-action-wrap align-self-start">
+                        <h2 class="main-title">{{ selectedDocument.title }}</h2>
+                    </div>
 
-                <div class="inner-header">
-                    <h1 class="title">{{ selectedDocument.title }}</h1>
-
-                    <div class="right-side">
+                    <div class="right-action-wrap">
                         <app-drop-down [optionsList]="versionOptions" [selectedOption]="selectedVersion"
                             (onSelectChange)="onVersionChange($event);"></app-drop-down>
 

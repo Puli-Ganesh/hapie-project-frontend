@@ -1,27 +1,26 @@
-<div class="mom-container">
+<div class="app-container">
 
-    <div class="mom-header">
-        <div class="breadcrumbs-wrapper">
+    <div class="main-header">
+        <div class="main-nav-wrap">
             <app-project-go-back-btn [skipNavigation]="!!this.selectedRecording?._id" (onClick)="onGoBack($event)"></app-project-go-back-btn>
 
-            <h2 class="breadcrumb-item">
-                {{ projectDetails?.projectName }}
-            </h2>
+            <h2 class="header-title">{{ projectDetails?.projectName }}</h2>
         </div>
-        <div class="actions-wrapper">
+        <div class="main-action-wrap">
             <app-project-exit-btn></app-project-exit-btn>
+            <app-header></app-header>
         </div>
-        <app-header></app-header>
     </div>
 
-    <div class="body">
+    <div class="app-content">
         <ng-container [ngSwitch]="selectedRecording ? 'selectedView' : 'listView'">
             <ng-container *ngSwitchCase="'listView'">
-                <div class="inner-header">
-                    <h2 class="title">MoM</h2>
-        
-                    <div class="right-side">
+                <div class="inner-header-wrap">
+                    <div class="left-action-wrap">
+                        <h2 class="main-title">MoM</h2>
                     </div>
+
+                    <div class="right-action-wrap"></div>
                 </div>
         
                 <div class="media-wrap" *ngIf="recordingList.length; else noMediaView;">
@@ -48,11 +47,13 @@
             </ng-container>
 
             <ng-container *ngSwitchCase="'selectedView'">
-                <div class="inner-header">
-                    <!-- <h2 class="title large">Meeting of {{selectedRecording.createdAt | date:'d LLLL'}}</h2> -->
-                    <h2 class="title large">Meeting of {{_moment(selectedRecording.createdAt).format('Do MMM, [At] h:mm A')}}</h2>
+                <div class="inner-header-wrap">
+                    <div class="left-action-wrap">
+                        <!-- <h2 class="title large">Meeting of {{selectedRecording.createdAt | date:'d LLLL'}}</h2> -->
+                        <h2 class="main-title large">Meeting of {{_moment(selectedRecording.createdAt).format('Do MMM, [At] h:mm A')}}</h2>
+                    </div>
 
-                    <div class="right-side">
+                    <div class="right-action-wrap">
                         <button class="app-button primary" (click)="goToRecordingListView()">
                             <span class="btn-label">Go Back</span>
                         </button>

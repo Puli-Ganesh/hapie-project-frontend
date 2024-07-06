@@ -1,150 +1,75 @@
 @import 'src/styles/mixins';
 
 
-.documents-wrapper {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-    min-height: 100vh;
-    overflow: hidden;
+.app-container {
+    .app-content {
 
-    .documents-header {
-        position: sticky;
-        display: flex;
-        align-items: center;
-        top: 0;
-        left: 0;
-        flex: 0;
-        z-index: 1;
-        background-color: $light-base;
-
-        .breadcrumbs-wrapper {
-            display: flex;
-            margin-right: auto;
-            gap: 18px;
-
-            .back-icon {
-                height: 20px;
-                width: 20px;
-                cursor: pointer;
-            }
-
-            .breadcrumb-item {
-                font-size: 16px;
-                font-style: normal;
-                font-weight: 600;
-                line-height: normal;
-                text-transform: capitalize;
-                margin: 0;
-            }
-        }
-
-        .actions-wrapper {
-            display: flex;
-            gap: 16px;
-        }
-    }
-
-    .body {
-        position: relative;
-        flex: 1;
-        background-color: $base;
-        border-radius: 4px;
-        border: 1px solid $border-color;
-        margin-right: 16px;
-        padding: 16px;
-        overflow: auto;
-    }
-
-    .inner-header {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 16px;
-
-        .title {
-            font-size: 14px;
-            font-style: normal;
-            font-weight: 600;
-            line-height: normal;
-            text-transform: capitalize;
-            margin: 0;
-        }
-
-        .right-side {
+        .pills-wrapper {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start;
+            flex-wrap: nowrap;
             gap: 24px;
-        }
-    }
+            width: 100%;
+            overflow: auto;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
 
-    .pills-wrapper {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        flex-wrap: nowrap;
-        gap: 24px;
-        width: 100%;
-        overflow: auto;
-        padding-bottom: 8px;
-        margin-bottom: 16px;
+            .pill-wrapper {
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 500;
+                line-height: 1.5;
+                text-transform: capitalize;
+                text-wrap: nowrap;
+                border-bottom: 2px solid transparent;
+                cursor: pointer;
 
-        .pill-wrapper {
-            font-size: 14px;
-            font-style: normal;
-            font-weight: 500;
-            line-height: 1.5;
-            text-transform: capitalize;
-            text-wrap: nowrap;
-            border-bottom: 2px solid transparent;
-            cursor: pointer;
-
-            &:hover,
-            &.selected {
-                border-bottom: 2px solid $primary;
-            }
-        }
-    }
-
-    .templates-list-wrapper {
-        .app-table-wrap {
-            .tbl-tr {
-                grid-template-columns: minmax(320px, 1fr) minmax(220px, 0.6fr) minmax(220px, 0.6fr) 175px;
-
-                .tbl-td {
-                    &.with-icon {
-                        display: flex;
-                        align-items: center;
-                        gap: 12px;
-
-                        svg {
-                            color: $on-base-blue;
-                        }
-                    }
-
-                    .items-wrap {
-                        display: flex;
-                        align-items: center;
-                        justify-content: flex-end;
-                        gap: 0 34px;
-                    }
-
-                    .edit-action-wrap {
-                        display: inline-flex;
-                        align-items: center;
-                        color: $primary;
-                        cursor: pointer;
-                    }
-
-                    .delete-icon {
-                        cursor: pointer;
-                    }
+                &:hover,
+                &.selected {
+                    border-bottom: 2px solid $primary;
                 }
             }
         }
     }
+
+    // .templates-list-wrapper {
+    //     .app-table-wrap {
+    //         .tbl-tr {
+    //             grid-template-columns: minmax(320px, 1fr) minmax(220px, 0.6fr) minmax(220px, 0.6fr) 175px;
+
+    //             .tbl-td {
+    //                 &.with-icon {
+    //                     display: flex;
+    //                     align-items: center;
+    //                     gap: 12px;
+
+    //                     svg {
+    //                         color: $on-base-blue;
+    //                     }
+    //                 }
+
+    //                 .items-wrap {
+    //                     display: flex;
+    //                     align-items: center;
+    //                     justify-content: flex-end;
+    //                     gap: 0 34px;
+    //                 }
+
+    //                 .edit-action-wrap {
+    //                     display: inline-flex;
+    //                     align-items: center;
+    //                     color: $primary;
+    //                     cursor: pointer;
+    //                 }
+
+    //                 .delete-icon {
+    //                     cursor: pointer;
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 }
 
 .app-table-ctrl {
@@ -287,7 +212,7 @@
 
             /* Set vertical boundaries for the document editor.*/
             // max-height: calc(100vh - 70px - 50px - 16px);
-            max-height: calc(100vh - 70px - 50px - 16px);
+            max-height: calc(100vh - 70px - 50px - 28px);
 
             /* This element is a flex container for easier rendering. */
             display: flex;
@@ -437,7 +362,7 @@
         margin-bottom: 24px;
     }
 
-    
+
     .input-container {
         margin-bottom: 24px;
 
@@ -513,6 +438,7 @@
         line-height: 20px;
         margin-bottom: 12px;
     }
+
     .link-wrapper {
         width: 100%;
         display: flex;
@@ -539,6 +465,7 @@
         display: flex;
         align-items: center;
         gap: 18px;
+
         .spinner {
             height: 24px;
             width: 24px;
@@ -550,6 +477,7 @@
     }
 
 }
+
 @keyframes spinner {
     0% {
         transform: rotate(0deg);

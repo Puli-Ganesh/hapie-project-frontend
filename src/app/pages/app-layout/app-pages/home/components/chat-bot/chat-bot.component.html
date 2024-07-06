@@ -1,34 +1,36 @@
-<div class="chatbot-wrapper">
+<div class="app-container">
 
-    <div class="chatbot-header">
-        <div class="breadcrumbs-wrapper">
+    <div class="main-header">
+        <div class="main-nav-wrap">
             <app-project-go-back-btn></app-project-go-back-btn>
 
-            <h2 class="breadcrumb-item">
-                {{ projectDetails?.projectName }}
-            </h2>
+            <h2 class="header-title">{{ projectDetails?.projectName }}</h2>
         </div>
 
-        <div class="actions-wrapper">
+        <div class="main-action-wrap">
             <app-project-exit-btn></app-project-exit-btn>
+            <app-header></app-header>
         </div>
-        <app-header></app-header>
     </div>
 
-    <div class="chatbot-container">
-        <div class="title-wrapper">
-            <h2 class="title">Chat With Confluence</h2>
+    <div class="app-content">
+        <div class="inner-header-wrap">
+            <div class="left-action-wrap">
+                <h2 class="main-title">Chat With Confluence</h2>
+            </div>
 
-            <div class="hallucination-wrap">
-                <label for="hallucinationToggler">
-                    <div class="label-title">Show Hallucination</div>
-                </label>
-                <label for="hallucinationToggler">
-                    <div class="hallucination" [class.on]="hallucinationToggler">
-                        <div class="tap-round"></div>
-                        <input type="checkbox" id="hallucinationToggler" name="hallucinationToggler" [(ngModel)]="hallucinationToggler">
-                    </div>
-                </label>
+            <div class="right-action-wrap">
+                <div class="hallucination-wrap">
+                    <label for="hallucinationToggler">
+                        <div class="label-title">Show Hallucination</div>
+                    </label>
+                    <label for="hallucinationToggler">
+                        <div class="hallucination" [class.on]="hallucinationToggler">
+                            <div class="tap-round"></div>
+                            <input type="checkbox" id="hallucinationToggler" name="hallucinationToggler" [(ngModel)]="hallucinationToggler">
+                        </div>
+                    </label>
+                </div>
             </div>
         </div>
 

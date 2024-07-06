@@ -47,30 +47,37 @@ body {
     .bg-1-#{$i} {
         background-color: nth($family-1, $i) !important;
     }
+
     .fg-1-#{$i} {
         color: nth($family-1, $i) !important;
     }
 }
+
 @for $i from 1 through length($family-2) {
     .bg-2-#{$i} {
         background-color: nth($family-2, $i) !important;
     }
+
     .fg-2-#{$i} {
         color: nth($family-2, $i) !important;
     }
 }
+
 @for $i from 1 through length($family-3) {
     .bg-3-#{$i} {
         background-color: nth($family-3, $i) !important;
     }
+
     .fg-3-#{$i} {
         color: nth($family-3, $i) !important;
     }
 }
+
 @for $i from 1 through length($family-4) {
     .bg-4-#{$i} {
         background-color: nth($family-4, $i) !important;
     }
+
     .fg-4-#{$i} {
         color: nth($family-4, $i) !important;
     }
@@ -91,4 +98,25 @@ body {
     background-color: $primary;
     width: 8px;
     border-radius: 50em;
+}
+
+.app-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+
+    .app-content {
+        flex: 1;
+        position: relative;
+        margin: 0 16px 0 0;
+        padding: 16px 16px;
+        background-color: $base;
+        border: 1px solid $border-color;
+        border-bottom-color: transparent;
+        border-radius: 4px;
+        overflow: auto;
+    }
 }

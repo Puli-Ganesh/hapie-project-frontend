@@ -1,24 +1,20 @@
-<div class="dashboard-wrapper">
+<div class="app-container">
 
-    <div class="dashboard-header">
-        <div class="breadcrumbs-wrapper">
+    <div class="main-header">
+        <div class="main-nav-wrap">
             <app-project-go-back-btn></app-project-go-back-btn>
 
-            <h2 class="breadcrumb-item">
-                {{ projectDetails?.projectName }}
-            </h2>
+            <h2 class="header-title">{{ projectDetails?.projectName }}</h2>
         </div>
 
-        <div class="actions-wrapper">
+        <div class="main-action-wrap">
             <app-project-exit-btn></app-project-exit-btn>
+            <app-header></app-header>
         </div>
-        <app-header></app-header>
     </div>
 
-    <div class="dashboard-container">
-        <div class="title-wrapper">
-            <h2 class="title">Dashboard</h2>
-        </div>
+    <div class="app-content">
+        <h2 class="main-title mb-16">Dashboard</h2>
 
         <div class="chart-and-calendar-wrap">
             <div class="dashboard-body-wrap">
