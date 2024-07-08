@@ -29,7 +29,8 @@ export class AddMemberComponent implements OnInit, OnChanges {
         Validators.required,
         Validators.pattern(Regex.EMAIL),
         Validators.maxLength(254)
-      ]]
+      ]],
+      hasAllProjectAccess: [false]
     });
   }
 
@@ -113,7 +114,8 @@ export class AddMemberComponent implements OnInit, OnChanges {
       this.userForm.patchValue({
         firstName: this.memberDetails.firstName,
         lastName: this.memberDetails.lastName,
-        email: this.memberDetails.email
+        email: this.memberDetails.email,
+        hasAllProjectAccess: this.memberDetails.hasAllProjectAccess ?? false
       });
       this.userForm.get('email')?.disable();
       const rIndex = this.roleOptions.findIndex((role: any) => role.value == this.memberDetails.type);
@@ -180,6 +182,8 @@ export class AddMemberComponent implements OnInit, OnChanges {
       } else {
         this.selectedProjectString = this.projectsList.filter((p: any) => p.checked).map((p: any) => p.projectName).join(', ');
       }
+      this.userForm.get('hasAllProjectAccess')?.patchValue(res);
+      this.userForm.updateValueAndValidity();
     } else {
       const res = this.projectsList.every((p: any) => !p.checked);
       if (res) {
@@ -187,6 +191,8 @@ export class AddMemberComponent implements OnInit, OnChanges {
       } else {
         this.selectedProjectString = this.projectsList.filter((p: any) => p.checked).map((p: any) => p.projectName).join(', ');
       }
+      this.userForm.get('hasAllProjectAccess')?.patchValue(res);
+      this.userForm.updateValueAndValidity();
     }
   }
 
@@ -197,11 +203,15 @@ export class AddMemberComponent implements OnInit, OnChanges {
         project.checked = false;
       }
       this.selectedProjectString = 'None';
+      this.userForm.get('hasAllProjectAccess')?.patchValue(false);
+      this.userForm.updateValueAndValidity();
     } else {
       for (let project of this.projectsList) {
         project.checked = true;
       }
       this.selectedProjectString = 'All projects';
+      this.userForm.get('hasAllProjectAccess')?.patchValue(true);
+      this.userForm.updateValueAndValidity();
     }
   }
 
@@ -220,6 +230,7 @@ export class AddMemberComponent implements OnInit, OnChanges {
         lastName: this.userForm.value.lastName,
         userId: this.memberDetails._id,
         role: this.selectedRole.value,
+        hasAllProjectAccess: this.userForm.value.hasAllProjectAccess,
         add: [],
         remove: []
       };
@@ -250,6 +261,7 @@ export class AddMemberComponent implements OnInit, OnChanges {
         lastName: this.userForm.value.lastName,
         role: this.selectedRole.value,
         projectAccess: this.projectsList.filter((p: any) => p.checked).map((p: any) => p._id),
+        hasAllProjectAccess: this.userForm.value.hasAllProjectAccess,
         isInvited: true,
       };
 

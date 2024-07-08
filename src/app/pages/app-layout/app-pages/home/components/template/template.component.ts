@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CkEditorConfig } from '@src/app/constants/ckEditorConfig';
 import { Permissions } from '@src/app/constants/permissions';
+import { Roles } from '@src/app/constants/roles';
 import { Routes } from '@src/app/constants/routes';
 import { FacadeService } from '@src/app/services/facade.service';
 import * as moment from 'moment';
@@ -31,7 +32,9 @@ export class TemplateComponent implements OnInit, OnDestroy {
   projectDetailsSubscription: Subscription;
   projectDetails: any;
 
-  permissions = Permissions;
+  protected permissions = Permissions;
+  protected appRoutes = Routes;
+  protected userRoles = Roles;
   currentUser: any;
   isUploading = false;
   selectedNodeId: number | null = null;
@@ -41,7 +44,6 @@ export class TemplateComponent implements OnInit, OnDestroy {
   templateNodes: any = [];
   selectedTemplate: any;
   deleteTemplateId: string | null = null;
-  appRoutes = Routes;
   defaultTemplateId = '';
 
   ngOnInit(): void {
@@ -55,7 +57,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
       this.selectedTemplate = null;
     }
   }
-  
+
   onExit(event: boolean) {
     this.reSetEditorWindowInstance();
   }
@@ -84,7 +86,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
   }
 
   onDeleteConfirm() {
-    
+
     if (this.deleteTemplateId) {
       this._facadeService.templateService.deleteById(this.deleteTemplateId).subscribe({
         next: (res: any) => {
@@ -120,7 +122,7 @@ export class TemplateComponent implements OnInit, OnDestroy {
         next: (res: any) => {
           if (this.projectDetails?.workflowId?.nodes) {
             this.templateList = res.data.list;
-            
+
             this.templateNodes = this.projectDetails.workflowId.nodes.filter((n: any) => n.app == 'Document');
             if (this.templateNodes.length) {
               this.selectPill(this.selectedNodeId ?? this.templateNodes[0].id);
@@ -160,11 +162,12 @@ export class TemplateComponent implements OnInit, OnDestroy {
     this.selectedTemplate = this.filteredTemplateList[index]
 
     setTimeout(() => {
+      const ckConfig = { ...CkEditorConfig.get };
+      if (this.userRoles.VIEWER === this.currentUser.type) {
+        ckConfig.toolbar.items = ckConfig.toolbar.items.join(',').replace('exportPDF,exportWord,|,', '').split(',');
+      }
       // @ts-ignore
-      CKEDITOR.ClassicEditor.create(document.querySelector('.document-editor__editable'), {
-        ...CkEditorConfig.config,
-        ...CkEditorConfig.documentOutline
-      }).then((editor: any) => {
+      CKEDITOR.ClassicEditor.create(document.querySelector('.document-editor__editable'), ckConfig).then((editor: any) => {
 
         const toolbarContainer = document.querySelector('.document-editor__toolbar');
         if (toolbarContainer) {

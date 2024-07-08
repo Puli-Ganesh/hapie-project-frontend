@@ -123,6 +123,7 @@
                     border-radius: 4px;
                     border: 1px solid $border-color;
                     background-color: $light-base;
+                    @include user-select-none();
 
                     .option {
                         color: $on-light-base;
@@ -174,6 +175,7 @@
                             font-weight: 400;
                             line-height: normal;
                             text-transform: capitalize;
+                            @include user-select-none();
                         }
 
                         &:hover {

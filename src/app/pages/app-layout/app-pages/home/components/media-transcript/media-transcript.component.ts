@@ -8,6 +8,7 @@ import { IResponse } from '@src/interfaces/response.interface';
 import { Permissions } from '@src/app/constants/permissions';
 import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
+import { Roles } from '@src/app/constants/roles';
 
 
 @Component({
@@ -47,6 +48,7 @@ export class MediaTranscriptComponent implements OnInit, OnDestroy {
   currentUser: any;
 
   protected readonly appRoutes = Routes;
+  protected readonly userRoles = Roles;
   protected isRequestAlive: boolean = false;
 
   // protected projectId: string = '';
@@ -59,6 +61,7 @@ export class MediaTranscriptComponent implements OnInit, OnDestroy {
   protected recordingId: string = '';
   protected recordingDetails: any;
   protected mediaUrl: string = '';
+  protected mediaControlsList: string = 'download playbackrate fullscreen';
 
   protected speakerWiseTranscript: any = [];
   protected speakerTags: any = {};
@@ -80,6 +83,10 @@ export class MediaTranscriptComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.currentUser = this._facadeService.authService.getCurrentUser();
+    const isViewer = this.userRoles.VIEWER == this.currentUser.type;
+    if (isViewer) {
+      this.mediaControlsList = this.mediaControlsList.replace('download', `no$&`).trim();
+    }
     if (!this.hasAnalysisAccess) {
       this._location.back();
       return;

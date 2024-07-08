@@ -1,12 +1,12 @@
-<div class="canvas-container">
+<div class="app-container">
 
     <ng-container *ngIf="!isLinkExpired">
-        <div class="inner-header">
-            <div class="breadcrumb-wrap">
-                <span class="label">{{projectName}}</span>
+        <div class="inner-header-wrap">
+            <div class="left-action-wrap">
+                <h2 class="main-title">{{projectName}}</h2>
             </div>
 
-            <div class="right-side">
+            <div class="right-action-wrap">
                 <ng-container *ngIf="templateList.length > 0">
                     <app-drop-down [optionsList]="templateList" displayKey="title" (onSelectChange)="onSelectTemplate($event)"></app-drop-down>
                 </ng-container>

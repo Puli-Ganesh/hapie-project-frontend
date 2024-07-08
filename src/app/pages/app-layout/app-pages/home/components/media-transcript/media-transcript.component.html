@@ -89,7 +89,7 @@
                 <div class="media-wrap border-{{projectColor}}">
                     <ng-container *ngIf="mediaUrl">
                         <video class="media" width="100%" height="100%" controls=""
-                            controlslist="download playbackrate fullscreen">
+                            [attr.controlslist]="mediaControlsList">
                             <source type="video/mp4" src="{{mediaUrl}}">
                         </video>
                     </ng-container>

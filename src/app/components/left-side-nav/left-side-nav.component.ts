@@ -252,11 +252,11 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
       if (url.includes('/dashboard')) {
         this.secondaryMenu = 'dashboard';
       } else if (url.includes('/media')) {
-        this.secondaryMenu = 'media'
+        this.secondaryMenu = 'media';
       } else if (url.includes('/compare')) {
-        this.secondaryMenu = 'compare'
+        this.secondaryMenu = 'compare';
       } else if (url.includes('/canvas')) {
-        this.secondaryMenu = 'canvas'
+        this.secondaryMenu = 'canvas';
       } else if (url.includes('/document-upload')) {
         this.secondaryMenu = 'document-upload';
       } else if (url.includes('/document')) {

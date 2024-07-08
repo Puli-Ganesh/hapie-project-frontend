@@ -334,6 +334,16 @@ export class ManageProjectComponent implements OnInit {
           if (res.code == "CREATED") {
             this.projectDetails = res.data.project;
             this.upsertProjectEvent.emit(res.data.project);
+            for (const member of this.projectDetails.members) {
+              const index = this.membersList.findIndex((mem: any) => mem._id == member.userId);
+              if (index > -1) {
+                this.selectedMembers.push({
+                  ...this.membersList[index],
+                  color: member.color
+                });
+              }
+            }
+            this.filteredMembersList = this.membersList.filter((m: any) => !this.selectedMembers.some((sm: any) => sm._id === m._id));
             this.currentStep = 2;
             this._facadeService.appService.openToaster('Project created successfully', 'success');
           }

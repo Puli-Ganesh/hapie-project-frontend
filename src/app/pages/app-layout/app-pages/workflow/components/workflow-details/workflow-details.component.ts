@@ -528,7 +528,9 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
   }
 
   onSaveData() {
-    // if (!this.isCreating) return;
+    if (!this.isCreating) return;
+
+    let documentTitle = 1;
     const nodes = [];
     for (let node of this.nodes) {
       const n: any = {
@@ -539,6 +541,7 @@ export class WorkflowDetailsComponent implements OnInit, OnDestroy {
       switch (node.title) {
         case 'Document':
           if (node.config && Object.keys(node.config).length) { n['config'] = node.config; }
+          else { n['config'] = { documentTitle: `Document ${documentTitle++}` } }
           break;
         case 'Confluence':
           if (this.confluenceConfigForm.invalid) {

@@ -1,29 +1,22 @@
 @import 'src/styles/_mixins';
 
 
-.canvas-container {
+.app-container {
     padding: 32px;
     padding-bottom: 15px;
     height: 100vh;
     background-color: $base;
 
-    .inner-header {
-        gap: 30px;
-        align-items: center;
-
-        .breadcrumb-wrap {
-            .label {
-                color: $on-base;
-                font-family: $raleway-500;
-                font-size: 32px;
-                font-style: normal;
-                line-height: 48px;
-                /* 150% */
-                text-transform: capitalize;
-            }
+    .inner-header-wrap {
+        .main-title {
+            font-size: 32px;
+            font-style: normal;
+            line-height: 48px;
+            font-weight: 500;
+            text-transform: capitalize;
         }
 
-        .right-side {
+        .right-action-wrap {
             .app-button {
                 &.success-bg {
                     background: #5FAD56;

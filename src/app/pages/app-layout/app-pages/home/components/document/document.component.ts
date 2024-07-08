@@ -1,14 +1,15 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { CkEditorConfig } from '@src/app/constants/ckEditorConfig';
 import { Permissions } from '@src/app/constants/permissions';
 import { Regex } from '@src/app/constants/regex';
+import { Roles } from '@src/app/constants/roles';
 import { Routes } from '@src/app/constants/routes';
 import { FacadeService } from '@src/app/services/facade.service';
-import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
+
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-document',
@@ -19,7 +20,6 @@ export class DocumentComponent implements OnInit, OnDestroy {
 
   constructor(
     private _facadeService: FacadeService,
-    private _router: Router,
     private _formBuilder: FormBuilder,
     private _clipboard: Clipboard
   ) {
@@ -28,13 +28,6 @@ export class DocumentComponent implements OnInit, OnDestroy {
     this.projectDetailsSubscription = this._facadeService.projectService.projectDetails$.subscribe({
       next: (details: any) => {
         this.projectDetails = details;
-        const nodes = this.projectDetails?.workflowId?.nodes;
-        if (nodes?.length) {
-          const documentNode = nodes.find((n: any) => n.app == 'Pandadoc');
-          this.isSignDocumentVisible = documentNode ? true : false;
-        } else {
-          this.isSignDocumentVisible = false;
-        }
         this.getDocumentList();
       }
     });
@@ -53,8 +46,10 @@ export class DocumentComponent implements OnInit, OnDestroy {
   protected isGenerating: boolean = false;
   protected signLink: string = '';
 
-  permissions = Permissions;
-  currentUser: any;
+  protected permissions = Permissions;
+  protected appRoutes = Routes;
+  protected userRoles = Roles;
+  protected currentUser: any;
   selectedNodeId: number | null = null;
 
   templateList: any = [];
@@ -64,7 +59,6 @@ export class DocumentComponent implements OnInit, OnDestroy {
   versionOptions = [];
   selectedDocument: any = null;
   selectedDocumentCategoryList: Array<any> = [];
-  appRoutes = Routes;
 
   ngOnInit(): void {
     this._facadeService.modalService.registerModal('signDocumentModal');
@@ -300,15 +294,21 @@ export class DocumentComponent implements OnInit, OnDestroy {
       }
     });
 
+    const nodes = this.projectDetails?.workflowId?.nodes;
+    const documentNode = nodes?.find((n: any) => n.id === this.selectedNodeId);
+    const pandaDocNode = nodes?.find((n: any) => n.app == 'Pandadoc' && documentNode?.connection?.to?.includes(n.id));
+    this.isSignDocumentVisible = pandaDocNode ? true : false;
+
     // @ts-ignore
     const editor = window.editor;
     if (!editor) {
       setTimeout(() => {
+        const ckConfig = { ...CkEditorConfig.get };
+        if (this.userRoles.VIEWER === this.currentUser.type) {
+          ckConfig.toolbar.items = ckConfig.toolbar.items.join(',').replace('exportPDF,exportWord,|,', '').split(',');
+        }
         // @ts-ignore
-        CKEDITOR.ClassicEditor.create(document.querySelector('.document-editor__editable'), {
-          ...CkEditorConfig.config,
-          ...CkEditorConfig.documentOutline
-        }).then((editor: any) => {
+        CKEDITOR.ClassicEditor.create(document.querySelector('.document-editor__editable'), ckConfig).then((editor: any) => {
           const toolbarContainer = document.querySelector('.document-editor__toolbar');
           if (toolbarContainer) {
             toolbarContainer.appendChild(editor.ui.view.toolbar.element);
@@ -334,10 +334,11 @@ export class DocumentComponent implements OnInit, OnDestroy {
       // @ts-ignore
       html: window.editor?.getData(),
       templateId: this.selectedDocument._id,
-      projectId: this.projectDetails._id
+      projectId: this.projectDetails._id,
+      documentName: this.projectDetails?.workflowId?.nodes?.find((n: any) => n.id === this.selectedNodeId)?.config?.documentTitle
     };
 
-    if (!body.html) {
+    if (!body.html || !body.documentName) {
       return;
     }
 

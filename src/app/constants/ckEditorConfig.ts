@@ -138,4 +138,11 @@ export class CkEditorConfig {
       'RealTimeCollaborationClient'
     ]
   };
+
+  static get get() {
+    return {
+      ...CkEditorConfig.config,
+      ...CkEditorConfig.documentOutline
+    };
+  }
 }
