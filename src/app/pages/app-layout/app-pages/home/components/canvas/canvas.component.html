@@ -75,9 +75,9 @@
                                 <ng-container *ngFor="let requirement of category.requirements; let reqIndex = index;">
                                     <div class="requirement-container high" [ngClass]="{
                                     'upsert-mode': requirement?.upsertMode,
-                                    'high': requirement?.matchingCount && requirement.matchingCount >= 75,
-                                    'medium': requirement?.matchingCount && requirement.matchingCount >= 50 && requirement.matchingCount < 75,
-                                    'low': requirement?.matchingCount && requirement.matchingCount < 50
+                                    'high': requirement?.matchingCount >= 0 && requirement.matchingCount >= 75,
+                                    'medium': requirement?.matchingCount >= 0 && requirement.matchingCount >= 50 && requirement.matchingCount < 75,
+                                    'low': requirement?.matchingCount >= 0 && requirement.matchingCount < 50
                                 }">
                                         <ng-container [ngSwitch]="requirement.toggler ? 'open' : 'close'">
                                             <span *ngSwitchCase="'open'" class="requirement-txt">{{ requirement.requirement }}</span>
