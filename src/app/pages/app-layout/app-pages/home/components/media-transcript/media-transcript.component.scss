@@ -248,6 +248,7 @@
                             line-height: 28px;
                             /* 155.556% */
                             text-transform: capitalize;
+                            word-break: break-all;
                             @include elipses-1();
                         }
 
@@ -263,27 +264,37 @@
                     }
                 }
 
-                .delete-wrapper {
+                .action-wrapper {
+                    margin-bottom: 8px;
                     display: flex;
                     gap: 8px;
                     cursor: pointer;
 
+                    &:last-child {
+                        margin: 0;
+                    }
+
                     .icon {
+                        flex-basis: 20px;
                         height: 20px;
-                        width: auto;
                     }
 
                     .label {
-                        color: #D12335;
-                        font-family: $raleway-500;
                         font-size: 12px;
                         line-height: 20px;
+                        font-style: normal;
+                        font-weight: 500;
+                        color: $on-base;
+
+                        &.danger {
+                            color: #D12335;
+                        }
                     }
                 }
 
-                &:has(.delete-wrapper) {
+                &:has(.action-wrapper) {
                     .media-wrap {
-                        margin-bottom: 24px;
+                        margin-bottom: 18px;
                     }
                 }
             }

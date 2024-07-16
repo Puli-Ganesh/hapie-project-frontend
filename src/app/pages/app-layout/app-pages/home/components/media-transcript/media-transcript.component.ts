@@ -1,12 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+
+import { Document, HeadingLevel, Paragraph, Packer } from 'docx';
+import { saveAs } from 'file-saver';
 
 import { FacadeService } from '@src/app/services/facade.service';
 import { Routes } from '@src/app/constants/routes';
 import { StorageKeys } from '@src/app/constants/storage-keys';
 import { IResponse } from '@src/interfaces/response.interface';
 import { Permissions } from '@src/app/constants/permissions';
-import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
 import { Roles } from '@src/app/constants/roles';
 
@@ -219,6 +222,105 @@ export class MediaTranscriptComponent implements OnInit, OnDestroy {
   getSegmentTime(speakerIndex: number, wordIndex: number): string {
     // @ts-ignore
     return `${parseInt(this.speakerWiseTranscript[speakerIndex].words[wordIndex].start / 60)}:${parseInt(this.speakerWiseTranscript[speakerIndex].words[wordIndex].start % 60)}`;
+  }
+
+  onDownloadTranscript(): void {
+    try {
+      const transcripts: Array<any> = [];
+      this.speakerWiseTranscript.forEach((item: any, idx: number) => {
+        const name = this.speakerTags[item.speaker].title;
+        // const time = this.getSegmentTime(idx, 0);
+
+        transcripts.push(new Paragraph({
+          text: name,// `${name} ${time}`
+          heading: HeadingLevel.HEADING_2
+        }));
+        const dataString = item.words.map((word: any) => word.word).join(' ');
+        transcripts.push(new Paragraph({
+          text: dataString,
+          style: "Paragraph1",
+        }));
+        transcripts.push(new Paragraph(''));
+      });
+
+      const docx = new Document({
+        creator: "NexGen Force",
+        title: "NexGen Force Report",
+        description: "NexGen Force Report",
+        styles: {
+          paragraphStyles: [
+            {
+              id: "Heading1",
+              name: "Heading 1",
+              basedOn: "Normal",
+              next: "Normal",
+              quickFormat: true,
+              run: {
+                font: "Arial",
+                size: 32,
+                bold: true,
+                color: "000000",
+              },
+              paragraph: {
+                spacing: {
+                  after: 180,
+                  before: 180,
+                },
+              },
+            },
+            {
+              id: "Heading2",
+              name: "Heading 2",
+              basedOn: "Normal",
+              next: "Normal",
+              quickFormat: true,
+              run: {
+                font: "Arial",
+                size: 22,
+                bold: true,
+                color: "000000",
+              },
+              paragraph: {
+                spacing: {
+                  after: 120,
+                  before: 120,
+                },
+              },
+            },
+            {
+              id: "Paragraph1",
+              name: "Paragraph 1",
+              basedOn: "Normal",
+              next: "Normal",
+              quickFormat: true,
+              run: {
+                font: "Arial",
+                size: 22,
+                color: "000000",
+              },
+              paragraph: {
+                spacing: {
+                  after: 20,
+                  before: 20,
+                },
+              },
+            }
+          ],
+        },
+        sections: [{
+          children: [...transcripts],
+        }],
+      });
+
+      Packer.toBlob(docx).then(blob => {
+        const fileName = `Transcript ${this.projectDetails?.projectName ?? ''} media upload ${this.recordingDetails?.version}.docx`.replace(/\s+/g, ' ');
+        saveAs(blob, fileName);
+      }).catch(err => {
+        console.log("Error while save transcript", err);
+      });
+    } catch (error) {
+      console.log('Error while downloading transcript', error);
+    }
   }
 
   // onGoToProject() {
