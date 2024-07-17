@@ -140,11 +140,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
   }
 
   setDocumentCKEditor() {
-    const rawTemplate = this.selectedDocument.html
-      ?.replace(/<p/g, '\n<p')?.replace(/<\/p>/g, '<\/p>\n')
-      ?.replace(/<li/g, '\n<li')?.replace(/<\/li>/g, '<\/li>\n')
-      ?.replace(/<ul/g, '\n<ul')?.replace(/<\/ul>/g, '<\/ul>\n')
-      ?.replace(/<ol/g, '\n<ol')?.replace(/<\/ol>/g, '<\/ol>\n') || '';
+    const rawTemplate = this.selectedDocument.html?.replace(/<(?:p|li|ul|ol)/g, '\n$&')?.replace(/<\/(?:p|li|ul|ol)>/g, '$&\n') || '';
     const rawTemplateLines = rawTemplate.split(/\n+/);
     /** old one (/{[\w\/ -?@]+[\[]+.*?[\]]+}/g) */
     const titleAndPromptRegex = (/{[\w\/ -?@‘’“”]+[\[]+.*?[\]]+}/g);

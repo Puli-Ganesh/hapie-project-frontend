@@ -21,7 +21,7 @@
                 <div id="sentimentByRatingChart" class="sentiment-by-rating-chart-wrap"></div>
             </div>
 
-            <div class="calendar-container" *ngIf="isMicrosoftUser">
+            <div class="calendar-container">
                 <div class="calendar-wrap">
                     <div class="calendar-header">
                         <div class="header-details">
@@ -99,28 +99,57 @@
                                     <span>{{event?.startTime?.format('hh:mma')}} -
                                         {{event?.endTime?.format('hh:mma')}}</span>
                                 </div>
-                                <a class="event-detail-wrap c-p" href="{{event?.onlineMeeting?.joinUrl}}" target="_blank">
-                                    <svg class="icon" width="22" height="22" viewBox="0 0 48 48" fill="none">
-                                        <rect width="48" height="48" rx="4" fill="white" />
-                                        <path
-                                            d="M28.2622 20.4263H43.9999V29.6066C43.9999 33.9525 40.4769 37.4755 36.1311 37.4755C31.7852 37.4755 28.2622 33.9524 28.2622 29.6066V20.4263Z"
-                                            fill="#4F58CA" />
-                                        <path
-                                            d="M15.8032 20.4263H35.4754V32.2296C35.4754 37.6619 31.0716 42.0656 25.6393 42.0656C20.207 42.0656 15.8032 37.6619 15.8032 32.2296V20.4263Z"
-                                            fill="#7C84EC" />
-                                        <circle cx="25.9673" cy="12.2295" r="6.22951" fill="#7C84EC" />
-                                        <circle cx="38.7542" cy="14.5245" r="3.93443" fill="#4F58CA" />
-                                        <rect x="4" y="14.5247" width="20.9836" height="20.9836" rx="4"
-                                            fill="#565FC3" />
-                                        <path
-                                            d="M9.75186 20.3445V20.4945H9.90186H13.351V30.5606V30.7106H13.501H14.887H15.037V30.5606V20.4945H18.4861H18.6361V20.3445V19.115V18.965H18.4861H9.90186H9.75186V19.115V20.3445Z"
-                                            fill="white" stroke="white" stroke-width="0.3" />
-                                    </svg>
+                                <a class="event-detail-wrap c-p" href="{{event?.meetingJoinUrl}}" target="_blank">
+                                    <ng-container [ngSwitch]="event?.platform">
+                                        <svg *ngSwitchCase="'teams'" class="icon" width="22" height="22"
+                                            viewBox="0 0 48 48" fill="none">
+                                            <rect width="48" height="48" rx="4" fill="white" />
+                                            <path
+                                                d="M28.2622 20.4263H43.9999V29.6066C43.9999 33.9525 40.4769 37.4755 36.1311 37.4755C31.7852 37.4755 28.2622 33.9524 28.2622 29.6066V20.4263Z"
+                                                fill="#4F58CA" />
+                                            <path
+                                                d="M15.8032 20.4263H35.4754V32.2296C35.4754 37.6619 31.0716 42.0656 25.6393 42.0656C20.207 42.0656 15.8032 37.6619 15.8032 32.2296V20.4263Z"
+                                                fill="#7C84EC" />
+                                            <circle cx="25.9673" cy="12.2295" r="6.22951" fill="#7C84EC" />
+                                            <circle cx="38.7542" cy="14.5245" r="3.93443" fill="#4F58CA" />
+                                            <rect x="4" y="14.5247" width="20.9836" height="20.9836" rx="4"
+                                                fill="#565FC3" />
+                                            <path
+                                                d="M9.75186 20.3445V20.4945H9.90186H13.351V30.5606V30.7106H13.501H14.887H15.037V30.5606V20.4945H18.4861H18.6361V20.3445V19.115V18.965H18.4861H9.90186H9.75186V19.115V20.3445Z"
+                                                fill="white" stroke="white" stroke-width="0.3" />
+                                        </svg>
+
+                                        <svg *ngSwitchCase="'zoom'" class="icon" width="20" height="20"
+                                            viewBox="0 0 48 48" fill="none">
+                                            <path fill="#4087FC"
+                                                d="M3 17.4C3 12.3595 3 9.8393 3.98094 7.91409C4.8438 6.22062 6.22062 4.8438 7.91409 3.98094C9.8393 3 12.3595 3 17.4 3H30.6C35.6404 3 38.1608 3 40.0858 3.98094C41.7794 4.8438 43.1562 6.22062 44.019 7.91409C45 9.8393 45 12.3595 45 17.4V30.6C45 35.6404 45 38.1608 44.019 40.0858C43.1562 41.7794 41.7794 43.1562 40.0858 44.019C38.1608 45 35.6404 45 30.6 45H17.4C12.3595 45 9.8393 45 7.91409 44.019C6.22062 43.1562 4.8438 41.7794 3.98094 40.0858C3 38.1608 3 35.6404 3 30.6V17.4Z" />
+                                            <path fill="white"
+                                                d="M12.4 15C11.3507 15 10.5 15.9594 10.5 17.1429V27.5356C10.5 30.5535 12.6692 33 15.345 33L26.5999 32.8929C27.6493 32.8929 28.5 31.9335 28.5 30.75V20.25C28.5 17.2322 25.9258 15 23.25 15H12.4Z" />
+                                            <path fill="white"
+                                                d="M31.0683 19.0914C30.3894 19.7628 30 20.7317 30 21.75V26.099C30 27.1173 30.3894 28.0863 31.0683 28.7576L35.2932 32.4788C36.1528 33.3287 37.5 32.6402 37.5 31.3508V16.7028C37.5 15.4133 36.1528 14.7248 35.2932 15.5748L31.0683 19.0914Z" />
+                                        </svg>
+                                    </ng-container>
                                     <span>join meeting</span>
                                 </a>
                             </div>
-                            <div class="event-title">{{event?.startTime?.format('MMMM Do')}} -
-                                {{event?.subject}}</div>
+                            <div class="event-footer-details-wrap">
+                                <div class="event-title">{{event?.startTime?.format('MMMM Do')}} - {{event?.subject}}</div>
+
+                                <button class="action-toggler-wrap" [ngClass]="{
+                                    'processing': event?.isRequestAlive,
+                                    'on': event?.jamId
+                                }" [disabled]="event?.isRequestAlive" (click)="manageJoinAgentMeeting(event)">
+                                    <div class="toggle-icon-wrap">
+                                        <svg class="toggle-icon" width="18" height="18" viewBox="0 0 478 478" fill="none">
+                                            <!-- <rect width="478" height="478" rx="4" fill="#FFFFFF" /> -->
+                                            <path fill="#2C76FF"
+                                                d="M394,196.1c0-11.9-9.7-21.6-21.6-21.6s-21.6,9.7-21.6,21.6c0,61.7-50.2,111.8-111.8,111.8 s-111.8-50.2-111.8-111.8c0-11.9-9.7-21.6-21.6-21.6S84,184.2,84,196.1c0,78.2,58.1,143,133.4,153.5v85.2h-55.6 c-11.9,0-21.6,9.7-21.6,21.6s9.7,21.6,21.6,21.6h154.5c11.9,0,21.6-9.7,21.6-21.6s-9.7-21.6-21.6-21.6h-55.6v-85.2 C335.9,339.1,394,274.2,394,196.1z" />
+                                            <path fill="#2C76FF"
+                                                d="M239,0L239,0c-46.4,0-84,37.6-84,84v110.7c0,46.4,37.6,84,84,84l0,0c46.4,0,84-37.6,84-84V84 C323,37.6,285.4,0,239,0z M239.1,55.9c-15.1,0-27.4,12.3-27.4,27.4c0,6.9-5.6,12.5-12.5,12.5s-12.5-5.6-12.5-12.5 c0-28.9,23.5-52.4,52.4-52.4c6.9,0,12.5,5.6,12.5,12.5S246,55.9,239.1,55.9z" />
+                                        </svg>
+                                    </div>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

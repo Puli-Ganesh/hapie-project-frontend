@@ -6,6 +6,9 @@ import { Routes } from '@src/app/constants/routes';
 import { FacadeService } from '@src/app/services/facade.service';
 import { IResponse } from '@src/interfaces/response.interface';
 
+
+type TCalendarPlatform = 'teams' | 'zoom' | 'google';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -46,11 +49,14 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit(): void {
-    if (this.isMicrosoftUser) {
-      this.currentDate = moment();
-      this.selectedDate = this.currentDate.clone();
-      this.generateCalendar();
-    }
+    // if (this.isMicrosoftUser) {
+    //   this.currentDate = moment();
+    //   this.selectedDate = this.currentDate.clone();
+    //   this.generateCalendar();
+    // }
+    this.currentDate = moment();
+    this.selectedDate = this.currentDate.clone();
+    this.generateCalendar();
   }
 
   getData() {
@@ -206,7 +212,11 @@ export class DashboardComponent implements OnInit {
     }
 
     this.calendar = weeks;
-    this.getCalendarData();
+
+    if (this.isMicrosoftUser) {
+      this.getCalendarData('teams');
+    }
+    this.getCalendarData('zoom');
   }
 
   previousMonth(): void {
@@ -226,25 +236,37 @@ export class DashboardComponent implements OnInit {
     this.generateCalendar();
   }
 
-  getCalendarData() {
-    if (!this.calendar?.length || !this.isMicrosoftUser) { return; }
+  getCalendarData(platform: TCalendarPlatform) {
+    // if (!this.calendar?.length || !this.isMicrosoftUser) { return; }
+    if (!this.calendar?.length || !platform) { return; }
 
     const body = {
       startDate: moment(this.currentDate).startOf('month').format(),
-      endDate: moment(this.currentDate).endOf('month').startOf('day').format()
+      endDate: moment(this.currentDate).endOf('month').startOf('day').format(),
+      platform
     };
 
     this._facadeService.dashboardService.getCalendarData(body).subscribe({
       next: (res: IResponse) => {
         if (res.code === "OK") {
-          if (!this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')] && res.data.eventList) {
-            this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')] = res.data.eventList;
+          if (res.data?.eventList?.length > 0) {
+            if (this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')]) {
+              for (const newItem of res.data.eventList) {
+                const isExist = this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')].some((item: any) => item.platform == newItem.platform && item.meetingId == newItem.meetingId);
+                if (!isExist) {
+                  this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')].push({ ...newItem });
+                }
+              }
+            } else {
+              this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')] = res.data.eventList;
+            }
 
             this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')]?.map((item) => {
-              item.startTime = moment.utc(item.start.dateTime);
-              item.endTime = moment.utc(item.end.dateTime);
+              item.startTime = moment(item.startDateTime);
+              item.endTime = moment(item.endDateTime);
               return item;
             });
+            this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')]?.sort((a: any, b: any) => a.startTime - b.startTime);
 
             const singleDateList = this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')]?.filter((item: any) => item.startTime.format('YYYY-MM-DD') === this.selectedDate.format('YYYY-MM-DD'));
             this.meetingListOfSelectedDate = singleDateList;
@@ -265,10 +287,52 @@ export class DashboardComponent implements OnInit {
       this.meetingListOfSelectedDate = singleDateList;
     } else if (selectedDate.isCurrentMonth === false && weekIndex === 0) {
       this.selectedDate = this.calendar[weekIndex][dayIndex].date.clone();
+      this.meetingListOfSelectedDate = [];
       this.previousMonth();
     } else if (selectedDate.isCurrentMonth === false && weekIndex !== 0) {
+      this.meetingListOfSelectedDate = [];
       this.selectedDate = this.calendar[weekIndex][dayIndex].date.clone();
       this.nextMonth();
+    }
+  }
+
+  manageJoinAgentMeeting(data: any) {
+    if (data?.isRequestAlive) {
+      return;
+    }
+
+    if (!data?.jamId) {
+      data.isRequestAlive = true;
+      const { isRequestAlive, ...body } = data;
+      this._facadeService.joinAgentMeetingService.create(body).subscribe({
+        next: (res: any) => {
+          if (res.code === 'OK') {
+            if (res.data?._id) {
+              data.jamId = res.data._id;
+            }
+          }
+          delete data?.isRequestAlive;
+        },
+        error: (err: any) => {
+          delete data?.isRequestAlive;
+          console.log('Error while create JAM', err);
+        }
+      });
+    } else {
+      data.isRequestAlive = true;
+      const { isRequestAlive, ...body } = data;
+      this._facadeService.joinAgentMeetingService.delete(body.jamId).subscribe({
+        next: (res: any) => {
+          if (res.code === 'OK') {
+            delete data.jamId;
+          }
+          delete data?.isRequestAlive;
+        },
+        error: (err: any) => {
+          delete data?.isRequestAlive;
+          console.log('Error while remove JAM', err);
+        }
+      });
     }
   }
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppConfig } from '@src/app/constants/appConfig';
 
 import { NodeImages } from '@src/app/constants/node-images';
 import { FacadeService } from '@src/app/services/facade.service';
@@ -11,19 +12,25 @@ import { FacadeService } from '@src/app/services/facade.service';
 export class AppsComponent implements OnInit {
 
   constructor(
-    protected _facadeService: FacadeService
+    protected _facadeService: FacadeService,
+    protected _appConfig: AppConfig
   ) { }
 
   protected appList: Array<any> = [];
   private readonly _nodeImages = NodeImages;
 
+  protected currentUser: any;
+  protected isRequestAlive: boolean = false;
+
+
   ngOnInit(): void {
     this.getRootObject();
+    this.currentUser = this._facadeService.authService.getCurrentUser();
   }
 
   getRootObject() {
     return new Promise((resolve: any, reject: any) => {
-      this._facadeService.workflowService.getRootObject().subscribe({
+      this._facadeService.appsService.getList().subscribe({
         next: (res: any) => {
           if (res.code == 'OK') {
             this.appList = res.data;
@@ -42,8 +49,51 @@ export class AppsComponent implements OnInit {
           console.log('There is an error while getting root object', err);
           reject();
         }
-      })
+      });
     });
+  }
+
+  commonOnClickFn(app: any) {
+    const holdApp = this.appList.find((appItem: any) => appItem.title == app.title);
+
+    switch (holdApp?.title) {
+      case 'Zoom':
+        this.manageZoom(holdApp);
+        break;
+      default:
+        if (holdApp) {
+          holdApp.isAdded = !holdApp?.isAdded;
+        }
+        break;
+    }
+  }
+
+  manageZoom(appDetails: any) {
+    if (this.isRequestAlive) return;
+
+    if (!appDetails?.isAdded) {
+      console.log('Adding app');
+      if (this.currentUser?._id && this._appConfig.serverURL) {
+        appDetails.isAdded = !appDetails?.isAdded;
+        const redirectUrl = `${this._appConfig.serverURL}/api/zoom-meeting/auth-callback`.replace(':', '%3A').replace(/\//g, '%2F');
+        window.open(`https://zoom.us/oauth/authorize?response_type=code&client_id=m2EfYhQxR4ahRSckotyf0w&redirect_uri=${redirectUrl}?ngf_user_id=${this.currentUser._id}`);
+      }
+    } else {
+      this.isRequestAlive = true;
+      console.log('Removing app');
+      this._facadeService.appsService.removeApp({ appName: appDetails.title }).subscribe({
+        next: (res: any) => {
+          if (res.code === "OK") {
+            appDetails.isAdded = false;
+          }
+          this.isRequestAlive = false;
+        },
+        error: (err: any) => {
+          this.isRequestAlive = false;
+          console.log('Error while removing app', err);
+        }
+      });
+    }
   }
 
 }

@@ -12,7 +12,7 @@
             .dashboard-body-wrap {
                 width: 100%;
                 flex: 1 0 550px;
-    
+
                 .sentiment-by-rating-chart-wrap {
                     margin: 0 auto;
                     padding: 24px;
@@ -24,27 +24,27 @@
                     box-shadow: 0 0 3px rgba($color: #000000, $alpha: 0.4);
                 }
             }
-    
+
             .calendar-container {
                 max-width: 300px;
                 flex: 1 0 300px;
-    
+
                 .calendar-wrap {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                     width: 100%;
-    
+
                     .calendar-header {
                         margin: 0 0 12px;
                         width: 100%;
-    
+
                         .header-details {
                             margin: 0 0 12px;
                             display: flex;
                             justify-content: space-between;
                             gap: 16px;
-    
+
                             .calendar-month {
                                 font-size: 24px;
                                 font-weight: 600;
@@ -52,22 +52,22 @@
                                 text-transform: capitalize;
                             }
                         }
-    
+
                         .calendar-indicator-wrap {
                             display: flex;
                             justify-content: space-between;
-    
+
                             .app-button {
                                 padding: 4px 8px 5px;
                                 color: $on-light-base;
                                 border-color: transparent;
                                 background-color: transparent;
-    
+
                                 .btn-icon {
                                     width: 12px;
                                     height: 12px;
                                 }
-    
+
                                 &:last-child {
                                     .btn-icon {
                                         margin: 0 0 0 4px;
@@ -76,17 +76,17 @@
                             }
                         }
                     }
-    
+
                     .calendar-body {
                         width: 100%;
                         background-color: $base;
-    
+
                         .calendar-weekdays {
                             margin: 0 0 6px;
                             display: flex;
                             justify-content: space-around;
                             width: 100%;
-    
+
                             .week-day {
                                 flex: 1 0;
                                 display: flex;
@@ -98,19 +98,19 @@
                                 text-transform: capitalize;
                             }
                         }
-    
+
                         .calendar-grid {
                             display: flex;
                             flex-flow: column nowrap;
                             gap: 6px;
                             width: 100%;
-    
+
                             .calendar-week {
                                 display: flex;
                                 flex-flow: row nowrap;
                                 gap: 6px;
                                 width: 100%;
-    
+
                                 .calendar-day {
                                     flex: 1 0;
                                     aspect-ratio: 1/1;
@@ -120,15 +120,15 @@
                                     align-items: center;
                                     font-size: 0.8rem;
                                     border-radius: 14px;
-    
+
                                     &.current-month {
                                         background-color: $light-base;
                                     }
-    
+
                                     &.to-day {
                                         border-color: $primary;
                                     }
-    
+
                                     &.selected-date {
                                         border-color: $primary;
                                         color: $on-primary;
@@ -139,15 +139,15 @@
                         }
                     }
                 }
-    
+
                 .divider {
                     margin: 16px 0px;
                     height: 1px;
                     background-color: $border-color;
                 }
-    
+
                 .calendar-event-details {
-    
+
                     .calendar-events-wrap {
                         display: flex;
                         flex-flow: column nowrap;
@@ -160,18 +160,18 @@
                             color: $primary;
                             text-transform: capitalize;
                         }
-    
+
                         .calendar-event {
                             border-radius: 12px;
                             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-    
+
                             .event-details-wrap {
                                 padding: 8px 14px;
                                 display: flex;
                                 flex-flow: row nowrap;
                                 gap: 16px;
                                 border-bottom: 1px solid $border-color;
-    
+
                                 .event-detail-wrap {
                                     display: flex;
                                     flex-flow: row nowrap;
@@ -181,29 +181,96 @@
                                     color: $on-base;
                                     font-style: normal;
                                     text-decoration-line: none;
-    
+
                                     .icon {
                                         width: 18px;
                                         height: 18px;
                                     }
                                 }
                             }
-    
-                            .event-title {
+
+                            .event-footer-details-wrap {
                                 margin: 14px;
-                                font-size: 14px;
-                                font-weight: 600;
-                                text-transform: capitalize;
-                                word-break: break-all;
-                                @include elipses-1;
+                                display: flex;
+                                flex-flow: row nowrap;
+                                gap: 8px;
+                                align-items: center;
+                                justify-content: space-between;
+
+                                .event-title {
+                                    font-size: 14px;
+                                    line-height: normal;
+                                    font-weight: 600;
+                                    font-style: normal;
+                                    text-transform: capitalize;
+                                    word-break: break-all;
+                                    @include elipses-1;
+                                }
+
+                                .action-toggler-wrap {
+                                    margin: 0;
+                                    padding: 0;
+                                    position: relative;
+                                    flex: 0 0 44px;
+                                    height: 24px;
+                                    background-color: #CECECE;
+                                    border-radius: 50em;
+                                    border: none;
+                                    outline: none;
+                                    cursor: pointer;
+                                    @include user-select-none();
+
+                                    .toggle-icon-wrap {
+                                        padding: 2px;
+                                        position: absolute;
+                                        top: 50%;
+                                        left: 3px;
+                                        transform: translateY(-50%);
+                                        border-radius: 50%;
+                                        overflow: hidden;
+                                        background-color: $base;
+
+                                        .toggle-icon {
+                                            display: block;
+                                            width: 16px;
+                                            height: 16px;
+
+                                            path {
+                                                fill: #CBCBCB;
+                                            }
+                                        }
+                                    }
+
+                                    &.processing {
+                                        cursor: progress;
+
+                                        .toggle-icon-wrap {
+                                            left: unset;
+                                            right: 3px;
+                                        }
+                                    }
+
+                                    &.on {
+                                        background-color: $primary;
+
+                                        .toggle-icon-wrap {
+                                            left: unset;
+                                            right: 3px;
+
+                                            .toggle-icon path {
+                                                fill: $primary;
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
 
                     .c-p {
-                       cursor: pointer; 
+                        cursor: pointer;
                     }
-    
+
                     .not-found-msg {
                         font-size: 16px;
                         font-weight: 400;

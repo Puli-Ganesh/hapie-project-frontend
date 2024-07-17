@@ -19,6 +19,8 @@ import { ShareCanvasService } from './share-canvas/share-canvas.service';
 import { WorkflowService } from './workflow/workflow.service';
 import { ConfluenceService } from './confluence/confluence.service';
 import { DashboardService } from './dashboard/dashboard.service';
+import { JoinAgentMeetingService } from './join-agent-meeting/join-agent-meeting.service';
+import { AppsService } from './apps/apps.service';
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +50,8 @@ export class FacadeService {
   private _workflowService!: WorkflowService;
   private _confluenceService!: ConfluenceService;
   private _dashboardService!: DashboardService;
+  private _joinAgentMeetingService!: JoinAgentMeetingService;
+  private _appsService!: AppsService;
 
 
   /** App Service getter */
@@ -200,5 +204,21 @@ export class FacadeService {
       this._dashboardService = this._injector.get(DashboardService);
     }
     return this._dashboardService;
+  }
+
+  /** JoinAgentMeeting Service getter */
+  public get joinAgentMeetingService(): JoinAgentMeetingService {
+    if (!this._joinAgentMeetingService) {
+      this._joinAgentMeetingService = this._injector.get(JoinAgentMeetingService);
+    }
+    return this._joinAgentMeetingService;
+  }
+
+  /** AppsService Service getter */
+  public get appsService(): AppsService {
+    if (!this._appsService) {
+      this._appsService = this._injector.get(AppsService);
+    }
+    return this._appsService;
   }
 }
