@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ConfigService } from '@src/app/config/config.service';
 import { AppConfig } from '@src/app/constants/appConfig';
 
 import { NodeImages } from '@src/app/constants/node-images';
@@ -13,7 +14,8 @@ export class AppsComponent implements OnInit {
 
   constructor(
     protected _facadeService: FacadeService,
-    protected _appConfig: AppConfig
+    protected _appConfig: AppConfig,
+    protected _configService: ConfigService
   ) { }
 
   protected appList: Array<any> = [];
@@ -60,6 +62,10 @@ export class AppsComponent implements OnInit {
       case 'Zoom':
         this.manageZoom(holdApp);
         break;
+
+      case 'Meet':
+        this.manageGoogle();
+        break;
       default:
         if (holdApp) {
           holdApp.isAdded = !holdApp?.isAdded;
@@ -94,6 +100,10 @@ export class AppsComponent implements OnInit {
         }
       });
     }
+  }
+
+  manageGoogle(){
+    window.location.href =  `${this._configService.getBaseURL}/auth/login-with-google`
   }
 
 }

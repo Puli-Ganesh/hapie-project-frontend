@@ -82,7 +82,7 @@
     <div class="another-way">or continue with</div>
 
     <div class="another-way-action-wrap">
-        <img class="another-option-item" src="assets/images/google-logo.png" (click)="onLoginWithGoogle()" alt="google">
+        <a [href]="googleAuthUrl"><img class="another-option-item" src="assets/images/google-logo.png" alt="google"></a>
         <img class="another-option-item" src="assets/images/microsoft-logo.png" (click)="onLoginWithMicrosoft()"
             alt="microsoft">
     </div>

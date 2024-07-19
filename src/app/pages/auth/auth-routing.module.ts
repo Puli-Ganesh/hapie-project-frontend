@@ -29,6 +29,11 @@ const routes: Routes = [
         component: MicrosoftResponseComponent
       },
       {
+        path: 'google-login/:code',
+        title: 'Sign in | NexGen Force',
+        component: MicrosoftResponseComponent
+      },
+      {
         path: 'forgot-password',
         title: 'Forgot Password | NexGen Force',
         component: ForgotPasswordComponent

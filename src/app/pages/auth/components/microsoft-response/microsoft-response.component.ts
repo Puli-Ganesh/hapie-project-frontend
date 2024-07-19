@@ -24,8 +24,35 @@ export class MicrosoftResponseComponent implements OnInit {
   protected serverError: string = '';
 
   ngOnInit(): void {
+    this._activatedRoute.params.subscribe((data: any) => {
+      if(data.code){
+        this.isLoggingIn = true;
+        const body: any = { code: decodeURIComponent(data.code) };
+        this._facadeService.authService.loginWithGoogle(body).subscribe({
+          next: (res: any) => {
+            this.isLoggingIn = false;
+
+            this._facadeService.authService.setSession(res);
+            this._router.navigateByUrl(this.appRoutes.PROJECTS);
+          },
+          error: (err: any) => {
+            this.isLoggingIn = false;
+            if (err.error.code == 'E_USER_NOT_FOUND') {
+              this.serverError = 'You are not registered yet. Contact support to register.';
+              this._facadeService.appService.openToaster('You are not registered yet. Contact support to register.', 'danger');
+                this._router.navigateByUrl(this.appRoutes.LOGIN);
+            }
+            if (err.error.code == 'E_INTERNAL_SERVER_ERROR') {
+              this.serverError = err.error.message ?? 'Something bad happened on server.';
+            }
+            console.error(err.error);
+          }
+        });
+      }
+    })
     this._activatedRoute.queryParams.subscribe({
       next: (res: any) => {
+        if(!res.code) return;
         const projectId = sessionStorage.getItem(StorageKeys.SST.PROJECT_ID_FOR_MICROSOFT);
 
         const body: any = { code: res.code };

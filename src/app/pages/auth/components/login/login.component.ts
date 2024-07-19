@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ConfigService } from '@src/app/config/config.service';
 
 import { AppConfig } from '@src/app/constants/appConfig';
 import { Regex } from '@src/app/constants/regex';
@@ -27,7 +28,7 @@ export class LoginComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _facadeService: FacadeService,
     private _router: Router,
-    private _appConfig: AppConfig
+    private _configService: ConfigService
   ) {
     this.loginForm = this._formBuilder.group({
       email: [null, [
@@ -51,6 +52,7 @@ export class LoginComponent implements OnInit {
   protected isPasswordEyeOpen: boolean = false;
   protected serverError: string | null = null;
   protected client: any;
+  protected googleAuthUrl: string = `${this._configService.getBaseURL}/auth/login-with-google`;
 
   ngOnInit(): void {
     // navigating user to home page if already logged in.
@@ -63,17 +65,6 @@ export class LoginComponent implements OnInit {
     } else {
       localStorage.clear();
     }
-
-    // @ts-ignore
-    this.client = google.accounts.oauth2.initTokenClient({
-      client_id: this._appConfig.googleClientId,
-      scope: `https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/meetings.space.readonly https://www.googleapis.com/auth/drive.readonly`,
-      callback: (res: any) => {
-        if (res.access_token) {
-          this.loginUserWithGoogle(res.access_token);
-        }
-      },
-    });
   }
 
   get email(): AbstractControl | null {
@@ -134,46 +125,6 @@ export class LoginComponent implements OnInit {
           sessionStorage.setItem(StorageKeys.SST.PROJECT_ID_FOR_MICROSOFT, this.projectId);
         }
         window.location.href = res.data.url;
-      }
-    });
-  }
-
-  onLoginWithGoogle() {
-    this.client.requestAccessToken();
-  }
-
-  loginUserWithGoogle(accessToken: string) {
-    this.isRequestAlive = true;
-
-    const body: any = { accessToken };
-    if (this.projectId) {
-      body.projectId = this.projectId;
-    }
-
-    this._facadeService.authService.loginWithGoogle(body).subscribe({
-      next: (res: any) => {
-        this.isRequestAlive = false;
-        if (res.code == 'OK') {
-          this._facadeService.authService.setSession(res);
-          if (this.projectId) {
-            this._router.navigateByUrl(`/${this.projectId}`).then(() => {
-              /** navigated based on project access via projectDetails$ observable subscription on project select */
-              this._facadeService.projectService.selectProject(this.projectId!);
-            });
-          } else {
-            this._router.navigateByUrl(this.appRoutes.PROJECTS);
-          }
-        }
-      },
-      error: (err: any) => {
-        this.isRequestAlive = false;
-        if (err.error.code == 'E_USER_NOT_FOUND') {
-          this.serverError = 'You are not registered yet. Contact support to register.';
-          this._facadeService.appService.openToaster('You are not registered yet. Contact support to register.', 'danger');
-        }
-        if (err.error.code == 'E_INTERNAL_SERVER_ERROR') {
-          this.serverError = err.error.message ?? 'Something bad happened on server.';
-        }
       }
     });
   }
