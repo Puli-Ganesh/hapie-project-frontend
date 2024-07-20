@@ -37,7 +37,7 @@
             <div class="media-item border-{{projectColor}}" *ngFor="let recording of recordings;"
                 (click)="navigateOnMediaTranscript(recording)">
                 <div class="media-img bg-{{projectColor}}-2">
-                    <img src="{{recording?.thumbnailUrl}}" alt="project">
+                    <img *ngIf="recording?.thumbnailUrl" src="{{recording?.thumbnailUrl}}" alt="project">
                 </div>
                 <div class="media-details">
                     <h2 class="media-name">media upload {{recording?.version}}</h2>

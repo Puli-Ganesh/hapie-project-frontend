@@ -7,7 +7,7 @@ import { FacadeService } from '@src/app/services/facade.service';
 import { IResponse } from '@src/interfaces/response.interface';
 
 
-type TCalendarPlatform = 'teams' | 'zoom' | 'google';
+type TCalendarPlatform = 'teams' | 'zoom' | 'meet';
 
 @Component({
   selector: 'app-dashboard',
@@ -212,11 +212,7 @@ export class DashboardComponent implements OnInit {
     }
 
     this.calendar = weeks;
-
-    if (this.isMicrosoftUser) {
-      this.getCalendarData('teams');
-    }
-    this.getCalendarData('zoom');
+    this.getCalendarData();
   }
 
   previousMonth(): void {
@@ -236,14 +232,13 @@ export class DashboardComponent implements OnInit {
     this.generateCalendar();
   }
 
-  getCalendarData(platform: TCalendarPlatform) {
+  getCalendarData() {
     // if (!this.calendar?.length || !this.isMicrosoftUser) { return; }
-    if (!this.calendar?.length || !platform) { return; }
+    if (!this.calendar?.length) { return; }
 
     const body = {
       startDate: moment(this.currentDate).startOf('month').format(),
-      endDate: moment(this.currentDate).endOf('month').startOf('day').format(),
-      platform
+      endDate: moment(this.currentDate).endOf('month').startOf('day').format()
     };
 
     this._facadeService.dashboardService.getCalendarData(body).subscribe({
