@@ -103,7 +103,7 @@ export class AppsComponent implements OnInit {
   }
 
   manageGoogle(){
-    window.location.href =  `${this._configService.getBaseURL}/auth/login-with-google`
+    window.location.href =  `${this._configService.getBaseURL}/auth/login-with-google/${this.currentUser._id}`
   }
 
 }
