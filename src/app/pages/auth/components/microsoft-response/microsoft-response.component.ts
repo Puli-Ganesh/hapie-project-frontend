@@ -27,7 +27,7 @@ export class MicrosoftResponseComponent implements OnInit {
     this._activatedRoute.params.subscribe((data: any) => {
       if(data.code){
         this.isLoggingIn = true;
-        const body: any = { code: decodeURIComponent(data.code) };
+        const body: any = { code: decodeURIComponent(data.code), state: data.state };
         this._facadeService.authService.loginWithGoogle(body).subscribe({
           next: (res: any) => {
             this.isLoggingIn = false;
