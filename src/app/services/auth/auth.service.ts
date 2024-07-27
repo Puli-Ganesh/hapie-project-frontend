@@ -58,6 +58,10 @@ export class AuthService {
     return this._httpClientService.post(body, `${this.endPoint}/acquire-token`);
   }
 
+  acquireTokenViaApp(body: { code: string }) {
+    return this._httpClientService.post(body, `${this.endPoint}/acquire-token-via-app`);
+  }
+
   setSession(authResult: any) {
     const expiresIn = authResult.data.token.expiresIn * 1000;
     const expiresAt = moment().valueOf() + expiresIn;

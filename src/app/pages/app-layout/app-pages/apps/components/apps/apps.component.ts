@@ -64,7 +64,11 @@ export class AppsComponent implements OnInit {
         break;
 
       case 'Meet':
-        this.manageGoogle();
+        this.manageGoogle(holdApp);
+        break;
+
+      case 'Teams':
+        this.manageTeams(holdApp);
         break;
       default:
         if (holdApp) {
@@ -72,6 +76,25 @@ export class AppsComponent implements OnInit {
         }
         break;
     }
+  }
+
+  commonRemoveApp(appDetails: any) {
+    if (this.isRequestAlive) { return; }
+
+    console.log('Removing app');
+    this.isRequestAlive = true;
+    this._facadeService.appsService.removeApp({ appName: appDetails.title }).subscribe({
+      next: (res: any) => {
+        this.isRequestAlive = false;
+        if (res.code === "OK") {
+          appDetails.isAdded = false;
+        }
+      },
+      error: (err: any) => {
+        this.isRequestAlive = false;
+        console.log('Error while removing app', err);
+      }
+    });
   }
 
   manageZoom(appDetails: any) {
@@ -85,25 +108,42 @@ export class AppsComponent implements OnInit {
         window.open(`https://zoom.us/oauth/authorize?response_type=code&client_id=m2EfYhQxR4ahRSckotyf0w&redirect_uri=${redirectUrl}?ngf_user_id=${this.currentUser._id}`);
       }
     } else {
-      this.isRequestAlive = true;
-      console.log('Removing app');
-      this._facadeService.appsService.removeApp({ appName: appDetails.title }).subscribe({
-        next: (res: any) => {
-          if (res.code === "OK") {
-            appDetails.isAdded = false;
-          }
-          this.isRequestAlive = false;
-        },
-        error: (err: any) => {
-          this.isRequestAlive = false;
-          console.log('Error while removing app', err);
-        }
-      });
+      this.commonRemoveApp(appDetails);
     }
   }
 
-  manageGoogle(){
-    window.location.href =  `${this._configService.getBaseURL}/auth/login-with-google/${this.currentUser._id}`
+  manageGoogle(appDetails: any) {
+    if (this.isRequestAlive) return;
+
+    if (!appDetails?.isAdded) {
+      console.log('Adding app');
+      if (this.currentUser?._id && this._appConfig.serverURL) {
+        appDetails.isAdded = !appDetails?.isAdded;
+        window.open(`${this._configService.getBaseURL}/auth/login-with-google/${this.currentUser._id}`);
+      }
+    } else {
+      this.commonRemoveApp(appDetails);
+    }
+  }
+
+  manageTeams(appDetails: any) {
+    if (this.isRequestAlive) return;
+
+    if (!appDetails?.isAdded) {
+      console.log('Adding app');
+      if (this.currentUser?._id && this._appConfig.serverURL) {
+        this._facadeService.authService.loginWithMicrosoft().subscribe({
+          next: (res: any) => {
+            window.open(res.data.url);
+          },
+          error: (err: any) => {
+            appDetails.isAdded = false;
+          }
+        });
+      }
+    } else {
+      this.commonRemoveApp(appDetails);
+    }
   }
 
 }
