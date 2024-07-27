@@ -136,6 +136,13 @@ export class MomComponent implements OnInit {
     const contentDiv = document.getElementById(elementId)!;
     this._renderer2.setProperty(contentDiv, 'innerHTML', '');// Clear any existing content
 
+    if (input && input.trim().startsWith('Not enough data to generate MOM')) {
+      const p = this._renderer2.createElement('p');
+      p.textContent = input;
+      this._renderer2.appendChild(contentDiv, p);
+      return;
+    }
+
     // Split the input string by new lines
     const lines = input.split('\n');
 
