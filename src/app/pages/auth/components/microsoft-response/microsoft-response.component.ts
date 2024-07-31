@@ -53,8 +53,18 @@ export class MicrosoftResponseComponent implements OnInit {
 
     this._activatedRoute.queryParams.subscribe({
       next: (res: any) => {
-        if (!res.code) return;
         const projectId = sessionStorage.getItem(StorageKeys.SST.PROJECT_ID_FOR_MICROSOFT);
+
+        if (res?.error === 'access_denied' || res?.error_subcode === 'cancel') {
+          if (projectId) {
+            this._router.navigateByUrl(`/${projectId}${this.appRoutes.LOGIN}`);
+          } else {
+            this._router.navigateByUrl(this.appRoutes.LOGIN);
+          }
+          return;
+        }
+
+        if (!res.code) return;
 
         const body: any = { code: res.code };
         if (this._facadeService.authService.isLoggedIn()) {

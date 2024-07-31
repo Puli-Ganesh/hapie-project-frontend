@@ -51,6 +51,33 @@
                                 color: $on-base;
                                 text-transform: capitalize;
                             }
+
+                            .app-button {
+                                &.refresh-btn {
+                                    padding: 3px 8px;
+
+                                    
+                                    .btn-icon {
+                                        margin: 0;
+                                        width: 24px;
+                                        height: 24px;
+                                        color: $base;
+
+                                        &.refreshing {
+                                            animation: rotate 2s linear infinite;
+                                        }
+                                    }
+
+                                    @keyframes rotate {
+                                        from {
+                                          transform: rotate(0deg); /* Start from 0 degrees */
+                                        }
+                                        to {
+                                          transform: rotate(360deg); /* Rotate to 360 degrees */
+                                        }
+                                    }
+                                }
+                            }
                         }
 
                         .calendar-indicator-wrap {
@@ -171,6 +198,7 @@
                                 flex-flow: row nowrap;
                                 gap: 16px;
                                 border-bottom: 1px solid $border-color;
+                                justify-content: space-between;
 
                                 .event-detail-wrap {
                                     display: flex;
@@ -181,6 +209,7 @@
                                     color: $on-base;
                                     font-style: normal;
                                     text-decoration-line: none;
+                                    text-transform: capitalize;
 
                                     .icon {
                                         width: 18px;
@@ -276,6 +305,15 @@
                         font-weight: 400;
                         text-align: center;
                         color: darkgray;
+                    }
+                }
+
+                .d-flex {
+                    display: flex;
+                    align-items: center;
+
+                    &.gap-10 {
+                        gap: 10px;
                     }
                 }
             }

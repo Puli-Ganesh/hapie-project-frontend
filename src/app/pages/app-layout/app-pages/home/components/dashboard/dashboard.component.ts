@@ -234,7 +234,10 @@ export class DashboardComponent implements OnInit {
 
   getCalendarData() {
     // if (!this.calendar?.length || !this.isMicrosoftUser) { return; }
-    if (!this.calendar?.length) { return; }
+    if (!this.calendar?.length) {
+      this.isCalendarRefreshing = false;
+      return;
+    }
 
     const body = {
       startDate: moment(this.currentDate).startOf('month').format(),
@@ -243,6 +246,7 @@ export class DashboardComponent implements OnInit {
 
     this._facadeService.dashboardService.getCalendarData(body).subscribe({
       next: (res: IResponse) => {
+        this.isCalendarRefreshing = false;
         if (res.code === "OK") {
           if (res.data?.eventList?.length > 0) {
             if (this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')]) {
@@ -269,9 +273,20 @@ export class DashboardComponent implements OnInit {
         }
       },
       error: (err: any) => {
+        this.isCalendarRefreshing = false;
         console.log('Error while getting calendar data', err);
       }
     });
+  }
+
+  protected isCalendarRefreshing: boolean = false;
+  onRefreshCalendar(): void {
+    if (this.isCalendarRefreshing) {
+      return;
+    }
+    this.isCalendarRefreshing = true;
+
+    this.getCalendarData();
   }
 
   onSelectDate(weekIndex: number, dayIndex: number) {
@@ -297,6 +312,10 @@ export class DashboardComponent implements OnInit {
     }
 
     if (!data?.jamId) {
+      if (data?.isCancelled) {
+        return;
+      }
+
       data.isRequestAlive = true;
       const { isRequestAlive, ...body } = data;
       this._facadeService.joinAgentMeetingService.create(body).subscribe({

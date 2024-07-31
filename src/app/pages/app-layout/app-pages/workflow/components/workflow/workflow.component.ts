@@ -69,8 +69,11 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     this._facadeService.workflowService.getAggregateList().subscribe({
       next: (res: any) => {
         if (res.code == 'OK') {
-          this.workflowList = res.data.list;
-          this.filteredWorkflowList = res.data.list;
+          this.workflowList = res.data.list?.map((item: any) => {
+            item.projects = item.projects.map(({ projectName }: any) => projectName).join(', ');
+            return item;
+          }) ?? [];
+          this.filteredWorkflowList = [...this.workflowList];
         }
       }
     });
@@ -100,7 +103,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
   onViewWorkflow(index: number) {
     const workflowId = this.filteredWorkflowList[index]?._id;
     if (workflowId) {
-      this._router.navigate([this.appRoutes.WORKFLOW_DETAILS, workflowId], { state: { isCreating: false }});
+      this._router.navigate([this.appRoutes.WORKFLOW_DETAILS, workflowId], { state: { isCreating: false } });
     }
   }
 
@@ -137,7 +140,7 @@ export class WorkflowComponent implements OnInit, OnDestroy {
         this.workflowForm.reset();
         this._facadeService.modalService.closeModal('createWorkflowModal');
         this._facadeService.appService.openToaster('Workflow successfully created.', 'success');
-        this._router.navigate([this.appRoutes.WORKFLOW_DETAILS, res.data._id], { state: { isCreating: true }});
+        this._router.navigate([this.appRoutes.WORKFLOW_DETAILS, res.data._id], { state: { isCreating: true } });
       },
       error: (err: any) => {
         console.log('There is an error while creating workflow', err);
@@ -158,11 +161,11 @@ export class WorkflowComponent implements OnInit, OnDestroy {
   onConfirmDelete() {
     const workflowId = this.selectedWorkflow?._id;
     if (!workflowId) return;
-    
+
     this._facadeService.workflowService.deleteById(workflowId).subscribe({
       next: (res: any) => {
-        this.workflowList = this.workflowList.filter((wf:any) => wf._id != workflowId);
-        this.filteredWorkflowList = this.filteredWorkflowList.filter((wf:any) => wf._id != workflowId);
+        this.workflowList = this.workflowList.filter((wf: any) => wf._id != workflowId);
+        this.filteredWorkflowList = this.filteredWorkflowList.filter((wf: any) => wf._id != workflowId);
         this._facadeService.modalService.closeModal('deleteWorkflowModal');
         this._facadeService.appService.openToaster('Workflow deleted successfully', 'success');
       },
@@ -172,7 +175,8 @@ export class WorkflowComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {;
+  ngOnDestroy(): void {
+    ;
     this._facadeService.modalService.unregisterModal('createWorkflowModal');
     this._facadeService.modalService.unregisterModal('deleteWorkflowModal');
   }

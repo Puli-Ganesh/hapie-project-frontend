@@ -163,7 +163,7 @@
                             <div class="tbl-td d-flex">{{ workflow.createdAt | date:'medium' }}</div>
                             <!-- <div class="tbl-td d-flex">{{ workflow.updatedAt | date:'medium' }}</div> -->
                             <div class="tbl-td d-flex text-cap">
-                                {{workflow?.projectName ? ('connected to ' + workflow.projectName) : 'not connected'}}
+                                {{workflow?.projects ? ('connected to ' + workflow.projects) : 'not connected'}}
                             </div>
                             <div class="tbl-td d-flex icons-tbl-td gap-20">
                                 <ng-container *ngIf="permissions.PROJECT_EDIT.includes(loggedInUser.type)">
