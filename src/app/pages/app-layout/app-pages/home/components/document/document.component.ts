@@ -194,7 +194,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
               templateHtml += line.replace(titleAndPrompt, '');
               templateHtml += requirementsHtmlStr;
             } else {
-              templateHtml += line.replace(titleAndPrompt, category.requirements[0]?.requirement || '');
+              templateHtml += line.replace(titleAndPrompt, `: ${category.requirements[0]?.requirement ?? ''}`.trim());
             }
           } else {
             templateHtml += line;
