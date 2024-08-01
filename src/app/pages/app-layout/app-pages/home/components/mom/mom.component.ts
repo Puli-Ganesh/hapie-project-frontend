@@ -1,6 +1,6 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, of } from 'rxjs';
 import * as moment from 'moment';
 
 import { Routes } from '@src/app/constants/routes';
@@ -134,11 +134,16 @@ export class MomComponent implements OnInit {
 
   generateHTMLFromString(elementId: string, input: string) {
     const contentDiv = document.getElementById(elementId)!;
+    if (!contentDiv) {
+      console.error(`Element with id ${elementId} not found.`);
+      return;
+    }
+
     this._renderer2.setProperty(contentDiv, 'innerHTML', '');// Clear any existing content
 
-    if (input && input.trim().startsWith('Not enough data to generate MOM')) {
+    if (!input || (input && input.trim().startsWith('Not enough data to generate MOM'))) {
       const p = this._renderer2.createElement('p');
-      p.textContent = input;
+      p.textContent = input || `Not enough data to generate MOM ${this.selectedTab}.`;
       this._renderer2.appendChild(contentDiv, p);
       return;
     }
@@ -146,31 +151,46 @@ export class MomComponent implements OnInit {
     // Split the input string by new lines
     const lines = input.split('\n');
 
-    let ulElement: any;
+    let ulElement: HTMLElement | null = null;
     let currentSection = '';
     let currentSubsection = '';
 
-    lines.forEach(line => {
-      // Trim leading and trailing spaces
-      line = line.trim();
+    const appendUlElement = () => {
+      // Add previous ulElement if exists
+      if (ulElement) {
+        this._renderer2.appendChild(contentDiv, ulElement);
+        ulElement = null;
+      }
+    };
+    const createUlElement = () => {
+      // create new ulElement
+      if (!ulElement) {
+        ulElement = this._renderer2.createElement('ul');
+      }
+    };
+    const createLiElementAndAppendToUlElement = (innerHTML: string) => {
+      if (innerHTML && ulElement) {
+        const li = this._renderer2.createElement('li');
+        li.innerHTML = innerHTML;
+        this._renderer2.appendChild(ulElement, li);
+      }
+    };
+
+    for (let i = 0; i < lines.length; i++) {
+      let line = lines[i]?.trim();
+      if (!line?.length) {
+        continue;
+      }
 
       if (line.startsWith('**') && line.endsWith('**')) {
-        // Add previous ulElement if exists
-        if (ulElement) {
-          this._renderer2.appendChild(contentDiv, ulElement);
-          ulElement = null;
-        }
+        appendUlElement();
         // Main sections
         currentSection = line.slice(2, -2);
         const h2 = this._renderer2.createElement('h2');
         h2.textContent = currentSection;
         this._renderer2.appendChild(contentDiv, h2);
       } else if (line.startsWith('- **') && line.includes('**:')) {
-        // Add previous ulElement if exists
-        if (ulElement) {
-          this._renderer2.appendChild(contentDiv, ulElement);
-          ulElement = null;
-        }
+        appendUlElement();
         // Subsections
         const subsectionEndIndex = line.indexOf('**:');
         currentSubsection = line.slice(4, subsectionEndIndex);
@@ -179,16 +199,10 @@ export class MomComponent implements OnInit {
         this._renderer2.appendChild(contentDiv, h3);
         ulElement = this._renderer2.createElement('ul');
         if (line.slice(subsectionEndIndex + 3)) {
-          const li = this._renderer2.createElement('li');
-          li.innerHTML = line.slice(subsectionEndIndex + 3).replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>');
-          this._renderer2.appendChild(ulElement, li);
+          createLiElementAndAppendToUlElement(line.slice(subsectionEndIndex + 3).replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>'));
         }
       } else if (line.startsWith('- **') && line.includes(':**')) {
-        // Add previous ulElement if exists
-        if (ulElement) {
-          this._renderer2.appendChild(contentDiv, ulElement);
-          ulElement = null;
-        }
+        appendUlElement();
         // Subsections
         const subsectionEndIndex = line.indexOf(':**');
         currentSubsection = line.slice(4, subsectionEndIndex);
@@ -197,57 +211,25 @@ export class MomComponent implements OnInit {
         this._renderer2.appendChild(contentDiv, h3);
         ulElement = this._renderer2.createElement('ul');
         if (line.slice(subsectionEndIndex + 3)) {
-          const li = this._renderer2.createElement('li');
-          li.innerHTML = line.slice(subsectionEndIndex + 3).replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>');
-          this._renderer2.appendChild(ulElement, li);
+          createLiElementAndAppendToUlElement(line.slice(subsectionEndIndex + 3).replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>'));
         }
-      } else if (line.match(/^\d+\.\s*\*\*(.*?):\*\*/)) {
-        // Add previous ulElement if exists
-        if (ulElement) {
-          this._renderer2.appendChild(contentDiv, ulElement);
-          ulElement = null;
-        }
+      } else if (line.match(/^\d+\.\s*\*\*(.*?)(?:\*\*:|:\*\*)/)) {
+        appendUlElement();
         // Subsections
-        const subsectionMatch = line.match(/^\d+\.\s*\*\*(.*?):\*\*/);
+        const subsectionMatch = line.match(/^\d+\.\s*\*\*(.*?)(?:\*\*:|:\*\*)/);
         if (subsectionMatch) {
           currentSubsection = subsectionMatch[1];
           const h3 = this._renderer2.createElement('h3');
           h3.textContent = currentSubsection;
           this._renderer2.appendChild(contentDiv, h3);
           ulElement = this._renderer2.createElement('ul');
-          let liLine = line.replace(/^\d+\.\s*\*\*(.*?):\*\*/, '');
+          let liLine = line.replace(/^\d+\.\s*\*\*(.*?)(?:\*\*:|:\*\*)/, '');
           if (liLine) {
-            const li = this._renderer2.createElement('li');
-            li.innerHTML = liLine.replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>');
-            this._renderer2.appendChild(ulElement, li);
-          }
-        }
-      } else if (line.match(/^\d+\.\s*\*\*(.*?)\*\*:/)) {
-        // Add previous ulElement if exists
-        if (ulElement) {
-          this._renderer2.appendChild(contentDiv, ulElement);
-          ulElement = null;
-        }
-        // Subsections
-        const subsectionMatch = line.match(/^\d+\.\s*\*\*(.*?)\*\*:/);
-        if (subsectionMatch) {
-          currentSubsection = subsectionMatch[1];
-          const h3 = this._renderer2.createElement('h3');
-          h3.textContent = currentSubsection;
-          this._renderer2.appendChild(contentDiv, h3);
-          ulElement = this._renderer2.createElement('ul');
-          let liLine = line.replace(/^\d+\.\s*\*\*(.*?)\*\*:/, '');
-          if (liLine) {
-            const li = this._renderer2.createElement('li');
-            li.innerHTML = liLine.replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>');
-            this._renderer2.appendChild(ulElement, li);
+            createLiElementAndAppendToUlElement(liLine.replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>'));
           }
         }
       } else if (line.startsWith('* ') && line.endsWith(':')) {
-        if (ulElement) {
-          this._renderer2.appendChild(contentDiv, ulElement);
-          ulElement = null;
-        }
+        appendUlElement();
         const subsectionEndIndex = line.indexOf(':');
         currentSubsection = line.slice(2, subsectionEndIndex);
         const h3 = this._renderer2.createElement('h3');
@@ -255,81 +237,42 @@ export class MomComponent implements OnInit {
         this._renderer2.appendChild(contentDiv, h3);
         ulElement = this._renderer2.createElement('ul');
       } else if (line.startsWith('*') && line.endsWith('*')) {
-        if (ulElement) {
-          this._renderer2.appendChild(contentDiv, ulElement);
-          ulElement = null;
-        }
+        appendUlElement();
         currentSubsection = line.replace(/\*/g, '');
         const h3 = this._renderer2.createElement('h3');
         h3.textContent = currentSubsection;
         this._renderer2.appendChild(contentDiv, h3);
         ulElement = this._renderer2.createElement('ul');
-      } else if (line.startsWith('- ')) {
-        if (!ulElement) {
-          ulElement = this._renderer2.createElement('ul');
-        }
-        // Regular list items
-        const li = this._renderer2.createElement('li');
-        li.innerHTML = line.slice(2).replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>');
-        this._renderer2.appendChild(ulElement, li);
-      } else if (line.match(/^\d+\./)) {
-        if (!ulElement) {
-          ulElement = this._renderer2.createElement('ul');
-        }
-        // Numbered list items
-        const li = this._renderer2.createElement('li');
-        li.innerHTML = line.slice(line.indexOf('.') + 1).trim().replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>');
-        this._renderer2.appendChild(ulElement, li);
       } else if (line.startsWith('- **')) {
-        if (!ulElement) {
-          ulElement = this._renderer2.createElement('ul');
-        }
+        createUlElement();
         // List items with bold text
-        const li = this._renderer2.createElement('li');
-        li.innerHTML = line.slice(2).replace(/\*\*(.*?)\*\*/, '<span class="bold">$1</span>');
-        this._renderer2.appendChild(ulElement, li);
+        createLiElementAndAppendToUlElement(line.slice(2).replace(/\*\*(.*?)\*\*/, '<span class="bold">$1</span>'));
       } else if (line.startsWith('*') && line.endsWith(':*')) {
-        // Add previous ulElement if exists
-        if (ulElement) {
-          this._renderer2.appendChild(contentDiv, ulElement);
-          ulElement = null;
-        }
+        appendUlElement();
         // Subsections
         currentSubsection = line.slice(1, -1);
         const h3 = this._renderer2.createElement('h3');
         h3.textContent = currentSubsection;
         this._renderer2.appendChild(contentDiv, h3);
-      } else if (line.startsWith('- ')) {
-        if (!ulElement) {
-          ulElement = this._renderer2.createElement('ul');
-        }
+      } else if (line.startsWith('- ') || line.startsWith('+ ')) {
+        createUlElement();
         // Regular list items
-        const li = this._renderer2.createElement('li');
-        li.innerHTML = line.slice(2).replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>');
-        this._renderer2.appendChild(ulElement, li);
-      } else if (line.startsWith('+ ')) {
-        if (!ulElement) {
-          ulElement = this._renderer2.createElement('ul');
-        }
-        // Regular list items
-        const li = this._renderer2.createElement('li');
-        li.innerHTML = line.slice(2).replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>');
-        this._renderer2.appendChild(ulElement, li);
+        createLiElementAndAppendToUlElement(line.slice(2).replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>'));
       } else if (line.match(/^\d+\./)) {
-        if (!ulElement) {
-          ulElement = this._renderer2.createElement('ul');
-        }
+        createUlElement();
         // Numbered list items
-        const li = this._renderer2.createElement('li');
-        li.innerHTML = line.slice(line.indexOf('.') + 1).trim().replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>');
-        this._renderer2.appendChild(ulElement, li);
+        createLiElementAndAppendToUlElement(line.slice(line.indexOf('.') + 1).trim().replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>'));
+      } else if (line?.length > 0) {
+        const p = this._renderer2.createElement('p');
+        p.innerHTML = line;
+        this._renderer2.setStyle(p, 'white-space', 'pre-line');
+        this._renderer2.setStyle(p, 'font-size', 'initial');
+        this._renderer2.setStyle(p, 'line-height', 'normal');
+        this._renderer2.appendChild(contentDiv, p);
       }
-    });
-
-    // Append any remaining ulElement
-    if (ulElement) {
-      this._renderer2.appendChild(contentDiv, ulElement);
     }
+
+    appendUlElement();
   }
 
   get Highcharts() {

@@ -106,7 +106,7 @@
                                 </ng-container>
                             </div>
 
-                            <button class="app-button wide add-btn" type="button" tabindex="-1"
+                            <button *ngIf="hasEditAccess" class="app-button wide add-btn" type="button" tabindex="-1"
                                 (click)="addNewRequirement(categoriesIndex, catIndex)">
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="btn-icon">
                                     <g clip-path="url(#clip0_334_541)">

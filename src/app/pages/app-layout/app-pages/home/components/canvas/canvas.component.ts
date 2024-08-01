@@ -40,7 +40,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.projectName = localStorage.getItem(StorageKeys.PROJECT_NAME) ?? '';
     this.workspaceId = localStorage.getItem(StorageKeys.WORKSPACE_ID) ?? '';
     this.projectColor = localStorage.getItem(StorageKeys.PROJECT_COLOR) ?? 1;
-    
+
     this.projectDetailsSubscription = this._facadeService.projectService.projectDetails$.subscribe({
       next: (details: any) => {
         this.projectDetails = details;
@@ -127,17 +127,16 @@ export class CanvasComponent implements OnInit, OnDestroy {
         const categoriesIndex = this.categoryList.findIndex((cList: any) => event.data.category.title.toLowerCase().startsWith(cList.title.toLowerCase()));
         if (categoriesIndex > -1) {
           const categoryIndex = this.categoryList[categoriesIndex].list.findIndex((c: any) => c._id === event.data.category._id);
-          if (categoryIndex > -1)
+          if (categoryIndex > -1) {
             switch (event.data.action) {
               case 'requirement-update':
-              const requirementIndex = this.categoryList[categoriesIndex].list[categoryIndex].requirements.findIndex((r: any) => r._id === event.data.requirement._id);
-              if (requirementIndex > -1) {
-                this.categoryList[categoriesIndex].list[categoryIndex].requirements[requirementIndex].requirement = event.data.requirement.requirement;
-                this.rawCategoryList[categoriesIndex].list[categoryIndex].requirements[requirementIndex].requirement = event.data.requirement.requirement;
-              }
-              break;
+                const requirementIndex = this.categoryList[categoriesIndex].list[categoryIndex].requirements.findIndex((r: any) => r._id === event.data.requirement._id);
+                if (requirementIndex > -1) {
+                  this.categoryList[categoriesIndex].list[categoryIndex].requirements[requirementIndex].requirement = event.data.requirement.requirement;
+                  this.rawCategoryList[categoriesIndex].list[categoryIndex].requirements[requirementIndex].requirement = event.data.requirement.requirement;
+                }
+                break;
               case 'requirement-added':
-                this.categoryList[categoriesIndex].list[categoryIndex].requirements = this.categoryList[categoriesIndex].list[categoryIndex].requirements.filter((req: any) => req?._id);
                 this.categoryList[categoriesIndex].list[categoryIndex].requirements.push({ ...event.data.requirement, toggler: true, upsertMode: false });
                 this.rawCategoryList[categoriesIndex].list[categoryIndex].requirements.push(event.data.requirement);
                 break;
@@ -148,6 +147,15 @@ export class CanvasComponent implements OnInit, OnDestroy {
               default:
                 break;
             }
+          } else if (event.data.action === 'requirement-added') {
+            const newCatIndex = this.categoryList[categoriesIndex].list.findIndex((c: any) => c.title === event.data.category.title);
+            if (newCatIndex > -1) {
+              this.categoryList[categoriesIndex].list[newCatIndex]._id = event.data.category._id;
+              this.rawCategoryList[categoriesIndex].list[newCatIndex]._id = event.data.category._id;
+              this.categoryList[categoriesIndex].list[newCatIndex].requirements.push({ ...event.data.requirement, toggler: true, upsertMode: false });
+              this.rawCategoryList[categoriesIndex].list[newCatIndex].requirements.push(event.data.requirement);
+            }
+          }
         }
       }
     });
@@ -256,19 +264,46 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this._facadeService.canvasService.getCanvasData(bodyToSend).subscribe({
       next: (res: IResponse) => {
         if (res.code === "OK") {
-          this.rawCategoryList = res.data.list;
-          this.rawCategoryList = this.rawCategoryList.map(((category: any) => {
-            category.requirements = category.requirements.filter((requirement: any) => requirement.isApproved)
-              .map((requirement: any) => ({ ...requirement, toggler: true }));
-            return category;
-          }));
-          this.setCategories();
+          this.sortCategoryListByTemplateCategoryList(res.data.categoryList, res.data.list);
         }
       },
       error: (err: any) => {
         console.error('Error while getting category list', err.error);
       }
     });
+  }
+
+  sortCategoryListByTemplateCategoryList(templateCategoryList: Array<string>, categoryList: Array<any>): void {
+    try {
+      if (!Array.isArray(templateCategoryList) || !Array.isArray(categoryList) || !this.selectedTemplate?._id) {
+        return;
+      }
+
+      this.rawCategoryList = [];
+      let i = 1;
+      const templateId = categoryList[0]?.templateId ?? this.selectedTemplate._id;
+      for (const tcTitle of templateCategoryList) {
+        const index = categoryList.findIndex(({ title }) => title === tcTitle);
+        if (index > -1 && index < categoryList.length) {
+          const category: any = categoryList.splice(index, 1)[0];
+          category.requirements = category.requirements.filter((requirement: any) => requirement.isApproved).map((requirement: any) => ({ ...requirement, toggler: true }));
+          this.rawCategoryList.push({ ...category });
+        } else {
+          this.rawCategoryList.push({
+            _id: `new-category-${i++}`,
+            title: tcTitle,
+            requirements: [],
+            templateId: templateId,
+            major: 1,
+            minor: 1
+          });
+        }
+      }
+
+      this.setCategories();
+    } catch (error) {
+      console.log('Error while sorting category as per template', error);
+    }
   }
 
   onCancelMigrateVersion(): void {
@@ -478,7 +513,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
               }
             }
           }
-        })
+        });
       } else {
         this.categoryList?.[categoriesIndex]?.list[categoryIndex]?.requirements?.splice(requirementIndex, 1);
       }
@@ -510,15 +545,29 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
     /** create new requirement, if _id not exist */
     if (!requirement?._id) {
-      const bodyToSend = {
+      const bodyToSend: any = {
         categoryId: category._id,
         requirementContent: requirement.requirement
       };
 
+      if (bodyToSend.categoryId.startsWith('new-category-')) {
+        bodyToSend.category = {
+          title: category.title,
+          projectId: this.projectId,
+          templateId: category.templateId,
+          major: category.major,
+          minor: category.minor
+        };
+      }
+
       this._facadeService.categoryService.addRequirement(bodyToSend).subscribe({
         next: (res: IResponse) => {
-          if (res.code === "OK" && res.data.requirements?.at(-1)) {
+          if (res.code === "OK") {
             category.requirements = category.requirements.filter((req: any) => req?._id);
+            const rawCategory = this.rawCategoryList[this.editIndexes.categoriesIndex]?.list?.[this.editIndexes.categoryIndex];
+            if (rawCategory?._id) {
+              rawCategory.requirements = rawCategory.requirements.filter((req: any) => req?._id);
+            }
             // this.rawCategoryList[this.editIndexes.categoriesIndex].list[this.editIndexes.categoryIndex].requirements.push(res.data.requirements?.at(-1));
             // requirement._id = res.data.requirements?.at(-1)?._id;
             // requirement.upsertMode = false;
