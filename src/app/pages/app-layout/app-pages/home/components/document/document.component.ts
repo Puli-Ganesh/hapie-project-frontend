@@ -152,7 +152,7 @@ export class DocumentComponent implements OnInit, OnDestroy {
       if (line.match(titleAndPromptRegex)) {
         const titleAndPrompt = line.match(titleAndPromptRegex).at(0);
         const [categoryTitle] = titleAndPrompt.replaceAll(/^{|]}$/g, '').split(' - [');
-        const categoryIndex = categories.findIndex((category) => category.title === categoryTitle);
+        const categoryIndex = categories.findIndex((category) => category.title === categoryTitle.trim());
 
         if (categoryIndex > -1) {
           const category = categories[categoryIndex];
@@ -179,18 +179,17 @@ export class DocumentComponent implements OnInit, OnDestroy {
                 templateHtml += line.replace(titleAndPrompt, '');
               }
             } else if (category?.requirements?.length === 1) {
-              templateHtml += line.replace(titleAndPrompt, category.requirements[0].requirement || '');
+              templateHtml += line.replace(titleAndPrompt, `: ${category.requirements[0]?.requirement ?? ''}`.trim());
             } else {
               templateHtml += line.replace(titleAndPrompt, '');
             }
           } else if (line.startsWith('<p')) {
-
             if (category.requirements.length > 1) {
-              let requirementsHtmlStr = `<ol><li>${category.title.split('/').pop()}<ol>`;
+              let requirementsHtmlStr = `<ol>`;
               for (let i = 0; i < category.requirements.length; i++) {
                 requirementsHtmlStr += `<li>${category.requirements[i].requirement}</li>`;
               }
-              requirementsHtmlStr += '</ol></li></ol>';
+              requirementsHtmlStr += '</ol>';
               templateHtml += line.replace(titleAndPrompt, '');
               templateHtml += requirementsHtmlStr;
             } else {
