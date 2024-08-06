@@ -122,13 +122,18 @@
                 }
             }
 
-            &.selected,
             &:hover {
+                background-color: $light-primary;
+            }
+            
+            &.selected {
                 background-color: $light-primary;
 
                 .tbl-td {
-                    &.icons-tbl-td {
-                        color: $on-light-base;
+                    svg>rect {
+                        &:not(rect[stroke]) {
+                            fill: $primary;
+                        }
                     }
                 }
             }

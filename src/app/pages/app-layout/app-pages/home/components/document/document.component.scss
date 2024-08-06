@@ -517,11 +517,12 @@
         .btn {
             padding: 12px 36px;
             border-radius: 8px;
-            background-color: #D12335;
+            background-color: $primary;
             color: $base;
             outline: none;
             border: none;
             cursor: pointer;
+            box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
 
             .label {
                 color: inherit;

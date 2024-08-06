@@ -71,6 +71,13 @@
                     left: 7px;
                     border-radius: 6px;
                     cursor: pointer;
+
+                    &[ng-reflect-ng-switch="checked"] {
+                        svg>rect {
+                            fill: $primary;
+                            stroke: $primary;
+                        }
+                    }
                 }
 
                 &:hover {

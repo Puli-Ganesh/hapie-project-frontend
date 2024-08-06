@@ -214,16 +214,23 @@
                 .action-wrap {
                     vertical-align: middle;
 
-                    .export-link-btn-wrap {
-                        .copy-link-icon {
-                            display: block;
-                            width: 24px;
-                            height: 24px;
+                    .copy-link-icon {
+                        display: block;
+                        width: 24px;
+                        height: 24px;
+                        path {
+                            fill: $primary;
                         }
                     }
 
                     &:not(:last-of-type) {
                         margin-right: 12px;
+                    }
+
+                    svg {
+                        path {
+                            stroke: $primary;
+                        }
                     }
                 }
             }

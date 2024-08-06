@@ -118,9 +118,9 @@
 
                 .ai-message {
                     align-self: flex-start;
-                    background-color: $light-base;
+                    background-color: #ddccf9;
                     color: $on-light-base;
-                    border: 1px solid $border-color;
+                    // border: 1px solid $border-color;
                     border-radius: 10px 10px 10px 2px;
 
                     &.high {
@@ -142,7 +142,7 @@
                 .user-message {
                     align-self: flex-end;
                     color: #141C25;
-                    background-color: #C9DCFF;
+                    background-color: #ddccf9;
                     border-radius: 10px 10px 0px 10px;
                 }
 

@@ -277,6 +277,12 @@
                     .icon {
                         flex-basis: 20px;
                         height: 20px;
+
+                        &.fill {
+                            path {
+                                fill: $primary;
+                            }
+                        }
                     }
 
                     .label {

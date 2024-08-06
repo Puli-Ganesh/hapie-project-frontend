@@ -176,7 +176,7 @@
                 <button class="btn light" (click)="onCancelMigrateVersion()">
                     Not Now
                 </button>
-                <button class="btn bg-{{projectColor}}-1" [class.disabled]="isRequestAlive" [disabled]="isRequestAlive"
+                <button class="btn" [class.disabled]="isRequestAlive" [disabled]="isRequestAlive"
                     (click)="onConfirmMigrateVersion()">
                     Yes, Migrate
                 </button>

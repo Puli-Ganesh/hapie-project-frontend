@@ -7,13 +7,15 @@
     .header {
         .logo-wrap {
             text-align: center;
-            height: 40px;
             margin-bottom: 32px;
+            .icon {
+                width: 140px;
+            }
         }
 
         .title {
             margin: 0 0 32px;
-            color: $on-base;
+            color: $primary-fg;
             text-align: center;
             font-family: $raleway-600;
             font-size: 24px;
@@ -87,9 +89,9 @@
         }
 
         .forgot-pass-link {
-            color: $on-base-blue;
+            color: $primary-link;
             font-family: $raleway-600;
-            font-size: 12px;
+            font-size: 14px;
             font-style: normal;
             line-height: 20px;
             /* 166.667% */
