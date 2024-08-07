@@ -249,23 +249,15 @@ export class DashboardComponent implements OnInit {
         this.isCalendarRefreshing = false;
         if (res.code === "OK") {
           if (res.data?.eventList?.length > 0) {
-            if (this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')]) {
-              for (const newItem of res.data.eventList) {
-                const isExist = this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')].some((item: any) => item.platform == newItem.platform && item.meetingId == newItem.meetingId);
-                if (!isExist) {
-                  this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')].push({ ...newItem });
-                }
-              }
-            } else {
-              this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')] = res.data.eventList;
-            }
+            this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')] = res.data.eventList ?? [];
 
-            this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')]?.map((item) => {
+            this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')].map((item) => {
               item.startTime = moment(item.startDateTime);
               item.endTime = moment(item.endDateTime);
+              item.isEnded = item.endTime.isBefore(moment());
               return item;
             });
-            this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')]?.sort((a: any, b: any) => a.startTime - b.startTime);
+            this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')].sort((a: any, b: any) => a.startTime - b.startTime);
 
             const singleDateList = this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')]?.filter((item: any) => item.startTime.format('YYYY-MM-DD') === this.selectedDate.format('YYYY-MM-DD'));
             this.meetingListOfSelectedDate = singleDateList;
@@ -285,6 +277,7 @@ export class DashboardComponent implements OnInit {
       return;
     }
     this.isCalendarRefreshing = true;
+    this.meetingListOfSelectedDate = [];
 
     this.getCalendarData();
   }
@@ -294,7 +287,7 @@ export class DashboardComponent implements OnInit {
     if (selectedDate.isCurrentMonth) {
       this.selectedDate = this.calendar[weekIndex][dayIndex].date.clone();
       const singleDateList = this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')]?.filter((item: any) => item.startTime.format('YYYY-MM-DD') === this.selectedDate.format('YYYY-MM-DD'));
-      this.meetingListOfSelectedDate = singleDateList;
+      this.meetingListOfSelectedDate = singleDateList.map((event: any) => ({ ...event, isEnded: event.endTime.isBefore(moment()) }));
     } else if (selectedDate.isCurrentMonth === false && weekIndex === 0) {
       this.selectedDate = this.calendar[weekIndex][dayIndex].date.clone();
       this.meetingListOfSelectedDate = [];

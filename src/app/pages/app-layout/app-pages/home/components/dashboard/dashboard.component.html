@@ -91,7 +91,7 @@
 
                 <div class="calendar-event-details">
                     <div class="not-found-msg" *ngIf="!meetingListOfSelectedDate?.length">
-                        You don’t have any meetings.
+                        {{isCalendarRefreshing ? 'Calendar events refreshing, please wait...' : 'You don’t have any meetings.'}}
                     </div>
                     <div *ngIf="meetingListOfSelectedDate?.length" class="calendar-events-wrap">
                         <h2 class="today-date-title">today, {{toDayDate.format('MMM Do')}}</h2>
@@ -107,8 +107,8 @@
                                     <span>{{event?.startTime?.format('hh:mma')}} -
                                         {{event?.endTime?.format('hh:mma')}}</span>
                                 </div>
-                                <ng-container [ngSwitch]="event?.isCancelled ? 'Cancelled' : ''">
-                                    <div *ngSwitchCase="'Cancelled'" class="event-detail-wrap">
+                                <ng-container [ngSwitch]="(event?.isCancelled || event?.isEnded) ? 'by-status' : ''">
+                                    <div *ngSwitchCase="'by-status'" class="event-detail-wrap">
                                         <ng-container [ngSwitch]="event?.platform">
                                             <svg *ngSwitchCase="'teams'" class="icon" width="22" height="22"
                                                 viewBox="0 0 48 48" fill="none">
@@ -150,7 +150,8 @@
                                                 <path d="M43.25 11.8462V36.1537C43.25 36.8887 42.3925 37.2999 41.8237 36.8362L35.375 31.3937V16.6062L41.8237 11.1637C42.3925 10.6999 43.25 11.1112 43.25 11.8462Z" fill="#4CAF50"/>
                                             </svg>        
                                         </ng-container>
-                                        <span>&nbsp;Cancelled &nbsp;&nbsp;&nbsp;</span>
+                                        <span *ngIf="event?.isCancelled">&nbsp;Cancelled &nbsp;&nbsp;&nbsp;</span>
+                                        <span *ngIf="!event?.isCancelled && event?.isEnded">&nbsp;Ended &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                     </div>
 
                                     <a *ngSwitchDefault="" class="event-detail-wrap c-p" href="{{event?.meetingJoinUrl}}" target="_blank">

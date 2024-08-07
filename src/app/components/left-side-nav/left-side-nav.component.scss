@@ -813,24 +813,24 @@ $primary-hover: rgba(170, 196, 255, 0.25);
 
 /* chat-box.component.css */
 .chat-bot-icon {
-    border: 20px solid $primary;
+    padding: 6px;
     position: fixed;
     bottom: 17px;
     right: 22px;
-    cursor: pointer;
-    z-index: 9998;
+    display: flex;
+    width: fit-content;
+    aspect-ratio: 1 / 1;
     border-radius: 50%;
+    background-color: $primary;
+    cursor: pointer;
+    z-index: 99;
 
     .chat-button {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        cursor: pointer;
-        z-index: 9999;
-        padding: 0 7px;
         height: 30px;
-        -webkit-filter: invert(100%);
+        align-self: center;
+        cursor: pointer;
         filter: invert(100%);
+        -webkit-filter: invert(100%);
     }
 }
 
@@ -844,8 +844,7 @@ $primary-hover: rgba(170, 196, 255, 0.25);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     overflow: hidden;
-    flex-direction: column;
-    z-index: 9999;
+    z-index: 99;
 
     .chat-header {
         background-color: $primary;
@@ -854,8 +853,6 @@ $primary-hover: rgba(170, 196, 255, 0.25);
         display: flex;
         justify-content: space-between;
         align-items: center;
-
-
 
         .close-button {
             background: none;
@@ -867,37 +864,36 @@ $primary-hover: rgba(170, 196, 255, 0.25);
     }
 
     .chat-content {
-        flex: 1;
         display: flex;
         flex-direction: column;
         height: 400px;
         padding: 10px;
         overflow-y: auto;
-        background-color: #ffff;
+        background-color: $base;
         white-space: pre-line;
 
         .ai-message,
         .user-message {
+            margin: 5px 0;
+            padding: 10px;
+            max-width: 70%;
             font-size: 12px;
             font-style: normal;
             font-weight: 400;
+            line-height: normal;
             word-break: break-all;
             color: #141C25;
-            margin: 5px 0;
-            padding: 10px;
             border-radius: 5px;
-            max-width: 70%;
         }
 
         .ai-message {
             align-self: flex-start;
-            background-color: #F9FAFB;
-            border: 1px solid #E4E7EC
+            background-color: #ddccf9;
         }
 
         .user-message {
             align-self: flex-end;
-            background-color: #C9DCFF;
+            background-color: #ddccf9;
         }
 
         .jumping-dots {
@@ -946,15 +942,13 @@ $primary-hover: rgba(170, 196, 255, 0.25);
                 }
             }
         }
-
-
     }
 
     .chat-input {
         display: flex;
         border: 1px solid #ddd;
         border-radius: 25px;
-        background-color: #ffff;
+        background-color: $base;
         align-items: center;
         margin: 10px;
 
