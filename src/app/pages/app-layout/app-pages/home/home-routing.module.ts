@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-// import { ManageProjectComponent } from './components/manage-project/manage-project.component';
 import { NotFoundComponent } from '@src/app/components/not-found/not-found.component';
 import { CompareComponent } from './components/compare/compare.component';
 import { MediaComponent } from './components/media/media.component';
@@ -13,72 +12,62 @@ import { DocumentUploadComponent } from './components/document-upload/document-u
 import { ChatBotComponent } from './components/chat-bot/chat-bot.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { MomComponent } from './components/mom/mom.component';
+import { postfixPageTitle } from '@src/app/constants/appConfig';
 
 const routes: Routes = [
   {
     path: 'dashboard',
-    title: 'Dashboard | NexGen Force',
+    title: `Dashboard ${postfixPageTitle}`,
     component: DashboardComponent
   },
-  /** both routes for create project and edit project. */
-  // {
-  //   path: 'create',
-  //   title: 'Create Project | NexGen Force',
-  //   component: ManageProjectComponent
-  // },
-  // {
-  //   path: 'manage/:projectId',
-  //   title: 'Manage Project | NexGen Force',
-  //   component: ManageProjectComponent
-  // },
   {
     path: 'compare',
-    title: 'Compare | NexGen Force',
+    title: `Compare ${postfixPageTitle}`,
     component: CompareComponent
   },
   {
     path: 'media',
-    title: 'Media | NexGen Force',
+    title: `Media ${postfixPageTitle}`,
     component: MediaComponent
   },
   {
     path: 'media/:id',
-    title: 'Media - Transcript | NexGen Force',
+    title: `Media - Transcript ${postfixPageTitle}`,
     component: MediaTranscriptComponent
   },
   {
     path: 'canvas',
-    title: 'Canvas | NexGen Force',
+    title: `Canvas ${postfixPageTitle}`,
     component: CanvasComponent
   },
   {
     path: 'template',
-    title: 'Templates | NexGen Force',
+    title: `Templates ${postfixPageTitle}`,
     component: TemplateComponent
   },
   {
     path: 'documents',
-    title: 'Documents & Templates | NexGen Force',
+    title: `Documents ${postfixPageTitle}`,
     component: DocumentComponent
   },
   {
     path: 'document-upload',
-    title: 'Document Upload | NexGen Force',
+    title: `Document Upload ${postfixPageTitle}`,
     component: DocumentUploadComponent
   },
   {
     path: 'chat',
-    title: 'Chat Bot | NexGen Force',
+    title: `Chat Bot ${postfixPageTitle}`,
     component: ChatBotComponent
   },
   {
     path: 'mom',
-    title: 'MoM | NexGen Force',
+    title: `MoM ${postfixPageTitle}`,
     component: MomComponent
   },
   {
     path: '**',
-    title: 'Page Not Found | NexGen Force',
+    title: `Page Not Found ${postfixPageTitle}`,
     component: NotFoundComponent
   }
 ];

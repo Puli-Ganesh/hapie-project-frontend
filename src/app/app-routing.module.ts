@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AppLayoutComponent } from './components/app-layout/app-layout.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { postfixPageTitle } from './constants/appConfig';
 
 const routes: Routes = [
   {
@@ -35,7 +36,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    title: 'Page Not Found | NexGen Force',
+    title: `Page Not Found ${postfixPageTitle}`,
     component: NotFoundComponent
   }
 ];

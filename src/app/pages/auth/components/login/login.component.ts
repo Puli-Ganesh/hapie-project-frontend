@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { Router } from '@angular/router';
 import { ConfigService } from '@src/app/config/config.service';
 
-import { AppConfig } from '@src/app/constants/appConfig';
+import { _appTitle } from '@src/app/constants/appConfig';
 import { Regex } from '@src/app/constants/regex';
 import { Routes } from '@src/app/constants/routes';
 import { StorageKeys } from '@src/app/constants/storage-keys';
@@ -45,6 +45,8 @@ export class LoginComponent implements OnInit {
   }
 
   protected readonly appRoutes = Routes;
+  protected readonly appTitle = _appTitle;
+
   protected isRequestAlive: boolean = false;
 
   protected loginForm: FormGroup;

@@ -5,6 +5,7 @@ import { ProjectsComponent } from './app-pages/home/components/projects/projects
 import { CommonOutletComponent } from '@src/app/components/common-outlet/common-outlet.component';
 
 import { AuthGuard } from '@src/app/guards/auth.guard';
+import { postfixPageTitle } from '@src/app/constants/appConfig';
 
 const routes: Routes = [
   {
@@ -14,7 +15,7 @@ const routes: Routes = [
   },
   {
     path: 'projects',
-    title: 'Projects | NexGen Force',
+    title: `Projects ${postfixPageTitle}`,
     canActivate: [AuthGuard],
     canActivateChild: [AuthGuard],
     component: ProjectsComponent,

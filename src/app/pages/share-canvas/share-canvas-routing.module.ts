@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ShareCanvasLayoutComponent } from './components/share-canvas-layout/share-canvas-layout.component';
 import { ShareCanvasComponent } from './components/share-canvas/share-canvas.component';
 import { NotFoundComponent } from '@src/app/components/not-found/not-found.component';
+import { postfixPageTitle } from '@src/app/constants/appConfig';
 
 const routes: Routes = [
   {
@@ -12,12 +13,12 @@ const routes: Routes = [
       {
         path: ':token',
         pathMatch: 'full',
-        title: 'NexGen Force | Share Canvas',
+        title: `Share Canvas ${postfixPageTitle}`,
         component: ShareCanvasComponent
       },
       {
         path: '**',
-        title: 'NexGen Force | Page Not Found',
+        title: `Page Not Found ${postfixPageTitle}`,
         component: NotFoundComponent
       }
     ]

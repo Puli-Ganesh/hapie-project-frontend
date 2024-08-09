@@ -12,6 +12,7 @@ import { IResponse } from '@src/interfaces/response.interface';
 import { Permissions } from '@src/app/constants/permissions';
 import { Location } from '@angular/common';
 import { Roles } from '@src/app/constants/roles';
+import { _appTitle } from '@src/app/constants/appConfig';
 
 
 @Component({
@@ -52,6 +53,7 @@ export class MediaTranscriptComponent implements OnInit, OnDestroy {
 
   protected readonly appRoutes = Routes;
   protected readonly userRoles = Roles;
+  protected readonly appTitle = _appTitle;
   protected isRequestAlive: boolean = false;
 
   // protected projectId: string = '';
@@ -244,9 +246,9 @@ export class MediaTranscriptComponent implements OnInit, OnDestroy {
       });
 
       const docx = new Document({
-        creator: "NexGen Force",
-        title: "NexGen Force Report",
-        description: "NexGen Force Report",
+        creator: `${this.appTitle}`,
+        title: `${this.appTitle} Report`,
+        description: `${this.appTitle} Report`,
         styles: {
           paragraphStyles: [
             {

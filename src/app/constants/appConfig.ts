@@ -8,3 +8,6 @@ export class AppConfig {
 	ckEditorUploadUrl: string = '';
 	ckEditorLicenseKey: string = '';
 }
+
+export const postfixPageTitle = '| Hapie';
+export const _appTitle = 'Hapie';

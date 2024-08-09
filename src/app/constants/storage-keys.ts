@@ -1,18 +1,18 @@
 export class StorageKeys {
-	static readonly USER_TOKEN = 'nexGen.token';
-	static readonly USER_TOKEN_EXPIRES_AT = 'nexGen.tokenExpiry';
-	static readonly USER_INFORMATION = 'nexGen.user';
-	static readonly PROJECT_ID = 'nexGen.projectId';
-	static readonly PROJECT_NAME = 'nexGen.projectName';
-	static readonly PROJECT_COLOR = 'nexGen.projectColor';
-	static readonly WORKSPACE_ID = 'nexGen.workspaceId';
-	static readonly WORKSPACE_NAME = 'nexGen.workspaceName';
-	static readonly WORKFLOW_ID = 'nexGen.workflowId';
+	static readonly USER_TOKEN = 'hapie.token';
+	static readonly USER_TOKEN_EXPIRES_AT = 'hapie.tokenExpiry';
+	static readonly USER_INFORMATION = 'hapie.user';
+	static readonly PROJECT_ID = 'hapie.projectId';
+	static readonly PROJECT_NAME = 'hapie.projectName';
+	static readonly PROJECT_COLOR = 'hapie.projectColor';
+	static readonly WORKSPACE_ID = 'hapie.workspaceId';
+	static readonly WORKSPACE_NAME = 'hapie.workspaceName';
+	static readonly WORKFLOW_ID = 'hapie.workflowId';
 
 	/** sessionStorage */
 	static readonly SST = {
-		PROJECT_VIEW_TYPE: 'nexGen.projectViewType',
-		WORKFLOW_VIEW_TYPE: 'nexGen.workflowViewType',
-		PROJECT_ID_FOR_MICROSOFT: 'nexGen.projectIdForMicrosoft',
+		PROJECT_VIEW_TYPE: 'hapie.projectViewType',
+		WORKFLOW_VIEW_TYPE: 'hapie.workflowViewType',
+		PROJECT_ID_FOR_MICROSOFT: 'hapie.projectIdForMicrosoft',
 	};
 }

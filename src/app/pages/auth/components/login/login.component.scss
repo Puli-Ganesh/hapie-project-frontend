@@ -22,14 +22,7 @@
             font-style: normal;
             line-height: 36px;
             /* 150% */
-
-            .blue {
-                color: $on-base-blue;
-                font-family: inherit;
-                font-size: inherit;
-                font-style: inherit;
-                line-height: inherit;
-            }
+            text-transform: capitalize;
         }
     }
 

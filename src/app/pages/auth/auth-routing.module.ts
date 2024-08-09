@@ -7,6 +7,7 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
 import { SetupProfileComponent } from './components/setup-profile/setup-profile.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { AuthRedirectComponent } from './components/auth-redirect/auth-redirect.component';
+import { postfixPageTitle } from '@src/app/constants/appConfig';
 
 const routes: Routes = [
   {
@@ -15,37 +16,37 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        title: 'Redirect | NexGex Force',
+        title: `Redirect ${postfixPageTitle}`,
         component: AuthRedirectComponent,
       },
       {
         path: 'login',
-        title: 'Sign in | NexGen Force',
+        title: `Sign in ${postfixPageTitle}`,
         component: LoginComponent
       },
       {
         path: 'microsoft-response',
-        title: 'Sign in | NexGen Force',
+        title: `Sign in ${postfixPageTitle}`,
         component: MicrosoftResponseComponent
       },
       {
         path: 'google-login/:code/:state',
-        title: 'Sign in | NexGen Force',
+        title: `Sign in ${postfixPageTitle}`,
         component: MicrosoftResponseComponent
       },
       {
         path: 'forgot-password',
-        title: 'Forgot Password | NexGen Force',
+        title: `Forgot Password ${postfixPageTitle}`,
         component: ForgotPasswordComponent
       },
       {
         path: 'reset-password/:token',
-        title: 'Reset Password | NexGen Force',
+        title: `Reset Password ${postfixPageTitle}`,
         component: ResetPasswordComponent
       },
       {
         path: 'setup-profile/:token',
-        title: 'Profile Setup | NexGen Force',
+        title: `Profile Setup ${postfixPageTitle}`,
         component: SetupProfileComponent
       }
     ]

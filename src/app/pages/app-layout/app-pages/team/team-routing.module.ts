@@ -3,16 +3,17 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { TeamComponent } from './components/team/team.component';
 import { NotFoundComponent } from '@src/app/components/not-found/not-found.component';
+import { postfixPageTitle } from '@src/app/constants/appConfig';
 
 const routes: Routes = [
   {
     path: '',
-    title: 'NexGen Force | Team',
+    title: `Team ${postfixPageTitle}`,
     component: TeamComponent
   },
   {
     path: '**',
-    title: 'Page Not Found | NexGen Force',
+    title: `Page Not Found ${postfixPageTitle}`,
     component: NotFoundComponent
   }
 ];
