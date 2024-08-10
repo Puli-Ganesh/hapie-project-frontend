@@ -232,8 +232,10 @@ export class DashboardComponent implements OnInit {
     this.generateCalendar();
   }
 
+  protected isCalendarRequestAlive: boolean = false;
   getCalendarData() {
-    // if (!this.calendar?.length || !this.isMicrosoftUser) { return; }
+    if (this.isCalendarRequestAlive) { return; }
+
     if (!this.calendar?.length) {
       this.isCalendarRefreshing = false;
       return;
@@ -244,8 +246,10 @@ export class DashboardComponent implements OnInit {
       endDate: moment(this.currentDate).endOf('month').startOf('day').format()
     };
 
+    this.isCalendarRequestAlive = true;
     this._facadeService.dashboardService.getCalendarData(body).subscribe({
       next: (res: IResponse) => {
+        this.isCalendarRequestAlive = false;
         this.isCalendarRefreshing = false;
         if (res.code === "OK") {
           if (res.data?.eventList?.length > 0) {
@@ -265,6 +269,7 @@ export class DashboardComponent implements OnInit {
         }
       },
       error: (err: any) => {
+        this.isCalendarRequestAlive = false;
         this.isCalendarRefreshing = false;
         console.log('Error while getting calendar data', err);
       }
@@ -283,6 +288,8 @@ export class DashboardComponent implements OnInit {
   }
 
   onSelectDate(weekIndex: number, dayIndex: number) {
+    if (this.isCalendarRequestAlive) { return; }
+
     const selectedDate = this.calendar[weekIndex][dayIndex];
     if (selectedDate.isCurrentMonth) {
       this.selectedDate = this.calendar[weekIndex][dayIndex].date.clone();
@@ -305,7 +312,7 @@ export class DashboardComponent implements OnInit {
     }
 
     if (!data?.jamId) {
-      if (data?.isCancelled) {
+      if (data?.isCancelled || data?.isEnded) {
         return;
       }
 
