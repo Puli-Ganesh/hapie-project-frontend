@@ -421,13 +421,15 @@ export class LeftSideNavComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         if (res.code == 'OK') {
           this.aiLoader = false;
-          if (res.data?.trim?.()?.startsWith?.(this.projectDetails._id)) {
+          let { response, language } = res.data;
+          response = response?.trim();
+          if (response?.startsWith?.(this.projectDetails._id)) {
             this.chats.push({
               'ai': 'There are no data for ai system.'
             });
           } else {
             this.chats.push({
-              'ai': res.data
+              'ai': response
             });
           }
         }

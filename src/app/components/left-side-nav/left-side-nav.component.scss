@@ -973,13 +973,13 @@ $primary-hover: rgba(170, 196, 255, 0.25);
 
             svg {
                 display: block;
-                fill: $primary;
-                cursor: pointer;
                 height: 34px;
                 width: 34px;
+                fill: $primary;
+                cursor: pointer;
 
                 &:hover {
-                    fill: #C9DCFF;
+                    fill: $light-primary;
                 }
             }
         }
