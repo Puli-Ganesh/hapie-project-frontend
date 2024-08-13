@@ -54,39 +54,55 @@
                     </div>
 
                     <div class="right-action-wrap">
+                        <div class="summary-toggler-wrap">
+                            <label for="summary-toggler" class="switch-label" [class.active]="!summaryToggler">Summary</label>
+                            <button id="summary-toggler" class="toggler-switch" (click)="onSummarySwitch()">
+                                <span class="t-s-indicator" [class.right]="summaryToggler"></span>
+                            </button>
+                            <label for="summary-toggler" class="switch-label" [class.active]="summaryToggler">Short Summary</label>
+                        </div>
                         <button class="app-button primary" (click)="goToRecordingListView()">
                             <span class="btn-label">Go Back</span>
                         </button>
                     </div>
                 </div>
 
-                <div class="pills-wrap">
-                    <div class="pill-wrap" *ngFor="let tab of _tabList;" [class.selected]="selectedTab === tab" (click)="onSelectTab(tab)">
-                        {{ tab }}
-                    </div>
-                </div>
-
-                <ng-container [ngSwitch]="selectedTab">
-                    <ng-container *ngSwitchCase="_tabList[0]">
-                        <div id="meeting-summary"></div>
-                    </ng-container>
-                    <ng-container *ngSwitchCase="_tabList[1]">
-                        <div id="meeting-actions"></div>
-                    </ng-container>
-                    <ng-container *ngSwitchCase="_tabList[2]">
-                        <div class="sentiment-analysis-wrap">
-                            <div id="SentimentAnalysisSemiCircleDonutChart" class="sentiment-analysis-semi-circle-donut-chart-wrap"></div>
-                            <div *ngIf="momData?.sentimentAnalysis?.pointName" class="selected-point-wrap">
-                                <h2 class="point-title">{{momData?.sentimentAnalysis?.pointName}} Points</h2>
-                                <ul class="points-wrap" *ngIf="momData.sentimentAnalysis[momData.sentimentAnalysis?.selectFrom]?.length">
-                                    <li class="point" *ngFor="let point of momData.sentimentAnalysis[momData.sentimentAnalysis.selectFrom]">
-                                        {{point}}
-                                    </li>
-                                </ul>
+                <ng-container [ngSwitch]="!summaryToggler ? 'full' : 'short'">
+                    <ng-container *ngSwitchCase="'full'">
+                        <div class="pills-wrap">
+                            <div class="pill-wrap" *ngFor="let tab of _tabList;" [class.selected]="selectedTab === tab" (click)="onSelectTab(tab)">
+                                {{ tab }}
                             </div>
                         </div>
+        
+                        <ng-container [ngSwitch]="selectedTab">
+                            <ng-container *ngSwitchCase="_tabList[0]">
+                                <div id="meeting-summary"></div>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="_tabList[1]">
+                                <div id="meeting-actions"></div>
+                            </ng-container>
+                            <ng-container *ngSwitchCase="_tabList[2]">
+                                <div class="sentiment-analysis-wrap">
+                                    <div id="SentimentAnalysisSemiCircleDonutChart" class="sentiment-analysis-semi-circle-donut-chart-wrap"></div>
+                                    <div *ngIf="momData?.sentimentAnalysis?.pointName" class="selected-point-wrap">
+                                        <h2 class="point-title">{{momData?.sentimentAnalysis?.pointName}} Points</h2>
+                                        <ul class="points-wrap" *ngIf="momData.sentimentAnalysis[momData.sentimentAnalysis?.selectFrom]?.length">
+                                            <li class="point" *ngFor="let point of momData.sentimentAnalysis[momData.sentimentAnalysis.selectFrom]">
+                                                {{point}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+
+                    <ng-container *ngSwitchCase="'short'">
+                        <div id="meeting-short-summary">meeting-short-summary</div>
                     </ng-container>
                 </ng-container>
+
             </ng-container>
         </ng-container>
     </div>

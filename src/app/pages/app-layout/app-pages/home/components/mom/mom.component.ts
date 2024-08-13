@@ -45,6 +45,7 @@ export class MomComponent implements OnInit {
   protected selectedSentimentAnalysis!: any;
   protected momData!: any;
   protected _moment = moment;
+  protected summaryToggler: boolean = false;
 
 
   ngOnInit(): void {
@@ -86,6 +87,7 @@ export class MomComponent implements OnInit {
     this.momData = null;
     this.selectedTab = '';
     this.selectedSentimentAnalysis = null;
+    this.summaryToggler = false;
   }
 
   onSelectTab(tab: string) {
@@ -106,7 +108,7 @@ export class MomComponent implements OnInit {
         case this._tabList[2]:
           setTimeout(() => {
             this.setSentimentAnalysisSemiCircleDonutChart();
-          }, 10);;
+          }, 10);
           break;
       }
     }
@@ -120,8 +122,8 @@ export class MomComponent implements OnInit {
       this._facadeService.recordingService.getMomData(this.selectedRecording?._id).subscribe({
         next: (res: IResponse) => {
           this.momData = res.data;
-          console.log('momSummary response \n\n', this.momData.momSummary);
-          console.log('momActionItems response \n\n', this.momData.momActionItems);
+          // console.log('momSummary response \n\n', this.momData.momSummary);
+          // console.log('momActionItems response \n\n', this.momData.momActionItems);
           resolve();
         },
         error: (error: any) => {
@@ -130,6 +132,35 @@ export class MomComponent implements OnInit {
         }
       });
     });
+  }
+
+  onSummarySwitch(): void {
+    this.summaryToggler = !this.summaryToggler;
+
+    if (this.summaryToggler) {
+      setTimeout(() => {
+        const defaultMessage = 'The MOM short summary could not be found.';
+        this.generateHTMLFromString('meeting-short-summary', this.momData.momShortSummary || defaultMessage);
+      }, 10);
+    } else {
+      switch (this.selectedTab) {
+        case this._tabList[0]:
+          setTimeout(() => {
+            this.generateHTMLFromString('meeting-summary', this.momData.momSummary);
+          }, 10);
+          break;
+        case this._tabList[1]:
+          setTimeout(() => {
+            this.generateHTMLFromString('meeting-actions', this.momData.momActionItems);
+          }, 10);
+          break;
+        case this._tabList[2]:
+          setTimeout(() => {
+            this.setSentimentAnalysisSemiCircleDonutChart();
+          }, 10);
+          break;
+      }
+    }
   }
 
   generateHTMLFromString(elementId: string, input: string) {
