@@ -84,6 +84,16 @@
 		width: 100%;
 	}
 
+	&.icon-only {
+		padding: 3px 8px;
+
+		.btn-icon {
+			margin: 0;
+			width: 24px;
+			height: 24px;
+		}
+	}
+
 	.btn-icon {
 		flex-shrink: 0;
 		width: 16px;

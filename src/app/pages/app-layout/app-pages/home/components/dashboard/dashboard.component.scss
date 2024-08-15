@@ -4,18 +4,16 @@
 .app-container {
     .app-content {
         .chart-and-calendar-wrap {
-            margin: 0 0 24px;
-            display: flex;
-            flex-flow: row wrap;
-            gap: 32px;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 32px 16px;
 
-            .dashboard-body-wrap {
+            .sentiment-by-rating-chart-container {
                 width: 100%;
-                flex: 1 0 550px;
 
                 .sentiment-by-rating-chart-wrap {
                     margin: 0 auto;
-                    padding: 24px;
+                    padding: 16px;
                     width: 100%;
                     max-width: 1248px;
                     // aspect-ratio: 16/9;
@@ -26,14 +24,13 @@
             }
 
             .calendar-container {
-                max-width: 300px;
-                flex: 1 0 300px;
+                width: 100%;
 
                 .calendar-wrap {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    width: 100%;
+                    width: 300px;
 
                     .calendar-header {
                         margin: 0 0 12px;
@@ -46,7 +43,7 @@
                             gap: 16px;
 
                             .calendar-month {
-                                font-size: 24px;
+                                font-size: 22px;
                                 font-weight: 600;
                                 color: $on-base;
                                 text-transform: capitalize;
@@ -54,13 +51,7 @@
 
                             .app-button {
                                 &.refresh-btn {
-                                    padding: 3px 8px;
-
-                                    
                                     .btn-icon {
-                                        margin: 0;
-                                        width: 24px;
-                                        height: 24px;
                                         color: $base;
 
                                         &.refreshing {
@@ -70,10 +61,11 @@
 
                                     @keyframes rotate {
                                         from {
-                                          transform: rotate(0deg); /* Start from 0 degrees */
+                                            transform: rotate(0deg); /* Start from 0 degrees */
                                         }
+
                                         to {
-                                          transform: rotate(360deg); /* Rotate to 360 degrees */
+                                            transform: rotate(360deg); /* Rotate to 360 degrees */
                                         }
                                     }
                                 }
@@ -168,25 +160,27 @@
                 }
 
                 .divider {
-                    margin: 16px 0px;
+                    margin: 12px 0px 8px;
                     height: 1px;
                     background-color: $border-color;
                 }
 
-                .calendar-event-details {
+                .today-date-title {
+                    margin: 0 0 12px;
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: $primary;
+                    text-transform: capitalize;
+                }
 
+                .calendar-event-details {
                     .calendar-events-wrap {
+                        padding: 3px 3px;
                         display: flex;
                         flex-flow: column nowrap;
                         gap: 16px;
-
-                        .today-date-title {
-                            margin: 0;
-                            font-size: 16px;
-                            font-weight: 600;
-                            color: $primary;
-                            text-transform: capitalize;
-                        }
+                        max-height: 40vh;
+                        overflow: auto;
 
                         .calendar-event {
                             border-radius: 12px;
@@ -201,6 +195,7 @@
                                 justify-content: space-between;
 
                                 .event-detail-wrap {
+                                    min-width: 104px;
                                     display: flex;
                                     flex-flow: row nowrap;
                                     gap: 6px;
@@ -312,8 +307,155 @@
                     display: flex;
                     align-items: center;
 
+                    &.justify-content-end {
+                        justify-content: flex-end;
+                    }
+
                     &.gap-10 {
                         gap: 10px;
+                    }
+                }
+
+                .schedule-meeting-form-wrap {
+                    border: 1px solid $border-color;
+                    padding: 8px;
+                    border-radius: 4px;
+
+                    .sm-title {
+                        margin: 0 0 16px;
+                        color: $on-base;
+                        font-size: 22px;
+                        font-style: normal;
+                        font-weight: 600;
+                        line-height: normal;
+                        text-transform: capitalize;
+                        word-break: break-all;
+                        @include elipses-1();
+                    }
+
+                    .schedule-meeting-form {
+                        display: grid;
+                        grid-template-columns: 1fr;
+                        gap: 16px 0;
+
+                        .input-container {
+                            .input-wrap {
+                                display: flex;
+                                flex-direction: column;
+                                gap: 2px 0;
+
+                                .label {
+                                    color: $on-light-base;
+                                    font-family: $base-font-family;
+                                    font-size: 12px;
+                                    font-style: normal;
+                                    font-weight: 400;
+                                    line-height: normal;
+                                    text-transform: capitalize;
+                                }
+
+                                .input {
+                                    padding: 8px 8px;
+                                    color: $on-light-base;
+                                    background-color: $light-base;
+                                    font-family: $base-font-family;
+                                    font-size: 13px;
+                                    font-style: normal;
+                                    font-weight: 400;
+                                    line-height: normal;
+                                    border-radius: 4px;
+                                    border: 1px solid $border-color;
+
+                                    &.multiline {
+                                        height: 75px;
+                                        outline: 0;
+                                        resize: none;
+                                    }
+
+                                    &:has(.ng-invalid) {
+                                        border-color: $error;
+                                    }
+
+                                    &::placeholder,
+                                    &::-webkit-input-placeholder {
+                                        color: rgba(10, 9, 8, 0.40);
+                                    }
+                                }
+                            }
+
+                            .err-wrap {
+                                margin-top: 2px;
+                                display: flex;
+                                flex-direction: column;
+
+                                .err-msg {
+                                    margin: 0;
+                                    color: $error;
+                                    font-family: $raleway-500;
+                                    font-size: 12px;
+                                    font-style: normal;
+                                    line-height: 18px;
+
+                                    &.multi-line {
+                                        white-space: pre;
+                                        line-height: normal;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@media only screen and (min-width: 870px) and (max-width: 1024px) {
+    .app-container {
+        .app-content {
+            .chart-and-calendar-wrap {
+                grid-template-columns: 1fr;
+
+                .calendar-container {
+                    &.calendar {
+                        display: grid;
+                        max-height: 100%;
+                        grid-template-columns: auto auto;
+                        gap: 0 32px;
+                        overflow: auto;
+
+                        .divider {
+                            display: none;
+                        }
+
+                        .calendar-event-details {
+                            padding: 0 3px 2px;
+
+                            .calendar-events-wrap {
+                                max-height: 290px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 869px) {
+    .app-container {
+        .app-content {
+            .chart-and-calendar-wrap {
+                grid-template-columns: 1fr;
+
+                .calendar-container {
+                    &.calendar {
+                        display: grid;
+                        max-height: 100%;
+                        overflow: auto;
+                        grid-template-columns: 1fr;
+                        gap: 0;
                     }
                 }
             }

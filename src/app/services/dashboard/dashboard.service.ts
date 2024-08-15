@@ -21,7 +21,10 @@ export class DashboardService {
   }
 
   getCalendarData(body: { startDate: string, endDate: string }): Observable<IResponse> {
-
     return this._httpClientService.post(body, `${this.endPoint}/get-calendar-data`);
+  }
+
+  createMeeting(body: any): Observable<IResponse> {
+    return this._httpClientService.post(body, `${this.endPoint}/create-meeting`);
   }
 }

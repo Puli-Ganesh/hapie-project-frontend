@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 
 import { Routes } from '@src/app/constants/routes';
 import { FacadeService } from '@src/app/services/facade.service';
 import { IResponse } from '@src/interfaces/response.interface';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Regex } from '@src/app/constants/regex';
 
 
 type TCalendarPlatform = 'teams' | 'zoom' | 'meet';
@@ -18,6 +20,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private _facadeService: FacadeService,
+    private _fb: FormBuilder,
   ) {
     this.projectDetailsSubscription = this._facadeService.projectService.projectDetails$.subscribe({
       next: (details: any) => {
@@ -28,7 +31,17 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    this.isMicrosoftUser = this._facadeService.appService.isMicrosoftUser;
+    this.scheduleMeetingForm = this._fb.group({
+      platform: ['', [Validators.required]],
+      subject: ['', [Validators.required]],
+      description: [''],
+      attendees: [''],
+      date: ['', [Validators.required, this.minTodayDateValidator]],
+      startTime: ['', [Validators.required]],
+      duration: [null, [Validators.required, Validators.min(1)]]
+    });
+
+    // this.isMicrosoftUser = this._facadeService.appService.isMicrosoftUser;
   }
 
   protected readonly appRoutes = Routes;
@@ -39,13 +52,17 @@ export class DashboardComponent implements OnInit {
     categories: []
   };
 
-  protected isMicrosoftUser: boolean = false;
+  // protected isMicrosoftUser: boolean = false;
   protected calendar: Array<Array<{ day: number, date: moment.Moment, isCurrentMonth: boolean }>> = [];
   protected currentDate!: moment.Moment;
   protected toDayDate: moment.Moment = moment();
   protected selectedDate!: moment.Moment;
   protected calendarMeetingDetailsObj: { [key: string]: Array<any> } = {};
   protected meetingListOfSelectedDate!: any;
+
+  protected isEventAdding: boolean = false;
+  protected scheduleMeetingForm: FormGroup;
+  protected platformList: Array<string> = [];
 
 
   ngOnInit(): void {
@@ -58,6 +75,9 @@ export class DashboardComponent implements OnInit {
     this.selectedDate = this.currentDate.clone();
     this.generateCalendar();
   }
+
+  @ViewChild('sentimentByRatingChart') sentimentByRatingChart!: ElementRef;
+
 
   getData() {
     if (!this.projectDetails?._id) {
@@ -81,6 +101,8 @@ export class DashboardComponent implements OnInit {
     return window.Highcharts;
   }
 
+  /** sentiment By Rating Chart */
+  protected SRChart: any;
   setSentimentByRatingChat(data: Array<any>): void {
     this.sentimentByRatingChartData.categories = [];
     this.sentimentByRatingChartData.series = [{
@@ -103,7 +125,7 @@ export class DashboardComponent implements OnInit {
       this.sentimentByRatingChartData.series[2].data.push(recording?.sentimentAnalysis?.positivePercentage ?? 0);
     }
 
-    this.Highcharts.chart('sentimentByRatingChart', {
+    this.SRChart = this.Highcharts.chart('sentimentByRatingChart', {
       chart: {
         type: 'column'
       },
@@ -157,6 +179,20 @@ export class DashboardComponent implements OnInit {
       },
       series: this.sentimentByRatingChartData.series
     });
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(e: any) {
+    if (this.SRChart) {
+      /** 1216 max width for Highcharts adjust on resize */
+      const chartWidth = this.sentimentByRatingChart.nativeElement.clientWidth - 32;
+      if (e.target.innerWidth <= 1024) {
+        this.SRChart.setSize(Math.min(1216, chartWidth), null);
+      } else {
+        const calendarOffset = (this.sentimentByRatingChart.nativeElement.querySelector('.calendar-container')?.clientWidth ?? 0) + 16;
+        this.SRChart.setSize(Math.min(1216, (chartWidth - calendarOffset)), null);
+      }
+    }
   }
 
   generateCalendar(): void {
@@ -252,6 +288,8 @@ export class DashboardComponent implements OnInit {
         this.isCalendarRequestAlive = false;
         this.isCalendarRefreshing = false;
         if (res.code === "OK") {
+          this.platformList = res.data?.platformList ?? [];
+
           if (res.data?.eventList?.length > 0) {
             this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')] = res.data.eventList ?? [];
 
@@ -348,6 +386,124 @@ export class DashboardComponent implements OnInit {
         }
       });
     }
+  }
+
+  get smfSubject(): AbstractControl {
+    return this.scheduleMeetingForm.get('subject') as FormControl;
+  }
+
+  get smfDate(): AbstractControl {
+    return this.scheduleMeetingForm.get('date') as FormControl;
+  }
+
+  get smfStartTime(): AbstractControl {
+    return this.scheduleMeetingForm.get('startTime') as FormControl;
+  }
+
+  get smfDuration(): AbstractControl {
+    return this.scheduleMeetingForm.get('duration') as FormControl;
+  }
+
+  get smfAttendees(): AbstractControl {
+    return this.scheduleMeetingForm.get('attendees') as FormControl;
+  }
+
+  onChangeMeetingPlatform(event: string): void {
+    this.scheduleMeetingForm.get('platform')?.patchValue(event);
+  }
+
+  emailListValidator() {
+    const emails = this.smfAttendees.value ?? '';
+    const emailList = emails.split(',').filter(Boolean);
+    const invalidEmails: string[] = [];
+
+    emailList.forEach((email: string) => {
+      email = email.trim();
+      if (email.length > 0 && !(Regex.EMAIL).test(email)) {
+        invalidEmails.push(email);
+      }
+    });
+
+    if (invalidEmails.length > 0) {
+      this.smfAttendees.setErrors({ invalidEmails: invalidEmails });
+    } else {
+      this.smfAttendees.setErrors(null);
+    }
+  }
+
+  minTodayDateValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    const inputDate = moment(control.value);
+    /** set time T00:00:00:0000 */
+    const today = moment().startOf('day');
+
+    return (!control.value || !inputDate.isValid() || inputDate.isBefore(today)) ? { 'minTodayDate': true } : null;
+  }
+
+  onAddMeetingToSchedule(): void {
+    if (this.isEventAdding) {
+      return;
+    }
+
+    this.isEventAdding = true;
+  }
+
+  onCancelMeetingToSchedule(): void {
+    if (!this.isEventAdding) {
+      return;
+    }
+
+    this.isEventAdding = false;
+    this.scheduleMeetingForm.reset({ platform: '', subject: '', description: '', attendees: '', date: '', startTime: '', duration: null });
+  }
+
+  protected isCreateMeetingRequestAlive: boolean = false;
+  onCreateMeeting(): void {
+    this.emailListValidator();
+    if (this.isCreateMeetingRequestAlive || this.scheduleMeetingForm.invalid) {
+      this.scheduleMeetingForm.markAllAsTouched();
+      return;
+    }
+
+    const body = {
+      platform: this.scheduleMeetingForm.value.platform,
+      subject: this.scheduleMeetingForm.value.subject,
+      description: this.scheduleMeetingForm.value.description,
+      date: this.scheduleMeetingForm.value.date,
+      startTime: this.scheduleMeetingForm.value.startTime,
+      duration: this.scheduleMeetingForm.value.duration,
+      attendees: this.scheduleMeetingForm.value.attendees.split(',').map((email: string) => email.trim()).filter(Boolean)
+    };
+
+    this.isCreateMeetingRequestAlive = true;
+    this._facadeService.dashboardService.createMeeting(body).subscribe({
+      next: (res: any) => {
+        this.isCreateMeetingRequestAlive = false;
+        if (res.code === 'CREATED') {
+          const response = res.data;
+          if (moment(response.date).format('YYYY_MM') === this.currentDate.format('YYYY_MM')) {
+            if (!this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')]) {
+              this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')] = [];
+            }
+
+            response.startTime = moment(response.startDateTime);
+            response.endTime = moment(response.endDateTime);
+            response.isEnded = response.endTime.isBefore(moment());
+            this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')].push(response);
+            this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')].sort((a: any, b: any) => a.startTime - b.startTime);
+
+            const singleDateList = this.calendarMeetingDetailsObj[this.currentDate.format('YYYY_MM')]?.filter((item: any) => item.startTime.format('YYYY-MM-DD') === this.selectedDate.format('YYYY-MM-DD'));
+            this.meetingListOfSelectedDate = singleDateList;
+          }
+
+          this.onCancelMeetingToSchedule();
+        }
+      },
+      error: (err: any) => {
+        this.isCreateMeetingRequestAlive = false;
+        this._facadeService.appService.openToaster(err.error.message, 'danger');
+        console.log('Error while create meeting', err);
+      }
+    });
   }
 
   ngOnDestroy(): void {
