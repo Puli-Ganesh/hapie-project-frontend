@@ -470,6 +470,7 @@ export class DashboardComponent implements OnInit {
       description: this.scheduleMeetingForm.value.description,
       date: this.scheduleMeetingForm.value.date,
       startTime: this.scheduleMeetingForm.value.startTime,
+      dateTime: moment(`${this.scheduleMeetingForm.value.date}T${this.scheduleMeetingForm.value.startTime}`).toISOString(),
       duration: this.scheduleMeetingForm.value.duration,
       attendees: this.scheduleMeetingForm.value.attendees.split(',').map((email: string) => email.trim()).filter(Boolean)
     };
