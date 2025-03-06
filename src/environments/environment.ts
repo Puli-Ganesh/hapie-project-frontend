@@ -4,16 +4,19 @@
 
 import { Settings } from "src/interfaces/settings.interface";
 
+const isDev = false;
 const settings: Settings = {
-	apiProtocol: 'http',
-	apiHost: '192.168.29.2',
-	apiPort: 3000
+    apiProtocol: isDev ? 'http' : 'https',
+    apiHost: isDev ? '192.168.29.2' : 'app.hapie.ai',
+    apiPort: isDev ? 3000 : 0
 }
 
 export const environment = {
 	production: false,
 	settings
 };
+
+
 
 /*
  * For easier debugging in development mode, you can import the following file
