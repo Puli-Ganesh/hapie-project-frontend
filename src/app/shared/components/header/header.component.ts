@@ -39,28 +39,56 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userSubscription: Subscription;
   isNotifCenterOpen: boolean = false;
   isRequestAlive: boolean = false;
-  notificationList: Array<{
-    message: string
-    projectId: any
-    name: string
-    shareCanvasId: {
-      hasEditAccess: boolean
+  activeTab: string = 'general';
+  notificationList: Array<any> = [
+    {
+      title: 'A recent sign-in to your account was detected from an unknown location.',
+      message: '',
+      time: '8 min ago',
+      category: 'general',
+      icon: 'assets/images/notification_warning_icon.svg',
+      actions: [{ label: 'Review', type: 'primary' }],
+      status: 'unread'
+    },
+    {
+      title: '<strong><b>John Smith</b></strong> requested access to <strong><b>Project 1</b></strong>',
+      message: '',
+      time: '8 min ago',
+      category: 'requests',
+      icon: 'assets/images/notification_user_profile.svg',
+      actions: [{ label: 'Deny', type: 'secondary' }, { label: 'Approve', type: 'primary' }],
+      status: 'unread'
+    },
+    {
+      title: '<strong><b>John Smith</b></strong> uploaded a document <strong><b>to project 1</b></strong>',
+      message: 'document-name.docx',
+      time: '8 min ago',
+      category: 'general',
+      icon: 'assets/images/notification_file_upload.svg',
+      status: 'unread'
+    },
+    {
+      title: 'Your document is ready for viewing',
+      message: '',
+      time: '8 min ago',
+      category: 'general',
+      icon: 'assets/images/notification_uploaded_file_view.svg',
+      status: 'unread'
+    },
+    {
+      title: 'Someone recently joined your project',
+      message: '',
+      time: '8 min ago',
+      category: 'general',
+      icon: 'assets/images/notification_unknown_user.svg',
+      status: 'unread'
     }
-  }> = [];
-  notificationCount: number = 0;
-  @ViewChild('notificationContainer') notificationContainer!: ElementRef;
+];
 
-
-  @HostListener('document:click', ['$event'])
-  clickOut(event: any) {
-    if (this.isNotifCenterOpen && !this.notificationContainer?.nativeElement?.contains(event.target)) {
-      this.isNotifCenterOpen = false;
-    }
-    if (this.profileToggler && !this.profileMenuWrapper?.nativeElement?.contains(event.target)) {
-      this.profileToggler = false;
-    }
-  }
-
+notifications: any[] = [];
+notificationCount: number = this.notificationList.length;
+archivedNotifications: Array<any> = [];
+private archiveMenuTimeout: any = null;
   ngOnInit(): void { }
 
   onLogout() {
@@ -71,58 +99,136 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onNotificationToggle() {
     this.isNotifCenterOpen = !this.isNotifCenterOpen;
-    this._facadeService.notificationService.markAllAsRead();
-    if (this.isNotifCenterOpen) {
-      this.getNotificationList();
-    }
   }
 
-  getNotificationList(): void {
-    if (this.isRequestAlive) return;
+  setTab(tab: string) {
+    this.activeTab = tab;
+  }
 
-    this.isRequestAlive = true;
-    this._facadeService.notificationService.getNotificationList().subscribe({
-      next: (res: any) => {
-        this.isRequestAlive = false;
-        if (res.code == "OK") {
-          this.notificationList = res.data.list;
+  
+
+ 
+
+  markAllAsRead() {
+    this.notificationList = this.notificationList.map(notification => {
+        if (notification.category === this.activeTab) {
+            return { ...notification, status: 'read' };
         }
-      },
-      error: (err: any) => {
-        this.isRequestAlive = false;
-        console.error('Error while getting notification list', err);
-      }
+        return notification;
     });
-  }
+}
 
-  onApproveEditAccess(index: number): void {
-    if (this.isRequestAlive) return;
+markSingleAsRead(notification: any) {
+  notification.status = 'read';
+}
 
-    this.isRequestAlive = true;
-    const notification: any = this.notificationList[index];
-    if (notification) {
-      this._facadeService.notificationService.approveEditAccess(notification._id).subscribe({
-        next: (res: any) => {
-          this.isRequestAlive = false;
-          if (res.code === "OK") {
-            notification.shareCanvasId.hasEditAccess = true;
-            this._facadeService.appService.openToaster('Approved', 'success');
-          }
-        },
-        error: (err: any) => {
-          this.isRequestAlive = false;
-          if (err.error.message) {
-            this._facadeService.appService.openToaster(err.error.message, 'danger');
-          }
-          console.error('Error while approving edit access.', err);
-        }
-      });
-    }
+stopCloseArchiveMenu(notification: any) {
+  if (this.archiveMenuTimeout) {
+    clearTimeout(this.archiveMenuTimeout);
   }
+}
+startCloseArchiveMenu(notification: any) {
+  this.archiveMenuTimeout = setTimeout(() => {
+    notification.isArchiveOpen = false;
+  }, 500);
+}
+
+toggleArchiveMenu(notification: any, event: Event) {
+  event.stopPropagation();
+  this.notificationList.forEach(notif => {
+      if (notif !== notification) {
+          notif.isArchiveOpen = false;
+      }
+  });
+
+  notification.isArchiveOpen = !notification.isArchiveOpen;
+}
+
+
+
+
+
+
+
+keepArchiveOpen(notification: any) {
+  if (this.archiveMenuTimeout) {
+    clearTimeout(this.archiveMenuTimeout);
+  }
+  notification.isArchiveOpen = true;
+}
+
+
+scheduleCloseArchiveMenu(notification: any) {
+  this.archiveMenuTimeout = setTimeout(() => {
+    notification.isArchiveOpen = false;
+  }, 100);
+}
+
+
+
+
+archiveNotification(notification: any, event: Event) {
+  event.stopPropagation();
+  this.notificationList = this.notificationList.filter(n => n !== notification);
+  notification.category = 'archived';
+  notification.isArchiveOpen = false;
+  this.archivedNotifications.push(notification);
+}
+
+
+
+get filteredNotifications() {
+  return this.activeTab === 'archived' 
+    ? this.archivedNotifications 
+    : this.notificationList.filter(n => n.category === this.activeTab);
+}
+
+
+get unreadNotificationCount(): number {
+  return this.notificationList.filter(notification => notification.status === 'unread').length;
+}
+
+
+getTabCount(category: string): number {
+  if (category === 'general') {
+    return this.notificationList.filter(n => n.category === 'general').length;
+  } else if (category === 'requests') {
+    return this.notificationList.filter(n => n.category === 'requests').length;
+  } else if (category === 'archived') {
+    return this.archivedNotifications.length;
+  }
+  return 0;
+}
+
+
+approveRequest(notification: any) {
+  this.notificationList = this.notificationList.filter(n => n !== notification);
+}
+
+
 
   ngOnDestroy(): void {
     this.notificationSubscription?.unsubscribe();
     this.userSubscription?.unsubscribe();
   }
+
+
+  @HostListener('document:click', ['$event'])
+onClickOutside(event: Event) {
+    const clickedElement = event.target as HTMLElement;
+    if (clickedElement.closest('.notif-dots') || clickedElement.closest('.notif-archive')) {
+        return;
+    }
+    this.notificationList.forEach(notif => {
+        notif.isArchiveOpen = false;
+    });
+}
+
+  
+
+
+
+
+
 
 }
