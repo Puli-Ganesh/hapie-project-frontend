@@ -9,209 +9,7 @@
         align-items: center;
         gap: 8px 18px;
 
-        .notification-wrapper {
-            position: relative;
-
-            .notif-icon-wrap {
-                margin: 0;
-                padding: 0;
-                display: block;
-                width: 32px;
-                height: 32px;
-                border: 0;
-                border-radius: 50%;
-                outline: none;
-                background: transparent;
-                overflow: hidden;
-
-                .notif-icon {
-                    padding: 3px;
-                    width: inherit;
-                    height: inherit;
-                }
-
-                &:hover {
-                    background-color: rgba(0, 0, 0, 0.05);
-                    cursor: pointer;
-                }
-            }
-
-            .badge {
-                padding: 1px 3px;
-                position: absolute;
-                top: 0;
-                right: 0;
-                display: block;
-                min-width: 16px;
-                border-radius: 50%;
-                background-color: $primary;
-                transform: translate(10%, -20%);
-                color: $base;
-
-                .count {
-                    font-size: 11px;
-                    line-height: 16px;
-                    text-align: center;
-                }
-            }
-
-            .notif-center-wrap {
-                display: none;
-                position: absolute;
-                top: calc(100% + 4px);
-                right: 24px;
-                background-color: $base;
-                // box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.05), 0px 4px 6px -2px rgba(0, 0, 0, 0.05), 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
-                box-shadow: 0 50px 20px rgba(0, 0, 0, 0.03), 0 28px 17px rgba(0, 0, 0, 0), 0 13px 13px rgba(0, 0, 0, 0.12), 0 3px 7px rgba(0, 0, 0, 0.14), 0 0 rgba(0, 0, 0, 0.14);
-                border-radius: 6px;
-                z-index: 99;
-
-                .notif-center {
-                    border-radius: inherit;
-                    display: flex;
-                    flex-flow: column nowrap;
-                    height: 500px;
-                    width: 400px;
-                    overflow: hidden;
-
-                    .notif-header {
-                        padding: 12px 16px;
-                        border-bottom: 1px solid $border-color;
-
-                        .title {
-                            margin: 0;
-                            color: $on-base;
-                            font-family: $raleway-500;
-                            font-size: 16px;
-                            font-style: normal;
-                            line-height: 20px;
-                            /* 160% */
-                            text-transform: capitalize;
-                        }
-                    }
-
-                    .notif-body {
-                        flex: 1 0;
-                        padding: 12px;
-                        overflow-x: hidden;
-                        overflow-y: auto;
-
-                        .notifs-wrap {
-                            display: flex;
-                            gap: 16px;
-
-                            &:not(:last-of-type) {
-                                margin-bottom: 24px;
-                            }
-
-                            .profile-icon {
-                                padding: 6px;
-                                width: 32px;
-                                height: 32px;
-                                border-radius: 4px;
-                                background: rgba(11, 11, 207, 0.04);
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                            }
-
-                            .notif-wrap {
-                                flex: 1;
-
-                                .req-type {
-                                    color: $on-base-blue;
-                                    font-family: $raleway-600;
-                                    font-size: 12px;
-                                    font-style: normal;
-                                    line-height: 20px;
-                                    letter-spacing: 0.48px;
-                                    text-transform: uppercase;
-                                }
-
-                                .title-wrap {
-                                    margin-bottom: 12px;
-
-                                    .title {
-                                        color: $on-base;
-                                        font-family: $raleway-500;
-                                        font-size: 12px;
-                                        font-style: normal;
-                                        line-height: 14px;
-                                        letter-spacing: 0.28px;
-
-                                        &.text-cap {
-                                            text-transform: capitalize;
-                                        }
-                                    }
-                                }
-
-                                .message {
-                                    padding: 8px 12px;
-                                    font-family: $raleway-500;
-                                    font-size: 12px;
-                                    font-style: normal;
-                                    line-height: 20px;
-                                    border-radius: 8px;
-                                    color: $on-base;
-                                    background: #ECECFE;
-                                }
-
-                                .btn-approve {
-                                    padding: 6px 10px;
-                                    min-width: 80px;
-                                    border-radius: 4px;
-                                    font-family: $raleway-600;
-                                    font-size: 12px;
-                                    font-style: normal;
-                                    line-height: 16px;
-                                    border: 0;
-                                    color: $on-primary;
-                                    background: $primary;
-
-                                    &:not(.approved):hover {
-                                        cursor: pointer;
-                                    }
-
-                                    &.approved {
-                                        @include user-select-none;
-                                        background-color: #5FAD56;
-                                    }
-                                }
-
-                                &:has(.btn-approve) {
-                                    .message {
-                                        margin-bottom: 12px;
-                                    }
-                                }
-                            }
-                        }
-
-                        .empty-msg {
-                            color: $on-base-light;
-                            font-family: $raleway-500;
-                            font-size: 16px;
-                            font-style: normal;
-                            line-height: 24px;
-                            /* 150% */
-                            @include user-select-none;
-                        }
-
-                        &:has(.empty-msg) {
-                            height: 100%;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                        }
-                    }
-                }
-
-                &.show {
-                    display: block;
-                }
-            }
-        }
-
-
+        /* User Profile Style Section */
         .profile-wrapper {
             position: relative;
 
@@ -271,7 +69,7 @@
                     }
                 }
 
-                .menu {
+                .menu, .footer {
                     padding: 4px 0px;
                     display: flex;
                     flex-direction: column;
@@ -286,20 +84,565 @@
                         cursor: pointer;
                     }
                 }
+            }
+        }
+    }
 
-                .footer {
-                    padding: 4px 0px;
 
-                    .item {
-                        padding: 8px 16px;
-                        color: rgba(55, 65, 81, 1);
-                        font-family: $raleway-500;
-                        font-size: 14px;
-                        line-height: 20px;
-                        cursor: pointer;
-                    }
+    /* NOTIFICATION BELL ICON */
+    .notification-wrapper {
+        position: relative;
+
+        .notif-icon-wrap {
+            position: relative;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .notif-icon-box {
+                width: 38px;
+                height: 36px;
+                background-color: #f4e8ff;
+                border-radius: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .notif-bell {
+                width: 25px; 
+                height: 25px;
+        
+            }
+
+            .notif-red-dot {
+                position: absolute;
+                top: 9.7px;
+                right: 9px;
+                width: 8px;
+                height: 8px;
+
+            }
+        }
+
+        .notif-center-wrap {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 280px;
+            background: #fff;
+            border-radius: 6px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            overflow: hidden;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+
+            &.show {
+                display: block;
+            }
+
+            .notif-center {
+                padding: 16px;
+                text-align: center;
+
+                .notif-header-text {
+                    font-size: 16px;
+                    font-weight: bold;
+                    color: #333;
                 }
             }
         }
     }
+    
+
+
+    .notification-wrapper {
+        position: relative;
+
+        // =======================
+        // Frame 1: Outer Frame
+        // =======================
+        .notif-center-wrap {
+            align-items: center;
+            display: none;
+            position: absolute;
+            top: 38px;
+            right: 0;
+            width: 375px;
+            border-radius: 24px;
+            background: #FAF5FF;
+            padding: 3px;
+            z-index: 10;
+            flex-direction: column;
+            gap: 4px;
+            border: 2px solid #FFFFFF;
+            box-shadow: 0px 0px 0px 1.3px #EEDEFF;
+            min-height: fit-content;
+
+        
+            &.show {
+                display: flex;
+            }
+        }
+        
+
+
+// Frame 2: Notification Tabs (General, Requests, Archived)
+// =======================
+.notif-header {
+    margin-top: -16px;
+    display: flex;
+    padding: 8px 12px 4px 12px;
+    align-items: center;
+    gap: 0px;
+    align-self: stretch;
+    width: 364px;
+    height: 50px;
+    background: #FAF5FF;
+    border-radius: 10px 10px 0 0;
+    margin-bottom: 3px;
+
+    .notif-tabs {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1 0 0;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 15px;
+            line-height: 18px;
+            letter-spacing: -0.6px;
+            border-radius: 12px;
+            transition: background 0.3s ease, border 0.3s ease;
+
+            // Styling for Active Tab
+            &.active {
+                background: #F4E8FF;
+                border: 1px solid #EEDEFF;
+                color: #9122FF;
+                padding: 10px 12px;
+                height: 38px;
+
+                .tab-badge {
+                    background: #E9D4FF;
+                    color: #9122FF;
+                }
+            }
+
+            // Styling for Non-Active Tab
+            &:not(.active) {
+                background: transparent;
+                color: #A58AC0;
+                padding: 8px 12px;
+                height: 34px;
+
+                .tab-badge {
+                    background: #F4E8FF;
+                    color: #A58AC0;
+                }
+            }
+
+            // Tab Badge (Small Card inside button)
+            .tab-badge {
+                margin-left: 5px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 2px 5px;
+                font-size: 12px;
+                font-weight: 500;
+                border-radius: 6px;
+                width: 18px;
+                height: 18px;
+                line-height: 14px;
+                letter-spacing: -0.48px;
+            }
+        }
+    }
 }
+// =======================
+// Frame 3: Notification Content (Activity Feed)
+// =======================
+.notif-content-card {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    align-items: center;
+    gap: 4px;
+    align-self: stretch;
+    width: 368px;
+    border-radius: 26px;
+    border: 1px solid #F4E8FF;
+    background: #FFFFFF;
+    overflow-y: auto; 
+    
+
+}
+
+// =======================
+// Activity Feed Items (Each Notification)
+// =======================
+.notif-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 12px;
+    gap: 15px;
+    align-self: stretch;
+    width: 340px;
+    height: auto;
+    background: #FFFFFF;
+    border-bottom: 1px solid #F4E8FF;
+    position: relative; // For absolute positioning of archive menu
+}
+
+// =======================
+// Notification Icon (Image)
+// =======================
+.notif-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    aspect-ratio: 1/1;
+}
+
+// =======================
+// Notification Text
+// =======================
+
+.notif-text {
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    align-items: flex-start;
+    align-content: flex-start;
+    font-family: 'Inter', sans-serif;
+    font-weight: 424;
+    font-size: 14px;
+    line-height: 1.3;
+    display: block;
+    color: #333;
+}
+
+.notif-content {
+    width: 213px;
+    height: auto;
+    font-family: 'Inter', sans-serif;
+    font-weight: 424;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -4%;
+    color: #0E121B;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+// =======================
+// Blue Circle (Unread Indicator)
+// =======================
+.notif-circle {
+    margin-top: 5px;
+    width: 12.5px;
+    height: 12.5px;
+    border-radius: 50%;
+    background: #DBEAFE;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &::before {
+        content: '';
+        width: 5px;
+        height: 5px;
+        background: #2563EB;
+        border-radius: 50%;
+    }
+}
+
+// =======================
+// 3 Dots Menu (More Options)
+// =======================
+.notif-menu {
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 12px; 
+    top: 12px; 
+
+    .notif-dots {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+    
+    .notif-dots span {
+        width: 3px;
+        height: 3px;
+        background: #9a9a9a;
+        border-radius: 50%;
+        margin: 2px 0;
+    }
+
+   
+    
+
+    .notif-archive {
+        display: none; // Initially hidden
+        width: 96px;
+        position: absolute;
+        right: 0;
+        top: 24px;
+        background: white;
+        border: 1px solid #E9E9E9; // Corrected border color
+        border-radius: 8px;
+        padding: 8px 12px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        color: #4B5563;
+        align-items: center;
+        justify-content: center; // Center align text and icon
+    
+        img {
+            width: 18px;
+            height: 18px;
+            margin-right: 6px;
+        }
+    
+        &.show {
+            display: flex; // Show only when the class 'show' is added
+        }
+    }
+    
+}
+
+// =======================
+// Timestamp & Read Status
+// =======================
+.tick{
+    margin-left: 20px;
+    margin-top: 0px;
+    height: 13px;
+    width: 13px;
+}
+.notif-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 400;
+    font-family: 'Inter', sans-serif;
+    line-height: 16px;
+    letter-spacing: 0%;
+    color: #64748B;
+    cursor: pointer;
+
+    .notif-status {
+        margin-top: -30px;
+        font-weight: bold;
+        &.unread {
+            color: #2563EB;
+        }
+        &.read {
+            color: #64748B;
+        }
+    }
+}
+
+// =======================
+// Action Button (Review Button)
+// =======================
+.action-buttons {
+    display: flex;
+    margin-top: 8px;
+
+    .btn-review {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2px;
+        padding: 6px 10px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 8px;
+        background: #9122FF;
+        color: white;
+        cursor: pointer;
+        width: 67px;
+        height: 28px;
+        transition: background 0.3s ease;
+
+        &:hover {
+            background: #7A1DC4;
+        }
+    }
+}
+
+.notif-doc-box {
+    display: flex;
+    align-items: center;
+    background-color: #f6faff;
+    border: 1px solid #dbeafe;
+    border-radius: 10px;
+    padding: 8px;
+    max-width: fit-content;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    align-self: stretch;
+    gap: 8px;
+    padding-right: 20px;
+}
+
+.notif-doc-box img {
+    width: 12px;
+    height: 12px;
+    margin-right: 6px;
+    flex-shrink: 0;
+}
+
+.notif-doc-box .notif-doc-name {
+    color: #64748b;
+    font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
+    font-family: Inter;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: -0.24px;
+    padding-right: 30px;
+}
+
+.notif-doc-box:hover {
+    background-color: #e8f1ff;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.btn {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-feature-settings: 'ss11' on, 'cv09' on, 'liga' off, 'calt' off;
+font-family: Inter;
+font-size: 12px;
+font-style: normal;
+font-weight: 500;
+line-height: 16px; /* 133.333% */
+letter-spacing: -0.48px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-deny {
+    background: white;
+    border: 1px solid #e9e9e9;
+    color: #525252;
+}
+
+.btn-deny:hover {
+    background: #f9f9f9;
+}
+
+.btn-approve {
+    background: #9122ff;
+    border: none;
+    color: white;
+}
+
+.btn-approve:hover {
+    background: darken(#9122ff, 5%);
+}
+
+.notif-btn {
+    background: #9122ff;
+    color: white;
+    border: none;
+    padding: 7px 120px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 300;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    display: inline-block;
+    text-align: center;
+    outline: none;
+
+    &:hover {
+        background: darken(#9122ff, 10%);
+    }
+
+    &:active {
+        background: lighten(#9122ff, 5%);
+    }
+
+    &:focus {
+        box-shadow: 0px 0px 5px rgba(145, 34, 255, 0.5);
+    }
+}
+
+
+
+        // =======================
+        // Frame 4: Mark All as Read Button
+        // =======================
+        .notif-footer {
+            display: flex;
+            flex-wrap: wrap;
+            bottom: 0;
+            position: relative;
+            margin-top: 10px;
+            margin-left: 20px;
+            text-align: left;
+            padding: 6px 10px;
+            font-size: 12px;
+            color: #9122ff;
+            cursor: pointer;
+            text-decoration: underline;
+            font-weight: bold;
+            transition: all 0.2s ease-in-out;
+            user-select: none;
+            margin-bottom: -5px;
+    
+            
+        }
+    
+        .notif-footer:hover {
+            color: darken(#9122ff, 10%);
+            text-decoration: underline;
+        }
+        .no-messages {
+            text-align: center;
+            font-size: 14px;
+            color: #a0a0a0;
+            padding: 20px;
+            font-weight: bold;
+        }
+        
+    
+    }
+
+}
+
+   

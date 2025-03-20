@@ -1,90 +1,126 @@
 <header class="header-wrapper">
     <div class="user-menu-wrapper">
-
+        <!-- Notification Bell Icon -->
         <div class="notification-wrapper" #notificationContainer>
+            <!-- Notification Bell Icon -->
             <button class="notif-icon-wrap" (click)="onNotificationToggle()">
-                <svg class="notif-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path
-                        d="M6 10C6 6.68629 8.68629 4 12 4V4C15.3137 4 18 6.68629 18 10V11V14.5L19.5725 17.2519C19.763 17.5853 19.5223 18 19.1384 18H4.86159C4.47768 18 4.23699 17.5853 4.42747 17.2519L6 14.5V11V10Z"
-                        stroke="#344051" stroke-width="1.5" />
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="M7.10547 17.75C7.56469 19.8932 9.46971 21.5 11.75 21.5C14.0303 21.5 15.9353 19.8932 16.3946 17.75H14.8433C14.4215 19.0556 13.196 20 11.75 20C10.304 20 9.07855 19.0556 8.65677 17.75H7.10547Z"
-                        fill="#344051" />
-                </svg>
-
+                <div class="notif-icon-box">
+                    <img src="assets/images/notification_bell_icon1.svg" alt="Bell Icon" class="notif-bell">
+                </div>
+                <img *ngIf="unreadNotificationCount > 0" src="assets/images/notification_red_icon.svg" alt="Notification Dot" class="notif-red-dot">
             </button>
-            <div class="badge" *ngIf="notificationCount">
-                <div class="count">{{ notificationCount }}</div>
-            </div>
-
+            <!-- Notification Dropdown (Outer Card) -->
             <div class="notif-center-wrap" [class.show]="isNotifCenterOpen">
                 <div class="notif-center">
+                    
+                    <!-- Tabs (Top of Outer Card) -->
                     <div class="notif-header">
-                        <h3 class="title">notifications</h3>
+                        <ul class="notif-tabs">
+                            <li [class.active]="activeTab === 'general'" (click)="setTab('general')">
+                                General <span class="tab-badge">{{ getTabCount('general') }}</span>
+                            </li>
+                            <li [class.active]="activeTab === 'requests'" (click)="setTab('requests')">
+                                Requests <span class="tab-badge">{{ getTabCount('requests') }}</span>
+                            </li>
+                            <li [class.active]="activeTab === 'archived'" (click)="setTab('archived')">
+                                Archived <span class="tab-badge">{{ getTabCount('archived') }}</span>
+                            </li>
+                        </ul>
+                        
                     </div>
-                    <div class="divider"></div>
-                    <div class="notif-body">
-                        <div class="notifs-wrap" *ngFor="let notification of notificationList; let index = index;">
-                            <div class="profile-icon">
-                                <svg width="24" height="24" viewBox="0 0 20 20" fill="none">
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M7.877 13.2063C4.033 13.2063 0.75 13.7873 0.75 16.1153C0.75 18.4433 4.013 19.0453 7.877 19.0453C11.722 19.0453 15.004 18.4633 15.004 16.1363C15.004 13.8093 11.742 13.2063 7.877 13.2063Z"
-                                        stroke="#0B0BCF" stroke-width="1.5" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M7.87562 9.886C10.3986 9.886 12.4436 7.841 12.4436 5.318C12.4436 2.795 10.3986 0.75 7.87562 0.75C5.35362 0.75 3.30862 2.795 3.30862 5.318C3.29962 7.832 5.32962 9.877 7.84462 9.886H7.87562Z"
-                                        stroke="#0B0BCF" stroke-width="1.5" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                    <path d="M17.2031 6.66919V10.6792" stroke="#0B0BCF" stroke-width="1.5"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                    <path d="M19.2502 8.67407H15.1602" stroke="#0B0BCF" stroke-width="1.5"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </div>
-                            <div class="notif-wrap">
-                                <div class="req-type">REQUEST EDIT ACCESS</div>
-                                <div class="title-wrap">
-                                    <span class="title text-cap">{{ notification.name }}</span><span class="title">
-                                        is requesting edit access to the {{ notification?.projectId?.projectName ??
-                                        '-' }} canvas.</span>
+
+                    <!-- Inner Card  -->
+                    <div class="notif-content-card">
+                        <div *ngIf="filteredNotifications.length === 0" class="no-messages">
+                            No Messages...
+                        </div>
+                        <!-- Content 1: Warning Detection -->
+                        <div class="notif-item" *ngFor="let notification of filteredNotifications">
+                            <div class="notif-icon-wrap">
+                                <div class="img">
+                                    <img [src]="notification.icon" [alt]="notification.title">
                                 </div>
-                                <div class="message" *ngIf="notification?.message">{{ notification.message }}</div>
-                                <ng-container ngSwitch="{{notification?.shareCanvasId?.hasEditAccess ? 'Y' : 'N'}}">
-                                    <button *ngSwitchCase="'N'" class="btn-approve" type="button"
-                                        (click)="onApproveEditAccess(index)">
-                                        Approve
+                            </div>
+                            <div class="notif-content">
+                                <p class="notif-text" [innerHTML]="notification.title"></p>
+                                <div class="notif-meta" (click)="markSingleAsRead(notification)">
+                                    <span class="notif-time">{{ notification.time }}</span>
+                                    <div class="notif-status-wrap">
+                                        <img [src]="notification.status === 'unread' ? 'assets/images/notification_blue_tick.svg' : 'assets/images/notification_grey_double_tick.svg'"
+                                             alt="Read Status" class="tick">
+                                        <span class="notif-status" [ngClass]="{'unread': notification.status === 'unread', 'read': notification.status === 'read'}">
+                                            {{ notification.status === 'unread' ? 'Unread' : 'Read' }}
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <div class="notif-doc-box" *ngIf="notification.message">
+                                    <img src="assets/images/notification_document_attachment_symbol.svg" alt="Attachment Icon">
+                                    <span class="notif-doc-name">{{ notification.message }}</span>
+                                </div>
+                                <div class="action-buttons" *ngIf="notification.actions">
+                                    <button *ngFor="let action of notification.actions" class="btn" [ngClass]="action.type === 'primary' ? 'btn-approve' : 'btn-deny'">
+                                        {{ action.label }}
                                     </button>
-                                    <button *ngSwitchCase="'Y'" class="btn-approve approved">
-                                        Approved
-                                    </button>
-                                </ng-container>
+                                </div>
+                            </div>
+                            <div class="notif-actions">
+                                <div class="notif-circle" *ngIf="notification.status === 'unread'"></div>
+                                <div class="notif-menu">
+                                    <!-- 3 dots button -->
+                                    <div class="notif-dots" (click)="toggleArchiveMenu(notification, $event)">
+                                        <img src="assets/images/notification_3_dots.svg" alt="More options">
+                                    </div>
+                                    
+                                    <!-- Archive button -->
+                                    <div class="notif-archive" [class.show]="notification.isArchiveOpen" (click)="archiveNotification(notification, $event)">
+                                        <img src="assets/images/notification_archive.svg" alt="Archive">
+                                        <span>Archive</span>
+                                    </div>
+
+                            
+                                
+                                </div>
+                                
+                                
+              
+                                    
+                                
+                                
+                                
                             </div>
                         </div>
-                    </div>
+                        
+                        
+                        
+                        
+
+                    </div> <!-- End of Inner Card -->
+                    
+                    <div *ngIf="filteredNotifications.length > 0" class="notif-footer" (click)="markAllAsRead()">Mark all as read</div>
+
+
                 </div>
             </div>
         </div>
 
+
+        <!-- User Profile Menu -->
         <div class="profile-wrapper" #profileMenuWrapper>
             <div class="profile-image-wrapper" (click)="profileToggler = !profileToggler">
-                <img *ngIf="currentUser?.profile" class="avatar-img" src="{{currentUser.profile}}" />
+                <img *ngIf="currentUser?.profile" class="avatar-img" [src]="currentUser.profile" />
                 <img *ngIf="!currentUser?.profile" class="avatar-img default" src="assets/images/profile_picture.svg">
             </div>
-
             <div class="profile-menu-wrapper" [class.show]="profileToggler">
                 <div class="header">
                     <h3 class="title">Signed in as</h3>
-                    <h3 class="name">
-                        {{ currentUser?.firstName + (currentUser?.lastName ? (' '+currentUser.lastName) : '')}}
-                    </h3>
+                    <h3 class="name">{{ currentUser?.firstName + (currentUser?.lastName ? (' '+currentUser.lastName) : '')}}</h3>
                 </div>
-                <!-- <div class="menu">
-                    <div class="item">Personal Profile</div>
-                </div> -->
                 <div class="footer">
                     <div class="item" (click)="onLogout()">Sign out</div>
                 </div>
             </div>
         </div>
+
     </div>
 </header>
